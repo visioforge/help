@@ -62,7 +62,7 @@ Media Blocks SDK est le SDK .NET le plus flexible de VisioForge — construisez 
 Paquet SDK principal (toutes les plateformes) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
 ```
 
 Runtime Windows x64 (choisissez x86 pour les applications 32 bits) :
@@ -83,7 +83,7 @@ Windows x86 :
 macOS (natif et MAUI / macCatalyst) :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 ```
 
 Linux x64 (nécessite également GStreamer 1.20+ installé sur le système) :
@@ -98,14 +98,14 @@ Android et iOS :
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 Paquets d'intégration UI (optionnels, par framework) :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
 ```
 
 Procédure d'installation complète : [install/index.md](../install/index.md).

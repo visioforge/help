@@ -110,8 +110,8 @@ Add the following packages to your project:
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -148,7 +148,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -156,7 +156,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 ```
 
@@ -217,8 +217,8 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
   </ItemGroup>
   
   <!-- Windows Platform -->
@@ -235,12 +235,12 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
   
   <!-- iOS Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
   </ItemGroup>
   
   <!-- macOS Desktop Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
   </ItemGroup>
   
   <!-- Linux Desktop Platform -->

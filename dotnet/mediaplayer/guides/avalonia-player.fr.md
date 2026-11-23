@@ -157,8 +157,8 @@ Le projet principal, `SimplePlayerMVVM.csproj`, cible plusieurs plateformes. Les
   <PackageReference Include="Avalonia.Android" Version="12.1.6" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
  </ItemGroup>
 </Project>
 ```
@@ -188,7 +188,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -248,7 +248,7 @@ Chaque projet principal de plateforme (`SimplePlayerMVVM.Android.csproj`, `Simpl
   <!-- ... other items ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.1.6" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -1146,7 +1146,7 @@ Pour abstraire les fonctionnalités spécifiques aux plateformes, des interfaces
           <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
         </ItemGroup>
         <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+          <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
         </ItemGroup>
         ```
 

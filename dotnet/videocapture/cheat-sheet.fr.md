@@ -81,14 +81,14 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.16]"/>
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 
 <!-- Linux x64 (nécessite GStreamer 1.20+ du système, 1.22+ pour certaines fonctionnalités) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 
 <!-- Android / iOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 Sous Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` remplace le paquet `.Linux.x64` ; voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) pour un fragment de projet qui choisit l'un ou l'autre selon l'identifiant de runtime.

@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-23 09:18:58 UTC (4e2b561cfd2)
+**Generated:** 2026-11-23 12:42:30 UTC (a22b44ce4e7)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 466 help documentation pages + 74 website pages
 
@@ -10953,7 +10953,7 @@ You can add these packages using the NuGet Package Manager in your IDE or by add
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -11466,8 +11466,8 @@ For MAUI projects targeting macOS (through MacCatalyst), add these packages:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
   <!-- Only for the OpenCV blocks -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.11.12.2]"/>
 </ItemGroup>
@@ -11999,8 +11999,8 @@ Add the following packages to your project:
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -12037,7 +12037,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -12045,7 +12045,7 @@ Additionally, you'll need to add the Java Bindings Library. Clone it from our [G
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 ```
 
@@ -12106,8 +12106,8 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
 
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.21]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
   </ItemGroup>
 
   <!-- Windows Platform -->
@@ -12124,12 +12124,12 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
 
   <!-- iOS Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
   </ItemGroup>
 
   <!-- macOS Desktop Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-desktop')) and $([MSBuild]::IsOSPlatform('osx'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
   </ItemGroup>
 
   <!-- Linux Desktop Platform -->
@@ -28804,7 +28804,7 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
@@ -43646,13 +43646,13 @@ The Avalonia template uses central package management, so NuGet writes the versi
 
 ```
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.21" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.21" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.23" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.23" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
   <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.16" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.13" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.22" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.23" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.10.26" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="2026.10.26" />
 </ItemGroup>
@@ -44363,7 +44363,7 @@ Add the iOS-specific package to your project:
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
        match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -44906,12 +44906,12 @@ The Uno template uses central package management, so NuGet writes the versions t
 
 ```
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.21" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.21" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.23" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.23" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
   <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.11.16" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.23" />
 </ItemGroup>
 ```
 
@@ -45203,13 +45203,13 @@ The native engines go into the project file instead, each under the condition of
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]" />
 </ItemGroup>
 ```
 
@@ -46770,14 +46770,14 @@ Platform-specific native runtimes — add the ones you target:
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.16]"/>
 
 <!-- macOS / macCatalyst -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 
 <!-- Linux x64 (needs system GStreamer 1.20+, 1.22+ for some features) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 
 <!-- Android / iOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 On Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` replaces the `.Linux.x64` package; see [Ubuntu deployment](../../deployment-x/Ubuntu/) for a project fragment that picks one by runtime identifier.
@@ -48217,7 +48217,7 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Major SDK package (managed):
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
 ```
 
 Native dependencies for Windows x64:
@@ -48269,7 +48269,7 @@ Recording webcam video in VB.NET applications is a common requirement for video 
 Add the following packages to your VB.NET project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -48744,7 +48744,7 @@ Video Capture SDK .NET relies on native libraries to access webcam devices and p
 Main SDK package:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
 ```
 
 ### Platform-Specific Redist Packages
@@ -48760,7 +48760,7 @@ For other platforms:
 
 ```
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 
 <!-- Linux x64 (needs system GStreamer 1.20+) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
@@ -48857,7 +48857,7 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -49391,7 +49391,7 @@ Add platform-specific native dependencies:
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 
 <!-- Linux x64 (needs system GStreamer 1.20+) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
@@ -49757,8 +49757,8 @@ Use the latest NuGet package versions of the SDK for .NET in your project.
 Add the following NuGet packages to your project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
 ```
 
 The `VideoCapture` package contains the main video capture functionality, while the `Core.UI.MAUI` package contains the `VideoView` control for video preview in .NET MAUI apps.
@@ -49791,7 +49791,7 @@ Add the following NuGet packages to your project based on target platform:
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -49800,7 +49800,7 @@ Add the following NuGet packages to your project based on target platform:
 ```
 <!-- Custom NuGet package and target code for maccatalyst to copy NuGet redist files to app file -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
@@ -61411,7 +61411,7 @@ All cross-platform targets use a GStreamer-backed decoding pipeline with hardwar
 Main SDK package (always required):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
 ```
 
 Windows x64 native runtime:
@@ -61431,7 +61431,7 @@ Windows x86 native runtime:
 macOS (native) and MacCatalyst (MAUI macOS):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 ```
 
 Linux x64 (plus system GStreamer 1.20+):
@@ -61446,14 +61446,14 @@ Android and iOS:
 
 ```
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 Optional UI framework packages — add whichever you target:
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
 ```
 
 Full per-IDE install walkthrough: [install/index.md](../../install/).
@@ -62083,9 +62083,9 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 - [VisioForge.DotNet.Core.Redist.LAV.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/) — the LAV splitter and decoders, which find the video and audio tracks in the stream and decode them
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.21]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]" />
 ```
 
 These are the x64 packages, so the project sets `<PlatformTarget>x64</PlatformTarget>`; a 32-bit app takes the `.x86` packages instead. See the [deployment guide](../../deployment/) for the full list.
@@ -63229,14 +63229,14 @@ For a Windows x64 app:
 
 ```
 <!-- MediaPlayerCoreX; for Media Blocks use VisioForge.DotNet.MediaBlocks instead -->
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]" />
 
 <!-- MediaPlayerCore -->
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.21]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]" />
 ```
 
 Other platforms take their own redistributables: see [Cross-platform deployment](../../../deployment-x/) and [Media Player SDK deployment](../../deployment/).
@@ -64028,8 +64028,8 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <PackageReference Include="Avalonia.Android" Version="12.1.6" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
  </ItemGroup>
 </Project>
 ```
@@ -64059,7 +64059,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <OutputType>Exe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Linux'))">
     <TargetFramework>net10.0</TargetFramework>
@@ -64119,7 +64119,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
   <!-- ... other items ... -->
   <ItemGroup>
     <PackageReference Include="Avalonia.iOS" Version="12.1.6" />
-    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
@@ -65010,7 +65010,7 @@ To abstract platform-specific functionality, interfaces are defined in the core 
     <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
   </ItemGroup>
   ```
   ```
@@ -65758,8 +65758,8 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ## NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
 
 <!-- Platform redists — include only the targets you build for -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
@@ -65767,11 +65767,11 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
                   Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS"
-                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.13]"/>
+                  Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.22]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android"
                   Condition="$(TargetFramework.Contains('android'))" Version="[2026.11.5]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS"
-                  Condition="$(TargetFramework.Contains('ios'))" Version="[2026.11.5]"/>
+                  Condition="$(TargetFramework.Contains('ios'))" Version="[2026.11.23]"/>
 ```
 
 ## MauiProgram.cs
@@ -66071,7 +66071,7 @@ Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — the FFmpeg (libav) codecs that many formats decode through
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -66668,7 +66668,7 @@ This guide walks you through building a full-featured video player application i
 ## Required NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```
@@ -66940,7 +66940,7 @@ Add platform-specific native dependencies:
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 
 <!-- macOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 
 <!-- Linux x64 (needs system GStreamer 1.20+) -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
@@ -67178,7 +67178,7 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
 ```
 
 It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.
@@ -68222,8 +68222,8 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 - [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — the FFmpeg tool the `FastEdit_` methods run; for an x86 app, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]" />
 ```
 
 The redist is x64, so set `PlatformTarget` to `x64` in the project file:
@@ -69197,7 +69197,7 @@ Its code: [images-to-video-short-console on GitHub](https://github.com/visioforg
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer and the native libraries the engine runs on, among them the H.264 encoder
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 ```
 
@@ -70216,8 +70216,8 @@ The full sample is on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/
 Two packages: the SDK itself and the MAUI `VideoView` control.
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control — on its own it cannot compile `VideoEditCoreX`. The `VisioForge.DotNet.VideoEdit` package is what brings the engine in.
@@ -70233,11 +70233,11 @@ Then add the redistributable for each platform you build for. See [Installing in
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
@@ -76074,7 +76074,7 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 Main SDK package (all platforms):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
 ```
 
 Windows x64 runtime (pick x86 for 32-bit apps):
@@ -76095,7 +76095,7 @@ Windows x86:
 macOS (native and MAUI / macCatalyst):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 ```
 
 Linux x64 (also requires GStreamer 1.20+ installed on the system):
@@ -76110,14 +76110,14 @@ Android and iOS:
 
 ```
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 UI integration packages (optional, per framework):
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
 ```
 
 Full install walkthrough: [install/index.md](../../install/).
@@ -79110,8 +79110,8 @@ The control builds and manages this pipeline for you through `HlsStreamManager`.
 
 <ItemGroup>
   <Reference Include="System.Web" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.21]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
   <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
 </ItemGroup>
@@ -83645,7 +83645,7 @@ graph TD;
 You'll need the VisioForge Media Blocks SDK. Add it to your .NET project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
 ```
 
 Depending on your target platform, add the corresponding native runtime package. For Windows x64:
@@ -84275,7 +84275,7 @@ On Linux, `rs-enumerate-devices` from the optional `librealsense2-utils` package
 ## RTSP IP Cameras in a Web Browser with WHEP in C# .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/rtsp-cameras-in-browser-whep/
 **Description:** Show RTSP IP cameras with sound in a web browser over WebRTC (WHEP) from a C# app with sub-second latency, no video re-encoding, no media server.
-**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, Streaming, IP Camera, RTSP, WebRTC, H.264, C#, JavaScript, NuGet
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, iOS, Streaming, IP Camera, RTSP, WebRTC, H.264, C#, JavaScript, NuGet
 **API:** WHEPServerSinkBlock, WHEPServerSinkSettings, RTSPRAWSourceBlock, RTSPRAWSourceSettings, DecodeBinBlock, MediaBlocksPipeline
 
 # Show RTSP IP Cameras in a Web Browser with WHEP in C# / .NET
@@ -84284,7 +84284,7 @@ On Linux, `rs-enumerate-devices` from the optional `librealsense2-utils` package
 
 Demo Sample
 
-The code in this guide comes from the RTSP WHEP Camera Grid Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples): it adds cameras by RTSP URL, serves a grid page with every camera, and forwards each camera's WHEP requests to its own server. Its console version, RTSP WHEP Camera Grid (Console), does the same on Windows, macOS and Linux, with the camera URLs on the command line.
+The code in this guide comes from the RTSP WHEP Camera Grid Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20WHEP%20Camera%20Grid%20Demo): it adds cameras by RTSP URL, serves a grid page with every camera, and forwards each camera's WHEP requests to its own server. Its console version, [RTSP WHEP Camera Grid (Console)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20WHEP%20Camera%20Grid), does the same on Windows, macOS and Linux, with the camera URLs on the command line. Both demos need Media Blocks SDK .NET 2026.11.23 or later, the first release with WHEP audio.
 
 The block reference is in [Sink blocks → WHEP server](../../Sinks/#whep-server).
 
@@ -84320,10 +84320,10 @@ WHEP is a small HTTP protocol on top of WebRTC: one `POST` with the SDP offer, a
 
 ## Prerequisites
 
-- Windows x64, macOS, or Linux x64/arm64 (Debian 12, Ubuntu 24.04 and later). `WHEPServerSinkBlock` uses the `rswebrtc` GStreamer plugin, which ships in each platform's `Adds` runtime package.
+- Windows x64, macOS, Linux x64/arm64 (Debian 12, Ubuntu 24.04 and later) or iOS. `WHEPServerSinkBlock` uses the `rswebrtc` GStreamer plugin, which ships in each platform's `Adds` runtime package and, on iOS, in `VisioForge.CrossPlatform.Core.iOS`.
 - .NET 10 (.NET 8 or later on Linux).
 - An IP camera with an H.264 RTSP stream; for sound, a camera that sends audio (AAC or G.711).
-- Media Blocks SDK .NET version 2026.11.20 or later on Windows — the release that adds `WHEPServerSinkBlock` — and 2026.11.21 or later on macOS and Linux. The audio input, `WHEPServerSinkBlock.AudioInput`, needs 2026.11.23 or later.
+- Media Blocks SDK .NET version 2026.11.20 or later on Windows — the release that adds `WHEPServerSinkBlock` — and 2026.11.21 or later on macOS and Linux. The audio input, `WHEPServerSinkBlock.AudioInput`, needs 2026.11.23 or later. On iOS, the SDK and `VisioForge.CrossPlatform.Core.iOS` both need 2026.11.23 or later.
 
 NuGet packages:
 
@@ -84331,8 +84331,9 @@ NuGet packages:
 - Windows: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) and [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — the GStreamer runtime and the additional plugins, `rswebrtc` among them
 - macOS: [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
 - Linux: `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
+- iOS: [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS/)
 
-Without the `Adds` package `WHEPServerSinkBlock.IsAvailable()` returns `false`. For deployment details see the [Deployment Guide](../../../deployment-x/).
+Without the `Adds` package `WHEPServerSinkBlock.IsAvailable()` returns `false`; on iOS it returns `false` with an SDK older than 2026.11.23. For deployment details see the [Deployment Guide](../../../deployment-x/).
 
 The browser page is a file the application serves. Embed it in the assembly in the `.csproj`, as the console demo does — a macOS app bundle would put a copied file under `Contents/Resources`, not next to the executable:
 
@@ -84786,13 +84787,13 @@ The block's build fails, with a message through the pipeline's `OnError` event, 
 
 ### Platforms
 
-Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
+Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`, iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
 
 ## Troubleshooting
 
 | Symptom | Cause and fix |
 | --- | --- |
-| `WHEPServerSinkBlock.IsAvailable()` returns `false` | The platform's `Adds` package is not referenced, or on Linux the distribution packages listed in [Prerequisites](#prerequisites) are missing. |
+| `WHEPServerSinkBlock.IsAvailable()` returns `false` | The platform's `Adds` package is not referenced (on iOS, `VisioForge.CrossPlatform.Core.iOS` is missing or the SDK is older than 2026.11.23), or on Linux the distribution packages listed in [Prerequisites](#prerequisites) are missing. |
 | `CreateAsync` throws `InvalidOperationException` ("Unable to read RTSP stream info") | The camera is unreachable, or the URL or credentials are wrong. Open the same URL in another RTSP client to check it. |
 | `StartAsync` returns `false` | Read the `OnError` messages: a port already in use, an invalid `ServerAddress`, or a camera stream that is not H.264 (H.265, MJPEG). |
 | The video plays, no sound | The `<video>` element starts muted: unmute it with its controls. If the camera sends no audio, `CreateAsync` turned `AudioEnabled` off and no audio was connected; check the camera's audio setting. |
@@ -84808,7 +84809,7 @@ Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `V
 
 - **`WHEPServerSinkBlock`** (this guide) — the source is already H.264 (an IP camera) and the viewers are browsers on your network. Video passthrough with no encoder, audio encoded to Opus, no media server.
 - **[`WebRTCSinkBlock`](../../Sinks/#webrtc)** — the video is raw or processed in the pipeline (a webcam, the screen, overlays, analytics). It encodes for each viewer (VP8 video, Opus audio) with per-viewer congestion control, at the cost of an encoder per viewer, and uses the `webrtcsink` WebSocket signalling protocol instead of WHEP.
-- **[`WHIPSinkBlock`](../../Sinks/#whip)** — you already run a WebRTC media server (MediaMTX, Janus, Cloudflare Stream) and want the application to push one stream to it; the server then handles the viewers. Requires H.264 video and Opus audio; runs on Windows, macOS and Linux.
+- **[`WHIPSinkBlock`](../../Sinks/#whip)** — you already run a WebRTC media server (MediaMTX, Janus, Cloudflare Stream) and want the application to push one stream to it; the server then handles the viewers. Requires H.264 video and Opus audio; runs on Windows, macOS, Linux and iOS.
 - **[HLS](../../Sinks/#hls)** — viewers on the open internet through a CDN or a plain `<video>` player, when a delay of several seconds is acceptable. See also [HLS streaming](../../../general/network-streaming/hls-streaming/) and the [ASP.NET Web Forms HLS player](../aspnet-webforms-hls-player/) guide.
 
 ## Frequently Asked Questions
@@ -84880,7 +84881,7 @@ For complete working examples, see the [RTSP demos on GitHub](https://github.com
 Add the Media Blocks SDK NuGet package to your project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
 ```
 
 You also need the platform-specific runtime packages. For Windows:
@@ -85253,7 +85254,7 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:
@@ -85904,7 +85905,7 @@ graph LR;
 Add the Media Blocks SDK to your project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
 ```
 
 On Windows you also need the native runtime packages. For recording (muxing) you need the core runtime; the Libav package supplies the muxers:
@@ -86173,7 +86174,7 @@ Yes. The encoded video and audio packets are copied byte-for-byte into the MP4 c
 ## Screen or Camera to a Browser over WebRTC in C# .NET
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/webrtc-whip/
 **Description:** Stream a screen, window or camera from a C# app to web browsers over WebRTC with no media server, and publish it to MediaMTX or Janus with WHIP.
-**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, Streaming, Screen Capture, Webcam, WebRTC, WHIP, VP8, H.264, Opus, C#, JavaScript, NuGet
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, iOS, Streaming, Screen Capture, Webcam, WebRTC, WHIP, VP8, H.264, Opus, C#, JavaScript, NuGet
 **API:** WebRTCSinkBlock, WebRTCSinkSettings, WHIPSinkBlock, WHIPSinkSettings, ScreenSourceBlock, SystemVideoSourceBlock, MediaBlocksPipeline
 
 # Stream a Screen or Camera to Web Browsers over WebRTC, and Publish with WHIP, in C# / .NET
@@ -86213,24 +86214,25 @@ Which one to use:
 | Encoding | VP8 and Opus, one encoder per viewer, with per-viewer congestion control | H.264 and Opus, encoded once in your pipeline |
 | CPU per extra viewer | one more VP8 encoder | none: the server forwards the stream |
 | Viewer page | served by the block, about 100 lines of JavaScript | the server's own player, or any WHEP player |
-| Platforms | Windows | Windows, macOS, Linux |
+| Platforms | Windows, macOS, Linux, iOS | Windows, macOS, Linux, iOS |
 | Typical use | screen sharing and camera views for a few viewers on a local network | publishing to many viewers, or across the internet |
 
 ## Prerequisites
 
-- Windows x64 for `WebRTCSinkBlock`; Windows, macOS or Linux for `WHIPSinkBlock`.
+- Windows, macOS, Linux or iOS.
 - .NET 10 (.NET 8 or later on Linux).
-- Media Blocks SDK .NET version 2026.11.21 or later. That release adds the screen-capture-to-`WebRTCSinkBlock` fix this guide relies on; with 2026.11.20, `WebRTCSinkBlock` plays cameras but a viewer of a Direct3D 11 screen capture never gets a picture.
+- Media Blocks SDK .NET version 2026.11.21 or later. That release adds the screen-capture-to-`WebRTCSinkBlock` fix this guide relies on; with 2026.11.20, `WebRTCSinkBlock` plays cameras but a viewer of a Direct3D 11 screen capture never gets a picture. On iOS, both blocks need the SDK and `VisioForge.CrossPlatform.Core.iOS` at 2026.11.23 or later.
 - For WHIP, a WebRTC media server. The examples use [MediaMTX](https://github.com/bluenviron/mediamtx), whose default configuration accepts WHIP on port 8889.
 
 NuGet packages:
 
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK
 - Windows: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) and [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — the GStreamer runtime and the additional plugins, `rswebrtc` (both blocks) among them
-- macOS (WHIP): [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
-- Linux (WHIP): `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
+- macOS: [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
+- Linux: `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
+- iOS: [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS/), which includes `rswebrtc`
 
-Without the `Adds` package `WebRTCSinkBlock.IsAvailable()` and `WHIPSinkBlock.IsAvailable()` return `false`. For deployment details see the [Deployment Guide](../../../deployment-x/).
+Without the `Adds` package `WebRTCSinkBlock.IsAvailable()` and `WHIPSinkBlock.IsAvailable()` return `false`; on iOS, both come with `VisioForge.CrossPlatform.Core.iOS`. For deployment details see the [Deployment Guide](../../../deployment-x/).
 
 ## Part 1: Straight to Browsers with WebRTCSinkBlock
 
@@ -86708,7 +86710,7 @@ pipeline.Connect(h264.Output, whip.CreateNewInput(MediaBlockPadMediaType.Video))
 
 ### Platforms
 
-`WebRTCSinkBlock` runs on Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`. `WHIPSinkBlock` runs on Windows, macOS and Linux with the platform's `Adds` package; on Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `IsAvailable()` at startup, as both programs do.
+`WebRTCSinkBlock` runs on Windows, macOS and Linux with the platform's `Adds` package, and on iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later: an older `Core.iOS` has the plugin without its fixes, so the sink starts, but `StopAsync` can hang when a viewer leaves during its negotiation. `WHIPSinkBlock` runs on the same platforms with the same packages. On Linux both also need the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `IsAvailable()` at startup, as both programs do.
 
 ### Codecs
 
@@ -86746,7 +86748,7 @@ On a local network no STUN server is needed. For viewers behind other networks, 
 
 | Symptom | Cause and fix |
 | --- | --- |
-| `IsAvailable()` returns `false` | The platform's `Adds` package is not referenced, or on Linux `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` are missing. |
+| `IsAvailable()` returns `false` | The platform's `Adds` package is not referenced (on iOS, `VisioForge.CrossPlatform.Core.iOS` is missing or the SDK is older than 2026.11.23), or on Linux `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` are missing. |
 | `StartAsync` returns `false`, `OnError` says the web server cannot listen | The web port is in use by another program. Choose another `WebServerAddress` port, or stop the other program. |
 | The page says `Disconnected, retrying...` | The signalling server is not reachable: the application is not running, the `?signalling=` port is wrong, or the firewall blocks it. |
 | The page says `Waiting for the stream...` | The page reached the signalling server, but the pipeline is not playing yet. Check `StartAsync` and the `OnError` messages. |
@@ -86777,7 +86779,7 @@ Yes. Connect a raw audio source to `CreateNewInput(MediaBlockPadMediaType.Audio)
 
 ### Does it work on macOS and Linux?
 
-`WHIPSinkBlock` does, on Windows, macOS and Linux. `WebRTCSinkBlock` is Windows-only; on macOS and Linux publish with WHIP, or serve cameras with [`WHEPServerSinkBlock`](../rtsp-cameras-in-browser-whep/).
+Both do, and both run on iOS too. To serve cameras without a viewer page of your own, use [`WHEPServerSinkBlock`](../rtsp-cameras-in-browser-whep/).
 
 ### Can a browser play the WHIP stream without the media server's page?
 
@@ -93647,11 +93649,11 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `rswebrtc` plugin (`whipclientsink`, from gst-plugins-rs), `capssetter` (gst-plugins-good) and the correct VisioForge SDK redistribution package.
+Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `rswebrtc` plugin (`whipclientsink`, from gst-plugins-rs), `capssetter` (gst-plugins-good) and the correct VisioForge SDK redistribution package. On iOS it ships in `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later.
 
 #### Platforms
 
-Windows, macOS, Linux.
+Windows, macOS, Linux, iOS.
 
 ### WebRTC
 
@@ -93730,11 +93732,11 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `WebRTCSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+Check availability using `WebRTCSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin: on Windows from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package (`.x86`, `.arm64`), on macOS from `VisioForge.CrossPlatform.Core.macOS.Adds`, on Linux from `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64`), plus the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`; on iOS `VisioForge.CrossPlatform.Core.iOS` includes it.
 
 #### Platforms
 
-Windows.
+Windows, macOS, Linux x64/arm64, iOS.
 
 ### WHEP server
 
@@ -93824,11 +93826,11 @@ Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
 
 #### Availability
 
-Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the platform's `Adds` package: `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` or `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`. On Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`.
+Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the platform's `Adds` package: `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` or `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`. On Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. On iOS it ships in `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later.
 
 #### Platforms
 
-Windows x64, macOS, Linux x64/arm64.
+Windows x64, macOS, Linux x64/arm64, iOS.
 
 ### RIST MPEG-TS
 
@@ -96281,11 +96283,11 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`.
+Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`. On iOS it ships in `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later.
 
 #### Low-latency playback
 
-The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) is a minimal player built this way: enter a WHEP URL, and the stream plays in a `VideoView`. What keeps its latency low:
+The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WHEP%20Player%20Demo) is a minimal player built this way: enter a WHEP URL, and the stream plays in a `VideoView`. What keeps its latency low:
 
 - `IsSync = false` on `VideoRendererBlock` and `AudioRendererBlock`. Each frame is shown as soon as it is decoded. With the default `true`, the renderer holds every frame for the pipeline latency, and the WebRTC jitter buffer alone adds 200 ms to it.
 - No `StunServer` on a local network: the host addresses connect directly. Set `StunServer` or `TurnServer` when the server is behind NAT.
@@ -96295,7 +96297,7 @@ Measured glass to glass on a local network — a millisecond clock on the screen
 
 #### Platforms
 
-Windows, macOS, Linux.
+Windows, macOS, Linux, iOS.
 
 ## Other Source Blocks
 
@@ -135778,9 +135780,9 @@ The package has no dependency on the rest of the VisioForge SDK. It targets .NET
 ## Install
 
 ```
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.23]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.23]" />
 ```
 
 `Redist.VirtualCamera.x64` carries the filters Zoom, OBS and browsers load: the consumer application loads the filter, and those applications are 64-bit (see below for other consumers). Build your application for x64 or ARM64 so they see its frames: a 32-bit process pushes to a stream that only 32-bit consumers read. Each `Redist.VirtualCamera` package brings the `Redist.Shared` package of its architecture, with the `VisioForge_MFP*.dll` and `VisioForge_MFPX*.dll` its filters load (and `vcomp140.dll` on x64). An application that is not x64 and calls `PushFrameBgra` or `PushFrameBgr24` also references `Redist.Shared` of its own architecture (`.x86` or `.arm64`) for the color conversion.
@@ -146210,7 +146212,7 @@ dotnet restore
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.21]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.11.17]"/>
 
   <!-- Optional: MongoDB integration -->
@@ -161143,7 +161145,7 @@ Whether you're looking for technical support, have questions about our products,
 
 # Pricing
 
-Annual licenses include 12 months of updates and email support; Lifetime·Team licenses include both for the life of the product
+[Annual licenses include 12 months of updates and email support; Lifetime·Team licenses include both for the life of the product](https://www.visioforge.com/buy#licensing-brief)
 
 Not sure which edition you need? In Video Capture SDK .NET, MP4 (H.264/H.265) recording and network streaming output (RTMP, RTSP, SRT, NDI, HLS) are in Premium, and IP camera sources (ONVIF/RTSP) start at Professional. Each product page has the full edition comparison.
 
@@ -161450,7 +161452,7 @@ Purchase Options
 
 -   [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
--   Source code samples included
+-   [Source code samples included](https://github.com/visioforge/.Net-SDK-s-samples)
 -   Email support
 -   1 year of updates
 
@@ -161486,7 +161488,7 @@ Purchase Options
 
 -   [Media Blocks SDK .NET](/media-blocks-sdk-net)
 
--   Source code samples included
+-   [Source code samples included](https://github.com/visioforge/.Net-SDK-s-samples)
 -   Email support
 -   1 year of updates
 
@@ -161520,7 +161522,7 @@ Purchase Options
 
 -   [Virtual Camera SDK](/virtual-camera-sdk)
 
--   Source code samples included
+-   [Source code samples included](https://github.com/visioforge/directshow-samples)
 -   Email support
 -   1 year of updates
 
@@ -164363,6 +164365,10 @@ Your personal data may be transferred to and processed in countries outside the 
 ## Automated Decision Making
 
 We do not use automated decision-making or profiling that produces legal effects or similarly significantly affects you.
+
+## YouTube API Services
+
+Our tutorial publishing tools use YouTube API Services to upload and manage the videos of our own YouTube channel. When you watch or interact with our videos on YouTube, the [YouTube Terms of Service](https://www.youtube.com/t/terms) apply, and Google processes your data under the [Google Privacy Policy](https://policies.google.com/privacy). These tools act only on our own channel: they read and update our own videos, playlists, comments and the channel's aggregate statistics. They do not collect, store or share personal data of viewers or other YouTube users. The access token stays on our own computer. Access granted to these tools can be revoked at any time on the [Google security settings page](https://security.google.com/settings/security/permissions).
 
 ## Data Breach Notification
 

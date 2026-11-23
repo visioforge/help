@@ -1873,11 +1873,11 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Llame a `WHEPSourceBlock.IsAvailable()` antes de construir el pipeline: indica si el plugin `rswebrtc` de GStreamer (`whepclientsrc`, de gst-plugins-rs) está presente. En Windows y macOS se incluye en los paquetes `VisioForge.CrossPlatform.Core.Windows.Adds.x64` y `VisioForge.CrossPlatform.Core.macOS.Adds`. En Linux se incluye en el paquete `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, y necesita GStreamer 1.22 o posterior (Debian 12, Ubuntu 24.04+) con los paquetes `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice` de la distribución instalados; sin ellos, `IsAvailable()` devuelve `false`.
+Llame a `WHEPSourceBlock.IsAvailable()` antes de construir el pipeline: indica si el plugin `rswebrtc` de GStreamer (`whepclientsrc`, de gst-plugins-rs) está presente. En Windows y macOS se incluye en los paquetes `VisioForge.CrossPlatform.Core.Windows.Adds.x64` y `VisioForge.CrossPlatform.Core.macOS.Adds`. En Linux se incluye en el paquete `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, y necesita GStreamer 1.22 o posterior (Debian 12, Ubuntu 24.04+) con los paquetes `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice` de la distribución instalados; sin ellos, `IsAvailable()` devuelve `false`. En iOS viene en `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 o posterior.
 
 #### Reproducción de baja latencia
 
-El WHEP Player Demo (WPF) del [repositorio de ejemplos](https://github.com/visioforge/.Net-SDK-s-samples) es un reproductor mínimo construido así: introduzca una URL WHEP y el flujo se reproduce en un `VideoView`. Lo que mantiene baja su latencia:
+El WHEP Player Demo (WPF) del [repositorio de ejemplos](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WHEP%20Player%20Demo) es un reproductor mínimo construido así: introduzca una URL WHEP y el flujo se reproduce en un `VideoView`. Lo que mantiene baja su latencia:
 
 - `IsSync = false` en `VideoRendererBlock` y `AudioRendererBlock`. Cada fotograma se muestra en cuanto se decodifica. Con el valor predeterminado `true`, el renderizador retiene cada fotograma durante la latencia del pipeline, y el búfer de fluctuación de WebRTC le añade por sí solo 200 ms.
 - Sin `StunServer` en una red local: las direcciones de los equipos se conectan directamente. Configure `StunServer` o `TurnServer` cuando el servidor esté detrás de NAT.
@@ -1887,7 +1887,7 @@ Medición de extremo a extremo (glass to glass) en una red local — un reloj de
 
 #### Plataformas
 
-Windows, macOS, Linux.
+Windows, macOS, Linux, iOS.
 
 ## Otros Bloques Fuente
 

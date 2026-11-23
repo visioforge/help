@@ -9,6 +9,7 @@ tags:
   - Windows
   - macOS
   - Linux
+  - iOS
   - Streaming
   - IP Camera
   - RTSP
@@ -32,7 +33,7 @@ primary_api_classes:
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Ejemplo de demostración"
-    El código de esta guía procede del RTSP WHEP Camera Grid Demo (WPF) del [repositorio de ejemplos](https://github.com/visioforge/.Net-SDK-s-samples): añade cámaras por URL RTSP, sirve una página con una cuadrícula de todas las cámaras y reenvía las solicitudes WHEP de cada cámara a su propio servidor. Su versión de consola, RTSP WHEP Camera Grid (Console), hace lo mismo en Windows, macOS y Linux, con las URL de las cámaras en la línea de comandos.
+    El código de esta guía procede del RTSP WHEP Camera Grid Demo (WPF) del [repositorio de ejemplos](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20WHEP%20Camera%20Grid%20Demo): añade cámaras por URL RTSP, sirve una página con una cuadrícula de todas las cámaras y reenvía las solicitudes WHEP de cada cámara a su propio servidor. Su versión de consola, [RTSP WHEP Camera Grid (Console)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20WHEP%20Camera%20Grid), hace lo mismo en Windows, macOS y Linux, con las URL de las cámaras en la línea de comandos. Ambas demos requieren Media Blocks SDK .NET 2026.11.23 o posterior, la primera versión con audio WHEP.
 
     La referencia del bloque está en [Bloques sink → Servidor WHEP](../Sinks/index.md#servidor-whep).
 
@@ -70,10 +71,10 @@ WHEP es un pequeño protocolo HTTP sobre WebRTC: un `POST` con la oferta SDP, un
 
 ## Requisitos previos
 
-- Windows x64, macOS o Linux x64/arm64 (Debian 12, Ubuntu 24.04 y posteriores). `WHEPServerSinkBlock` usa el plugin `rswebrtc` de GStreamer, que se distribuye en el paquete de runtime `Adds` de cada plataforma.
+- Windows x64, macOS, Linux x64/arm64 (Debian 12, Ubuntu 24.04 y posteriores) o iOS. `WHEPServerSinkBlock` usa el plugin `rswebrtc` de GStreamer, que se distribuye en el paquete de runtime `Adds` de cada plataforma y, en iOS, en `VisioForge.CrossPlatform.Core.iOS`.
 - .NET 10 (.NET 8 o posterior en Linux).
 - Una cámara IP con un flujo RTSP H.264; para el sonido, una cámara que envíe audio (AAC o G.711).
-- Media Blocks SDK .NET versión 2026.11.20 o posterior en Windows, la versión que añade `WHEPServerSinkBlock`, y 2026.11.21 o posterior en macOS y Linux. La entrada de audio, `WHEPServerSinkBlock.AudioInput`, requiere la 2026.11.23 o posterior.
+- Media Blocks SDK .NET versión 2026.11.20 o posterior en Windows, la versión que añade `WHEPServerSinkBlock`, y 2026.11.21 o posterior en macOS y Linux. La entrada de audio, `WHEPServerSinkBlock.AudioInput`, requiere la 2026.11.23 o posterior. En iOS, el SDK y `VisioForge.CrossPlatform.Core.iOS` necesitan ambos 2026.11.23 o posterior.
 
 Paquetes NuGet:
 
@@ -81,8 +82,9 @@ Paquetes NuGet:
 - Windows: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) y [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — el runtime de GStreamer y los plugins adicionales, entre ellos `rswebrtc`
 - macOS: [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) y [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
 - Linux: `VisioForge.CrossPlatform.Core.Linux.x64` y `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` para ARM), además del GStreamer de la distribución con `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice`
+- iOS: [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS/)
 
-Sin el paquete `Adds`, `WHEPServerSinkBlock.IsAvailable()` devuelve `false`. Para los detalles de despliegue consulte la [Guía de despliegue](../../deployment-x/index.md).
+Sin el paquete `Adds`, `WHEPServerSinkBlock.IsAvailable()` devuelve `false`; en iOS devuelve `false` con un SDK anterior a 2026.11.23. Para los detalles de despliegue consulte la [Guía de despliegue](../../deployment-x/index.md).
 
 La página del navegador es un archivo que sirve la aplicación. Incrústela en el ensamblado desde el `.csproj`, como hace la demo de consola: un bundle de aplicación de macOS colocaría un archivo copiado en `Contents/Resources`, no junto al ejecutable:
 
@@ -538,13 +540,13 @@ La construcción del bloque falla, con un mensaje a través del evento `OnError`
 
 ### Plataformas
 
-Windows x64 con `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS con `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 con `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` y los paquetes `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice` de la distribución. Compruebe `WHEPServerSinkBlock.IsAvailable()` al iniciar, como hace la demo.
+Windows x64 con `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS con `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 con `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` y los paquetes `gstreamer1.0-plugins-bad` y `gstreamer1.0-nice` de la distribución, iOS con `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 o posterior. Compruebe `WHEPServerSinkBlock.IsAvailable()` al iniciar, como hace la demo.
 
 ## Solución de problemas
 
 | Síntoma | Causa y solución |
 | --- | --- |
-| `WHEPServerSinkBlock.IsAvailable()` devuelve `false` | El paquete `Adds` de la plataforma no está referenciado o, en Linux, faltan los paquetes de la distribución indicados en [Requisitos previos](#requisitos-previos). |
+| `WHEPServerSinkBlock.IsAvailable()` devuelve `false` | El paquete `Adds` de la plataforma no está referenciado (en iOS, falta `VisioForge.CrossPlatform.Core.iOS` o el SDK es anterior a 2026.11.23) o, en Linux, faltan los paquetes de la distribución indicados en [Requisitos previos](#requisitos-previos). |
 | `CreateAsync` lanza `InvalidOperationException` ("Unable to read RTSP stream info") | La cámara no es accesible, o la URL o las credenciales son incorrectas. Abra la misma URL en otro cliente RTSP para comprobarla. |
 | `StartAsync` devuelve `false` | Lea los mensajes de `OnError`: un puerto ya en uso, un `ServerAddress` no válido o un flujo de cámara que no es H.264 (H.265, MJPEG). |
 | El vídeo se reproduce sin sonido | El elemento `<video>` empieza en silencio: active el sonido con sus controles. Si la cámara no envía audio, `CreateAsync` desactivó `AudioEnabled` y no se conectó audio; revise la configuración de audio de la cámara. |
@@ -560,7 +562,7 @@ Windows x64 con `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS con `Vis
 
 - **`WHEPServerSinkBlock`** (esta guía): la fuente ya es H.264 (una cámara IP) y los espectadores son navegadores de su red. Vídeo en passthrough sin codificador, audio codificado a Opus, sin servidor de medios.
 - **[`WebRTCSinkBlock`](../Sinks/index.md#webrtc)**: el vídeo está sin comprimir o se procesa en el pipeline (una webcam, la pantalla, superposiciones, analítica). Codifica para cada espectador (vídeo VP8, audio Opus) con control de congestión por espectador, a costa de un codificador por espectador, y usa el protocolo de señalización WebSocket de `webrtcsink` en lugar de WHEP.
-- **[`WHIPSinkBlock`](../Sinks/index.md#whip)**: ya tiene un servidor de medios WebRTC (MediaMTX, Janus, Cloudflare Stream) y quiere que la aplicación le envíe un flujo; el servidor se encarga entonces de los espectadores. Requiere vídeo H.264 y audio Opus; funciona en Windows, macOS y Linux.
+- **[`WHIPSinkBlock`](../Sinks/index.md#whip)**: ya tiene un servidor de medios WebRTC (MediaMTX, Janus, Cloudflare Stream) y quiere que la aplicación le envíe un flujo; el servidor se encarga entonces de los espectadores. Requiere vídeo H.264 y audio Opus; funciona en Windows, macOS, Linux e iOS.
 - **[HLS](../Sinks/index.md#hls)**: espectadores en internet a través de una CDN o de un reproductor `<video>` simple, cuando un retardo de varios segundos es aceptable. Consulte también [streaming HLS](../../general/network-streaming/hls-streaming.md) y la guía del [reproductor HLS para ASP.NET Web Forms](aspnet-webforms-hls-player.md).
 
 ## Preguntas frecuentes

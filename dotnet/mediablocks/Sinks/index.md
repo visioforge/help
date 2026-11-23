@@ -1758,11 +1758,11 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `rswebrtc` plugin (`whipclientsink`, from gst-plugins-rs), `capssetter` (gst-plugins-good) and the correct VisioForge SDK redistribution package.
+Check availability using `WHIPSinkBlock.IsAvailable()`. Requires the GStreamer `rswebrtc` plugin (`whipclientsink`, from gst-plugins-rs), `capssetter` (gst-plugins-good) and the correct VisioForge SDK redistribution package. On iOS it ships in `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later.
 
 #### Platforms
 
-Windows, macOS, Linux.
+Windows, macOS, Linux, iOS.
 
 ### WebRTC
 
@@ -1841,11 +1841,11 @@ await pipeline.StartAsync();
 
 #### Availability
 
-Check availability using `WebRTCSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+Check availability using `WebRTCSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin: on Windows from the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package (`.x86`, `.arm64`), on macOS from `VisioForge.CrossPlatform.Core.macOS.Adds`, on Linux from `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64`), plus the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`; on iOS `VisioForge.CrossPlatform.Core.iOS` includes it.
 
 #### Platforms
 
-Windows.
+Windows, macOS, Linux x64/arm64, iOS.
 
 ### WHEP server
 
@@ -1935,11 +1935,11 @@ Console.WriteLine(whep.EndpointUrl); // http://127.0.0.1:9100/whep/endpoint
 
 #### Availability
 
-Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the platform's `Adds` package: `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` or `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`. On Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`.
+Check availability using `WHEPServerSinkBlock.IsAvailable()`. Requires the `rswebrtc` GStreamer plugin from the platform's `Adds` package: `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` or `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`. On Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. On iOS it ships in `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later.
 
 #### Platforms
 
-Windows x64, macOS, Linux x64/arm64.
+Windows x64, macOS, Linux x64/arm64, iOS.
 
 ### RIST MPEG-TS
 

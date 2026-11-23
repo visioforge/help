@@ -92,7 +92,7 @@ Su código: [video-player-short-wpf en GitHub](https://github.com/visioforge/.Ne
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — los códecs FFmpeg (libav) con los que se decodifican muchos formatos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
 ```

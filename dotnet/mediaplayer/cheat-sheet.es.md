@@ -62,7 +62,7 @@ Todos los objetivos multiplataforma usan una pipeline de decodificación respald
 Paquete principal del SDK (siempre obligatorio):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
 ```
 
 Runtime nativo para Windows x64:
@@ -82,7 +82,7 @@ Runtime nativo para Windows x86:
 macOS (nativo) y MacCatalyst (MAUI macOS):
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 ```
 
 Linux x64 (más GStreamer 1.20+ del sistema):
@@ -97,14 +97,14 @@ Android e iOS:
 
 ```xml
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 Paquetes opcionales de frameworks de UI — agregue el que corresponda a su objetivo:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
 ```
 
 Guía completa de instalación por IDE: [install/index.md](../install/index.md).

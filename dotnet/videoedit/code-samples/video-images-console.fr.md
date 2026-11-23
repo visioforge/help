@@ -69,7 +69,7 @@ Son code : [images-to-video-short-console sur GitHub](https://github.com/visiofo
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) : GStreamer et les bibliothèques natives du moteur, dont l'encodeur H.264
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 ```
 

@@ -75,8 +75,8 @@ Use the latest NuGet package versions of the SDK for .NET in your project.
 Add the following NuGet packages to your project:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
 ```
 
 The `VideoCapture` package contains the main video capture functionality, while the `Core.UI.MAUI` package contains the `VideoView` control for video preview in .NET MAUI apps.
@@ -109,7 +109,7 @@ Add the following NuGet packages to your project based on target platform:
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- The iOS redist version trails the SDK version on purpose - it tracks the
        GStreamer-iOS rebuild cadence, not the wrapper release. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 ```
 
@@ -118,7 +118,7 @@ Add the following NuGet packages to your project based on target platform:
 ```xml
 <!-- Custom NuGet package and target code for maccatalyst to copy NuGet redist files to app file -->
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 
 <Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">

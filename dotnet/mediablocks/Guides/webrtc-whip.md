@@ -9,6 +9,7 @@ tags:
   - Windows
   - macOS
   - Linux
+  - iOS
   - Streaming
   - Screen Capture
   - Webcam
@@ -69,24 +70,25 @@ Which one to use:
 | Encoding | VP8 and Opus, one encoder per viewer, with per-viewer congestion control | H.264 and Opus, encoded once in your pipeline |
 | CPU per extra viewer | one more VP8 encoder | none: the server forwards the stream |
 | Viewer page | served by the block, about 100 lines of JavaScript | the server's own player, or any WHEP player |
-| Platforms | Windows | Windows, macOS, Linux |
+| Platforms | Windows, macOS, Linux, iOS | Windows, macOS, Linux, iOS |
 | Typical use | screen sharing and camera views for a few viewers on a local network | publishing to many viewers, or across the internet |
 
 ## Prerequisites
 
-- Windows x64 for `WebRTCSinkBlock`; Windows, macOS or Linux for `WHIPSinkBlock`.
+- Windows, macOS, Linux or iOS.
 - .NET 10 (.NET 8 or later on Linux).
-- Media Blocks SDK .NET version 2026.11.21 or later. That release adds the screen-capture-to-`WebRTCSinkBlock` fix this guide relies on; with 2026.11.20, `WebRTCSinkBlock` plays cameras but a viewer of a Direct3D 11 screen capture never gets a picture.
+- Media Blocks SDK .NET version 2026.11.21 or later. That release adds the screen-capture-to-`WebRTCSinkBlock` fix this guide relies on; with 2026.11.20, `WebRTCSinkBlock` plays cameras but a viewer of a Direct3D 11 screen capture never gets a picture. On iOS, both blocks need the SDK and `VisioForge.CrossPlatform.Core.iOS` at 2026.11.23 or later.
 - For WHIP, a WebRTC media server. The examples use [MediaMTX](https://github.com/bluenviron/mediamtx), whose default configuration accepts WHIP on port 8889.
 
 NuGet packages:
 
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK
 - Windows: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) and [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — the GStreamer runtime and the additional plugins, `rswebrtc` (both blocks) among them
-- macOS (WHIP): [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
-- Linux (WHIP): `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
+- macOS: [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
+- Linux: `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
+- iOS: [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS/), which includes `rswebrtc`
 
-Without the `Adds` package `WebRTCSinkBlock.IsAvailable()` and `WHIPSinkBlock.IsAvailable()` return `false`. For deployment details see the [Deployment Guide](../../deployment-x/index.md).
+Without the `Adds` package `WebRTCSinkBlock.IsAvailable()` and `WHIPSinkBlock.IsAvailable()` return `false`; on iOS, both come with `VisioForge.CrossPlatform.Core.iOS`. For deployment details see the [Deployment Guide](../../deployment-x/index.md).
 
 ## Part 1: Straight to Browsers with WebRTCSinkBlock
 
@@ -568,7 +570,7 @@ pipeline.Connect(h264.Output, whip.CreateNewInput(MediaBlockPadMediaType.Video))
 
 ### Platforms
 
-`WebRTCSinkBlock` runs on Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`. `WHIPSinkBlock` runs on Windows, macOS and Linux with the platform's `Adds` package; on Linux it also needs the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `IsAvailable()` at startup, as both programs do.
+`WebRTCSinkBlock` runs on Windows, macOS and Linux with the platform's `Adds` package, and on iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later: an older `Core.iOS` has the plugin without its fixes, so the sink starts, but `StopAsync` can hang when a viewer leaves during its negotiation. `WHIPSinkBlock` runs on the same platforms with the same packages. On Linux both also need the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `IsAvailable()` at startup, as both programs do.
 
 ### Codecs
 
@@ -606,7 +608,7 @@ On a local network no STUN server is needed. For viewers behind other networks, 
 
 | Symptom | Cause and fix |
 | --- | --- |
-| `IsAvailable()` returns `false` | The platform's `Adds` package is not referenced, or on Linux `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` are missing. |
+| `IsAvailable()` returns `false` | The platform's `Adds` package is not referenced (on iOS, `VisioForge.CrossPlatform.Core.iOS` is missing or the SDK is older than 2026.11.23), or on Linux `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` are missing. |
 | `StartAsync` returns `false`, `OnError` says the web server cannot listen | The web port is in use by another program. Choose another `WebServerAddress` port, or stop the other program. |
 | The page says `Disconnected, retrying...` | The signalling server is not reachable: the application is not running, the `?signalling=` port is wrong, or the firewall blocks it. |
 | The page says `Waiting for the stream...` | The page reached the signalling server, but the pipeline is not playing yet. Check `StartAsync` and the `OnError` messages. |
@@ -637,7 +639,7 @@ Yes. Connect a raw audio source to `CreateNewInput(MediaBlockPadMediaType.Audio)
 
 ### Does it work on macOS and Linux?
 
-`WHIPSinkBlock` does, on Windows, macOS and Linux. `WebRTCSinkBlock` is Windows-only; on macOS and Linux publish with WHIP, or serve cameras with [`WHEPServerSinkBlock`](rtsp-cameras-in-browser-whep.md).
+Both do, and both run on iOS too. To serve cameras without a viewer page of your own, use [`WHEPServerSinkBlock`](rtsp-cameras-in-browser-whep.md).
 
 ### Can a browser play the WHIP stream without the media server's page?
 

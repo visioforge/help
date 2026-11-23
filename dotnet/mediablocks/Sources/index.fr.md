@@ -1873,11 +1873,11 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Appelez `WHEPSourceBlock.IsAvailable()` avant de construire le pipeline : la méthode indique si le plugin GStreamer `rswebrtc` (`whepclientsrc`, issu de gst-plugins-rs) est présent. Sous Windows et macOS, il est fourni par les packages `VisioForge.CrossPlatform.Core.Windows.Adds.x64` et `VisioForge.CrossPlatform.Core.macOS.Adds`. Sous Linux, il est fourni par le package `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, et nécessite GStreamer 1.22 ou ultérieur (Debian 12, Ubuntu 24.04+) avec les paquets `gstreamer1.0-plugins-bad` et `gstreamer1.0-nice` de la distribution installés ; sans eux, `IsAvailable()` renvoie `false`.
+Appelez `WHEPSourceBlock.IsAvailable()` avant de construire le pipeline : la méthode indique si le plugin GStreamer `rswebrtc` (`whepclientsrc`, issu de gst-plugins-rs) est présent. Sous Windows et macOS, il est fourni par les packages `VisioForge.CrossPlatform.Core.Windows.Adds.x64` et `VisioForge.CrossPlatform.Core.macOS.Adds`. Sous Linux, il est fourni par le package `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64`, et nécessite GStreamer 1.22 ou ultérieur (Debian 12, Ubuntu 24.04+) avec les paquets `gstreamer1.0-plugins-bad` et `gstreamer1.0-nice` de la distribution installés ; sans eux, `IsAvailable()` renvoie `false`. Sous iOS, il est fourni par `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 ou ultérieure.
 
 #### Lecture à faible latence
 
-Le WHEP Player Demo (WPF) du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples) est un lecteur minimal construit ainsi : saisissez une URL WHEP, et le flux est lu dans un `VideoView`. Ce qui maintient sa latence basse :
+Le WHEP Player Demo (WPF) du [dépôt d'exemples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WHEP%20Player%20Demo) est un lecteur minimal construit ainsi : saisissez une URL WHEP, et le flux est lu dans un `VideoView`. Ce qui maintient sa latence basse :
 
 - `IsSync = false` sur `VideoRendererBlock` et `AudioRendererBlock`. Chaque image est affichée dès qu'elle est décodée. Avec la valeur par défaut `true`, le moteur de rendu retient chaque image pendant la latence du pipeline, à laquelle le tampon de gigue WebRTC ajoute à lui seul 200 ms.
 - Pas de `StunServer` sur un réseau local : les adresses des machines se connectent directement. Définissez `StunServer` ou `TurnServer` lorsque le serveur est derrière un NAT.
@@ -1887,7 +1887,7 @@ Mesure de bout en bout (glass to glass) sur un réseau local — une horloge à 
 
 #### Plateformes
 
-Windows, macOS, Linux.
+Windows, macOS, Linux, iOS.
 
 ## Autres blocs de sources
 

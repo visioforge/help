@@ -111,13 +111,13 @@ Los motores nativos van, en cambio, en el archivo de proyecto, cada uno bajo la 
   <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]" />
 </ItemGroup>
 ```
 

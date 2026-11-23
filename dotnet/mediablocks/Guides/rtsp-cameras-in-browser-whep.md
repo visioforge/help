@@ -9,6 +9,7 @@ tags:
   - Windows
   - macOS
   - Linux
+  - iOS
   - Streaming
   - IP Camera
   - RTSP
@@ -32,7 +33,7 @@ primary_api_classes:
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Demo Sample"
-    The code in this guide comes from the RTSP WHEP Camera Grid Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples): it adds cameras by RTSP URL, serves a grid page with every camera, and forwards each camera's WHEP requests to its own server. Its console version, RTSP WHEP Camera Grid (Console), does the same on Windows, macOS and Linux, with the camera URLs on the command line.
+    The code in this guide comes from the RTSP WHEP Camera Grid Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/RTSP%20WHEP%20Camera%20Grid%20Demo): it adds cameras by RTSP URL, serves a grid page with every camera, and forwards each camera's WHEP requests to its own server. Its console version, [RTSP WHEP Camera Grid (Console)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20WHEP%20Camera%20Grid), does the same on Windows, macOS and Linux, with the camera URLs on the command line. Both demos need Media Blocks SDK .NET 2026.11.23 or later, the first release with WHEP audio.
 
     The block reference is in [Sink blocks → WHEP server](../Sinks/index.md#whep-server).
 
@@ -70,10 +71,10 @@ WHEP is a small HTTP protocol on top of WebRTC: one `POST` with the SDP offer, a
 
 ## Prerequisites
 
-- Windows x64, macOS, or Linux x64/arm64 (Debian 12, Ubuntu 24.04 and later). `WHEPServerSinkBlock` uses the `rswebrtc` GStreamer plugin, which ships in each platform's `Adds` runtime package.
+- Windows x64, macOS, Linux x64/arm64 (Debian 12, Ubuntu 24.04 and later) or iOS. `WHEPServerSinkBlock` uses the `rswebrtc` GStreamer plugin, which ships in each platform's `Adds` runtime package and, on iOS, in `VisioForge.CrossPlatform.Core.iOS`.
 - .NET 10 (.NET 8 or later on Linux).
 - An IP camera with an H.264 RTSP stream; for sound, a camera that sends audio (AAC or G.711).
-- Media Blocks SDK .NET version 2026.11.20 or later on Windows — the release that adds `WHEPServerSinkBlock` — and 2026.11.21 or later on macOS and Linux. The audio input, `WHEPServerSinkBlock.AudioInput`, needs 2026.11.23 or later.
+- Media Blocks SDK .NET version 2026.11.20 or later on Windows — the release that adds `WHEPServerSinkBlock` — and 2026.11.21 or later on macOS and Linux. The audio input, `WHEPServerSinkBlock.AudioInput`, needs 2026.11.23 or later. On iOS, the SDK and `VisioForge.CrossPlatform.Core.iOS` both need 2026.11.23 or later.
 
 NuGet packages:
 
@@ -81,8 +82,9 @@ NuGet packages:
 - Windows: [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) and [VisioForge.CrossPlatform.Core.Windows.Adds.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.Adds.x64/) — the GStreamer runtime and the additional plugins, `rswebrtc` among them
 - macOS: [VisioForge.CrossPlatform.Core.macOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS/) and [VisioForge.CrossPlatform.Core.macOS.Adds](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.macOS.Adds/)
 - Linux: `VisioForge.CrossPlatform.Core.Linux.x64` and `VisioForge.CrossPlatform.Core.Linux.Adds.x64` (`.arm64` for ARM), plus the distribution's GStreamer with `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`
+- iOS: [VisioForge.CrossPlatform.Core.iOS](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.iOS/)
 
-Without the `Adds` package `WHEPServerSinkBlock.IsAvailable()` returns `false`. For deployment details see the [Deployment Guide](../../deployment-x/index.md).
+Without the `Adds` package `WHEPServerSinkBlock.IsAvailable()` returns `false`; on iOS it returns `false` with an SDK older than 2026.11.23. For deployment details see the [Deployment Guide](../../deployment-x/index.md).
 
 The browser page is a file the application serves. Embed it in the assembly in the `.csproj`, as the console demo does — a macOS app bundle would put a copied file under `Contents/Resources`, not next to the executable:
 
@@ -538,13 +540,13 @@ The block's build fails, with a message through the pipeline's `OnError` event, 
 
 ### Platforms
 
-Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
+Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`, iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
 
 ## Troubleshooting
 
 | Symptom | Cause and fix |
 | --- | --- |
-| `WHEPServerSinkBlock.IsAvailable()` returns `false` | The platform's `Adds` package is not referenced, or on Linux the distribution packages listed in [Prerequisites](#prerequisites) are missing. |
+| `WHEPServerSinkBlock.IsAvailable()` returns `false` | The platform's `Adds` package is not referenced (on iOS, `VisioForge.CrossPlatform.Core.iOS` is missing or the SDK is older than 2026.11.23), or on Linux the distribution packages listed in [Prerequisites](#prerequisites) are missing. |
 | `CreateAsync` throws `InvalidOperationException` ("Unable to read RTSP stream info") | The camera is unreachable, or the URL or credentials are wrong. Open the same URL in another RTSP client to check it. |
 | `StartAsync` returns `false` | Read the `OnError` messages: a port already in use, an invalid `ServerAddress`, or a camera stream that is not H.264 (H.265, MJPEG). |
 | The video plays, no sound | The `<video>` element starts muted: unmute it with its controls. If the camera sends no audio, `CreateAsync` turned `AudioEnabled` off and no audio was connected; check the camera's audio setting. |
@@ -560,7 +562,7 @@ Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `V
 
 - **`WHEPServerSinkBlock`** (this guide) — the source is already H.264 (an IP camera) and the viewers are browsers on your network. Video passthrough with no encoder, audio encoded to Opus, no media server.
 - **[`WebRTCSinkBlock`](../Sinks/index.md#webrtc)** — the video is raw or processed in the pipeline (a webcam, the screen, overlays, analytics). It encodes for each viewer (VP8 video, Opus audio) with per-viewer congestion control, at the cost of an encoder per viewer, and uses the `webrtcsink` WebSocket signalling protocol instead of WHEP.
-- **[`WHIPSinkBlock`](../Sinks/index.md#whip)** — you already run a WebRTC media server (MediaMTX, Janus, Cloudflare Stream) and want the application to push one stream to it; the server then handles the viewers. Requires H.264 video and Opus audio; runs on Windows, macOS and Linux.
+- **[`WHIPSinkBlock`](../Sinks/index.md#whip)** — you already run a WebRTC media server (MediaMTX, Janus, Cloudflare Stream) and want the application to push one stream to it; the server then handles the viewers. Requires H.264 video and Opus audio; runs on Windows, macOS, Linux and iOS.
 - **[HLS](../Sinks/index.md#hls)** — viewers on the open internet through a CDN or a plain `<video>` player, when a delay of several seconds is acceptable. See also [HLS streaming](../../general/network-streaming/hls-streaming.md) and the [ASP.NET Web Forms HLS player](aspnet-webforms-hls-player.md) guide.
 
 ## Frequently Asked Questions

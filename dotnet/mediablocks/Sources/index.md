@@ -1877,11 +1877,11 @@ pipeline.Connect(source.AudioOutput, audioRenderer.Input);
 await pipeline.StartAsync();
 ```
 
-Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`.
+Check `WHEPSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`whepclientsrc`, from gst-plugins-rs) is present. On Windows and macOS it ships in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` and `VisioForge.CrossPlatform.Core.macOS.Adds` packages. On Linux it ships in the `VisioForge.CrossPlatform.Core.Linux.Adds.x64` / `.arm64` package, and needs GStreamer 1.22 or later (Debian 12, Ubuntu 24.04+) with the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice` packages installed; without them `IsAvailable()` returns `false`. On iOS it ships in `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later.
 
 #### Low-latency playback
 
-The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples) is a minimal player built this way: enter a WHEP URL, and the stream plays in a `VideoView`. What keeps its latency low:
+The WHEP Player Demo (WPF) in the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WHEP%20Player%20Demo) is a minimal player built this way: enter a WHEP URL, and the stream plays in a `VideoView`. What keeps its latency low:
 
 - `IsSync = false` on `VideoRendererBlock` and `AudioRendererBlock`. Each frame is shown as soon as it is decoded. With the default `true`, the renderer holds every frame for the pipeline latency, and the WebRTC jitter buffer alone adds 200 ms to it.
 - No `StunServer` on a local network: the host addresses connect directly. Set `StunServer` or `TurnServer` when the server is behind NAT.
@@ -1891,7 +1891,7 @@ Measured glass to glass on a local network — a millisecond clock on the screen
 
 #### Platforms
 
-Windows, macOS, Linux.
+Windows, macOS, Linux, iOS.
 
 ## Other Source Blocks
 

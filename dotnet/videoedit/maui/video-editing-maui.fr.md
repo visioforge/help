@@ -52,8 +52,8 @@ L'exemple complet se trouve sur [GitHub](https://github.com/visioforge/.Net-SDK-
 Deux paquets : le SDK lui-même et le contrôle `VideoView` de MAUI.
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.21]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.21]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` ne fournit que le contrôle `VideoView` — à lui seul, il ne peut
@@ -74,11 +74,11 @@ builds Android.
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <!-- La version du redistribuable iOS est volontairement en retard sur celle du SDK - elle suit
        le rythme de reconstruction de GStreamer-iOS, pas celui du wrapper. -->
-  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.13]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
