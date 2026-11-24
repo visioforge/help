@@ -35,6 +35,11 @@ primary_api_classes:
   - UDPSinkSettings
   - MultiUDPMPEGTSSinkBlock
 
+video:
+  id: y3rY9vHSFXQ
+  upload_date: 2026-11-24T13:35:52Z
+  duration: PT52S
+
 ---
 
 # UDP Streaming with VisioForge SDKs
@@ -181,6 +186,57 @@ This code:
 [MediaBlocksPipeline](#){ .md-button }
 
 The Media Blocks SDK provides cross-platform UDP streaming support using GStreamer-based blocks. These blocks work on Windows, macOS, Linux, iOS, and Android.
+
+### The Short Version
+
+The one-minute video runs this console app and opens the stream in ffplay.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/y3rY9vHSFXQ?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+A complete console app: it sends a video file as an MPEG-TS stream over UDP to `udp://127.0.0.1:5004` until Enter is pressed. `UniversalSourceBlock` reads the file, `H264EncoderBlock` encodes the video, and `AACEncoderBlock` encodes the audio when the file has an audio track. `UDPMPEGTSSinkBlock` multiplexes both into MPEG-TS and sends the packets. The file is sent once, in real time: a receiver started later joins mid-file and shows the picture from the next keyframe. Open the stream with `ffplay udp://127.0.0.1:5004`; `ffprobe` reports `mpegts` with H.264, and AAC when the file has audio. To reach another machine, put its IP address, or a multicast address, into `Host`.
+
+<!-- vf-compile -->
+```csharp
+using System;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioEncoders;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var file = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(
+        args[0]));
+var udp = new UDPMPEGTSSinkBlock(
+    new UDPSinkSettings
+    { Host = "127.0.0.1", Port = 5004 });
+var h264 = new H264EncoderBlock();
+p.Connect(file.VideoOutput, h264.Input);
+p.Connect(h264.Output, udp.CreateNewInput(
+    MediaBlockPadMediaType.Video));
+if (file.AudioOutput != null)
+{
+    var aac = new AACEncoderBlock();
+    p.Connect(file.AudioOutput, aac.Input);
+    p.Connect(aac.Output, udp.CreateNewInput(
+        MediaBlockPadMediaType.Audio));
+}
+if (!await p.StartAsync()) return;
+Console.WriteLine("udp://127.0.0.1:5004");
+Console.ReadLine();
+await p.StopAsync();
+```
+
+The full project is [udp-mpegts-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/udp-mpegts-short-console), a Windows x64 console app that references `VisioForge.DotNet.MediaBlocks` and the SDK's native package for that platform, `VisioForge.CrossPlatform.Core.Windows.x64`. Pass the path of a file with a video track as the first argument.
 
 ### Single-destination MPEG-TS Streaming
 
