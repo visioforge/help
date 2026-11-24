@@ -54,6 +54,7 @@ using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
 ```
 **Paquets NuGet requis** :
+
 - VisioForge.DirectShowAPI (il contient aussi l'espace de noms `VisioForge.DirectShowLib`)
 ### Projets Delphi
 ```delphi
@@ -1460,10 +1461,14 @@ public bool ConfigureEncryption(IBaseFilter muxer, string password)
 **Problème** : CLSID introuvable
 
 **Solution** :
-```bash
-# Enregistrer les filtres (executer en tant qu'administrateur)
-regsvr32 "C:\Path\To\EncryptMuxer.ax"
-regsvr32 "C:\Path\To\DecryptDemuxer.ax"
+```batch
+REM Enregistrer les filtres (exécuter en tant qu'administrateur)
+REM VisioForge_Encryptor_v9 contient le chiffreur v9 et le déchiffreur v9 utilisés par les exemples
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_Encryptor_v9_x64.ax"
+REM Les encodeurs H.264 et AAC utilisés par les exemples (VFH264EncoderV10, VFAACEncoderV10)
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_H264_Encoder_x64.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_AAC_Encoder_v10_x64.ax"
+REM Applications 32 bits : les mêmes fichiers sans _x64
 ```
 
 #### Erreur « Interface not available »
@@ -1471,6 +1476,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problème** : impossible d'interroger IVFCryptoConfig
 
 **Solution** :
+
 - Vérifier que la version du filtre est correcte
 - Vérifier que le filtre est correctement enregistré
 - S'assurer que les interfaces COM sont compatibles
@@ -1480,6 +1486,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problème** : mauvais mot de passe utilisé pour le déchiffrement
 
 **Solution** :
+
 - Vérifier que le même mot de passe est utilisé pour le chiffrement et le déchiffrement
 - Vérifier l'encodage du mot de passe (Unicode vs ANSI)
 - S'assurer qu'il n'y a pas de fautes de frappe dans le mot de passe
@@ -1489,6 +1496,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problème** : l'encodage a échoué silencieusement
 
 **Solution** :
+
 - Connecter la sortie du chiffreur à un File Writer et définir le nom du fichier sur le File Writer : le chiffreur n'implémente pas `IFileSinkFilter`
 - Vérifier que tous les filtres encodeurs sont correctement connectés
 - Vérifier la validité des configurations d'encodeur
@@ -1497,6 +1505,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 
 ---
 ## Voir aussi
+
 - [Vue d'ensemble du Video Encryption SDK](index.md) — fonctionnalités du produit
 - [Référence des interfaces](interface-reference.md) — documentation API complète
 - [Pack de filtres d'encodage DirectShow](../filters-enc/index.md) — encodeurs compatibles

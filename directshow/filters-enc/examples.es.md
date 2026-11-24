@@ -380,7 +380,7 @@ public IBaseFilter CreateAudioEncoder(IFilterGraph2 filterGraph, AudioCodec code
             break;
 
         default:
-            throw new ArgumentException("Códec de audio no compatible");
+            throw new ArgumentException("Unsupported audio codec");
     }
 
     return FilterGraphTools.AddFilterFromClsid(filterGraph, encoderCLSID, encoderName);
@@ -664,7 +664,7 @@ public class CompleteEncoder : IDisposable
                 break;
 
             default:
-                throw new ArgumentException("Códec de audio no compatible");
+                throw new ArgumentException("Unsupported audio codec");
         }
 
         return FilterGraphTools.AddFilterFromClsid(filterGraph, clsid, name);

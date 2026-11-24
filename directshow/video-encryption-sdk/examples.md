@@ -54,6 +54,7 @@ using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
 ```
 **Required NuGet Packages**:
+
 - VisioForge.DirectShowAPI (it also contains the `VisioForge.DirectShowLib` namespace)
 ### Delphi Projects
 ```delphi
@@ -1460,10 +1461,14 @@ public bool ConfigureEncryption(IBaseFilter muxer, string password)
 **Problem**: CLSID not found
 
 **Solution**:
-```bash
-# Register filters (run as Administrator)
-regsvr32 "C:\Path\To\EncryptMuxer.ax"
-regsvr32 "C:\Path\To\DecryptDemuxer.ax"
+```batch
+REM Register filters (run as Administrator)
+REM VisioForge_Encryptor_v9 holds both the v9 encryptor and the v9 decryptor the samples use
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_Encryptor_v9_x64.ax"
+REM The H.264 and AAC encoders the samples use (VFH264EncoderV10, VFAACEncoderV10)
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_H264_Encoder_x64.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_AAC_Encoder_v10_x64.ax"
+REM 32-bit applications: the same files without _x64
 ```
 
 #### "Interface not available" Error
@@ -1471,6 +1476,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problem**: Cannot query IVFCryptoConfig
 
 **Solution**:
+
 - Verify filter version is correct
 - Check filter is properly registered
 - Ensure COM interfaces are compatible
@@ -1480,6 +1486,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problem**: Wrong password used for decryption
 
 **Solution**:
+
 - Verify same password is used for encryption and decryption
 - Check password encoding (Unicode vs. ANSI)
 - Ensure no typos in password
@@ -1489,6 +1496,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problem**: Encoding failed silently
 
 **Solution**:
+
 - Connect the encryptor's output to a File Writer and set the file name on the File Writer: the encryptor itself has no `IFileSinkFilter`
 - Check all encoder filters are properly connected
 - Verify encoder configurations are valid
@@ -1497,6 +1505,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 
 ---
 ## See Also
+
 - [Video Encryption SDK Overview](index.md) - Product features
 - [Interface Reference](interface-reference.md) - Complete API documentation
 - [DirectShow Encoding Filters Pack](../filters-enc/index.md) - Compatible encoders

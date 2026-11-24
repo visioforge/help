@@ -119,9 +119,9 @@ Determine qué SDKs utiliza su aplicación:
 Cree la estructura de carpetas de despliegue:
 
 ```
-SuApp\
-├── SuApp.exe
-├── SuApp.exe.config
+YourApp\
+├── YourApp.exe
+├── YourApp.exe.config
 └── Filters\
     ├── VisioForge_FFMPEG_Source_x64.ax
     ├── avcodec-63.dll
@@ -157,14 +157,14 @@ SuApp\
 REM Verificar privilegios de administrador
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo ERROR: Este script debe ejecutarse como administrador.
+    echo ERROR: This script must be run as Administrator!
     exit /b 1
 )
 regsvr32 /s "%~dp0Filters\VisioForge_FFMPEG_Source_x64.ax"
 if %ERRORLEVEL% EQU 0 (
-    echo Registro exitoso
+    echo Registration successful
 ) else (
-    echo Registro fallido
+    echo Registration failed
 )
 ```
 
@@ -402,7 +402,7 @@ msiexec /i EnterpriseVideoApp.msi /quiet /norestart /l*v install.log
 **Estructura del paquete**:
 
 ```
-SuSDK\
+YourSDK\
 ├── bin\
 │   ├── x86\
 │   │   └── Filters\
@@ -432,7 +432,7 @@ SuSDK\
 ```
 x64: HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64
 x86: HKLM\SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x86
-Valor: "Installed" = 1 (DWORD)
+Value: "Installed" = 1 (DWORD)
 ```
 
 **Integración de instalador**:
@@ -513,13 +513,13 @@ Cree entornos de prueba aislados:
 
 ```batch
 REM Instalar silenciosamente
-MiAppSetup.exe /S
+MyAppSetup.exe /S
 
 REM Verificar instalación
-reg query "HKLM\SOFTWARE\MiApp" /v InstallDir
+reg query "HKLM\SOFTWARE\MyApp" /v InstallDir
 
 REM Desinstalar silenciosamente
-"%ProgramFiles%\MiApp\Uninstall.exe" /S
+"%ProgramFiles%\MyApp\Uninstall.exe" /S
 ```
 
 ### Script de prueba automatizada
@@ -531,7 +531,7 @@ param(
     [string]$FilterCLSID
 )
 
-Write-Host "Probando instalación..." -ForegroundColor Cyan
+Write-Host "Testing installation..." -ForegroundColor Cyan
 
 # Instalar
 Start-Process $InstallerPath -ArgumentList "/S" -Wait
@@ -539,16 +539,16 @@ Start-Process $InstallerPath -ArgumentList "/S" -Wait
 # Verificar registro de filtro
 $regPath = "HKLM:\SOFTWARE\Classes\CLSID\$FilterCLSID"
 if (Test-Path $regPath) {
-    Write-Host "✓ Filtro registrado" -ForegroundColor Green
+    Write-Host "✓ Filter registered" -ForegroundColor Green
 } else {
-    Write-Host "✗ Filtro NO registrado" -ForegroundColor Red
+    Write-Host "✗ Filter NOT registered" -ForegroundColor Red
     Exit 1
 }
 
 # Probar con GraphEdit
 $graphEdit = "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\graphedt.exe"
 if (Test-Path $graphEdit) {
-    Write-Host "✓ Probando con GraphEdit..." -ForegroundColor Cyan
+    Write-Host "✓ Testing with GraphEdit..." -ForegroundColor Cyan
     # Agregar automatización de GraphEdit aquí
 }
 
@@ -556,18 +556,18 @@ if (Test-Path $graphEdit) {
 $uninstaller = Get-ChildItem "C:\Program Files\MyApp\Uninstall.exe" -ErrorAction SilentlyContinue
 if ($uninstaller) {
     Start-Process $uninstaller.FullName -ArgumentList "/S" -Wait
-    Write-Host "✓ Desinstalación completada" -ForegroundColor Green
+    Write-Host "✓ Uninstall completed" -ForegroundColor Green
 }
 
 # Verificar limpieza
 if (Test-Path $regPath) {
-    Write-Host "✗ Filtro todavía registrado después de desinstalar" -ForegroundColor Red
+    Write-Host "✗ Filter still registered after uninstall" -ForegroundColor Red
     Exit 1
 } else {
-    Write-Host "✓ Filtro desregistrado exitosamente" -ForegroundColor Green
+    Write-Host "✓ Filter unregistered successfully" -ForegroundColor Green
 }
 
-Write-Host "¡Todas las pruebas pasaron!" -ForegroundColor Green
+Write-Host "All tests passed!" -ForegroundColor Green
 ```
 
 ---
@@ -579,13 +579,13 @@ Write-Host "¡Todas las pruebas pasaron!" -ForegroundColor Green
 **Aplicaciones x64**:
 
 - Usar solo filtros x64
-- Instalar en `C:\Program Files\SuApp`
+- Instalar en `C:\Program Files\YourApp`
 - Registrar en vista de registro de 64-bits
 
 **Aplicaciones x86**:
 
 - Usar solo filtros x86
-- Instalar en `C:\Program Files (x86)\SuApp`
+- Instalar en `C:\Program Files (x86)\YourApp`
 - Registrar en vista de registro de 32-bits (regsvr32 maneja automáticamente)
 
 **Aplicaciones mixtas**:
@@ -618,7 +618,7 @@ HKLM\SOFTWARE\Wow6432Node\Classes\CLSID\{GUID} ← vista 32-bits
 
 ```batch
 REM Firmar instalador con certificado
-signtool sign /f MiCert.pfx /p password /t https://timestamp.digicert.com MiAppSetup.exe
+signtool sign /f MyCert.pfx /p password /t https://timestamp.digicert.com MyAppSetup.exe
 ```
 
 **Beneficios**:
@@ -709,7 +709,7 @@ if (hr == REGDB_E_CLASSNOTREG) {
 
 ```bash
 # Agregar parámetro /norestart
-msiexec /i MiApp.msi /quiet /norestart
+msiexec /i MyApp.msi /quiet /norestart
 
 # NSIS: Verificar modo silencioso en script
 ${IfSilent}

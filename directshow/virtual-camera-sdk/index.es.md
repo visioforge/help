@@ -162,7 +162,7 @@ var sinkFilter = FilterGraphTools.AddFilterFromClsid(
 var sinkIntf = sinkFilter as IVFVirtualCameraSink;
 if (sinkIntf != null)
 {
-    sinkIntf.set_license("SU-CLAVE-DE-LICENCIA"); // o "TRIAL" para versión de prueba
+    sinkIntf.set_license("YOUR-LICENSE-KEY"); // o "TRIAL" para versión de prueba
 }
 ```
 
@@ -208,7 +208,7 @@ if (SUCCEEDED(hr))
     if (SUCCEEDED(hr))
     {
         // Establecer licencia — LPCSTR (ANSI), no cadena ancha
-        hr = pSinkIntf->set_license("SU-CLAVE-DE-LICENCIA"); // o "TRIAL"
+        hr = pSinkIntf->set_license("YOUR-LICENSE-KEY"); // o "TRIAL"
         pSinkIntf->Release();
     }
 }
@@ -255,7 +255,7 @@ begin
     if Succeeded(SinkFilter.QueryInterface(IID_IVFVirtualCameraSink, SinkIntf)) then
     begin
       // Establecer licencia — PAnsiChar (cadena ANSI)
-      SinkIntf.set_license(PAnsiChar(AnsiString('SU-CLAVE-DE-LICENCIA'))); // o AnsiString('TRIAL')
+      SinkIntf.set_license(PAnsiChar(AnsiString('YOUR-LICENSE-KEY'))); // o AnsiString('TRIAL')
       SinkIntf := nil;
     end;
   end;

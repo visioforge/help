@@ -135,7 +135,7 @@ public class VirtualCameraFileStreaming
                 "VisioForge Virtual Camera Sink - Video");
             // Opcional: Establecer clave de licencia para versión comprada
             var sinkIntf = sinkVideoFilter as IVFVirtualCameraSink;
-            sinkIntf?.set_license("SU-CLAVE-DE-LICENCIA"); // Usar "TRIAL" para versión de prueba
+            sinkIntf?.set_license("YOUR-LICENSE-KEY"); // Usar "TRIAL" para versión de prueba
             // Agregar Sumidero de Cámara Virtual para audio
             sinkAudioFilter = FilterGraphTools.AddFilterFromClsid(
                 filterGraphSource,
@@ -153,7 +153,7 @@ public class VirtualCameraFileStreaming
             // Iniciar reproducción
             hr = mediaControlSource.Run();
             DsError.ThrowExceptionForHR(hr);
-            Console.WriteLine("Transmitiendo a cámara virtual. Presione cualquier tecla para detener...");
+            Console.WriteLine("Streaming to virtual camera. Press any key to stop...");
         }
         catch (Exception ex)
         {
@@ -328,7 +328,7 @@ public class VirtualCameraFromPhysicalCamera
 
             if (cameraFilter == null)
             {
-                throw new Exception($"Cámara '{physicalCameraName}' no encontrada");
+                throw new Exception($"Camera '{physicalCameraName}' not found");
             }
 
             // Agregar Sumidero de Cámara Virtual
@@ -354,7 +354,7 @@ public class VirtualCameraFromPhysicalCamera
             hr = mediaControl.Run();
             DsError.ThrowExceptionForHR(hr);
 
-            Console.WriteLine("Transmitiendo cámara física a cámara virtual...");
+            Console.WriteLine("Streaming physical camera to virtual camera...");
         }
         catch (Exception ex)
         {
@@ -441,7 +441,7 @@ public class VirtualCameraFrameByFrame
             }
             if (frames.Length == 0)
             {
-                throw new Exception("No hay imágenes para mostrar");
+                throw new Exception("No images to display");
             }
             int width = frames[0].Width;
             int height = frames[0].Height;
@@ -466,13 +466,13 @@ public class VirtualCameraFrameByFrame
                 "VisioForge Video Push Source");
             if (sourceVideoFilter == null)
             {
-                throw new Exception("No se puede crear el filtro VisioForge Push Source.");
+                throw new Exception("Unable to create VisioForge Push Source filter.");
             }
             // Obtener interfaz IVFLiveVideoSource
             pushSource = sourceVideoFilter as IVFLiveVideoSource;
             if (pushSource == null)
             {
-                throw new Exception("No se puede obtener la interfaz IVFLiveVideoSource.");
+                throw new Exception("Unable to get IVFLiveVideoSource interface.");
             }
             // Configurar formato de mapa de bits
             var bmiHeader = new BitmapInfoHeader
@@ -498,7 +498,7 @@ public class VirtualCameraFrameByFrame
             framePushTimer.Interval = (int)(1000 / frameRate);
             framePushTimer.Tick += PushFrame;
             framePushTimer.Start();
-            Console.WriteLine("Transmitiendo secuencia de imágenes a cámara virtual...");
+            Console.WriteLine("Streaming image sequence to virtual camera...");
         }
         catch (Exception ex)
         {
@@ -642,7 +642,7 @@ public class VirtualCameraCapture
 
             if (virtualCameraSource == null)
             {
-                throw new Exception("No se puede crear el filtro de Fuente de Cámara Virtual");
+                throw new Exception("Unable to create Virtual Camera Source filter");
             }
 
             // NOTA: IVFVirtualCameraSource solo expone SetCustomVideoSize() y
@@ -684,7 +684,7 @@ public class VirtualCameraCapture
             hr = mediaControl.Run();
             DsError.ThrowExceptionForHR(hr);
 
-            Console.WriteLine("Capturando desde cámara virtual...");
+            Console.WriteLine("Capturing from virtual camera...");
         }
         catch (Exception ex)
         {

@@ -14,6 +14,10 @@ primary_api_classes:
   - VFSimplePlayerEngine
   - VFPAnalyzer
 
+video:
+  id: MM3IJxIxwww
+  upload_date: 2026-11-24T09:52:31Z
+  duration: PT1M8S
 ---
 
 # Encontrar fragmentos de video en contenido de video más grande
@@ -98,12 +102,53 @@ En este código:
 - Verificamos si se encontró una posición coincidente (`Search` devuelve `int.MaxValue` cuando no encuentra el fragmento; 0 significa una coincidencia al inicio del video)
 - Convertimos el resultado a una marca de tiempo y la mostramos junto con el valor de diferencia
 
+### Encontrar cada coincidencia en unas pocas líneas
+
+Una aplicación de consola completa: encuentra cada lugar en el que `clip.mp4` aparece en `movie.mp4` e imprime el inicio de cada coincidencia. `VFPAnalyzer.SearchAsync` recibe las dos huellas, la duración del clip, el límite de diferencia (aquí una coincidencia debe quedar por debajo de 500) y `true` para devolver todas las coincidencias y no solo la mejor, y devuelve el inicio de cada coincidencia como una `List<TimeSpan>`. `GetSearchFingerprintForVideoFileAsync` devuelve `null` cuando no puede analizar un archivo e imprime el motivo a través del callback; si falta un archivo, el constructor de `VFPFingerprintSource` lanza `FileNotFoundException`. Un clip de 10 segundos en 480p se encontró en los cinco lugares de 2 horas y 18 minutos de video 720p, en unos nueve minutos.
+
+```csharp
+using System;
+using VisioForge.Core;
+using VisioForge.Core.VideoFingerPrinting;
+using static VisioForge.Core.VideoFingerPrinting.VFPAnalyzer;
+
+await VisioForgeX.InitSDKAsync();
+SetLicenseKey("TRIAL");
+var clip = await
+    GetSearchFingerprintForVideoFileAsync(
+        new VFPFingerprintSource("clip.mp4"),
+        Console.WriteLine);
+var movie = await
+    GetSearchFingerprintForVideoFileAsync(
+        new VFPFingerprintSource("movie.mp4"),
+        Console.WriteLine);
+if (clip != null && movie != null)
+{
+    var found = await SearchAsync(
+        clip, movie, clip.Duration, 500, true);
+    foreach (var at in found)
+        Console.WriteLine(
+            $"Found at {at:hh\\:mm\\:ss}");
+    if (found.Count == 0)
+        Console.WriteLine("Not found");
+}
+VisioForgeX.DestroySDK();
+```
+
+El proyecto completo es [find-clip-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Fingerprinting%20SDK/_VideoTutorials/find-clip-short-console), una aplicación de consola para Windows x64 que referencia `VisioForge.DotNet.Core.Redist.VideoFingerprinting` y los paquetes nativos del SDK para esa plataforma, `VisioForge.CrossPlatform.Core.Windows.x64` y `VisioForge.CrossPlatform.Libav.Windows.x64`. Los nombres de archivo son relativos al directorio de trabajo, así que coloque ambos archivos en la carpeta desde la que inicia la aplicación. Sin clave de licencia, el SDK funciona en modo de prueba y muestra una vez el mensaje «Unregistered version»; haga clic en OK y la búsqueda continúa.
+
+El video de un minuto escribe y ejecuta esta aplicación.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/MM3IJxIxwww?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
 ## Consideraciones de rendimiento
 
 La tecnología de huellas usa algoritmos sofisticados que equilibran precisión y rendimiento. Para resultados óptimos:
 
 - Considere ajustar el nivel máximo de diferencia basándose en sus requisitos específicos
-- Procesa videos en su resolución nativa cuando sea posible
+- Procese videos en su resolución nativa cuando sea posible
 - Para archivos muy grandes, considere dividir la búsqueda en fragmentos manejables
 
 ## Recursos adicionales

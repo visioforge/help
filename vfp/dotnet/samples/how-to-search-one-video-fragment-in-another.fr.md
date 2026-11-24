@@ -14,6 +14,10 @@ primary_api_classes:
   - VFSimplePlayerEngine
   - VFPAnalyzer
 
+video:
+  id: MM3IJxIxwww
+  upload_date: 2026-11-24T09:52:31Z
+  duration: PT1M8S
 ---
 
 # Recherche de fragments vidéo dans un contenu vidéo plus volumineux
@@ -97,6 +101,47 @@ Dans ce code :
 - Effectuons l'opération de recherche entre notre fragment et la vidéo principale
 - Vérifions si une position correspondante a été trouvée (`Search` renvoie `int.MaxValue` lorsque le fragment est introuvable ; 0 signifie une correspondance au tout début de la vidéo)
 - Convertissons le résultat en horodatage et l'affichons avec la valeur de différence
+
+### Trouver chaque correspondance en quelques lignes
+
+Une application console complète : elle trouve chaque endroit où `clip.mp4` apparaît dans `movie.mp4` et affiche le début de chaque correspondance. `VFPAnalyzer.SearchAsync` reçoit les deux empreintes, la durée de l'extrait, la limite de différence (ici, une correspondance doit rester sous 500) et `true` pour renvoyer toutes les correspondances et pas seulement la meilleure, et renvoie le début de chaque correspondance sous forme de `List<TimeSpan>`. `GetSearchFingerprintForVideoFileAsync` renvoie `null` lorsqu'un fichier ne peut pas être analysé et affiche la raison via le callback ; un fichier manquant fait lever `FileNotFoundException` au constructeur de `VFPFingerprintSource`. Un extrait de 10 secondes en 480p a été trouvé aux cinq endroits de 2 heures 18 minutes de vidéo 720p, en neuf minutes environ.
+
+```csharp
+using System;
+using VisioForge.Core;
+using VisioForge.Core.VideoFingerPrinting;
+using static VisioForge.Core.VideoFingerPrinting.VFPAnalyzer;
+
+await VisioForgeX.InitSDKAsync();
+SetLicenseKey("TRIAL");
+var clip = await
+    GetSearchFingerprintForVideoFileAsync(
+        new VFPFingerprintSource("clip.mp4"),
+        Console.WriteLine);
+var movie = await
+    GetSearchFingerprintForVideoFileAsync(
+        new VFPFingerprintSource("movie.mp4"),
+        Console.WriteLine);
+if (clip != null && movie != null)
+{
+    var found = await SearchAsync(
+        clip, movie, clip.Duration, 500, true);
+    foreach (var at in found)
+        Console.WriteLine(
+            $"Found at {at:hh\\:mm\\:ss}");
+    if (found.Count == 0)
+        Console.WriteLine("Not found");
+}
+VisioForgeX.DestroySDK();
+```
+
+Le projet complet est [find-clip-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Fingerprinting%20SDK/_VideoTutorials/find-clip-short-console), une application console Windows x64 qui référence `VisioForge.DotNet.Core.Redist.VideoFingerprinting` et les paquets natifs du SDK pour cette plateforme, `VisioForge.CrossPlatform.Core.Windows.x64` et `VisioForge.CrossPlatform.Libav.Windows.x64`. Les noms de fichier sont relatifs au répertoire de travail : placez donc les deux fichiers dans le dossier depuis lequel vous lancez l'application. Sans clé de licence, le SDK fonctionne en mode d'essai et affiche une fois le message « Unregistered version » ; cliquez sur OK et la recherche continue.
+
+La vidéo d'une minute écrit et exécute cette application.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/MM3IJxIxwww?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Considérations de performance
 

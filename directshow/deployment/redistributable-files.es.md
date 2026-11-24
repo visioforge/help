@@ -59,7 +59,7 @@ El mismo archivo `.ax` contiene también el filtro FFMPEG Video Decoder (CLSID `
 **Tamaño total**: ~45 MB
 ### Estructura del directorio de instalación
 ```
-SuApp\
+YourApp\
 ├── x86\
 │   ├── VisioForge_FFMPEG_Source.ax
 │   ├── avcodec-63.dll
@@ -138,7 +138,7 @@ Las DLL de FFmpeg x86 y x64 tienen los mismos nombres, por lo que cada arquitect
 ### Estructura del directorio de instalación
 
 ```
-SuApp\
+YourApp\
 ├── VisioForge_VLC_Source.ax          (x86; _x64.ax o _arm64.ax para x64 / ARM64)
 ├── libvlc.dll
 ├── libvlccore.dll
@@ -587,32 +587,32 @@ Antes de lanzar, verifique que todos los archivos estén incluidos. Coloque el s
 ```batch
 @echo off
 setlocal
-echo Probando registro de filtros...
+echo Testing Filter Registration...
 
 REM Verificar privilegios de administrador
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo ERROR: Este script debe ejecutarse como administrador.
+    echo ERROR: This script must be run as Administrator!
     exit /b 1
 )
 
 REM Probar cada filtro
 regsvr32 /s "%~dp0VisioForge_FFMPEG_Source_x64.ax"
 if %errorLevel% neq 0 (
-    echo ERROR: no se pudo registrar FFMPEG Source
-    echo Compruebe que el archivo .ax y las DLL de FFmpeg se encuentren en la carpeta del script
+    echo ERROR: FFMPEG Source failed to register
+    echo Check that the .ax file and all FFmpeg DLLs are in the script folder
     exit /b 1
 )
 REM Probar creación de filtro
-"%~dp0SuAppDePrueba.exe"
+"%~dp0YourTestApp.exe"
 set TEST_RESULT=%errorLevel%
 REM Quitar el registro de prueba
 regsvr32 /s /u "%~dp0VisioForge_FFMPEG_Source_x64.ax"
 if %TEST_RESULT% neq 0 (
-    echo ERROR: SuAppDePrueba.exe no pudo crear el filtro
+    echo ERROR: YourTestApp.exe could not create the filter
     exit /b 1
 )
-echo Prueba de FFMPEG Source superada.
+echo FFMPEG Source test passed!
 ```
 ---
 

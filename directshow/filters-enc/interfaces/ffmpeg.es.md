@@ -518,7 +518,7 @@ public class FFMPEGDVDEncoder
         var encoder = ffmpegEncoder as IVFFFMPEGEncoder;
         if (encoder == null)
         {
-            Console.WriteLine("Error: El filtro no admite IVFFFMPEGEncoder");
+            Console.WriteLine("Error: Filter does not support IVFFFMPEGEncoder");
             return;
         }
 
@@ -553,11 +553,11 @@ public class FFMPEGDVDEncoder
 
         encoder.set_settings(settings);
 
-        Console.WriteLine("Codificador FFMPEG configurado para DVD NTSC:");
-        Console.WriteLine("  Resolución: 720x480 (16:9)");
-        Console.WriteLine("  Video: 6 Mbps MPEG-2, entrelazado");
-        Console.WriteLine("  Audio: 224 kbps, 48 kHz estéreo");
-        Console.WriteLine("  GOP: 12 fotogramas");
+        Console.WriteLine("FFMPEG encoder configured for DVD NTSC:");
+        Console.WriteLine("  Resolution: 720x480 (16:9)");
+        Console.WriteLine("  Video: 6 Mbps MPEG-2, interlaced");
+        Console.WriteLine("  Audio: 224 kbps, 48 kHz stereo");
+        Console.WriteLine("  GOP: 12 frames");
     }
 }
 ```
@@ -602,8 +602,8 @@ public class FFMPEGWebStreaming
 
         encoder.set_settings(settings);
 
-        Console.WriteLine("Codificador FFMPEG configurado para transmisión web FLV:");
-        Console.WriteLine("  720p @ 2 Mbps, progresivo");
+        Console.WriteLine("FFMPEG encoder configured for FLV web streaming:");
+        Console.WriteLine("  720p @ 2 Mbps, progressive");
     }
 }
 ```
@@ -648,7 +648,7 @@ public class FFMPEGVCDEncoder
 
         encoder.set_settings(settings);
 
-        Console.WriteLine("Codificador FFMPEG configurado para VCD PAL:");
+        Console.WriteLine("FFMPEG encoder configured for VCD PAL:");
         Console.WriteLine("  352x288 @ 1150 kbps");
     }
 }
@@ -694,8 +694,8 @@ public class FFMPEGMPEG2TS
 
         encoder.set_settings(settings);
 
-        Console.WriteLine("Codificador FFMPEG configurado para MPEG-2 TS:");
-        Console.WriteLine("  Flujo de radiodifusión HD 1080i");
+        Console.WriteLine("FFMPEG encoder configured for MPEG-2 TS:");
+        Console.WriteLine("  1080i HD broadcast stream");
     }
 }
 ```
@@ -717,7 +717,7 @@ void ConfigureFFMPEGDVD(IBaseFilter* pFFMPEGEncoder)
                                         (void**)&pEncoder);
     if (FAILED(hr) || !pEncoder)
     {
-        std::cout << "Error: El filtro no admite IVFFFMPEGEncoder" << std::endl;
+        std::cout << "Error: Filter does not support IVFFFMPEGEncoder" << std::endl;
         return;
     }
 
@@ -750,7 +750,7 @@ void ConfigureFFMPEGDVD(IBaseFilter* pFFMPEGEncoder)
 
     pEncoder->set_settings(settings);
 
-    std::cout << "Codificador FFMPEG configurado para DVD NTSC" << std::endl;
+    std::cout << "FFMPEG encoder configured for DVD NTSC" << std::endl;
 
     pEncoder->Release();
 }
@@ -794,7 +794,7 @@ void ConfigureFFMPEGFLV(IBaseFilter* pFFMPEGEncoder)
 
         pEncoder->set_settings(settings);
 
-        std::cout << "Codificador FLV FFMPEG configurado" << std::endl;
+        std::cout << "FFMPEG FLV encoder configured" << std::endl;
 
         pEncoder->Release();
     }
@@ -816,7 +816,7 @@ begin
   hr := FFMPEGEncoder.QueryInterface(IID_IVFFFMPEGEncoder, Encoder);
   if Failed(hr) or (Encoder = nil) then
   begin
-    WriteLn('Error: El filtro no admite IVFFFMPEGEncoder');
+    WriteLn('Error: Filter does not support IVFFFMPEGEncoder');
     Exit;
   end;
 
@@ -848,7 +848,7 @@ begin
 
     Encoder.set_settings(Settings);
 
-    WriteLn('Codificador FFMPEG configurado para DVD PAL');
+    WriteLn('FFMPEG encoder configured for DVD PAL');
   finally
     Encoder := nil;
   end;

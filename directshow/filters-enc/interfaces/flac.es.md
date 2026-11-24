@@ -659,14 +659,14 @@ public class FLACArchivalEncoder
         var flacEncoder = audioEncoder as IFLACEncodeSettings;
         if (flacEncoder == null)
         {
-            Console.WriteLine("Error: El filtro no admite IFLACEncodeSettings");
+            Console.WriteLine("Error: Filter does not support IFLACEncodeSettings");
             return;
         }
 
         // Comprobar si podemos modificar la configuración
         if (!flacEncoder.canModifySettings())
         {
-            Console.WriteLine("Advertencia: No se puede modificar la configuración del codificador en este momento");
+            Console.WriteLine("Warning: Cannot modify encoder settings at this time");
             return;
         }
 
@@ -678,13 +678,13 @@ public class FLACArchivalEncoder
         flacEncoder.useExhaustiveModelSearch(true);   // Mejor compresión posible
         flacEncoder.setRicePartitionOrder(0, 8);      // Rango de partición Rice máximo
 
-        Console.WriteLine("Codificador FLAC configurado para archivo de alta calidad:");
-        Console.WriteLine($"  Nivel de Codificación: {flacEncoder.encoderLevel()}");
-        Console.WriteLine($"  Orden LPC: {flacEncoder.LPCOrder()}");
-        Console.WriteLine($"  Tamaño de Bloque: {flacEncoder.blockSize()}");
-        Console.WriteLine($"  Mid-Side Adaptativo: {flacEncoder.isUsingAdaptiveMidSideCoding()}");
-        Console.WriteLine($"  Búsqueda Exhaustiva: {flacEncoder.isUsingExhaustiveModel()}");
-        Console.WriteLine($"  Partición Rice: {flacEncoder.riceMin()}-{flacEncoder.riceMax()}");
+        Console.WriteLine("FLAC encoder configured for high-quality archival:");
+        Console.WriteLine($"  Encoding Level: {flacEncoder.encoderLevel()}");
+        Console.WriteLine($"  LPC Order: {flacEncoder.LPCOrder()}");
+        Console.WriteLine($"  Block Size: {flacEncoder.blockSize()}");
+        Console.WriteLine($"  Adaptive Mid-Side: {flacEncoder.isUsingAdaptiveMidSideCoding()}");
+        Console.WriteLine($"  Exhaustive Search: {flacEncoder.isUsingExhaustiveModel()}");
+        Console.WriteLine($"  Rice Partition: {flacEncoder.riceMin()}-{flacEncoder.riceMax()}");
     }
 }
 ```
@@ -708,10 +708,10 @@ public class FLACRealTimeEncoder
         flacEncoder.useExhaustiveModelSearch(false);  // Deshabilitar para velocidad
         flacEncoder.setRicePartitionOrder(0, 4);      // Rango de partición Rice reducido
 
-        Console.WriteLine("Codificador FLAC configurado para codificación rápida en tiempo real");
-        Console.WriteLine($"  Nivel de Codificación: {flacEncoder.encoderLevel()}");
-        Console.WriteLine($"  Orden LPC: {flacEncoder.LPCOrder()}");
-        Console.WriteLine($"  Tamaño de Bloque: {flacEncoder.blockSize()} (menor latencia)");
+        Console.WriteLine("FLAC encoder configured for fast real-time encoding");
+        Console.WriteLine($"  Encoding Level: {flacEncoder.encoderLevel()}");
+        Console.WriteLine($"  LPC Order: {flacEncoder.LPCOrder()}");
+        Console.WriteLine($"  Block Size: {flacEncoder.blockSize()} (lower latency)");
     }
 }
 ```
@@ -735,7 +735,7 @@ public class FLACMusicEncoder
         flacEncoder.useExhaustiveModelSearch(false);  // No necesario para música
         flacEncoder.setRicePartitionOrder(0, 6);      // Buen rango de partición Rice
 
-        Console.WriteLine("Codificador FLAC configurado para codificación de música equilibrada");
+        Console.WriteLine("FLAC encoder configured for balanced music encoding");
     }
 }
 ```
@@ -757,14 +757,14 @@ void ConfigureHighQualityFLAC(IBaseFilter* pAudioEncoder)
                                        (void**)&pFLACEncoder);
     if (FAILED(hr) || !pFLACEncoder)
     {
-        std::cout << "Error: El filtro no admite IFLACEncodeSettings" << std::endl;
+        std::cout << "Error: Filter does not support IFLACEncodeSettings" << std::endl;
         return;
     }
 
     // Comprobar si podemos modificar la configuración
     if (!pFLACEncoder->canModifySettings())
     {
-        std::cout << "Advertencia: No se puede modificar la configuración del codificador" << std::endl;
+        std::cout << "Warning: Cannot modify encoder settings" << std::endl;
         pFLACEncoder->Release();
         return;
     }
@@ -778,14 +778,14 @@ void ConfigureHighQualityFLAC(IBaseFilter* pAudioEncoder)
     pFLACEncoder->setRicePartitionOrder(0, 8);      // Rango máximo
 
     // Mostrar configuración
-    std::cout << "Codificador FLAC configurado para archivo de alta calidad:" << std::endl;
-    std::cout << "  Nivel de Codificación: " << pFLACEncoder->encoderLevel() << std::endl;
-    std::cout << "  Orden LPC: " << pFLACEncoder->LPCOrder() << std::endl;
-    std::cout << "  Tamaño de Bloque: " << pFLACEncoder->blockSize() << std::endl;
-    std::cout << "  Mid-Side Adaptativo: "
-              << (pFLACEncoder->isUsingAdaptiveMidSideCoding() ? "Sí" : "No") << std::endl;
-    std::cout << "  Búsqueda Exhaustiva: "
-              << (pFLACEncoder->isUsingExhaustiveModel() ? "Sí" : "No") << std::endl;
+    std::cout << "FLAC encoder configured for high-quality archival:" << std::endl;
+    std::cout << "  Encoding Level: " << pFLACEncoder->encoderLevel() << std::endl;
+    std::cout << "  LPC Order: " << pFLACEncoder->LPCOrder() << std::endl;
+    std::cout << "  Block Size: " << pFLACEncoder->blockSize() << std::endl;
+    std::cout << "  Adaptive Mid-Side: "
+              << (pFLACEncoder->isUsingAdaptiveMidSideCoding() ? "Yes" : "No") << std::endl;
+    std::cout << "  Exhaustive Search: "
+              << (pFLACEncoder->isUsingExhaustiveModel() ? "Yes" : "No") << std::endl;
 
     pFLACEncoder->Release();
 }
@@ -811,7 +811,7 @@ void ConfigureFastFLAC(IBaseFilter* pAudioEncoder)
             pFLACEncoder->useExhaustiveModelSearch(FALSE);  // Deshabilitado para velocidad
             pFLACEncoder->setRicePartitionOrder(0, 4);      // Rango reducido
 
-            std::cout << "Codificador FLAC configurado para codificación rápida en tiempo real" << std::endl;
+            std::cout << "FLAC encoder configured for fast real-time encoding" << std::endl;
         }
         pFLACEncoder->Release();
     }
@@ -833,7 +833,7 @@ begin
   hr := AudioEncoder.QueryInterface(IID_IFLACEncodeSettings, FLACEncoder);
   if Failed(hr) or (FLACEncoder = nil) then
   begin
-    WriteLn('Error: El filtro no admite IFLACEncodeSettings');
+    WriteLn('Error: Filter does not support IFLACEncodeSettings');
     Exit;
   end;
 
@@ -841,7 +841,7 @@ begin
     // Comprobar si podemos modificar la configuración
     if not FLACEncoder.canModifySettings then
     begin
-      WriteLn('Advertencia: No se puede modificar la configuración del codificador');
+      WriteLn('Warning: Cannot modify encoder settings');
       Exit;
     end;
 
@@ -854,12 +854,12 @@ begin
     FLACEncoder.setRicePartitionOrder(0, 8);      // Rango máximo
 
     // Mostrar configuración
-    WriteLn('Codificador FLAC configurado para archivo de alta calidad:');
-    WriteLn('  Nivel de Codificación: ', FLACEncoder.encoderLevel);
-    WriteLn('  Orden LPC: ', FLACEncoder.LPCOrder);
-    WriteLn('  Tamaño de Bloque: ', FLACEncoder.blockSize);
-    WriteLn('  Mid-Side Adaptativo: ', FLACEncoder.isUsingAdaptiveMidSideCoding);
-    WriteLn('  Búsqueda Exhaustiva: ', FLACEncoder.isUsingExhaustiveModel);
+    WriteLn('FLAC encoder configured for high-quality archival:');
+    WriteLn('  Encoding Level: ', FLACEncoder.encoderLevel);
+    WriteLn('  LPC Order: ', FLACEncoder.LPCOrder);
+    WriteLn('  Block Size: ', FLACEncoder.blockSize);
+    WriteLn('  Adaptive Mid-Side: ', FLACEncoder.isUsingAdaptiveMidSideCoding);
+    WriteLn('  Exhaustive Search: ', FLACEncoder.isUsingExhaustiveModel);
 
   finally
     FLACEncoder := nil;
@@ -887,7 +887,7 @@ begin
         FLACEncoder.useExhaustiveModelSearch(False);  // No necesario
         FLACEncoder.setRicePartitionOrder(0, 6);      // Buen rango
 
-        WriteLn('Codificador FLAC configurado para codificación de música equilibrada');
+        WriteLn('FLAC encoder configured for balanced music encoding');
       end;
     finally
       FLACEncoder := nil;

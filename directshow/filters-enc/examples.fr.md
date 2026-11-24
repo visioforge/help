@@ -622,7 +622,7 @@ public class CompleteEncoder : IDisposable
                 break;
 
             default:
-                throw new ArgumentException("Unsupported vidéo codec");
+                throw new ArgumentException("Unsupported video codec");
         }
 
         return FilterGraphTools.AddFilterFromClsid(filterGraph, clsid, name);

@@ -579,7 +579,7 @@ public class MonogramAACHighQuality
         var aacEncoder = audioEncoder as IMonogramAACEncoder;
         if (aacEncoder == null)
         {
-            Console.WriteLine("Error: El filtro no soporta IMonogramAACEncoder");
+            Console.WriteLine("Error: Filter does not support IMonogramAACEncoder");
             return;
         }
         // Configurar codificación de música estéreo de alta calidad
@@ -593,14 +593,14 @@ public class MonogramAACHighQuality
         int hr = aacEncoder.SetConfig(ref config);
         if (hr == 0)
         {
-            Console.WriteLine("Codificador AAC configurado para música de alta calidad:");
-            Console.WriteLine("  Perfil: AAC-LC");
-            Console.WriteLine("  Tasa de bits: 192 kbps");
-            Console.WriteLine("  Salida: AAC Raw para contenedor MP4");
+            Console.WriteLine("AAC encoder configured for high quality music:");
+            Console.WriteLine("  Profile: AAC-LC");
+            Console.WriteLine("  Bitrate: 192 kbps");
+            Console.WriteLine("  Output: Raw AAC for MP4 container");
         }
         else
         {
-            Console.WriteLine($"Error configurando el codificador AAC: 0x{hr:X8}");
+            Console.WriteLine($"Error configuring AAC encoder: 0x{hr:X8}");
         }
     }
 }
@@ -615,7 +615,7 @@ public class VFAACHighQualityMusic
         var vfAacEncoder = audioEncoder as IVFAACEncoder;
         if (vfAacEncoder == null)
         {
-            Console.WriteLine("Error: El filtro no soporta IVFAACEncoder");
+            Console.WriteLine("Error: Filter does not support IVFAACEncoder");
             return;
         }
         // Configurar codificación de música estéreo completa
@@ -628,14 +628,14 @@ public class VFAACHighQualityMusic
         vfAacEncoder.SetMidSide(1);                 // Habilitar codificación mid-side
         vfAacEncoder.SetLFE(0);                     // Sin LFE (solo estéreo)
         vfAacEncoder.SetTimeShift(0);               // Sin desplazamiento de tiempo
-        Console.WriteLine("Codificador VisioForge AAC configurado:");
+        Console.WriteLine("VisioForge AAC encoder configured:");
         // Verificar configuración
         vfAacEncoder.GetBitRate(out uint bitrate);
         vfAacEncoder.GetProfile(out uint profile);
         vfAacEncoder.GetInputChannels(out short channels);
-        Console.WriteLine($"  Tasa de bits: {bitrate / 1000} kbps");
-        Console.WriteLine($"  Perfil: {(profile == 2 ? "AAC-LC" : profile.ToString())}");
-        Console.WriteLine($"  Canales: {channels}");
+        Console.WriteLine($"  Bitrate: {bitrate / 1000} kbps");
+        Console.WriteLine($"  Profile: {(profile == 2 ? "AAC-LC" : profile.ToString())}");
+        Console.WriteLine($"  Channels: {channels}");
     }
 }
 ```
@@ -657,8 +657,8 @@ public class VFAACLowBitrateStreaming
         vfAacEncoder.SetTNS(1);                     // Habilitar TNS
         vfAacEncoder.SetMidSide(1);                 // Habilitar mid-side
         vfAacEncoder.SetLFE(0);                     // Sin LFE
-        Console.WriteLine("AAC-HE configurado para transmisión de baja tasa de bits");
-        Console.WriteLine("  64 kbps estéreo con salida ADTS");
+        Console.WriteLine("AAC-HE configured for low-bitrate streaming");
+        Console.WriteLine("  64 kbps stereo with ADTS output");
     }
 }
 ```
@@ -680,7 +680,7 @@ public class VFAACVoicePodcast
         vfAacEncoder.SetTNS(1);                     // Habilitar TNS para voz
         vfAacEncoder.SetMidSide(0);                 // N/A para mono
         vfAacEncoder.SetLFE(0);                     // Sin LFE
-        Console.WriteLine("AAC configurado para voz/podcast");
+        Console.WriteLine("AAC configured for voice/podcast");
         Console.WriteLine("  80 kbps mono AAC-LC");
     }
 }
@@ -699,7 +699,7 @@ void ConfigureMonogramAAC(IBaseFilter* pAudioEncoder)
                                        (void**)&pAACEncoder);
     if (FAILED(hr) || !pAACEncoder)
     {
-        std::cout << "Error: El filtro no soporta IMonogramAACEncoder" << std::endl;
+        std::cout << "Error: Filter does not support IMonogramAACEncoder" << std::endl;
         return;
     }
     // Configurar codificación de música de alta calidad
@@ -711,9 +711,9 @@ void ConfigureMonogramAAC(IBaseFilter* pAudioEncoder)
     hr = pAACEncoder->SetConfig(&config);
     if (SUCCEEDED(hr))
     {
-        std::cout << "Codificador AAC configurado para música de alta calidad" << std::endl;
-        std::cout << "  Perfil: AAC-LC" << std::endl;
-        std::cout << "  Tasa de bits: 192 kbps" << std::endl;
+        std::cout << "AAC encoder configured for high quality music" << std::endl;
+        std::cout << "  Profile: AAC-LC" << std::endl;
+        std::cout << "  Bitrate: 192 kbps" << std::endl;
     }
     pAACEncoder->Release();
 }
@@ -737,7 +737,7 @@ void ConfigureVFAAC(IBaseFilter* pAudioEncoder)
         pVFAACEncoder->SetTNS(1);                   // Habilitar TNS
         pVFAACEncoder->SetMidSide(1);               // Habilitar mid-side
         pVFAACEncoder->SetLFE(0);                   // Sin LFE
-        std::cout << "Codificador VisioForge AAC configurado" << std::endl;
+        std::cout << "VisioForge AAC encoder configured" << std::endl;
         pVFAACEncoder->Release();
     }
 }
@@ -756,7 +756,7 @@ begin
   hr := AudioEncoder.QueryInterface(IID_IMonogramAACEncoder, AACEncoder);
   if Failed(hr) or (AACEncoder = nil) then
   begin
-    WriteLn('Error: El filtro no soporta IMonogramAACEncoder');
+    WriteLn('Error: Filter does not support IMonogramAACEncoder');
     Exit;
   end;
   try
@@ -768,9 +768,9 @@ begin
     hr := AACEncoder.SetConfig(Config);
     if Succeeded(hr) then
     begin
-      WriteLn('Codificador AAC configurado para música de alta calidad');
-      WriteLn('  Perfil: AAC-LC');
-      WriteLn('  Tasa de bits: 192 kbps');
+      WriteLn('AAC encoder configured for high quality music');
+      WriteLn('  Profile: AAC-LC');
+      WriteLn('  Bitrate: 192 kbps');
     end;
   finally
     AACEncoder := nil;
@@ -795,7 +795,7 @@ begin
       VFAACEncoder.SetTNS(1);                   // Habilitar TNS
       VFAACEncoder.SetMidSide(1);               // Habilitar mid-side
       VFAACEncoder.SetLFE(0);                   // Sin LFE
-      WriteLn('Codificador VisioForge AAC configurado');
+      WriteLn('VisioForge AAC encoder configured');
     finally
       VFAACEncoder := nil;
     end;

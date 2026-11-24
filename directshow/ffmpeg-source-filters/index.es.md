@@ -179,7 +179,7 @@ public class FFMPEGSourcePlayer
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al inicializar FFMPEG Source: {ex.Message}");
+            Console.WriteLine($"Error initializing FFMPEG Source: {ex.Message}");
             Cleanup();
             throw;
         }

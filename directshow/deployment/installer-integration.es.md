@@ -15,12 +15,16 @@ tags:
 Esta guía proporciona instrucciones completas para integrar filtros VisioForge DirectShow en instaladores Windows. Cubre múltiples tecnologías de instaladores, acciones personalizadas para registro de filtros, gestión de dependencias y mejores prácticas.
 
 ---
+
 ## Prerrequisitos
+
 Antes de crear un instalador, asegúrese de entender:
+
 - [Archivos redistribuibles](redistributable-files.md) - Archivos a incluir en el instalador
 - [Registro de filtros](filter-registration.md) - Mecanismos de registro
 - Arquitectura de plataforma objetivo (x86/x64)
 - Requisitos de Visual C++ Redistributable
+
 ---
 
 ## Resumen de tecnologías de instaladores
@@ -46,18 +50,26 @@ Antes de crear un instalador, asegúrese de entender:
 [Ver ejemplos WiX →](#ejemplos-wix-toolset)
 
 ---
+
 ### NSIS (Nullsoft Scriptable Install System)
+
 **Mejor para**: Instaladores ligeros, UI personalizada, aplicaciones portátiles
+
 **Ventajas**:
+
 - Tamaño pequeño del instalador
 - Altamente personalizable
 - Lenguaje de scripting simple
 - Sin dependencias de runtime
 - Ejecución rápida
+
 **Requisitos**:
+
 - Compilador NSIS 3.x
 - Archivos de script .nsi
+
 [Ver ejemplos NSIS →](#ejemplos-nsis)
+
 ---
 
 ### InstallShield
@@ -80,18 +92,26 @@ Antes de crear un instalador, asegúrese de entender:
 [Ver guía InstallShield →](#integracion-installshield)
 
 ---
+
 ### Inno Setup
+
 **Mejor para**: Instaladores simples, aplicaciones pequeñas, software gratuito
+
 **Ventajas**:
+
 - Gratuito y de código abierto
 - Soporte de scripting Pascal
 - Soporte Unicode
 - Buena documentación
 - Comunidad activa
+
 **Requisitos**:
+
 - Compilador Inno Setup 6.x
 - Archivos de script .iss
+
 [Ver ejemplos Inno Setup →](#ejemplos-inno-setup)
+
 ---
 
 ## Ejemplos WiX Toolset
@@ -249,7 +269,9 @@ wix build -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixe
 ```
 
 ---
+
 ### WiX avanzado: Paquete autoextraíble
+
 Cree un paquete que incluya Visual C++ Redistributable.
 #### Bundle.wxs
 ```xml
@@ -492,8 +514,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
 ```
 
 ---
+
 ## Ejemplos NSIS
+
 ### Instalador NSIS básico
+
 Cree un script de instalador NSIS completo.
 #### Installer.nsi
 ```nsis
@@ -690,7 +715,9 @@ silent_mode:
 ```
 
 ---
+
 ### NSIS: Plugin personalizado para registro
+
 Cree un plugin NSIS para más control. Los instaladores NSIS y sus plugins son procesos de 32 bits, por lo que un plugin solo puede cargar y registrar el filtro x86 (`VisioForge_FFMPEG_Source.ax`). Registre el filtro x64 con el `regsvr32` de 64 bits, como en el script básico anterior. El filtro x86 necesita su propia carpeta con las DLL de FFmpeg x86, `cacert.pem`, `dav1d-license.txt` y el runtime de VC++ x86 (`msvcp140.dll`, `vcruntime140.dll`); el uso siguiente lo instala en `$INSTDIR\Filters\x86`.
 #### FilterRegistration.cpp (plugin NSIS)
 ```cpp
@@ -810,8 +837,11 @@ RMDir /r "$INSTDIR\Filters\x86"
    - Establecer: **Install Before This Application**
 
 ---
+
 ## Ejemplos Inno Setup
+
 ### Script básico Inno Setup
+
 #### Setup.iss
 ```pascal
 ; Script de configuración MyApp para Inno Setup 6.x
@@ -959,8 +989,11 @@ unins000.exe /SILENT
 ```
 
 ---
+
 ## Empaquetado de dependencias
+
 ### Visual C++ Redistributable
+
 #### Opción 1: Bootstrapper de descarga
 ```xml
 <!-- WiX Bundle.wxs -->
@@ -1103,8 +1136,11 @@ ${EndIf}
 ```
 
 ---
+
 ## Probando instalación
+
 ### Lista de verificación de pruebas manuales
+
 - [ ] Instalar en Windows 10/11 limpio
 - [ ] Verificar todos los archivos copiados
 - [ ] Verificar registro de filtro (GraphEdit/GraphStudioNext)
@@ -1192,12 +1228,16 @@ msiexec /i MyApp.msi /quiet /norestart
 ```
 
 ---
+
 ## Ver también
+
 ### Documentación
+
 - [Registro de filtros](filter-registration.md) - Métodos de registro manual
 - [Archivos redistribuibles](redistributable-files.md) - Archivos a incluir en instalador
 - [Resumen de despliegue](index.md) - Guía completa de despliegue
 ### Recursos externos
+
 - [Documentación WiX Toolset](https://docs.firegiant.com/wix/)
 - [Documentación NSIS](https://nsis.sourceforge.io/Docs/)
 - [Documentación Inno Setup](https://jrsoftware.org/ishelp/)

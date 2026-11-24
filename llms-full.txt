@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-24 09:52:34 UTC (07cd3f3c308)
+**Generated:** 2026-11-24 11:32:57 UTC (2d58c48195a)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 468 help documentation pages + 74 website pages
 
@@ -57989,6 +57989,10 @@ A security monitor for your own cameras, checking a camera's view while it is in
 This tutorial uses the Windows-only VideoCaptureCore engine, the SDK's DirectShow engine.
 
 ## Video Walkthrough
+
+### The short version
+
+The same preview in a few lines of C#: the engine on the `VideoView`, the camera's address with its login and password, and `IPPreview` mode. Its code is an excerpt of this tutorial's `Form1.cs`, without the Pixelate effect, the Stop button and the close handler; the full code is in [Implementation Example with C# Code](#implementation-example-with-c-code) below.
 
 ## Source Code Repository
 
@@ -118337,7 +118341,12 @@ This guide provides comprehensive instructions for integrating VisioForge Direct
 
 ## Prerequisites
 
-Before creating an installer, ensure you understand: - [Redistributable Files](../redistributable-files/) - Files to include in installer - [Filter Registration](../filter-registration/) - Registration mechanisms - Target platform architecture (x86/x64) - Visual C++ Redistributable requirements
+Before creating an installer, ensure you understand:
+
+- [Redistributable Files](../redistributable-files/) - Files to include in installer
+- [Filter Registration](../filter-registration/) - Registration mechanisms
+- Target platform architecture (x86/x64)
+- Visual C++ Redistributable requirements
 
 ---
 
@@ -118367,7 +118376,22 @@ Before creating an installer, ensure you understand: - [Redistributable Files](.
 
 ### NSIS (Nullsoft Scriptable Install System)
 
-**Best For**: Lightweight installers, custom UI, portable applications **Advantages**: - Small installer size - Highly customizable - Simple scripting language - No runtime dependencies - Fast execution **Requirements**: - NSIS 3.x compiler - .nsi script files [View NSIS Examples →](#nsis-examples)
+**Best For**: Lightweight installers, custom UI, portable applications
+
+**Advantages**:
+
+- Small installer size
+- Highly customizable
+- Simple scripting language
+- No runtime dependencies
+- Fast execution
+
+**Requirements**:
+
+- NSIS 3.x compiler
+- .nsi script files
+
+[View NSIS Examples →](#nsis-examples)
 
 ---
 
@@ -118394,7 +118418,22 @@ Before creating an installer, ensure you understand: - [Redistributable Files](.
 
 ### Inno Setup
 
-**Best For**: Simple installers, small applications, freeware **Advantages**: - Free and open-source - Pascal scripting support - Unicode support - Good documentation - Active community **Requirements**: - Inno Setup 6.x compiler - .iss script files [View Inno Setup Examples →](#inno-setup-examples)
+**Best For**: Simple installers, small applications, freeware
+
+**Advantages**:
+
+- Free and open-source
+- Pascal scripting support
+- Unicode support
+- Good documentation
+- Active community
+
+**Requirements**:
+
+- Inno Setup 6.x compiler
+- .iss script files
+
+[View Inno Setup Examples →](#inno-setup-examples)
 
 ---
 
@@ -133432,7 +133471,9 @@ using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
 ```
 
-**Required NuGet Packages**: - VisioForge.DirectShowAPI (it also contains the `VisioForge.DirectShowLib` namespace)
+**Required NuGet Packages**:
+
+- VisioForge.DirectShowAPI (it also contains the `VisioForge.DirectShowLib` namespace)
 
 ### Delphi Projects
 
@@ -134360,28 +134401,46 @@ public void SetEncryptionPassword(IVFCryptoConfig config)
 **Solution**:
 
 ```
-# Register filters (run as Administrator)
-regsvr32 "C:\Path\To\EncryptMuxer.ax"
-regsvr32 "C:\Path\To\DecryptDemuxer.ax"
+REM Register filters (run as Administrator)
+REM VisioForge_Encryptor_v9 holds both the v9 encryptor and the v9 decryptor the samples use
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_Encryptor_v9_x64.ax"
+REM The H.264 and AAC encoders the samples use (VFH264EncoderV10, VFAACEncoderV10)
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_H264_Encoder_x64.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_AAC_Encoder_v10_x64.ax"
+REM 32-bit applications: the same files without _x64
 ```
 
 #### "Interface not available" Error
 
 **Problem**: Cannot query IVFCryptoConfig
 
-**Solution**: - Verify filter version is correct - Check filter is properly registered - Ensure COM interfaces are compatible
+**Solution**:
+
+- Verify filter version is correct
+- Check filter is properly registered
+- Ensure COM interfaces are compatible
 
 #### Decryption Fails with Garbled Video
 
 **Problem**: Wrong password used for decryption
 
-**Solution**: - Verify same password is used for encryption and decryption - Check password encoding (Unicode vs. ANSI) - Ensure no typos in password
+**Solution**:
+
+- Verify same password is used for encryption and decryption
+- Check password encoding (Unicode vs. ANSI)
+- Ensure no typos in password
 
 #### Output File is Empty or Corrupt
 
 **Problem**: Encoding failed silently
 
-**Solution**: - Connect the encryptor's output to a File Writer and set the file name on the File Writer: the encryptor itself has no `IFileSinkFilter` - Check all encoder filters are properly connected - Verify encoder configurations are valid - Monitor IMediaEventEx for error events - Check disk space is available
+**Solution**:
+
+- Connect the encryptor's output to a File Writer and set the file name on the File Writer: the encryptor itself has no `IFileSinkFilter`
+- Check all encoder filters are properly connected
+- Verify encoder configurations are valid
+- Monitor IMediaEventEx for error events
+- Check disk space is available
 
 ---
 
@@ -134933,15 +134992,11 @@ using System.Runtime.InteropServices;
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 public interface IVFCryptoConfig
 {
-    // NOTE: put_Provider / get_Provider are stubs in the managed wrapper —
-    // the parameter is literally named `passwordProviderNotUsed` because the
-    // .NET marshaling for IVFPasswordProvider is not wired up. From C# call
-    // put_Password directly with the binary key bytes.
     [PreserveSig]
-    int put_Provider([In] IVFPasswordProvider passwordProviderNotUsed);
+    int put_Provider([In] IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
-    int get_Provider([Out] IVFPasswordProvider passwordProviderNotUsed);
+    int get_Provider(out IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
     int put_Password(IntPtr buffer, [In] int size);
@@ -134951,9 +135006,9 @@ public interface IVFCryptoConfig
 }
 ```
 
-C# password provider not supported
+Password provider from C#
 
-The managed `put_Provider` / `get_Provider` wrappers are **non-functional stubs** (note the `passwordProviderNotUsed` parameter name). To set passwords from C#, call `put_Password` with the raw key bytes via `IntPtr` (or use the `ApplyString` helper). Custom `IVFPasswordProvider` callbacks must be implemented from C++ or Delphi.
+`put_Provider` works from C#: pass an object that implements `IVFPasswordProvider`. If no password has been set, the filter calls its `QueryPassword`: the decryption demuxer when its input pin connects, with the source file name; the encryption muxer when the graph starts, with the output file name. `pszFileName` is `NULL` when the neighbouring filter does not expose a file name. Each time the filter calls twice: first with `pBuffer` set to `NULL` to learn the key size, then with a buffer of that size.
 
 #### Delphi Definition
 
@@ -135007,7 +135062,7 @@ HRESULT get_Provider(IPasswordProvider** ppProvider);
 **C# Syntax**:
 
 ```
-int get_Provider(IVFPasswordProvider passwordProvider);
+int get_Provider(out IVFPasswordProvider passwordProvider);
 ```
 
 **Parameters**: - `ppProvider` / `passwordProvider` - Pointer to receive password provider interface
@@ -135245,7 +135300,7 @@ int QueryPassword(
 );
 ```
 
-**Parameters**: - `pszFileName` - File name for which password is requested (can be used to determine file-specific keys) - `pBuffer` - Buffer to receive password data or binary key - `plSize` - Pointer to buffer size (input: max buffer size, output: actual data size returned) **Return Value**: - `S_OK` (0) if password provided successfully - `E_OUTOFMEMORY` if buffer is too small (set plSize to required size) - Error HRESULT on failure **Remarks**: Implement this interface to: - Provide binary key data (256-bit keys for AES-256) - Generate file-specific encryption keys based on file name - Retrieve keys from external key management systems - Implement custom password derivation logic For simple scenarios with a single password for all files, using `IVFCryptoConfig::put_Password` directly is more straightforward. **Implementation Example (C#)**:
+**Parameters**: - `pszFileName` - File name for which password is requested (can be used to determine file-specific keys) - `pBuffer` - Buffer to receive password data or binary key - `plSize` - Pointer to buffer size (input: max buffer size, output: actual data size returned) **Return Value**: - `S_OK` (0) if password provided successfully - When `pBuffer` is `NULL`, set `plSize` to the key size and return `S_OK`: the filter asks for the size first, then calls again with a buffer of that size - `E_OUTOFMEMORY` if a non-NULL buffer is too small (set plSize to required size) - Error HRESULT on failure **Remarks**: Implement this interface to: - Provide binary key data (256-bit keys for AES-256) - Generate file-specific encryption keys based on file name - Retrieve keys from external key management systems - Implement custom password derivation logic For simple scenarios with a single password for all files, using `IVFCryptoConfig::put_Password` directly is more straightforward. **Implementation Example (C#)**:
 
 ```
 public class CustomPasswordProvider : IVFPasswordProvider
@@ -135254,7 +135309,12 @@ public class CustomPasswordProvider : IVFPasswordProvider
     {
         // Generate file-specific key
         byte[] key = GenerateKeyForFile(pszFileName);
-        if (pBuffer == null || plSize < key.Length)
+        if (pBuffer == null)
+        {
+            plSize = key.Length;
+            return 0; // S_OK: the filter asks for the size first, then calls again with a buffer of that size
+        }
+        if (plSize < key.Length)
         {
             plSize = key.Length;
             return unchecked((int)0x8007000E); // E_OUTOFMEMORY
@@ -148550,6 +148610,43 @@ In this code:
 - Perform the search operation between our fragment and main video
 - Check if a matching position was found (`Search` returns `int.MaxValue` when the fragment is not found; 0 means a match at the very start)
 - Convert the result to a timestamp and display it along with the difference value
+
+### Finding Every Match in a Few Lines
+
+A complete console app: it finds every place where `clip.mp4` appears in `movie.mp4` and prints the start of each match. `VFPAnalyzer.SearchAsync` takes the two fingerprints, the clip's duration, the difference limit (a match must score below 500 here) and `true` to return every match instead of only the best one, and it returns the start of each match as a `List<TimeSpan>`. `GetSearchFingerprintForVideoFileAsync` returns `null` when a file cannot be analyzed and prints the reason through the callback; a missing file throws `FileNotFoundException` from the `VFPFingerprintSource` constructor. A 10-second 480p clip was found at all five places in 2 hours 18 minutes of 720p video, in about nine minutes.
+
+```
+using System;
+using VisioForge.Core;
+using VisioForge.Core.VideoFingerPrinting;
+using static VisioForge.Core.VideoFingerPrinting.VFPAnalyzer;
+
+await VisioForgeX.InitSDKAsync();
+SetLicenseKey("TRIAL");
+var clip = await
+    GetSearchFingerprintForVideoFileAsync(
+        new VFPFingerprintSource("clip.mp4"),
+        Console.WriteLine);
+var movie = await
+    GetSearchFingerprintForVideoFileAsync(
+        new VFPFingerprintSource("movie.mp4"),
+        Console.WriteLine);
+if (clip != null && movie != null)
+{
+    var found = await SearchAsync(
+        clip, movie, clip.Duration, 500, true);
+    foreach (var at in found)
+        Console.WriteLine(
+            $"Found at {at:hh\\:mm\\:ss}");
+    if (found.Count == 0)
+        Console.WriteLine("Not found");
+}
+VisioForgeX.DestroySDK();
+```
+
+The full project is [find-clip-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Fingerprinting%20SDK/_VideoTutorials/find-clip-short-console), a Windows x64 console app that references `VisioForge.DotNet.Core.Redist.VideoFingerprinting` and the SDK's native packages for that platform, `VisioForge.CrossPlatform.Core.Windows.x64` and `VisioForge.CrossPlatform.Libav.Windows.x64`. File names are relative to the working directory, so put both files in the folder you start the app from. Without a license key the SDK runs in trial mode and shows an "Unregistered version" message once; click OK and the search goes on.
+
+The one-minute video writes and runs this app.
 
 ## Performance Considerations
 

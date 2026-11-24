@@ -157,14 +157,14 @@ YourApp\
 REM Verifier les privileges administrateur
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo ERREUR : ce script doit etre execute en tant qu'administrateur !
+    echo ERROR: This script must be run as Administrator!
     exit /b 1
 )
 regsvr32 /s "%~dp0Filters\VisioForge_FFMPEG_Source_x64.ax"
 if %ERRORLEVEL% EQU 0 (
-    echo Enregistrement reussi
+    echo Registration successful
 ) else (
-    echo Echec de l'enregistrement
+    echo Registration failed
 )
 ```
 
@@ -531,7 +531,7 @@ param(
     [string]$FilterCLSID
 )
 
-Write-Host "Test de l'installation..." -ForegroundColor Cyan
+Write-Host "Testing installation..." -ForegroundColor Cyan
 
 # Installer
 Start-Process $InstallerPath -ArgumentList "/S" -Wait
@@ -539,16 +539,16 @@ Start-Process $InstallerPath -ArgumentList "/S" -Wait
 # Verifier l'enregistrement du filtre
 $regPath = "HKLM:\SOFTWARE\Classes\CLSID\$FilterCLSID"
 if (Test-Path $regPath) {
-    Write-Host "✓ Filtre enregistre" -ForegroundColor Green
+    Write-Host "✓ Filter registered" -ForegroundColor Green
 } else {
-    Write-Host "✗ Filtre NON enregistre" -ForegroundColor Red
+    Write-Host "✗ Filter NOT registered" -ForegroundColor Red
     Exit 1
 }
 
 # Tester avec GraphEdit
 $graphEdit = "C:\Program Files (x86)\Windows Kits\10\bin\*\x64\graphedt.exe"
 if (Test-Path $graphEdit) {
-    Write-Host "✓ Test avec GraphEdit..." -ForegroundColor Cyan
+    Write-Host "✓ Testing with GraphEdit..." -ForegroundColor Cyan
     # Ajouter l'automatisation GraphEdit ici
 }
 
@@ -556,18 +556,18 @@ if (Test-Path $graphEdit) {
 $uninstaller = Get-ChildItem "C:\Program Files\MyApp\Uninstall.exe" -ErrorAction SilentlyContinue
 if ($uninstaller) {
     Start-Process $uninstaller.FullName -ArgumentList "/S" -Wait
-    Write-Host "✓ Desinstallation terminee" -ForegroundColor Green
+    Write-Host "✓ Uninstall completed" -ForegroundColor Green
 }
 
 # Verifier le nettoyage
 if (Test-Path $regPath) {
-    Write-Host "✗ Filtre toujours enregistre apres desinstallation" -ForegroundColor Red
+    Write-Host "✗ Filter still registered after uninstall" -ForegroundColor Red
     Exit 1
 } else {
-    Write-Host "✓ Filtre desenregistre avec succes" -ForegroundColor Green
+    Write-Host "✓ Filter unregistered successfully" -ForegroundColor Green
 }
 
-Write-Host "Tous les tests sont passes !" -ForegroundColor Green
+Write-Host "All tests passed!" -ForegroundColor Green
 ```
 
 ---

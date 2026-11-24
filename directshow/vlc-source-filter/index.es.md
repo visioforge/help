@@ -285,7 +285,7 @@ public class VLCSourcePlayer
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error al inicializar VLC Source: {ex.Message}");
+            Console.WriteLine($"Error initializing VLC Source: {ex.Message}");
             Cleanup();
             throw;
         }
@@ -396,7 +396,7 @@ if (vlcSrc != null)
         var trackName = new StringBuilder(256);
         vlcSrc.GetAudioTrackInfo(i, out trackId, trackName);
 
-        Console.WriteLine($"Pista {i}: {trackName} (ID: {trackId})");
+        Console.WriteLine($"Track {i}: {trackName} (ID: {trackId})");
     }
 
     // Seleccionar pista de audio específica

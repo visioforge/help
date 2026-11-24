@@ -163,10 +163,10 @@ var cryptoConfig = muxerFilter as IVFCryptoConfig;
 if (cryptoConfig != null)
 {
     // Aplicar contraseña de cadena
-    cryptoConfig.ApplyString("MiContraseñaSegura123");
+    cryptoConfig.ApplyString("MySecurePassword123");
 
     // O usar archivo como clave
-    // cryptoConfig.ApplyFile(@"C:\keys\miclave.bin");
+    // cryptoConfig.ApplyFile(@"C:\keys\mykey.bin");
 
     // O usar datos binarios
     // byte[] keyData = new byte[] { 0x01, 0x02, 0x03, ... };
@@ -184,7 +184,7 @@ hr = pMuxer->QueryInterface(IID_ICryptoConfig, (void**)&pCrypto);
 if (SUCCEEDED(hr))
 {
     // Establecer contraseña
-    const wchar_t* password = L"MiContraseñaSegura123";
+    const wchar_t* password = L"MySecurePassword123";
     hr = pCrypto->put_Password(
         (LPBYTE)password,
         wcslen(password) * sizeof(wchar_t)
@@ -204,7 +204,7 @@ var cryptoConfig = demuxerFilter as IVFCryptoConfig;
 if (cryptoConfig != null)
 {
     // Debe usar la misma contraseña/clave que la encriptación
-    cryptoConfig.ApplyString("MiContraseñaSegura123");
+    cryptoConfig.ApplyString("MySecurePassword123");
 }
 ```
 

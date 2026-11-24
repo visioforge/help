@@ -81,7 +81,7 @@ public class VideoEffectsBasicExample
         effectFilter = FilterGraphTools.AddFilterFromClsid(
             filterGraph,
             Consts.CLSID_VFVideoEffects,
-            "Vidéo Effects");
+            "Video Effects");
 
         // Configurer l'effet via l'interface IVFEffects45
         var effects = effectFilter as IVFEffects45;
@@ -150,7 +150,7 @@ HRESULT ApplyVideoEffect(LPCWSTR filename)
                          IID_IBaseFilter, (void**)&pEffect);
     if (FAILED(hr)) goto cleanup;
 
-    hr = pGraph->AddFilter(pEffect, L"Vidéo Effects");
+    hr = pGraph->AddFilter(pEffect, L"Video Effects");
     if (FAILED(hr)) goto cleanup;
 
     // Configurer l'effet
@@ -239,7 +239,7 @@ public void ApplyTextOverlay(IBaseFilter effectFilter)
             {
                 X = 50,
                 Y = 50,
-                Text = "My Vidéo Title",
+                Text = "My Video Title",
                 FontName = "Arial",
                 FontSize = 36,
                 FontColor = 0xFFFFFF,        // Blanc
@@ -432,7 +432,7 @@ public class VideoMixerPIPExample
         mixerFilter = FilterGraphTools.AddFilterFromClsid(
             filterGraph,
             Consts.CLSID_VFVideoMixer,
-            "Vidéo Mixer");
+            "Video Mixer");
 
         // Configurer le melangeur — interface réelle IVFVideoMixer
         var mixer = mixerFilter as IVFVideoMixer;
@@ -510,7 +510,7 @@ public class VideoMixerGridExample
     {
         if (videoPaths.Length != 4)
         {
-            throw new ArgumentException("Requires exactly 4 vidéo sources");
+            throw new ArgumentException("Requires exactly 4 video sources");
         }
         var filterGraph = (IFilterGraph2)new FilterGraph();
         // Ajouter tous les filtres source
@@ -523,7 +523,7 @@ public class VideoMixerGridExample
         var mixerFilter = FilterGraphTools.AddFilterFromClsid(
             filterGraph,
             Consts.CLSID_VFVideoMixer,
-            "Vidéo Mixer");
+            "Video Mixer");
         var mixer = mixerFilter as IVFVideoMixer;
         if (mixer != null)
         {
@@ -578,7 +578,7 @@ public void CreateMixerWithChromaKey(string backgroundPath, string foregroundPat
     var mixerFilter = FilterGraphTools.AddFilterFromClsid(
         filterGraph,
         Consts.CLSID_VFVideoMixer,
-        "Vidéo Mixer");
+        "Video Mixer");
 
     var mixer = mixerFilter as IVFVideoMixer;
     if (mixer != null)
@@ -756,7 +756,7 @@ public class CompleteProcessingPipeline
         var filterGraph = (IFilterGraph2)new FilterGraph();
 
         // 1. Source vidéo principale
-        filterGraph.AddSourceFilter(mainVideoPath, "Main Vidéo", out IBaseFilter mainSource);
+        filterGraph.AddSourceFilter(mainVideoPath, "Main Video", out IBaseFilter mainSource);
 
         // 2. Source vidéo fond vert
         filterGraph.AddSourceFilter(greenScreenVideoPath, "Green Screen", out IBaseFilter gsSource);
@@ -778,7 +778,7 @@ public class CompleteProcessingPipeline
         var effectsFilter = FilterGraphTools.AddFilterFromClsid(
             filterGraph,
             Consts.CLSID_VFVideoEffects,
-            "Vidéo Effects");
+            "Video Effects");
 
         var effects = effectsFilter as IVFEffects45;
         if (effects != null)
@@ -808,7 +808,7 @@ public class CompleteProcessingPipeline
         var mixerFilter = FilterGraphTools.AddFilterFromClsid(
             filterGraph,
             Consts.CLSID_VFVideoMixer,
-            "Vidéo Mixer");
+            "Video Mixer");
 
         var mixer = mixerFilter as IVFVideoMixer;
         if (mixer != null)

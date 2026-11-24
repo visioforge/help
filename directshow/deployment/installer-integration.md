@@ -15,12 +15,16 @@ tags:
 This guide provides comprehensive instructions for integrating VisioForge DirectShow filters into Windows installers. It covers multiple installer technologies, custom actions for filter registration, dependency management, and best practices.
 
 ---
+
 ## Prerequisites
+
 Before creating an installer, ensure you understand:
+
 - [Redistributable Files](redistributable-files.md) - Files to include in installer
 - [Filter Registration](filter-registration.md) - Registration mechanisms
 - Target platform architecture (x86/x64)
 - Visual C++ Redistributable requirements
+
 ---
 
 ## Installer Technologies Overview
@@ -46,18 +50,26 @@ Before creating an installer, ensure you understand:
 [View WiX Examples →](#wix-toolset-examples)
 
 ---
+
 ### NSIS (Nullsoft Scriptable Install System)
+
 **Best For**: Lightweight installers, custom UI, portable applications
+
 **Advantages**:
+
 - Small installer size
 - Highly customizable
 - Simple scripting language
 - No runtime dependencies
 - Fast execution
+
 **Requirements**:
+
 - NSIS 3.x compiler
 - .nsi script files
+
 [View NSIS Examples →](#nsis-examples)
+
 ---
 
 ### InstallShield
@@ -80,18 +92,26 @@ Before creating an installer, ensure you understand:
 [View InstallShield Guide →](#installshield-integration)
 
 ---
+
 ### Inno Setup
+
 **Best For**: Simple installers, small applications, freeware
+
 **Advantages**:
+
 - Free and open-source
 - Pascal scripting support
 - Unicode support
 - Good documentation
 - Active community
+
 **Requirements**:
+
 - Inno Setup 6.x compiler
 - .iss script files
+
 [View Inno Setup Examples →](#inno-setup-examples)
+
 ---
 
 ## WiX Toolset Examples
@@ -249,7 +269,9 @@ wix build -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixe
 ```
 
 ---
+
 ### Advanced WiX: Self-Extracting Bundle
+
 Create a bundle that includes Visual C++ Redistributable.
 #### Bundle.wxs
 ```xml
@@ -492,8 +514,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
 ```
 
 ---
+
 ## NSIS Examples
+
 ### Basic NSIS Installer
+
 Create a complete NSIS installer script.
 #### Installer.nsi
 ```nsis
@@ -690,7 +715,9 @@ silent_mode:
 ```
 
 ---
+
 ### NSIS: Custom Plugin for Registration
+
 Create a custom NSIS plugin for more control. NSIS installers and their plugins are 32-bit processes, so a plugin can load and register only the x86 filter (`VisioForge_FFMPEG_Source.ax`). Register the x64 filter with the 64-bit `regsvr32`, as in the basic script above. The x86 filter needs a folder of its own with the x86 FFmpeg DLLs, `cacert.pem`, `dav1d-license.txt` and the x86 VC++ runtime (`msvcp140.dll`, `vcruntime140.dll`); the usage below installs it to `$INSTDIR\Filters\x86`.
 #### FilterRegistration.cpp (NSIS Plugin)
 ```cpp
@@ -810,8 +837,11 @@ RMDir /r "$INSTDIR\Filters\x86"
    - Set: **Install Before This Application**
 
 ---
+
 ## Inno Setup Examples
+
 ### Basic Inno Setup Script
+
 #### Setup.iss
 ```pascal
 ; MyApp Setup Script for Inno Setup 6.x
@@ -959,8 +989,11 @@ unins000.exe /SILENT
 ```
 
 ---
+
 ## Bundling Dependencies
+
 ### Visual C++ Redistributable
+
 #### Option 1: Download Bootstrapper
 ```xml
 <!-- WiX Bundle.wxs -->
@@ -1103,8 +1136,11 @@ ${EndIf}
 ```
 
 ---
+
 ## Testing Installation
+
 ### Manual Testing Checklist
+
 - [ ] Install on clean Windows 10/11
 - [ ] Verify all files copied
 - [ ] Check filter registration (GraphEdit/GraphStudioNext)
@@ -1192,12 +1228,16 @@ msiexec /i MyApp.msi /quiet /norestart
 ```
 
 ---
+
 ## See Also
+
 ### Documentation
+
 - [Filter Registration](filter-registration.md) - Manual registration methods
 - [Redistributable Files](redistributable-files.md) - Files to include in installer
 - [Deployment Overview](index.md) - Complete deployment guide
 ### External Resources
+
 - [WiX Toolset Documentation](https://docs.firegiant.com/wix/)
 - [NSIS Documentation](https://nsis.sourceforge.io/Docs/)
 - [Inno Setup Documentation](https://jrsoftware.org/ishelp/)

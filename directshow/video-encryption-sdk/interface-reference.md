@@ -63,15 +63,11 @@ using System.Runtime.InteropServices;
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 public interface IVFCryptoConfig
 {
-    // NOTE: put_Provider / get_Provider are stubs in the managed wrapper —
-    // the parameter is literally named `passwordProviderNotUsed` because the
-    // .NET marshaling for IVFPasswordProvider is not wired up. From C# call
-    // put_Password directly with the binary key bytes.
     [PreserveSig]
-    int put_Provider([In] IVFPasswordProvider passwordProviderNotUsed);
+    int put_Provider([In] IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
-    int get_Provider([Out] IVFPasswordProvider passwordProviderNotUsed);
+    int get_Provider(out IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
     int put_Password(IntPtr buffer, [In] int size);
@@ -81,8 +77,8 @@ public interface IVFCryptoConfig
 }
 ```
 
-!!! warning "C# password provider not supported"
-    The managed `put_Provider` / `get_Provider` wrappers are **non-functional stubs** (note the `passwordProviderNotUsed` parameter name). To set passwords from C#, call `put_Password` with the raw key bytes via `IntPtr` (or use the `ApplyString` helper). Custom `IVFPasswordProvider` callbacks must be implemented from C++ or Delphi.
+!!! note "Password provider from C#"
+    `put_Provider` works from C#: pass an object that implements `IVFPasswordProvider`. If no password has been set, the filter calls its `QueryPassword`: the decryption demuxer when its input pin connects, with the source file name; the encryption muxer when the graph starts, with the output file name. `pszFileName` is `NULL` when the neighbouring filter does not expose a file name. Each time the filter calls twice: first with `pBuffer` set to `NULL` to learn the key size, then with a buffer of that size.
 
 #### Delphi Definition
 
@@ -143,7 +139,7 @@ HRESULT get_Provider(IPasswordProvider** ppProvider);
 
 **C# Syntax**:
 ```csharp
-int get_Provider(IVFPasswordProvider passwordProvider);
+int get_Provider(out IVFPasswordProvider passwordProvider);
 ```
 
 **Parameters**:
@@ -381,7 +377,8 @@ int QueryPassword(
 - `plSize` - Pointer to buffer size (input: max buffer size, output: actual data size returned)
 **Return Value**:
 - `S_OK` (0) if password provided successfully
-- `E_OUTOFMEMORY` if buffer is too small (set plSize to required size)
+- When `pBuffer` is `NULL`, set `plSize` to the key size and return `S_OK`: the filter asks for the size first, then calls again with a buffer of that size
+- `E_OUTOFMEMORY` if a non-NULL buffer is too small (set plSize to required size)
 - Error HRESULT on failure
 **Remarks**:
 Implement this interface to:
@@ -398,7 +395,12 @@ public class CustomPasswordProvider : IVFPasswordProvider
     {
         // Generate file-specific key
         byte[] key = GenerateKeyForFile(pszFileName);
-        if (pBuffer == null || plSize < key.Length)
+        if (pBuffer == null)
+        {
+            plSize = key.Length;
+            return 0; // S_OK: the filter asks for the size first, then calls again with a buffer of that size
+        }
+        if (plSize < key.Length)
         {
             plSize = key.Length;
             return unchecked((int)0x8007000E); // E_OUTOFMEMORY

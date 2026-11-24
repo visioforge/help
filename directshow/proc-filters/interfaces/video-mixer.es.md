@@ -138,8 +138,8 @@ int GetInputParam([In] int pin_index, [Out] out VFPIPVideoInputParam param);
 VFPIPVideoInputParam param;
 pMixer->GetInputParam(1, &param);
 
-printf("Posición entrada 1: %d,%d\n", param.Left, param.Top);
-printf("Tamaño entrada 1: %dx%d\n", param.Width, param.Height);
+printf("Input 1 position: %d,%d\n", param.Left, param.Top);
+printf("Input 1 size: %dx%d\n", param.Width, param.Height);
 ```
 
 ---
@@ -426,7 +426,7 @@ public class SplitScreenMixer
     {
         var mixer = mixerFilter as IVFVideoMixer;
         if (mixer == null)
-            throw new NotSupportedException("IVFVideoMixer no disponible");
+            throw new NotSupportedException("IVFVideoMixer not available");
         // Salida 1920x1080
         var output = new VFPIPVideoOutputParam
         {

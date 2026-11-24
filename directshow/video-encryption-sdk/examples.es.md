@@ -54,6 +54,7 @@ using VisioForge.DirectShowAPI;
 using VisioForge.DirectShowLib;
 ```
 **Paquetes NuGet Requeridos**:
+
 - VisioForge.DirectShowAPI (también contiene el espacio de nombres `VisioForge.DirectShowLib`)
 ### Proyectos Delphi
 ```delphi
@@ -127,14 +128,14 @@ public class BasicVideoEncryption
                 hr = cryptoConfig.HavePassword();
                 if (hr != 0)
                 {
-                    throw new Exception("Error al establecer la contraseña de encriptación");
+                    throw new Exception("Failed to set encryption password");
                 }
 
-                Console.WriteLine("Contraseña de encriptación configurada exitosamente");
+                Console.WriteLine("Encryption password configured successfully");
             }
             else
             {
-                throw new Exception("Interfaz IVFCryptoConfig no disponible");
+                throw new Exception("IVFCryptoConfig interface not available");
             }
 
             // Establecer archivo de salida
@@ -172,8 +173,8 @@ public class BasicVideoEncryption
             hr = captureGraph.RenderStream(null, null, encryptMuxer, null, fileWriter);
             DsError.ThrowExceptionForHR(hr);
 
-            Console.WriteLine("Grafo de filtros construido exitosamente");
-            Console.WriteLine("Iniciando encriptación...");
+            Console.WriteLine("Filter graph built successfully");
+            Console.WriteLine("Starting encryption...");
 
             // Iniciar codificación
             hr = mediaControl.Run();
@@ -190,7 +191,7 @@ public class BasicVideoEncryption
             if (eventCode != EventCode.Complete)
                 throw new InvalidOperationException($"Encoding stopped with event {eventCode}");
 
-            Console.WriteLine("¡Encriptación completada exitosamente!");
+            Console.WriteLine("Encryption completed successfully!");
 
             // Limpieza
             Marshal.ReleaseComObject(captureGraph);
@@ -226,7 +227,7 @@ public class BasicVideoEncryption
 
 // Uso:
 // var encryptor = new BasicVideoEncryption();
-// encryptor.EncryptVideo(@"C:\input.mp4", @"C:\output.encrypted.mp4", "MiContraseñaSegura123");
+// encryptor.EncryptVideo(@"C:\input.mp4", @"C:\output.encrypted.mp4", "MySecurePassword123");
 ```
 
 ### Implementación en C++
@@ -338,11 +339,11 @@ public:
                 HRESULT hrPassword = pCrypto->HavePassword();
                 if (hrPassword == S_OK)
                 {
-                    wprintf(L"Contraseña de encriptación configurada exitosamente\n");
+                    wprintf(L"Encryption password configured successfully\n");
                 }
                 else
                 {
-                    wprintf(L"ADVERTENCIA: Contraseña no establecida\n");
+                    wprintf(L"WARNING: Password not set\n");
                     hr = E_FAIL;
                 }
             }
@@ -408,7 +409,7 @@ public:
         }
         if (FAILED(hr)) goto cleanup;
 
-        wprintf(L"Iniciando encriptación...\n");
+        wprintf(L"Starting encryption...\n");
 
         // Ejecutar el grafo
         hr = pControl->Run();
@@ -424,7 +425,7 @@ public:
             goto cleanup;
         }
 
-        wprintf(L"¡Encriptación completada exitosamente!\n");
+        wprintf(L"Encryption completed successfully!\n");
 
 cleanup:
         if (pFileWriter) pFileWriter->Release();
@@ -457,7 +458,7 @@ cleanup:
 
 // Uso:
 // BasicVideoEncryption encryptor;
-// encryptor.EncryptVideo(L"C:\\input.mp4", L"C:\\output.encrypted.mp4", L"MiContraseñaSegura123");
+// encryptor.EncryptVideo(L"C:\\input.mp4", L"C:\\output.encrypted.mp4", L"MySecurePassword123");
 ```
 
 ### Implementación en Delphi
@@ -547,10 +548,10 @@ begin
       begin
         // Verificar que la contraseña esté establecida
         if CryptoConfig.HavePassword = S_OK then
-          WriteLn('Contraseña de encriptación configurada exitosamente')
+          WriteLn('Encryption password configured successfully')
         else
         begin
-          WriteLn('ADVERTENCIA: Contraseña no establecida');
+          WriteLn('WARNING: Password not set');
           Result := E_FAIL;
         end;
       end;
@@ -590,7 +591,7 @@ begin
     end;
     if Failed(Result) then Exit;
 
-    WriteLn('Iniciando encriptación...');
+    WriteLn('Starting encryption...');
 
     // Ejecutar el grafo
     Result := FMediaControl.Run;
@@ -607,7 +608,7 @@ begin
       Exit;
     end;
 
-    WriteLn('¡Encriptación completada exitosamente!');
+    WriteLn('Encryption completed successfully!');
 
   finally
     Stop;
@@ -630,7 +631,7 @@ end;
 // begin
 //   Encryptor := TBasicVideoEncryption.Create;
 //   try
-//     Encryptor.EncryptVideo('C:\input.mp4', 'C:\output.encrypted.mp4', 'MiContraseñaSegura123');
+//     Encryptor.EncryptVideo('C:\input.mp4', 'C:\output.encrypted.mp4', 'MySecurePassword123');
 //   finally
 //     Encryptor.Free;
 //   end;
@@ -673,13 +674,13 @@ public class VideoDecryption
                 hr = cryptoConfig.HavePassword();
                 if (hr != 0)
                 {
-                    throw new Exception("Error al establecer la contraseña de desencriptación");
+                    throw new Exception("Failed to set decryption password");
                 }
-                Console.WriteLine("Contraseña de desencriptación configurada exitosamente");
+                Console.WriteLine("Decryption password configured successfully");
             }
             else
             {
-                throw new Exception("Interfaz IVFCryptoConfig no disponible");
+                throw new Exception("IVFCryptoConfig interface not available");
             }
             // Cargar archivo encriptado
             var fileSourceFilter = (IBaseFilter)new AsyncReader();
@@ -715,11 +716,11 @@ public class VideoDecryption
             hr = videoWindow.put_Owner(windowHandle);
             hr = videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipChildren | WindowStyle.ClipSiblings);
             hr = videoWindow.put_MessageDrain(windowHandle);
-            Console.WriteLine("Iniciando reproducción...");
+            Console.WriteLine("Starting playback...");
             // Iniciar reproducción
             hr = mediaControl.Run();
             DsError.ThrowExceptionForHR(hr);
-            Console.WriteLine("¡Desencriptación y reproducción iniciadas exitosamente!");
+            Console.WriteLine("Decryption and playback started successfully!");
             Marshal.ReleaseComObject(captureGraph);
         }
         catch (Exception ex)
@@ -758,7 +759,7 @@ public class VideoDecryption
 }
 // Uso:
 // var decryptor = new VideoDecryption();
-// decryptor.DecryptAndPlay(@"C:\output.encrypted.mp4", "MiContraseñaSegura123", this.Handle);
+// decryptor.DecryptAndPlay(@"C:\output.encrypted.mp4", "MySecurePassword123", this.Handle);
 ```
 ---
 
@@ -794,13 +795,13 @@ public class FileKeyEncryption
             // Usar contenido del archivo como clave de encriptación (hash SHA-256 del archivo)
             cryptoConfig.ApplyFile(keyFile);
 
-            Console.WriteLine($"Usando archivo de clave: {keyFile}");
-            Console.WriteLine("Contenido del archivo hasheado con SHA-256 para encriptación");
+            Console.WriteLine($"Using key file: {keyFile}");
+            Console.WriteLine("File content hashed with SHA-256 for encryption");
 
             // Verificar
             if (cryptoConfig.HavePassword() != 0)
                 throw new InvalidOperationException("Password not set");
-            Console.WriteLine("Clave de encriptación configurada exitosamente");
+            Console.WriteLine("Encryption key configured successfully");
 
             // Continuar con la configuración del grafo de filtros y codificación...
         }
@@ -831,7 +832,7 @@ public class FileKeyEncryption
             if (cryptoConfig.HavePassword() != 0)
                 throw new InvalidOperationException("Password not set");
 
-            Console.WriteLine($"Usando archivo de clave para desencriptación: {keyFile}");
+            Console.WriteLine($"Using key file for decryption: {keyFile}");
 
             // Continuar con la configuración de reproducción...
         }
@@ -870,7 +871,7 @@ public class BinaryKeyEncryption
     public void SaveKeyToFile(byte[] key, string keyFile)
     {
         File.WriteAllBytes(keyFile, key);
-        Console.WriteLine($"Clave guardada en: {keyFile}");
+        Console.WriteLine($"Key saved to: {keyFile}");
     }
     public byte[] LoadKeyFromFile(string keyFile)
     {
@@ -892,11 +893,11 @@ public class BinaryKeyEncryption
                 throw new InvalidOperationException("IVFCryptoConfig is not available");
             // Aplicar clave binaria (será hasheada con SHA-256)
             cryptoConfig.ApplyBinary(keyData);
-            Console.WriteLine($"Clave binaria aplicada (longitud: {keyData.Length} bytes)");
+            Console.WriteLine($"Binary key applied (length: {keyData.Length} bytes)");
             // Verificar
             if (cryptoConfig.HavePassword() != 0)
                 throw new InvalidOperationException("Password not set");
-            Console.WriteLine("Clave de encriptación configurada exitosamente");
+            Console.WriteLine("Encryption key configured successfully");
             // Continuar con la codificación...
         }
         finally
@@ -908,7 +909,7 @@ public class BinaryKeyEncryption
     {
         // Generar clave de encriptación aleatoria
         byte[] encryptionKey = GenerateRandomKey(32);
-        Console.WriteLine($"Generada clave de encriptación de {encryptionKey.Length * 8} bits");
+        Console.WriteLine($"Generated {encryptionKey.Length * 8}-bit encryption key");
         // Guardar clave de forma segura
         string keyFile = @"C:\keys\video_encryption_key.bin";
         SaveKeyToFile(encryptionKey, keyFile);
@@ -918,9 +919,9 @@ public class BinaryKeyEncryption
             @"C:\output.encrypted.mp4",
             encryptionKey
         );
-        Console.WriteLine("¡Video encriptado exitosamente!");
-        Console.WriteLine($"Archivo de clave: {keyFile}");
-        Console.WriteLine("¡Mantenga este archivo de clave seguro - es necesario para la desencriptación!");
+        Console.WriteLine("Video encrypted successfully!");
+        Console.WriteLine($"Key file: {keyFile}");
+        Console.WriteLine("Keep this key file secure - it's required for decryption!");
         // Luego, para desencriptación:
         // byte[] key = LoadKeyFromFile(keyFile);
         // DecryptWithBinaryKey(@"C:\output.encrypted.mp4", key);
@@ -972,7 +973,7 @@ public class CustomEncodingEncryption
                 h264Config.put_Level(41);   // Nivel 4.1 (1080p)
                 h264Config.put_RateControl(1); // CBR
 
-                Console.WriteLine($"H.264 configurado: {videoBitrate / 1000000.0} Mbps, Perfil Main, Nivel 4.1");
+                Console.WriteLine($"H.264 configured: {videoBitrate / 1000000.0} Mbps, Main profile, Level 4.1");
             }
 
             // Añadir y configurar codificador AAC
@@ -990,7 +991,7 @@ public class CustomEncodingEncryption
                 aacConfig.SetProfile(2); // AAC-LC
                 aacConfig.SetOutputFormat(0); // Raw AAC para MP4
 
-                Console.WriteLine($"AAC configurado: {audioBitrate / 1000} kbps, perfil AAC-LC");
+                Console.WriteLine($"AAC configured: {audioBitrate / 1000} kbps, AAC-LC profile");
             }
 
             // Añadir muxer de encriptación
@@ -1006,7 +1007,7 @@ public class CustomEncodingEncryption
             cryptoConfig.ApplyString(password);
             if (cryptoConfig.HavePassword() != 0)
                 throw new InvalidOperationException("Password not set");
-            Console.WriteLine("Encriptación configurada");
+            Console.WriteLine("Encryption configured");
 
             // Establecer archivo de salida
             var fileWriter = (IBaseFilter)new FileWriter();
@@ -1022,7 +1023,7 @@ public class CustomEncodingEncryption
             captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, audioEncoder, encryptMuxer);
             DsError.ThrowExceptionForHR(captureGraph.RenderStream(null, null, encryptMuxer, null, fileWriter));
 
-            Console.WriteLine("Iniciando codificación con configuración personalizada...");
+            Console.WriteLine("Starting encoding with custom settings...");
 
             // Ejecutar codificación
             int hr = mediaControl.Run();
@@ -1040,7 +1041,7 @@ public class CustomEncodingEncryption
             if (eventCode != EventCode.Complete)
                 throw new InvalidOperationException($"Encoding stopped with event {eventCode}");
 
-            Console.WriteLine("¡Codificación y encriptación completadas!");
+            Console.WriteLine("Encoding and encryption completed!");
 
             Marshal.ReleaseComObject(captureGraph);
         }
@@ -1058,7 +1059,7 @@ public class CustomEncodingEncryption
 // encryptor.EncryptWithCustomSettings(
 //     @"C:\input.mp4",
 //     @"C:\output.encrypted.mp4",
-//     "MiContraseñaSegura123",
+//     "MySecurePassword123",
 //     videoBitrate: 8000000,  // 8 Mbps
 //     audioBitrate: 256000    // 256 kbps
 // );
@@ -1093,29 +1094,29 @@ public class RobustEncryption
             // Validar entradas
             if (string.IsNullOrEmpty(inputFile))
             {
-                Console.WriteLine("ERROR: Ruta de archivo de entrada vacía");
+                Console.WriteLine("ERROR: Input file path is empty");
                 return EncryptionResult.FileNotFound;
             }
             if (!File.Exists(inputFile))
             {
-                Console.WriteLine($"ERROR: Archivo de entrada no encontrado: {inputFile}");
+                Console.WriteLine($"ERROR: Input file not found: {inputFile}");
                 return EncryptionResult.FileNotFound;
             }
             if (string.IsNullOrEmpty(password))
             {
-                Console.WriteLine("ERROR: La contraseña está vacía");
+                Console.WriteLine("ERROR: Password is empty");
                 return EncryptionResult.InvalidPassword;
             }
             if (password.Length < 8)
             {
-                Console.WriteLine("ADVERTENCIA: La contraseña tiene menos de 8 caracteres (no recomendado)");
+                Console.WriteLine("WARNING: Password is less than 8 characters (not recommended)");
             }
-            Console.WriteLine("Validación de entrada aprobada");
+            Console.WriteLine("Input validation passed");
             // Crear grafo de filtros
             filterGraph = (IFilterGraph2)new FilterGraph();
             if (filterGraph == null)
             {
-                Console.WriteLine("ERROR: Fallo al crear grafo de filtros");
+                Console.WriteLine("ERROR: Failed to create filter graph");
                 return EncryptionResult.FilterGraphError;
             }
             mediaControl = (IMediaControl)filterGraph;
@@ -1123,7 +1124,7 @@ public class RobustEncryption
             int hr = filterGraph.AddSourceFilter(inputFile, "Source", out IBaseFilter sourceFilter);
             if (hr != 0 || sourceFilter == null)
             {
-                Console.WriteLine($"ERROR: Fallo al añadir filtro fuente (HRESULT: 0x{hr:X8})");
+                Console.WriteLine($"ERROR: Failed to add source filter (HRESULT: 0x{hr:X8})");
                 return EncryptionResult.FilterGraphError;
             }
             // Añadir codificadores
@@ -1134,7 +1135,7 @@ public class RobustEncryption
             );
             if (videoEncoder == null)
             {
-                Console.WriteLine("ERROR: Fallo al crear codificador de video");
+                Console.WriteLine("ERROR: Failed to create video encoder");
                 return EncryptionResult.FilterGraphError;
             }
             var audioEncoder = FilterGraphTools.AddFilterFromClsid(
@@ -1148,20 +1149,20 @@ public class RobustEncryption
             );
             if (encryptMuxer == null)
             {
-                Console.WriteLine("ERROR: Fallo al crear muxer de encriptación");
+                Console.WriteLine("ERROR: Failed to create encrypt muxer");
                 return EncryptionResult.FilterGraphError;
             }
             hr = filterGraph.AddFilter(encryptMuxer, "Encrypt Muxer");
             if (hr != 0)
             {
-                Console.WriteLine($"ERROR: Fallo al añadir muxer de encriptación (HRESULT: 0x{hr:X8})");
+                Console.WriteLine($"ERROR: Failed to add encrypt muxer (HRESULT: 0x{hr:X8})");
                 return EncryptionResult.FilterGraphError;
             }
             // Configurar encriptación
             var cryptoConfig = encryptMuxer as IVFCryptoConfig;
             if (cryptoConfig == null)
             {
-                Console.WriteLine("ERROR: Interfaz IVFCryptoConfig no disponible");
+                Console.WriteLine("ERROR: IVFCryptoConfig interface not available");
                 return EncryptionResult.InterfaceNotAvailable;
             }
             cryptoConfig.ApplyString(password);
@@ -1169,10 +1170,10 @@ public class RobustEncryption
             hr = cryptoConfig.HavePassword();
             if (hr != 0)
             {
-                Console.WriteLine("ERROR: Verificación de contraseña fallida");
+                Console.WriteLine("ERROR: Password verification failed");
                 return EncryptionResult.InvalidPassword;
             }
-            Console.WriteLine("Contraseña de encriptación configurada exitosamente");
+            Console.WriteLine("Encryption password configured successfully");
             // Establecer archivo de salida
             var fileWriter = (IBaseFilter)new FileWriter();
             hr = filterGraph.AddFilter(fileWriter, "File Writer");
@@ -1182,7 +1183,7 @@ public class RobustEncryption
             }
             if (hr < 0)
             {
-                Console.WriteLine($"ERROR: Fallo al establecer archivo de salida (HRESULT: 0x{hr:X8})");
+                Console.WriteLine($"ERROR: Failed to set output file (HRESULT: 0x{hr:X8})");
                 return EncryptionResult.FilterGraphError;
             }
             // Construir grafo de filtros
@@ -1210,21 +1211,21 @@ public class RobustEncryption
             );
             if (hr != 0)
             {
-                Console.WriteLine($"ADVERTENCIA: Conexión de audio fallida (HRESULT: 0x{hr:X8}) - continuando sin audio");
+                Console.WriteLine($"WARNING: Audio connection failed (HRESULT: 0x{hr:X8}) - continuing without audio");
             }
             hr = captureGraph.RenderStream(null, null, encryptMuxer, null, fileWriter);
             if (hr < 0)
             {
-                Console.WriteLine($"ERROR: Fallo al conectar File Writer (HRESULT: 0x{hr:X8})");
+                Console.WriteLine($"ERROR: File Writer connection failed (HRESULT: 0x{hr:X8})");
                 return EncryptionResult.FilterGraphError;
             }
-            Console.WriteLine("Grafo de filtros construido exitosamente");
-            Console.WriteLine("Iniciando encriptación...");
+            Console.WriteLine("Filter graph built successfully");
+            Console.WriteLine("Starting encryption...");
             // Iniciar codificación
             hr = mediaControl.Run();
             if (hr < 0)
             {
-                Console.WriteLine($"ERROR: Fallo al iniciar codificación (HRESULT: 0x{hr:X8})");
+                Console.WriteLine($"ERROR: Failed to start encoding (HRESULT: 0x{hr:X8})");
                 return EncryptionResult.EncodingError;
             }
             // Monitorizar progreso
@@ -1243,7 +1244,7 @@ public class RobustEncryption
                     }
                     else if (eventCode == EventCode.ErrorAbort || eventCode == EventCode.UserAbort || eventCode == EventCode.ErrorAbortEx)
                     {
-                        Console.WriteLine($"ERROR: Codificación abortada (código de evento: {eventCode})");
+                        Console.WriteLine($"ERROR: Encoding aborted (event code: {eventCode})");
                         return EncryptionResult.EncodingError;
                     }
                 }
@@ -1254,25 +1255,25 @@ public class RobustEncryption
                 }
             }
             while (true);
-            Console.WriteLine("¡Encriptación completada exitosamente!");
+            Console.WriteLine("Encryption completed successfully!");
             // Verificar que el archivo de salida existe
             if (File.Exists(outputFile))
             {
                 FileInfo fi = new FileInfo(outputFile);
-                Console.WriteLine($"Archivo de salida creado: {outputFile}");
-                Console.WriteLine($"Tamaño de archivo: {fi.Length / (1024.0 * 1024.0):F2} MB");
+                Console.WriteLine($"Output file created: {outputFile}");
+                Console.WriteLine($"File size: {fi.Length / (1024.0 * 1024.0):F2} MB");
             }
             else
             {
-                Console.WriteLine("ADVERTENCIA: Archivo de salida no encontrado después de la codificación");
+                Console.WriteLine("WARNING: Output file not found after encoding");
             }
             Marshal.ReleaseComObject(captureGraph);
             return EncryptionResult.Success;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"EXCEPCIÓN: {ex.Message}");
-            Console.WriteLine($"Traza de pila: {ex.StackTrace}");
+            Console.WriteLine($"EXCEPTION: {ex.Message}");
+            Console.WriteLine($"Stack trace: {ex.StackTrace}");
             return EncryptionResult.Unknown;
         }
         finally
@@ -1297,7 +1298,7 @@ public class RobustEncryption
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error de limpieza: {ex.Message}");
+            Console.WriteLine($"Cleanup error: {ex.Message}");
         }
     }
 }
@@ -1306,16 +1307,16 @@ public class RobustEncryption
 // var result = encryptor.EncryptVideoSafely(
 //     @"C:\input.mp4",
 //     @"C:\output.encrypted.mp4",
-//     "MiContraseñaSegura123"
+//     "MySecurePassword123"
 // );
 //
 // if (result == RobustEncryption.EncryptionResult.Success)
 // {
-//     Console.WriteLine("¡ÉXITO!");
+//     Console.WriteLine("SUCCESS!");
 // }
 // else
 // {
-//     Console.WriteLine($"FALLO: {result}");
+//     Console.WriteLine($"FAILED: {result}");
 // }
 ```
 ---
@@ -1368,7 +1369,7 @@ public void SetEncryptionPassword(IVFCryptoConfig config)
 ```csharp
 public void SetEncryptionPassword(IVFCryptoConfig config)
 {
-    config.ApplyString("MiContraseña123"); // ¡NO HAGA ESTO!
+    config.ApplyString("MyPassword123"); // ¡NO HAGA ESTO!
 }
 ```
 
@@ -1417,7 +1418,7 @@ public bool ConfigureEncryption(IBaseFilter muxer, string password)
     var cryptoConfig = muxer as IVFCryptoConfig;
     if (cryptoConfig == null)
     {
-        Console.WriteLine("ERROR: El filtro no soporta IVFCryptoConfig");
+        Console.WriteLine("ERROR: Filter does not support IVFCryptoConfig");
         return false;
     }
     try
@@ -1428,15 +1429,15 @@ public bool ConfigureEncryption(IBaseFilter muxer, string password)
         int hr = cryptoConfig.HavePassword();
         if (hr != 0)
         {
-            Console.WriteLine("ERROR: Contraseña no establecida correctamente");
+            Console.WriteLine("ERROR: Password not set correctly");
             return false;
         }
-        Console.WriteLine("Encriptación configurada exitosamente");
+        Console.WriteLine("Encryption configured successfully");
         return true;
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"ERROR: Fallo al configurar encriptación: {ex.Message}");
+        Console.WriteLine($"ERROR: Failed to configure encryption: {ex.Message}");
         return false;
     }
 }
@@ -1450,10 +1451,14 @@ public bool ConfigureEncryption(IBaseFilter muxer, string password)
 **Problema**: CLSID no encontrado
 
 **Solución**:
-```bash
-# Registrar filtros (ejecutar como Administrador)
-regsvr32 "C:\Path\To\EncryptMuxer.ax"
-regsvr32 "C:\Path\To\DecryptDemuxer.ax"
+```batch
+REM Registrar filtros (ejecutar como Administrador)
+REM VisioForge_Encryptor_v9 contiene el cifrador v9 y el descifrador v9 que usan los ejemplos
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_Encryptor_v9_x64.ax"
+REM Los codificadores H.264 y AAC que usan los ejemplos (VFH264EncoderV10, VFAACEncoderV10)
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_H264_Encoder_x64.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Video Encryption SDK\Redist\VisioForge_AAC_Encoder_v10_x64.ax"
+REM Aplicaciones de 32 bits: los mismos archivos sin _x64
 ```
 
 #### Error "Interface not available"
@@ -1461,6 +1466,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problema**: No se puede consultar IVFCryptoConfig
 
 **Solución**:
+
 - Verifique que la versión del filtro sea correcta
 - Compruebe que el filtro esté registrado correctamente
 - Asegúrese de que las interfaces COM sean compatibles
@@ -1470,6 +1476,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problema**: Contraseña incorrecta usada para desencriptación
 
 **Solución**:
+
 - Verifique que se use la misma contraseña para encriptación y desencriptación
 - Compruebe la codificación de la contraseña (Unicode vs. ANSI)
 - Asegúrese de que no haya errores tipográficos en la contraseña
@@ -1479,6 +1486,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 **Problema**: La codificación falló silenciosamente
 
 **Solución**:
+
 - Conecte la salida del cifrador a un File Writer y establezca el nombre de archivo en el File Writer: el cifrador no implementa `IFileSinkFilter`
 - Compruebe que todos los filtros codificadores estén conectados correctamente
 - Verifique que las configuraciones del codificador sean válidas
@@ -1487,6 +1495,7 @@ regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 
 ---
 ## Ver También
+
 - [Descripción General del Video Encryption SDK](index.md) - Características del producto
 - [Referencia de Interfaz](interface-reference.md) - Documentación completa de la API
 - [DirectShow Encoding Filters Pack](../filters-enc/index.md) - Codificadores compatibles

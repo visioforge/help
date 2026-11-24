@@ -223,7 +223,7 @@ public class FFMPEGSourceBasicExample
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Error: {ex.Message}", "Error de Reproducción");
+            MessageBox.Show($"Error: {ex.Message}", "Playback Error");
         }
     }
 
@@ -300,7 +300,7 @@ Public Class FFMPEGSourceBasicExample
 
             Marshal.ReleaseComObject(captureGraph)
         Catch ex As Exception
-            MessageBox.Show($"Error: {ex.Message}", "Error de Reproducción")
+            MessageBox.Show($"Error: {ex.Message}", "Playback Error")
         End Try
     End Sub
 
@@ -564,7 +564,7 @@ settings.SetCustomOption("fflags", "nobuffer");           // Deshabilitar búfer
 settings.SetCustomOption("flags", "low_delay");           // Bandera de bajo retardo
 settings.SetCustomOption("framedrop", "1");               // Permitir caída de cuadros
 // Opciones HTTP
-settings.SetCustomOption("user_agent", "MiApp/1.0");     // Agente de usuario personalizado
+settings.SetCustomOption("user_agent", "MyApp/1.0");     // Agente de usuario personalizado
 settings.SetCustomOption("headers", "Authorization: Bearer token");
 // Borrar todas las opciones personalizadas
 settings.ClearCustomOptions();
@@ -869,7 +869,7 @@ public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWind
         int hr = registration.SetLicenseKey(licenseKey);
         if (hr != 0)
         {
-            throw new Exception("Activación de licencia fallida");
+            throw new Exception("License activation failed");
         }
     }
 
@@ -1083,7 +1083,7 @@ public partial class MainForm : Form
     private void btnLoad_Click(object sender, EventArgs e)
     {
         OpenFileDialog dlg = new OpenFileDialog();
-        dlg.Filter = "Archivos de Video|*.mp4;*.mkv;*.avi;*.mov|Todos los Archivos|*.*";
+        dlg.Filter = "Video Files|*.mp4;*.mkv;*.avi;*.mov|All Files|*.*";
         if (dlg.ShowDialog() == DialogResult.OK)
         {
             player.Initialize(panelVideo.Handle, this.Handle);
@@ -1095,7 +1095,7 @@ public partial class MainForm : Form
     }
     private void Player_PlaybackComplete(object sender, EventArgs e)
     {
-        MessageBox.Show("Reproducción completada");
+        MessageBox.Show("Playback complete");
     }
     protected override void WndProc(ref Message m)
     {

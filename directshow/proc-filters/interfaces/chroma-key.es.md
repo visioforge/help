@@ -236,7 +236,7 @@ public class WeatherStudioSetup
     {
         var chroma = chromaFilter as IVFChromaKey;
         if (chroma == null)
-            throw new NotSupportedException("IVFChromaKey no disponible");
+            throw new NotSupportedException("IVFChromaKey not available");
 
         // Pantalla azul para mapas del tiempo
         chroma.chroma_put_color((int)CVFChromaColor.Chroma_Blue);
@@ -324,7 +324,7 @@ public class AdaptiveChromaKey
             _chroma.chroma_put_contrast(low, high);
 
             // El usuario revisa el resultado y selecciona la mejor configuración
-            Console.WriteLine($"Probando: Low={low}, High={high}");
+            Console.WriteLine($"Testing: Low={low}, High={high}");
             System.Threading.Thread.Sleep(2000);
         }
     }

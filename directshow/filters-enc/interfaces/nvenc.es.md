@@ -834,12 +834,12 @@ HRESULT CheckNVENCSupport(IBaseFilter* pEncoder)
     {
         if (available)
         {
-            printf("NVENC está disponible (estado: %d)\n", status);
+            printf("NVENC is available (status: %d)\n", status);
             // Proceder con configuración NVENC
         }
         else
         {
-            printf("NVENC no disponible (estado: %d)\n", status);
+            printf("NVENC not available (status: %d)\n", status);
             // Retroceder a codificador software
         }
     }
@@ -865,12 +865,12 @@ public bool IsNVENCAvailable(IBaseFilter encoder)
     {
         if (available)
         {
-            Console.WriteLine($"NVENC está disponible (estado: {status})");
+            Console.WriteLine($"NVENC is available (status: {status})");
             return true;
         }
         else
         {
-            Console.WriteLine($"NVENC no disponible (estado: {status})");
+            Console.WriteLine($"NVENC not available (status: {status})");
             return false;
         }
     }
@@ -894,12 +894,12 @@ begin
     begin
       if Available then
       begin
-        WriteLn(Format('NVENC está disponible (estado: %d)', [Status]));
+        WriteLn(Format('NVENC is available (status: %d)', [Status]));
         Result := True;
       end
       else
       begin
-        WriteLn(Format('NVENC no disponible (estado: %d)', [Status]));
+        WriteLn(Format('NVENC not available (status: %d)', [Status]));
       end;
     end;
     NVEnc2 := nil;
@@ -963,7 +963,7 @@ public class NVENCHighQualityRecording
     {
         var nvenc = encoder as INVEncConfig;
         if (nvenc == null)
-            throw new NotSupportedException("NVENC no disponible");
+            throw new NotSupportedException("NVENC not available");
 
         // Configuración básica
         nvenc.SetDeviceType(0);          // Primera GPU

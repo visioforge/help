@@ -587,20 +587,20 @@ Avant publication, vérifiez que tous les fichiers sont inclus. Placez le script
 ```batch
 @echo off
 setlocal
-echo Test de l'enregistrement des filtres...
+echo Testing Filter Registration...
 
 REM Verifier les privileges administrateur
 net session >nul 2>&1
 if %errorLevel% neq 0 (
-    echo ERREUR : ce script doit etre execute en tant qu'administrateur !
+    echo ERROR: This script must be run as Administrator!
     exit /b 1
 )
 
 REM Tester chaque filtre
 regsvr32 /s "%~dp0VisioForge_FFMPEG_Source_x64.ax"
 if %errorLevel% neq 0 (
-    echo ERREUR : echec d'enregistrement de FFMPEG Source
-    echo Verifier que le fichier .ax et toutes les DLL FFmpeg sont dans le dossier du script
+    echo ERROR: FFMPEG Source failed to register
+    echo Check that the .ax file and all FFmpeg DLLs are in the script folder
     exit /b 1
 )
 REM Tester la creation du filtre
@@ -609,10 +609,10 @@ set TEST_RESULT=%errorLevel%
 REM Retirer l'enregistrement de test
 regsvr32 /s /u "%~dp0VisioForge_FFMPEG_Source_x64.ax"
 if %TEST_RESULT% neq 0 (
-    echo ERREUR : YourTestApp.exe n'a pas pu creer le filtre
+    echo ERROR: YourTestApp.exe could not create the filter
     exit /b 1
 )
-echo Test de FFMPEG Source reussi !
+echo FFMPEG Source test passed!
 ```
 ---
 

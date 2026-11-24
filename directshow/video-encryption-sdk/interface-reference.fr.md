@@ -63,15 +63,11 @@ using System.Runtime.InteropServices;
 [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
 public interface IVFCryptoConfig
 {
-    // NOTE : put_Provider / get_Provider sont des stubs dans le wrapper manage —
-    // le parametre s'appelle litteralement `passwordProviderNotUsed` car le
-    // marshaling .NET pour IVFPasswordProvider n'est pas branche. Depuis C#,
-    // appelez put_Password directement avec les octets de cle binaires.
     [PreserveSig]
-    int put_Provider([In] IVFPasswordProvider passwordProviderNotUsed);
+    int put_Provider([In] IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
-    int get_Provider([Out] IVFPasswordProvider passwordProviderNotUsed);
+    int get_Provider(out IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
     int put_Password(IntPtr buffer, [In] int size);
@@ -81,8 +77,8 @@ public interface IVFCryptoConfig
 }
 ```
 
-!!! warning "Fournisseur de mot de passe C# non pris en charge"
-    Les wrappers managés `put_Provider` / `get_Provider` sont des **stubs non fonctionnels** (notez le nom du paramètre `passwordProviderNotUsed`). Pour définir des mots de passe depuis C#, appelez `put_Password` avec les octets de clé bruts via `IntPtr` (ou utilisez l'utilitaire `ApplyString`). Les rappels `IVFPasswordProvider` personnalisés doivent être implémentés depuis C++ ou Delphi.
+!!! note "Fournisseur de mot de passe depuis C#"
+    `put_Provider` fonctionne depuis C# : passez un objet qui implémente `IVFPasswordProvider`. Si aucun mot de passe n'a été défini, le filtre appelle son `QueryPassword` : le démultiplexeur de déchiffrement lorsque sa broche d'entrée se connecte, avec le nom du fichier source ; le multiplexeur de chiffrement au démarrage du graphe, avec le nom du fichier de sortie. `pszFileName` vaut `NULL` lorsque le filtre voisin n'expose pas de nom de fichier. À chaque fois, le filtre appelle deux fois : d'abord avec `pBuffer` à `NULL` pour connaître la taille de la clé, puis avec un tampon de cette taille.
 
 #### Définition Delphi
 
@@ -143,7 +139,7 @@ HRESULT get_Provider(IPasswordProvider** ppProvider);
 
 **Syntaxe C#** :
 ```csharp
-int get_Provider(IVFPasswordProvider passwordProvider);
+int get_Provider(out IVFPasswordProvider passwordProvider);
 ```
 
 **Paramètres** :
@@ -382,7 +378,8 @@ int QueryPassword(
 - `plSize` — pointeur vers la taille du tampon (entrée : taille max ; sortie : taille réelle des données renvoyées)
 **Valeur de retour** :
 - `S_OK` (0) si le mot de passe a été fourni avec succès
-- `E_OUTOFMEMORY` si le tampon est trop petit (définissez plSize à la taille requise)
+- Lorsque `pBuffer` vaut `NULL`, définissez plSize à la taille de la clé et renvoyez `S_OK` : le filtre demande d'abord la taille, puis rappelle avec un tampon de cette taille
+- `E_OUTOFMEMORY` si un tampon non NULL est trop petit (définissez plSize à la taille requise)
 - HRESULT d'erreur en cas d'échec
 **Remarques** :
 Implémentez cette interface pour :
@@ -399,7 +396,12 @@ public class CustomPasswordProvider : IVFPasswordProvider
     {
         // Generer une cle specifique au fichier
         byte[] key = GenerateKeyForFile(pszFileName);
-        if (pBuffer == null || plSize < key.Length)
+        if (pBuffer == null)
+        {
+            plSize = key.Length;
+            return 0; // S_OK : le filtre demande d'abord la taille, puis rappelle avec un tampon de cette taille
+        }
+        if (plSize < key.Length)
         {
             plSize = key.Length;
             return unchecked((int)0x8007000E); // E_OUTOFMEMORY

@@ -51,6 +51,14 @@ Este tutorial usa el motor VideoCaptureCore, exclusivo de Windows: el motor Dire
   <iframe src="https://www.youtube.com/embed/dxVWXHwgFQg?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
+### La versión corta
+
+La misma vista previa en unas pocas líneas de C#: el motor sobre el `VideoView`, la dirección de la cámara con su usuario y su contraseña, y el modo `IPPreview`. Su código es un extracto del `Form1.cs` de este tutorial, sin el efecto Pixelate, el botón Stop ni el controlador de cierre; el código completo está más abajo, en [Ejemplo de implementación con código C#](#ejemplo-de-implementacion-con-codigo-c).
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/eAllqdrphwg?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
 ## Repositorio de código fuente
 
 El proyecto completo, con el archivo del diseñador, está en GitHub:

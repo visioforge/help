@@ -459,18 +459,18 @@ public class MP4MuxerStandardConfig
         var muxerConfig = mp4Muxer as IMP4MuxerConfig;
         if (muxerConfig == null)
         {
-            Console.WriteLine("Error: El filtro no soporta IMP4MuxerConfig");
+            Console.WriteLine("Error: Filter does not support IMP4MuxerConfig");
             return;
         }
         // Configurar para codificación estándar basada en archivos
         muxerConfig.put_SingleThread(false);     // Multi-hilo para rendimiento
         muxerConfig.put_CorrectTiming(true);     // Habilitar corrección de tiempo
-        Console.WriteLine("MP4 muxer configurado para creación estándar de archivos");
+        Console.WriteLine("MP4 muxer configured for standard file creation");
         // Verificar configuración
         muxerConfig.get_SingleThread(out bool singleThread);
         muxerConfig.get_CorrectTiming(out bool correctTiming);
-        Console.WriteLine($"  Un solo hilo: {singleThread}");
-        Console.WriteLine($"  Corrección de tiempo: {correctTiming}");
+        Console.WriteLine($"  Single-threaded: {singleThread}");
+        Console.WriteLine($"  Timing correction: {correctTiming}");
     }
 }
 ```
@@ -486,8 +486,8 @@ public class MP4MuxerDeterministicConfig
         // Configurar para salida determinista y reproducible
         muxerConfig.put_SingleThread(true);      // Un solo hilo para consistencia
         muxerConfig.put_CorrectTiming(true);     // Habilitar corrección de tiempo
-        Console.WriteLine("MP4 muxer configurado para salida determinista");
-        Console.WriteLine("  Adecuado para pruebas de regresión y validación");
+        Console.WriteLine("MP4 muxer configured for deterministic output");
+        Console.WriteLine("  Suitable for regression testing and validation");
     }
 }
 ```
@@ -501,7 +501,7 @@ public class MP4V10LiveStreamingConfig
         var muxerV10Config = mp4V10Muxer as IMP4V10MuxerConfig;
         if (muxerV10Config == null)
         {
-            Console.WriteLine("Error: El filtro no soporta IMP4V10MuxerConfig");
+            Console.WriteLine("Error: Filter does not support IMP4V10MuxerConfig");
             return;
         }
         // Configurar para streaming en vivo a archivo
@@ -509,11 +509,11 @@ public class MP4V10LiveStreamingConfig
         // Habilitar ajuste de tiempo para fuentes en vivo
         uint flags = (uint)MP4V10Flags.TimeAdjust;
         muxerV10Config.SetFlags(flags);
-        Console.WriteLine("MP4 v10 muxer configurado para streaming en vivo");
+        Console.WriteLine("MP4 v10 muxer configured for live streaming");
         // Verificar configuración
         muxerV10Config.GetFlags(out uint currentFlags);
-        Console.WriteLine($"  Banderas: 0x{currentFlags:X8}");
-        Console.WriteLine($"  Ajuste de Tiempo: {((currentFlags & (uint)MP4V10Flags.TimeAdjust) != 0)}");
+        Console.WriteLine($"  Flags: 0x{currentFlags:X8}");
+        Console.WriteLine($"  Time Adjust: {((currentFlags & (uint)MP4V10Flags.TimeAdjust) != 0)}");
     }
 }
 ```
@@ -531,8 +531,8 @@ public class MP4V10ManualTimestampConfig
         // Habilitar anulación de tiempo para control manual
         uint flags = (uint)MP4V10Flags.TimeOverride;
         muxerV10Config.SetFlags(flags);
-        Console.WriteLine("MP4 v10 muxer configurado para control manual de marcas de tiempo");
-        Console.WriteLine("  La aplicación debe proporcionar marcas de tiempo precisas");
+        Console.WriteLine("MP4 v10 muxer configured for manual timestamp control");
+        Console.WriteLine("  Application must provide accurate timestamps");
     }
 }
 ```
@@ -550,7 +550,7 @@ void ConfigureMP4Muxer(IBaseFilter* pMp4Muxer)
                                    (void**)&pMuxerConfig);
     if (FAILED(hr) || !pMuxerConfig)
     {
-        std::cout << "Error: El filtro no soporta IMP4MuxerConfig" << std::endl;
+        std::cout << "Error: Filter does not support IMP4MuxerConfig" << std::endl;
         return;
     }
     // Configurar muxer
@@ -560,9 +560,9 @@ void ConfigureMP4Muxer(IBaseFilter* pMp4Muxer)
     BOOL singleThread, correctTiming;
     pMuxerConfig->get_SingleThread(&singleThread);
     pMuxerConfig->get_CorrectTiming(&correctTiming);
-    std::cout << "MP4 muxer configurado:" << std::endl;
-    std::cout << "  Un solo hilo: " << (singleThread ? "Sí" : "No") << std::endl;
-    std::cout << "  Corrección de tiempo: " << (correctTiming ? "Sí" : "No") << std::endl;
+    std::cout << "MP4 muxer configured:" << std::endl;
+    std::cout << "  Single-threaded: " << (singleThread ? "Yes" : "No") << std::endl;
+    std::cout << "  Timing correction: " << (correctTiming ? "Yes" : "No") << std::endl;
     pMuxerConfig->Release();
 }
 ```
@@ -581,7 +581,7 @@ void ConfigureMP4V10LiveStreaming(IBaseFilter* pMp4V10Muxer)
         // Habilitar ajuste de tiempo
         unsigned long flags = MP4V10_TIME_ADJUST;
         pMuxerV10Config->SetFlags(flags);
-        std::cout << "MP4 v10 muxer configurado para streaming en vivo" << std::endl;
+        std::cout << "MP4 v10 muxer configured for live streaming" << std::endl;
         pMuxerV10Config->Release();
     }
 }
@@ -600,7 +600,7 @@ begin
   hr := Mp4Muxer.QueryInterface(IID_IMP4MuxerConfig, MuxerConfig);
   if Failed(hr) or (MuxerConfig = nil) then
   begin
-    WriteLn('Error: El filtro no soporta IMP4MuxerConfig');
+    WriteLn('Error: Filter does not support IMP4MuxerConfig');
     Exit;
   end;
   try
@@ -610,9 +610,9 @@ begin
     // Verificar configuración
     MuxerConfig.get_SingleThread(SingleThread);
     MuxerConfig.get_CorrectTiming(CorrectTiming);
-    WriteLn('MP4 muxer configurado:');
-    WriteLn('  Un solo hilo: ', SingleThread);
-    WriteLn('  Corrección de tiempo: ', CorrectTiming);
+    WriteLn('MP4 muxer configured:');
+    WriteLn('  Single-threaded: ', SingleThread);
+    WriteLn('  Timing correction: ', CorrectTiming);
   finally
     MuxerConfig := nil;
   end;
@@ -633,7 +633,7 @@ begin
       // Habilitar ajuste de tiempo
       Flags := MP4V10_TIME_ADJUST;
       MuxerV10Config.SetFlags(Flags);
-      WriteLn('MP4 v10 muxer configurado para streaming en vivo');
+      WriteLn('MP4 v10 muxer configured for live streaming');
     finally
       MuxerV10Config := nil;
     end;

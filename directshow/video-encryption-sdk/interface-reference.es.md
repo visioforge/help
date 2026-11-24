@@ -64,14 +64,10 @@ using System.Runtime.InteropServices;
 public interface IVFCryptoConfig
 {
     [PreserveSig]
-    // NOTA: put_Provider / get_Provider son stubs en el wrapper administrado —
-    // el parámetro se llama literalmente `passwordProviderNotUsed` porque el
-    // marshaling .NET para IVFPasswordProvider no está implementado. Desde C#
-    // llame directamente a put_Password con los bytes de la clave binaria.
-    int put_Provider([In] IVFPasswordProvider passwordProviderNotUsed);
+    int put_Provider([In] IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
-    int get_Provider([Out] IVFPasswordProvider passwordProviderNotUsed);
+    int get_Provider(out IVFPasswordProvider passwordProvider);
 
     [PreserveSig]
     int put_Password(IntPtr buffer, [In] int size);
@@ -81,8 +77,8 @@ public interface IVFCryptoConfig
 }
 ```
 
-!!! warning "Proveedor de contraseña no compatible desde C#"
-    Los wrappers administrados `put_Provider` / `get_Provider` son **stubs no funcionales** (observe el nombre del parámetro `passwordProviderNotUsed`). Para establecer contraseñas desde C#, llame a `put_Password` con los bytes brutos de la clave mediante `IntPtr` (o use el helper `ApplyString`). Los callbacks personalizados de `IVFPasswordProvider` deben implementarse desde C++ o Delphi.
+!!! note "Proveedor de contraseña desde C#"
+    `put_Provider` funciona desde C#: pase un objeto que implemente `IVFPasswordProvider`. Si no se ha establecido ninguna contraseña, el filtro llama a su `QueryPassword`: el demultiplexor de descifrado al conectarse su pin de entrada, con el nombre del archivo de origen; el multiplexor de cifrado al iniciarse el grafo, con el nombre del archivo de salida. `pszFileName` es `NULL` cuando el filtro vecino no expone un nombre de archivo. Cada vez el filtro llama dos veces: primero con `pBuffer` en `NULL` para conocer el tamaño de la clave y después con un buffer de ese tamaño.
 
 #### Definición en Delphi
 
@@ -143,7 +139,7 @@ HRESULT get_Provider(IPasswordProvider** ppProvider);
 
 **Sintaxis en C#**:
 ```csharp
-int get_Provider(IVFPasswordProvider passwordProvider);
+int get_Provider(out IVFPasswordProvider passwordProvider);
 ```
 
 **Parámetros**:
@@ -281,7 +277,7 @@ if (SUCCEEDED(hr))
     else
     {
         // No hay contraseña establecida
-        MessageBox(NULL, L"Por favor establezca la contraseña de encriptación", L"Error", MB_OK);
+        MessageBox(NULL, L"Please set encryption password", L"Error", MB_OK);
     }
 
     pCrypto->Release();
@@ -297,12 +293,12 @@ if (cryptoConfig != null)
     if (hr == 0) // S_OK
     {
         // La contraseña está establecida
-        Console.WriteLine("Contraseña configurada exitosamente");
+        Console.WriteLine("Password configured successfully");
     }
     else
     {
         // Sin contraseña
-        Console.WriteLine("Advertencia: No hay contraseña establecida");
+        Console.WriteLine("Warning: No password set");
     }
 }
 ```
@@ -381,7 +377,8 @@ int QueryPassword(
 - `plSize` - Puntero al tamaño del buffer (entrada: tamaño máximo del buffer, salida: tamaño real de datos retornado)
 **Valor de Retorno**:
 - `S_OK` (0) si la contraseña se proporcionó exitosamente
-- `E_OUTOFMEMORY` si el buffer es muy pequeño (establecer plSize al tamaño requerido)
+- Cuando `pBuffer` es `NULL`, establezca plSize al tamaño de la clave y devuelva `S_OK`: el filtro pide primero el tamaño y luego vuelve a llamar con un buffer de ese tamaño
+- `E_OUTOFMEMORY` si un buffer no NULL es muy pequeño (establecer plSize al tamaño requerido)
 - HRESULT de error en caso de fallo
 **Observaciones**:
 Implemente esta interfaz para:
@@ -398,7 +395,12 @@ public class CustomPasswordProvider : IVFPasswordProvider
     {
         // Generar clave específica del archivo
         byte[] key = GenerateKeyForFile(pszFileName);
-        if (pBuffer == null || plSize < key.Length)
+        if (pBuffer == null)
+        {
+            plSize = key.Length;
+            return 0; // S_OK: el filtro pide primero el tamaño y luego vuelve a llamar con un buffer de ese tamaño
+        }
+        if (plSize < key.Length)
         {
             plSize = key.Length;
             return unchecked((int)0x8007000E); // E_OUTOFMEMORY

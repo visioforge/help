@@ -313,19 +313,19 @@ public class VLCAudioTrackExample
             // Obtener recuento de pistas de audio
             int audioCount = 0;
             vlcSrc.GetAudioTracksCount(out audioCount);
-            Console.WriteLine($"Total de pistas de audio: {audioCount}");
+            Console.WriteLine($"Total audio tracks: {audioCount}");
             // Listar todas las pistas de audio
             for (int i = 0; i < audioCount; i++)
             {
                 int trackId;
                 StringBuilder trackName = new StringBuilder(256);
                 vlcSrc.GetAudioTrackInfo(i, out trackId, trackName);
-                Console.WriteLine($"Pista {i}: ID={trackId}, Nombre={trackName}");
+                Console.WriteLine($"Track {i}: ID={trackId}, Name={trackName}");
             }
             // Obtener pista actualmente activa
             int currentTrackId;
             vlcSrc.GetAudioTrack(out currentTrackId);
-            Console.WriteLine($"ID de pista actualmente activa: {currentTrackId}");
+            Console.WriteLine($"Currently active track ID: {currentTrackId}");
             // Seleccionar una pista específica (por ejemplo, índice de pista 1)
             if (audioCount > 1)
             {
@@ -333,7 +333,7 @@ public class VLCAudioTrackExample
                 StringBuilder name = new StringBuilder(256);
                 vlcSrc.GetAudioTrackInfo(1, out desiredTrackId, name);
                 vlcSrc.SetAudioTrack(desiredTrackId);
-                Console.WriteLine($"Cambiado a pista: {name}");
+                Console.WriteLine($"Switched to track: {name}");
             }
         }
         // Construir y ejecutar grafo
@@ -357,7 +357,7 @@ public class VLCAudioTrackExample
             StringBuilder trackName = new StringBuilder(256);
             vlcSrc.GetAudioTrackInfo(trackIndex, out trackId, trackName);
             vlcSrc.SetAudioTrack(trackId);
-            Console.WriteLine($"Cambiado a pista de audio: {trackName}");
+            Console.WriteLine($"Switched to audio track: {trackName}");
         }
     }
 }
@@ -368,19 +368,19 @@ void ListAndSelectAudioTracks(IVlcSrc* pVlcSrc)
 {
     int audioCount = 0;
     pVlcSrc->GetAudioTracksCount(&audioCount);
-    wprintf(L"Total de pistas de audio: %d\n", audioCount);
+    wprintf(L"Total audio tracks: %d\n", audioCount);
     // Listar todas las pistas
     for (int i = 0; i < audioCount; i++)
     {
         int trackId = 0;
         WCHAR trackName[256] = {0};
         pVlcSrc->GetAudioTrackInfo(i, &trackId, trackName);
-        wprintf(L"Pista %d: ID=%d, Nombre=%s\n", i, trackId, trackName);
+        wprintf(L"Track %d: ID=%d, Name=%s\n", i, trackId, trackName);
     }
     // Obtener pista actual
     int currentId = 0;
     pVlcSrc->GetAudioTrack(&currentId);
-    wprintf(L"ID de pista actual: %d\n", currentId);
+    wprintf(L"Current track ID: %d\n", currentId);
     // Seleccionar pista por índice (por ejemplo, pista 1)
     if (audioCount > 1)
     {
@@ -388,7 +388,7 @@ void ListAndSelectAudioTracks(IVlcSrc* pVlcSrc)
         WCHAR name[256] = {0};
         pVlcSrc->GetAudioTrackInfo(1, &trackId, name);
         pVlcSrc->SetAudioTrack(trackId);
-        wprintf(L"Cambiado a pista: %s\n", name);
+        wprintf(L"Switched to track: %s\n", name);
     }
 }
 ```
@@ -417,7 +417,7 @@ public class VLCSubtitleExample
             int subtitleCount = 0;
             vlcSrc.GetSubtitlesCount(out subtitleCount);
 
-            Console.WriteLine($"Total de pistas de subtítulos: {subtitleCount}");
+            Console.WriteLine($"Total subtitle tracks: {subtitleCount}");
 
             // Listar todos los subtítulos
             for (int i = 0; i < subtitleCount; i++)
@@ -426,7 +426,7 @@ public class VLCSubtitleExample
                 StringBuilder subtitleName = new StringBuilder(256);
                 vlcSrc.GetSubtitleInfo(i, out subtitleId, subtitleName);
 
-                Console.WriteLine($"Subtítulo {i}: ID={subtitleId}, Nombre={subtitleName}");
+                Console.WriteLine($"Subtitle {i}: ID={subtitleId}, Name={subtitleName}");
             }
 
             // Habilitar subtítulo (por ejemplo, índice de subtítulo 0)
@@ -437,7 +437,7 @@ public class VLCSubtitleExample
                 vlcSrc.GetSubtitleInfo(0, out subtitleId, name);
 
                 vlcSrc.SetSubtitle(subtitleId);
-                Console.WriteLine($"Subtítulo habilitado: {name}");
+                Console.WriteLine($"Enabled subtitle: {name}");
             }
 
             // Deshabilitar subtítulos (usar ID -1)
@@ -455,7 +455,7 @@ public class VLCSubtitleExample
             {
                 // Deshabilitar subtítulos
                 vlcSrc.SetSubtitle(-1);
-                Console.WriteLine("Subtítulos deshabilitados");
+                Console.WriteLine("Subtitles disabled");
             }
             else
             {
@@ -464,7 +464,7 @@ public class VLCSubtitleExample
                 vlcSrc.GetSubtitleInfo(subtitleIndex, out subtitleId, name);
 
                 vlcSrc.SetSubtitle(subtitleId);
-                Console.WriteLine($"Cambiado a subtítulo: {name}");
+                Console.WriteLine($"Switched to subtitle: {name}");
             }
         }
     }
@@ -479,7 +479,7 @@ void ManageSubtitles(IVlcSrc* pVlcSrc)
     int subtitleCount = 0;
     pVlcSrc->GetSubtitlesCount(&subtitleCount);
 
-    wprintf(L"Total de subtítulos: %d\n", subtitleCount);
+    wprintf(L"Total subtitles: %d\n", subtitleCount);
 
     // Listar todos los subtítulos
     for (int i = 0; i < subtitleCount; i++)
@@ -488,7 +488,7 @@ void ManageSubtitles(IVlcSrc* pVlcSrc)
         WCHAR subtitleName[256] = {0};
         pVlcSrc->GetSubtitleInfo(i, &subtitleId, subtitleName);
 
-        wprintf(L"Subtítulo %d: ID=%d, Nombre=%s\n", i, subtitleId, subtitleName);
+        wprintf(L"Subtitle %d: ID=%d, Name=%s\n", i, subtitleId, subtitleName);
     }
 
     // Habilitar primer subtítulo
@@ -499,7 +499,7 @@ void ManageSubtitles(IVlcSrc* pVlcSrc)
         pVlcSrc->GetSubtitleInfo(0, &id, name);
 
         pVlcSrc->SetSubtitle(id);
-        wprintf(L"Subtítulo habilitado: %s\n", name);
+        wprintf(L"Enabled subtitle: %s\n", name);
     }
 
     // Deshabilitar subtítulos
@@ -693,7 +693,7 @@ public class VLCFrameRateExample
             int hr = vlcSrc3.SetDefaultFrameRate(fps);
             DsError.ThrowExceptionForHR(hr);
 
-            Console.WriteLine($"Velocidad de fotogramas establecida a: {fps} fps");
+            Console.WriteLine($"Frame rate set to: {fps} fps");
         }
 
         // Cargar archivo
@@ -737,7 +737,7 @@ void SetCustomFrameRate(IBaseFilter* pFilter, double fps)
         hr = pVlcSrc3->SetDefaultFrameRate(fps);
         if (SUCCEEDED(hr))
         {
-            wprintf(L"Velocidad de fotogramas establecida a: %.2f fps\n", fps);
+            wprintf(L"Frame rate set to: %.2f fps\n", fps);
         }
 
         pVlcSrc3->Release();
@@ -1172,7 +1172,7 @@ public partial class MainForm : Form
     private void btnLoad_Click(object sender, EventArgs e)
     {
         OpenFileDialog dlg = new OpenFileDialog();
-        dlg.Filter = "Archivos de Video|*.mp4;*.mkv;*.avi;*.mov|Todos los Archivos|*.*";
+        dlg.Filter = "Video Files|*.mp4;*.mkv;*.avi;*.mov|All Files|*.*";
         if (dlg.ShowDialog() == DialogResult.OK)
         {
             player.Initialize(panelVideo.Handle, this.Handle);
@@ -1192,7 +1192,7 @@ public partial class MainForm : Form
             }
             // Rellenar cuadro combinado de subtítulos
             comboSubtitles.Items.Clear();
-            comboSubtitles.Items.Add("Ninguno");
+            comboSubtitles.Items.Add("None");
             foreach (var subtitle in player.Subtitles)
             {
                 comboSubtitles.Items.Add(subtitle.Name);
@@ -1207,7 +1207,7 @@ public partial class MainForm : Form
     }
     private void comboSubtitles_SelectedIndexChanged(object sender, EventArgs e)
     {
-        player.SelectSubtitle(comboSubtitles.SelectedIndex - 1); // -1 debido al elemento "Ninguno"
+        player.SelectSubtitle(comboSubtitles.SelectedIndex - 1); // -1 debido al elemento "None"
     }
     protected override void WndProc(ref Message m)
     {

@@ -116,7 +116,7 @@ int GetAudioTracksCount(out int count);
 ```cpp
 int audioCount = 0;
 pVlcSrc->GetAudioTracksCount(&audioCount);
-printf("Pistas de audio: %d\n", audioCount);
+printf("Audio tracks: %d\n", audioCount);
 ```
 
 ---
@@ -150,7 +150,7 @@ for (int i = 0; i < audioCount; i++)
     int id = 0;
     WCHAR name[256] = {0};
     pVlcSrc->GetAudioTrackInfo(i, &id, name);
-    wprintf(L"Pista %d - ID: %d, Nombre: %s\n", i, id, name);
+    wprintf(L"Track %d - ID: %d, Name: %s\n", i, id, name);
 }
 ```
 **Ejemplo (C#)**:
@@ -162,7 +162,7 @@ for (int i = 0; i < count; i++)
     int id;
     var name = new StringBuilder(256);
     vlcSrc.GetAudioTrackInfo(i, out id, name);
-    Console.WriteLine($"Pista {i} - ID: {id}, Nombre: {name}");
+    Console.WriteLine($"Track {i} - ID: {id}, Name: {name}");
 }
 ```
 ---
@@ -195,7 +195,7 @@ int GetAudioTrack(out int id);
 ```cpp
 int currentTrack = 0;
 pVlcSrc->GetAudioTrack(&currentTrack);
-printf("ID de pista de audio actual: %d\n", currentTrack);
+printf("Current audio track ID: %d\n", currentTrack);
 ```
 
 ---
@@ -264,7 +264,7 @@ int GetSubtitlesCount(out int count);
 ```cpp
 int subtitleCount = 0;
 pVlcSrc->GetSubtitlesCount(&subtitleCount);
-printf("Pistas de subtítulos: %d\n", subtitleCount);
+printf("Subtitle tracks: %d\n", subtitleCount);
 ```
 
 ---
@@ -294,7 +294,7 @@ for (int i = 0; i < subCount; i++)
     int id = 0;
     WCHAR name[256] = {0};
     pVlcSrc->GetSubtitleInfo(i, &id, name);
-    wprintf(L"Subtítulo %d - ID: %d, Nombre: %s\n", i, id, name);
+    wprintf(L"Subtitle %d - ID: %d, Name: %s\n", i, id, name);
 }
 ```
 ---
@@ -575,7 +575,7 @@ void PlayMovieWithAudioSelection(IBaseFilter* pVlcFilter)
     int audioCount = 0;
     pVlcSrc->GetAudioTracksCount(&audioCount);
 
-    wprintf(L"Pistas de audio disponibles:\n");
+    wprintf(L"Available audio tracks:\n");
     for (int i = 0; i < audioCount; i++)
     {
         int id = 0;
@@ -621,7 +621,7 @@ public class VLCRTSPPlayer
         // Obtener interfaz IVlcSrc3 (versión más alta)
         var vlcSrc3 = vlcFilter as IVlcSrc3;
         if (vlcSrc3 == null)
-            throw new NotSupportedException("IVlcSrc3 no disponible");
+            throw new NotSupportedException("IVlcSrc3 not available");
 
         // Configurar VLC para latencia mínima
         var parameters = new List<string>
@@ -708,7 +708,7 @@ var
   Name: array[0..255] of WideChar;
 begin
   ComboBoxSubtitles.Clear;
-  ComboBoxSubtitles.Items.Add('Deshabilitado');
+  ComboBoxSubtitles.Items.Add('Disabled');
 
   if FVlcSrc.GetSubtitlesCount(Count) = S_OK then
   begin

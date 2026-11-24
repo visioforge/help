@@ -15,12 +15,16 @@ tags:
 Ce guide fournit des instructions complètes pour intégrer les filtres DirectShow VisioForge dans des installeurs Windows. Il couvre plusieurs technologies d'installeur, les actions personnalisées d'enregistrement de filtres, la gestion des dépendances et les bonnes pratiques.
 
 ---
+
 ## Prérequis
+
 Avant de créer un installeur, assurez-vous de comprendre :
+
 - [Fichiers redistribuables](redistributable-files.md) — fichiers à inclure dans l'installeur
 - [Enregistrement des filtres](filter-registration.md) — mécanismes d'enregistrement
 - Architecture de la plateforme cible (x86/x64)
 - Exigences relatives au redistribuable Visual C++
+
 ---
 
 ## Vue d'ensemble des technologies d'installeur
@@ -46,18 +50,26 @@ Avant de créer un installeur, assurez-vous de comprendre :
 [Voir les exemples WiX →](#wix-toolset-examples)
 
 ---
+
 ### NSIS (Nullsoft Scriptable Install System)
+
 **Cas idéal** : installeurs légers, interface utilisateur personnalisée, applications portables
+
 **Avantages** :
+
 - Taille d'installeur réduite
 - Très personnalisable
 - Langage de script simple
 - Aucune dépendance d'exécution
 - Exécution rapide
+
 **Exigences** :
+
 - Compilateur NSIS 3.x
 - Fichiers de script .nsi
+
 [Voir les exemples NSIS →](#nsis-examples)
+
 ---
 
 ### InstallShield
@@ -80,18 +92,26 @@ Avant de créer un installeur, assurez-vous de comprendre :
 [Voir le guide InstallShield →](#installshield-integration)
 
 ---
+
 ### Inno Setup
+
 **Cas idéal** : installeurs simples, petites applications, freeware
+
 **Avantages** :
+
 - Gratuit et open source
 - Prise en charge des scripts Pascal
 - Prise en charge Unicode
 - Bonne documentation
 - Communauté active
+
 **Exigences** :
+
 - Compilateur Inno Setup 6.x
 - Fichiers de script .iss
+
 [Voir les exemples Inno Setup →](#inno-setup-examples)
+
 ---
 
 ## Exemples WiX Toolset { #wix-toolset-examples }
@@ -249,7 +269,9 @@ wix build -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixe
 ```
 
 ---
+
 ### WiX avancé : bundle auto-extractible { #advanced-wix-self-extracting-bundle }
+
 Créez un bundle qui inclut le redistribuable Visual C++.
 #### Bundle.wxs
 ```xml
@@ -492,8 +514,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
 ```
 
 ---
+
 ## Exemples NSIS { #nsis-examples }
+
 ### Installeur NSIS de base
+
 Créez un script d'installeur NSIS complet.
 #### Installer.nsi
 ```nsis
@@ -690,7 +715,9 @@ silent_mode:
 ```
 
 ---
+
 ### NSIS : plugin personnalisé pour l'enregistrement
+
 Créez un plugin NSIS personnalisé pour plus de contrôle. Les installateurs NSIS et leurs plugins sont des processus 32 bits : un plugin ne peut donc charger et enregistrer que le filtre x86 (`VisioForge_FFMPEG_Source.ax`). Enregistrez le filtre x64 avec le `regsvr32` 64 bits, comme dans le script de base ci-dessus. Le filtre x86 a besoin de son propre dossier avec les DLL FFmpeg x86, `cacert.pem`, `dav1d-license.txt` et le runtime VC++ x86 (`msvcp140.dll`, `vcruntime140.dll`) ; l'utilisation ci-dessous l'installe dans `$INSTDIR\Filters\x86`.
 #### FilterRegistration.cpp (plugin NSIS)
 ```cpp
@@ -810,8 +837,11 @@ RMDir /r "$INSTDIR\Filters\x86"
    - Définir : **Install Before This Application**
 
 ---
+
 ## Exemples Inno Setup { #inno-setup-examples }
+
 ### Script Inno Setup de base
+
 #### Setup.iss
 ```pascal
 ; Script de configuration MyApp pour Inno Setup 6.x
@@ -959,8 +989,11 @@ unins000.exe /SILENT
 ```
 
 ---
+
 ## Inclusion des dépendances { #bundling-dependencies }
+
 ### Redistribuable Visual C++
+
 #### Option 1 : Bootstrapper de téléchargement
 ```xml
 <!-- WiX Bundle.wxs -->
@@ -1103,8 +1136,11 @@ ${EndIf}
 ```
 
 ---
+
 ## Tests d'installation
+
 ### Liste de vérification des tests manuels
+
 - [ ] Installer sur Windows 10/11 vierge
 - [ ] Vérifier que tous les fichiers sont copiés
 - [ ] Vérifier l'enregistrement du filtre (GraphEdit/GraphStudioNext)
@@ -1192,12 +1228,16 @@ msiexec /i MyApp.msi /quiet /norestart
 ```
 
 ---
+
 ## Voir aussi
+
 ### Documentation
+
 - [Enregistrement des filtres](filter-registration.md) — méthodes d'enregistrement manuelles
 - [Fichiers redistribuables](redistributable-files.md) — fichiers à inclure dans l'installeur
 - [Vue d'ensemble du déploiement](index.md) — guide complet de déploiement
 ### Ressources externes
+
 - [Documentation WiX Toolset](https://docs.firegiant.com/wix/)
 - [Documentation NSIS](https://nsis.sourceforge.io/Docs/)
 - [Documentation Inno Setup](https://jrsoftware.org/ishelp/)

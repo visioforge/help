@@ -51,6 +51,14 @@ This tutorial uses the Windows-only VideoCaptureCore engine, the SDK's DirectSho
   <iframe src="https://www.youtube.com/embed/dxVWXHwgFQg?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
+### The short version
+
+The same preview in a few lines of C#: the engine on the `VideoView`, the camera's address with its login and password, and `IPPreview` mode. Its code is an excerpt of this tutorial's `Form1.cs`, without the Pixelate effect, the Stop button and the close handler; the full code is in [Implementation Example with C# Code](#implementation-example-with-c-code) below.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/eAllqdrphwg?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
 ## Source Code Repository
 
 The complete project, with the designer file, is on GitHub:

@@ -567,7 +567,7 @@ public void ConfigureHighQualityMP3(IBaseFilter audioEncoder)
     // Verificar si la entrada está conectada
     if (lame.InputTypeDefined() != 0)
     {
-        Console.WriteLine("Advertencia: Entrada no conectada, usando valores predeterminados");
+        Console.WriteLine("Warning: Input not connected, using defaults");
     }
     // Configuraciones VBR de alta calidad
     lame.set_Variable(1);              // Habilitar VBR
