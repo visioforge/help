@@ -25,62 +25,71 @@ This document provides a complete list of files required to redistribute each Di
 ---
 ## FFMPEG Source Filter
 ### Core Files
+The same `.ax` file also contains the FFMPEG Video Decoder filter (CLSID `{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}`): registering the file registers both filters, and the decoder needs no files beyond the ones listed below.
 #### x86 (32-bit)
 **Filter**:
 - `VisioForge_FFMPEG_Source.ax` - Main DirectShow filter
 **FFmpeg Libraries** (required):
 - `avcodec-63.dll` - Video/audio codec library
-- `avdevice-63.dll` - Device handling
-- `avfilter-12.dll` - Audio/video filtering
 - `avformat-63.dll` - Container format handling
 - `avutil-61.dll` - Utility functions
 - `swresample-7.dll` - Audio resampling
 - `swscale-10.dll` - Video scaling and color conversion
 - `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources
-**Total Size**: ~80-100 MB
+- `dav1d-license.txt` - dav1d license notice, shipped with the FFmpeg libraries
+**Visual C++ runtime** (next to the filter, see Dependencies):
+- `msvcp140.dll`
+- `vcruntime140.dll`
+**Total Size**: ~33 MB
 #### x64 (64-bit)
 **Filter**:
 - `VisioForge_FFMPEG_Source_x64.ax` - Main DirectShow filter (64-bit)
 **FFmpeg Libraries** (required):
 - `avcodec-63.dll` - 64-bit version
-- `avdevice-63.dll` - 64-bit version
-- `avfilter-12.dll` - 64-bit version
 - `avformat-63.dll` - 64-bit version
 - `avutil-61.dll` - 64-bit version
 - `swresample-7.dll` - 64-bit version
 - `swscale-10.dll` - 64-bit version
 - `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources
-**Total Size**: ~90-110 MB
+- `dav1d-license.txt` - dav1d license notice, shipped with the FFmpeg libraries
+**Visual C++ runtime** (next to the filter, see Dependencies):
+- `msvcp140.dll`
+- `vcruntime140.dll`
+- `vcruntime140_1.dll`
+**Total Size**: ~45 MB
 ### Installation Directory Structure
 ```
 YourApp\
 ├── x86\
 │   ├── VisioForge_FFMPEG_Source.ax
 │   ├── avcodec-63.dll
-│   ├── avdevice-63.dll
-│   ├── avfilter-12.dll
 │   ├── avformat-63.dll
 │   ├── avutil-61.dll
 │   ├── swresample-7.dll
 │   ├── swscale-10.dll
-│   └── cacert.pem
+│   ├── cacert.pem
+│   ├── dav1d-license.txt
+│   ├── msvcp140.dll
+│   └── vcruntime140.dll
 └── x64\
     ├── VisioForge_FFMPEG_Source_x64.ax
     ├── avcodec-63.dll
-    ├── avdevice-63.dll
-    ├── avfilter-12.dll
     ├── avformat-63.dll
     ├── avutil-61.dll
     ├── swresample-7.dll
     ├── swscale-10.dll
-    └── cacert.pem
+    ├── cacert.pem
+    ├── dav1d-license.txt
+    ├── msvcp140.dll
+    ├── vcruntime140.dll
+    └── vcruntime140_1.dll
 ```
 The x86 and x64 FFmpeg DLLs have the same names, so each architecture needs its own folder next to its own filter.
 ### License Files
 - `license.rtf` - SDK license agreement (include in installer)
 ### Dependencies
-- **Visual C++ Redistributable 2015-2022** (x86 or x64)
-  - Download: https://aka.ms/vs/17/release/vc_redist.x64.exe
+- **Visual C++ 2015-2022 runtime**: ship `msvcp140.dll` and `vcruntime140*.dll` next to the filter, as the FFMPEG Source setup does, or install the Visual C++ Redistributable 2015-2022 of the filter's architecture
+  - Download: https://aka.ms/vs/17/release/vc_redist.x64.exe (x64), https://aka.ms/vs/17/release/vc_redist.x86.exe (x86)
 ---
 
 ## VLC Source Filter
@@ -502,7 +511,7 @@ YourApp\
 
 ### Visual C++ Redistributables
 
-All SDKs require Visual C++ Redistributable 2015-2022.
+All SDKs except Virtual Camera SDK require the Visual C++ 2015-2022 runtime, from the Visual C++ Redistributable 2015-2022. FFMPEG Source can ship the runtime DLLs next to the filter instead (see its section).
 
 **Download Links**:
 - x86: https://aka.ms/vs/17/release/vc_redist.x86.exe
@@ -566,7 +575,7 @@ For each SDK, you must include:
 
 | SDK | Minimum Size | With All Options |
 |-----|--------------|------------------|
-| **FFMPEG Source** | ~80 MB (x86) | ~190 MB (both arch) |
+| **FFMPEG Source** | ~33 MB (x86) | ~78 MB (both arch) |
 | **VLC Source** | ~150 MB | ~200 MB (with locales) |
 | **Processing Filters** | ~20 MB | ~180 MB (with LAV) |
 | **Encoding Filters** | ~40 MB | ~300 MB (complete) |

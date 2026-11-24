@@ -14,6 +14,10 @@ primary_api_classes:
   - VideoEditCore
   - FastEditSeekMode
 
+video:
+  id: EASyGlUymvY
+  upload_date: 2026-11-24T07:00:00Z
+  duration: PT1M3S
 ---
 
 # Couper une vidéo sans réencodage en C\#
@@ -33,6 +37,14 @@ Cette page coupe une partie d'un fichier vidéo dans un nouveau fichier avec [Vi
     la recherche dans `llms.txt`. Aucune authentification requise.
 
     Claude Code : `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Tutoriel vidéo
+
+La vidéo d'une minute écrit et exécute cette application console : 30 secondes d'un film 720p coupées en une demi-seconde environ.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/EASyGlUymvY?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Paquets NuGet requis
 

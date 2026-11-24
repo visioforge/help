@@ -14,6 +14,10 @@ primary_api_classes:
   - VideoEditCore
   - FastEditSeekMode
 
+video:
+  id: EASyGlUymvY
+  upload_date: 2026-11-24T07:00:00Z
+  duration: PT1M3S
 ---
 
 # Cut a Video Without Re-encoding in C\#
@@ -33,6 +37,14 @@ This page cuts a part of a video file into a new file with [Video Edit SDK .NET]
     `llms.txt`. No authentication required.
 
     Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Video tutorial
+
+The one-minute video writes and runs this console app: 30 seconds of a 720p movie cut in about half a second.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/EASyGlUymvY?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Required NuGet packages
 

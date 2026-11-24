@@ -1452,8 +1452,8 @@ public bool ConfigureEncryption(IBaseFilter muxer, string password)
 **Solución**:
 ```bash
 # Registrar filtros (ejecutar como Administrador)
-regsvr32 "C:\Ruta\A\EncryptMuxer.ax"
-regsvr32 "C:\Ruta\A\DecryptDemuxer.ax"
+regsvr32 "C:\Path\To\EncryptMuxer.ax"
+regsvr32 "C:\Path\To\DecryptDemuxer.ax"
 ```
 
 #### Error "Interface not available"

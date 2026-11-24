@@ -25,62 +25,71 @@ Ce document fournit la liste complète des fichiers requis pour redistribuer cha
 ---
 ## FFMPEG Source DirectShow Filter { #ffmpeg-source-filter }
 ### Fichiers principaux
+Le même fichier `.ax` contient aussi le filtre FFMPEG Video Decoder (CLSID `{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}`) : enregistrer le fichier enregistre les deux filtres, et le décodeur n'a besoin d'aucun fichier en dehors de ceux listés ci-dessous.
 #### x86 (32 bits)
 **Filtre** :
 - `VisioForge_FFMPEG_Source.ax` — filtre DirectShow principal
 **Bibliothèques FFmpeg** (requises) :
 - `avcodec-63.dll` — bibliothèque de codecs vidéo/audio
-- `avdevice-63.dll` — gestion des périphériques
-- `avfilter-12.dll` — filtrage audio/vidéo
 - `avformat-63.dll` — gestion des formats de conteneur
 - `avutil-61.dll` — fonctions utilitaires
 - `swresample-7.dll` — rééchantillonnage audio
 - `swscale-10.dll` — mise à l'échelle vidéo et conversion colorimétrique
 - `cacert.pem` — certificats racines ; requis pour les sources https://, rtmps:// et tls://
-**Taille totale** : ~80-100 Mo
+- `dav1d-license.txt` — avis de licence de dav1d, livré avec les bibliothèques FFmpeg
+**Runtime Visual C++** (à côté du filtre, voir Dépendances) :
+- `msvcp140.dll`
+- `vcruntime140.dll`
+**Taille totale** : ~33 Mo
 #### x64 (64 bits)
 **Filtre** :
 - `VisioForge_FFMPEG_Source_x64.ax` — filtre DirectShow principal (64 bits)
 **Bibliothèques FFmpeg** (requises) :
 - `avcodec-63.dll` — version 64 bits
-- `avdevice-63.dll` — version 64 bits
-- `avfilter-12.dll` — version 64 bits
 - `avformat-63.dll` — version 64 bits
 - `avutil-61.dll` — version 64 bits
 - `swresample-7.dll` — version 64 bits
 - `swscale-10.dll` — version 64 bits
 - `cacert.pem` — certificats racines ; requis pour les sources https://, rtmps:// et tls://
-**Taille totale** : ~90-110 Mo
+- `dav1d-license.txt` — avis de licence de dav1d, livré avec les bibliothèques FFmpeg
+**Runtime Visual C++** (à côté du filtre, voir Dépendances) :
+- `msvcp140.dll`
+- `vcruntime140.dll`
+- `vcruntime140_1.dll`
+**Taille totale** : ~45 Mo
 ### Structure de répertoire d'installation { #installation-directory-structure }
 ```
 YourApp\
 ├── x86\
 │   ├── VisioForge_FFMPEG_Source.ax
 │   ├── avcodec-63.dll
-│   ├── avdevice-63.dll
-│   ├── avfilter-12.dll
 │   ├── avformat-63.dll
 │   ├── avutil-61.dll
 │   ├── swresample-7.dll
 │   ├── swscale-10.dll
-│   └── cacert.pem
+│   ├── cacert.pem
+│   ├── dav1d-license.txt
+│   ├── msvcp140.dll
+│   └── vcruntime140.dll
 └── x64\
     ├── VisioForge_FFMPEG_Source_x64.ax
     ├── avcodec-63.dll
-    ├── avdevice-63.dll
-    ├── avfilter-12.dll
     ├── avformat-63.dll
     ├── avutil-61.dll
     ├── swresample-7.dll
     ├── swscale-10.dll
-    └── cacert.pem
+    ├── cacert.pem
+    ├── dav1d-license.txt
+    ├── msvcp140.dll
+    ├── vcruntime140.dll
+    └── vcruntime140_1.dll
 ```
 Les DLL FFmpeg x86 et x64 portent les mêmes noms : chaque architecture a besoin de son propre dossier, à côté de son filtre.
 ### Fichiers de licence
 - `license.rtf` — contrat de licence du SDK (à inclure dans l'installeur)
 ### Dépendances
-- **Redistribuable Visual C++ 2015-2022** (x86 ou x64)
-  - Téléchargement : https://aka.ms/vs/17/release/vc_redist.x64.exe
+- **Runtime Visual C++ 2015-2022** : livrez `msvcp140.dll` et `vcruntime140*.dll` à côté du filtre, comme le fait le setup FFMPEG Source, ou installez le redistribuable Visual C++ 2015-2022 de l'architecture du filtre
+  - Téléchargement : https://aka.ms/vs/17/release/vc_redist.x64.exe (x64), https://aka.ms/vs/17/release/vc_redist.x86.exe (x86)
 ---
 
 ## VLC Source DirectShow Filter
@@ -502,7 +511,7 @@ YourApp\
 
 ### Redistribuables Visual C++
 
-Tous les SDK nécessitent le redistribuable Visual C++ 2015-2022.
+Tous les SDK sauf Virtual Camera SDK nécessitent le runtime Visual C++ 2015-2022, fourni par le redistribuable Visual C++ 2015-2022. FFMPEG Source peut à la place livrer les DLL du runtime à côté du filtre (voir sa section).
 
 **Liens de téléchargement** :
 - x86 : https://aka.ms/vs/17/release/vc_redist.x86.exe
@@ -566,7 +575,7 @@ Pour chaque SDK, vous devez inclure :
 
 | SDK | Taille minimum | Avec toutes les options |
 |-----|--------------|------------------|
-| **FFMPEG Source** | ~80 Mo (x86) | ~190 Mo (les deux archi) |
+| **FFMPEG Source** | ~33 Mo (x86) | ~78 Mo (les deux archi) |
 | **VLC Source** | ~150 Mo | ~200 Mo (avec locales) |
 | **Processing Filters** | ~20 Mo | ~180 Mo (avec LAV) |
 | **Encoding Filters** | ~40 Mo | ~300 Mo (complet) |

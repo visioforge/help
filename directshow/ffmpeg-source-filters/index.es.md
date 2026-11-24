@@ -251,7 +251,10 @@ public class FFMPEGSourcePlayer
 ```csharp
 // CLSID del Filtro FFMPEG Source — mismo valor usado en los ejemplos C# / C++ y en
 // el registro COM (../deployment/filter-registration.md).
-public static readonly Guid CLSID_VFFFMPEGSource = new Guid("1974D893-83E4-4F89-9908-795C524CC17E");
+public static readonly Guid CLSID_VFFFMPEGSource = new Guid("C5255DE3-50A7-4714-B763-D99E96E4CD52");
+
+// CLSID del filtro FFMPEG Video Decoder — en el mismo archivo .ax que FFMPEG Source
+public static readonly Guid CLSID_VFFFMPEGVideoDecoder = new Guid("934BBFAE-DE28-46C9-A2EC-85C84A1992BA");
 
 // Interfaz IFFMPEGSourceSettings — para el IID canónico consulte el header de la
 // interfaz (`IFFmpegSourceSettings.h` / `IFFmpegSourceSettings.cs`) enlazado desde
@@ -387,6 +390,14 @@ IPin* GetPin(IBaseFilter* pFilter, PIN_DIRECTION PinDir, int nPin)
     return pPin;
 }
 ```
+
+## Filtro FFMPEG Video Decoder
+
+El mismo archivo `.ax` contiene un segundo filtro, el **VisioForge FFMPEG Video Decoder** (CLSID `{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}`). Es un filtro de transformación que decodifica video en grafos cuya fuente es otro divisor, como LAV Splitter o AVI Splitter. Al registrar el archivo `.ax` se registran ambos filtros.
+
+- **Entrada**: MJPEG, H.264 (H264 y AVC1), HEVC, MPEG-2, MPEG-4 Part 2, VC-1 (WVC1 y WMV3). El tipo de entrada debe indicar el tamaño y la duración del fotograma; un tipo sin ellos se rechaza.
+- **Salida**: NV12, YV12, YUY2, RGB32 y RGB24.
+- **Mérito**: `MERIT_DO_NOT_USE`, por lo que Intelligent Connect nunca lo inserta. Agréguelo usted mismo al grafo con `CoCreateInstance` y conecte el pin de video del divisor a su pin de entrada.
 
 ## Integración con Filtros de Procesamiento
 

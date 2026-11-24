@@ -27,7 +27,7 @@ L'interface `IFFMPEGSourceSettings` fournit des options de configuration avancé
 ## Définition de l'interface
 
 - **Nom de l'interface** : `IFFMPEGSourceSettings`
-- **CLSID du filtre interrogé** : `{1974D893-83E4-4F89-9908-795C524CC17E}` (le filtre source FFMPEG — l'IID de l'interface est distinct ; consultez l'en-tête).
+- **CLSID du filtre interrogé** : `{C5255DE3-50A7-4714-B763-D99E96E4CD52}` (le filtre source FFMPEG — l'IID de l'interface est `{1974D893-83E4-4F89-9908-795C524CC17E}`).
 - **Hérite de** : `IUnknown`
 
 ### Fichiers de définition de l'interface

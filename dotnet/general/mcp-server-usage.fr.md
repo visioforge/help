@@ -1,5 +1,5 @@
 ---
-title: Serveur MCP VisioForge pour développer en .NET avec l'IA
+title: Serveur MCP VisioForge pour coder en .NET avec l'IA
 description: Connectez votre assistant IA au serveur MCP VisioForge pour un accès instantané à l'API, aux guides de déploiement et aux exemples du SDK.
 tags:
   - Video Capture SDK

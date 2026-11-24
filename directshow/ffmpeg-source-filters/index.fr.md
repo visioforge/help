@@ -251,7 +251,10 @@ public class FFMPEGSourcePlayer
 ```csharp
 // CLSID du FFMPEG Source Filter — meme valeur utilisee dans les exemples C# / C++
 // et dans l'enregistrement registre dans ../deployment/filter-registration.md.
-public static readonly Guid CLSID_VFFFMPEGSource = new Guid("1974D893-83E4-4F89-9908-795C524CC17E");
+public static readonly Guid CLSID_VFFFMPEGSource = new Guid("C5255DE3-50A7-4714-B763-D99E96E4CD52");
+
+// CLSID du filtre FFMPEG Video Decoder — dans le même fichier .ax que FFMPEG Source
+public static readonly Guid CLSID_VFFFMPEGVideoDecoder = new Guid("934BBFAE-DE28-46C9-A2EC-85C84A1992BA");
 
 // Interface IFFMPEGSourceSettings — pour l'IID canonique, voir l'en-tete de l'interface
 // (`IFFmpegSourceSettings.h` / `IFFmpegSourceSettings.cs`) reference depuis
@@ -387,6 +390,14 @@ IPin* GetPin(IBaseFilter* pFilter, PIN_DIRECTION PinDir, int nPin)
     return pPin;
 }
 ```
+
+## Filtre FFMPEG Video Decoder
+
+Le même fichier `.ax` contient un second filtre, le **VisioForge FFMPEG Video Decoder** (CLSID `{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}`). C'est un filtre de transformation qui décode la vidéo dans les graphes dont la source est un autre séparateur, comme LAV Splitter ou AVI Splitter. Enregistrer le fichier `.ax` enregistre les deux filtres.
+
+- **Entrée** : MJPEG, H.264 (H264 et AVC1), HEVC, MPEG-2, MPEG-4 Part 2, VC-1 (WVC1 et WMV3). Le type d'entrée doit indiquer la taille et la durée d'image ; un type sans elles est refusé.
+- **Sortie** : NV12, YV12, YUY2, RGB32 et RGB24.
+- **Mérite** : `MERIT_DO_NOT_USE` : Intelligent Connect ne l'insère donc jamais. Ajoutez-le vous-même au graphe avec `CoCreateInstance` et connectez la broche vidéo du séparateur à sa broche d'entrée.
 
 ## Intégration avec les filtres de traitement
 

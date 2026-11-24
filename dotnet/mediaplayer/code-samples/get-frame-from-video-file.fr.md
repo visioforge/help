@@ -18,6 +18,10 @@ primary_api_classes:
   - ExtractFrameWithVideoEditCore
   - ExtractFrameWithMediaPlayerCore
 
+video:
+  id: u0rO3xSzO5w
+  upload_date: 2026-11-24T06:45:00Z
+  duration: PT58S
 ---
 
 # Extraction d'images vidéo depuis des fichiers vidéo en .NET
@@ -173,6 +177,12 @@ VisioForgeX.DestroySDK();
 ```
 
 Le projet complet est [extract-frames-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/extract-frames-short-console), une application console Windows x64 qui référence les paquets natifs du SDK pour cette plateforme, `VisioForge.CrossPlatform.Core.Windows.x64` et `VisioForge.CrossPlatform.Libav.Windows.x64`. Les noms de fichier sont relatifs au répertoire de travail : placez donc `movie.mp4` dans le dossier depuis lequel vous lancez l'application.
+
+La vidéo d'une minute écrit et exécute cette application.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/u0rO3xSzO5w?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 #### Travail avec des données RGB brutes
 

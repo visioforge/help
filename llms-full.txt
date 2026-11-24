@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-24 06:35:36 UTC (6b10ca3594b)
+**Generated:** 2026-11-24 09:52:34 UTC (07cd3f3c308)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 468 help documentation pages + 74 website pages
 
@@ -28554,7 +28554,7 @@ Explore the core components of VisioForge .NET SDKs:
 ---END OF PAGE---
 
 
-## VisioForge MCP Server for AI-Assisted .NET Development
+## VisioForge MCP Server: AI-Assisted .NET Development
 **URL:** https://www.visioforge.com/help/docs/dotnet/general/mcp-server-usage/
 **Description:** Connect your AI coding assistant to the VisioForge MCP Server for instant access to API documentation, deployment guides, code examples, and SDK knowledge.
 **Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, Android, iOS, Streaming, Conversion, IP Camera, RTSP, C#, NuGet
@@ -43854,7 +43854,7 @@ Before the first engine, initialize the SDK with VisioForgeX.InitSDKAsync, and r
 ---END OF PAGE---
 
 
-## Install .NET SDKs with NuGet, Visual Studio and Rider
+## Install .NET SDKs: NuGet, Visual Studio, and Rider
 **URL:** https://www.visioforge.com/help/docs/dotnet/install/
 **Description:** Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
 **Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, DirectShow, Windows, macOS, Linux, Android, iOS, Capture, Streaming
@@ -61742,6 +61742,8 @@ VisioForgeX.DestroySDK();
 
 The full project is [extract-frames-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/extract-frames-short-console), a Windows x64 console app that references the SDK's native packages for that platform, `VisioForge.CrossPlatform.Core.Windows.x64` and `VisioForge.CrossPlatform.Libav.Windows.x64`. File names are relative to the working directory, so put `movie.mp4` in the folder you start the app from.
 
+The one-minute video writes and runs this app.
+
 #### Working with Raw RGB Data
 
 For more advanced scenarios or when you need direct pixel manipulation, you can extract frames as RGB byte arrays:
@@ -67876,6 +67878,10 @@ AI coding agents: use the VisioForge MCP server
 Building this with **Claude Code**, **Cursor**, or another AI coding agent? Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage/) at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable code samples, and deployment guides — more accurate than grepping `llms.txt`. No authentication required.
 
 Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Video tutorial
+
+The one-minute video writes and runs this console app: 30 seconds of a 720p movie cut in about half a second.
 
 ## Required NuGet packages
 
@@ -116774,7 +116780,22 @@ DirectShow filters must be registered with Windows before they can be used in ap
 
 ### Method 1: Automatic Registration (Installer)
 
-The recommended method for end-users is to use the official installer. **Available Installers**: - `visioforge_ffmpeg_source_filter_setup.exe` - FFMPEG Source Filter - `visioforge_vlc_source_filter_setup.exe` - VLC Source Filter - `visioforge_processing_filters_pack_setup.exe` - Processing Filters Pack - `visioforge_encoding_filters_pack_setup.exe` - Encoding Filters Pack - `visioforge_virtual_camera_sdk_setup.exe` - Virtual Camera SDK **Installation Steps**: 1. Run installer as Administrator 2. Follow installation wizard 3. Filters are automatically registered 4. No additional steps required
+The recommended method for end-users is to use the official installer.
+
+**Available Installers**:
+
+- `visioforge_ffmpeg_source_filter_setup.exe` - FFMPEG Source Filter
+- `visioforge_vlc_source_sdk_setup_x86.exe`, `visioforge_vlc_source_sdk_setup_x64.exe` - VLC Source Filter
+- `visioforge_processing_filters_pack_setup.exe` - Processing Filters Pack
+- `visioforge_encoding_filters_pack_setup.exe` - Encoding Filters Pack
+- `visioforge_virtual_camera_sdk_setup.exe` - Virtual Camera SDK
+
+**Installation Steps**:
+
+1. Run installer as Administrator
+2. Follow installation wizard
+3. Filters are automatically registered
+4. No additional steps required
 
 ---
 
@@ -116785,16 +116806,16 @@ For development and testing, you can manually register filters using Windows `re
 #### Registration Command
 
 ```
-# Open Command Prompt as Administrator
-# Right-click Start → Command Prompt (Admin)
+REM Open Command Prompt as Administrator
+REM Right-click Start → Command Prompt (Admin)
 
-# Register x86 (32-bit) filter
+REM Register x86 (32-bit) filter
 regsvr32 "C:\Path\To\Filter.ax"
 
-# Register x64 (64-bit) filter
+REM Register x64 (64-bit) filter
 regsvr32 "C:\Path\To\Filter_x64.ax"
 
-# Unregister filter
+REM Unregister filter
 regsvr32 /u "C:\Path\To\Filter.ax"
 ```
 
@@ -116803,69 +116824,69 @@ regsvr32 /u "C:\Path\To\Filter.ax"
 **FFMPEG Source Filter**:
 
 ```
-# x86
-regsvr32 "C:\Program Files (x86)\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source.ax"
+REM x86
+regsvr32 "C:\Program Files (x86)\VisioForge\FFMPEG Source DirectShow filter\Redist\x86\VisioForge_FFMPEG_Source.ax"
 
-# x64
-regsvr32 "C:\Program Files\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
+REM x64
+regsvr32 "C:\Program Files (x86)\VisioForge\FFMPEG Source DirectShow filter\Redist\x64\VisioForge_FFMPEG_Source_x64.ax"
 ```
 
 **VLC Source Filter**:
 
 ```
-# x86
-regsvr32 "C:\Program Files (x86)\VisioForge\VLC Source\VisioForge_VLC_Source.ax"
+REM x86
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge VLC Source DirectShow SDK\Redist\x86\VisioForge_VLC_Source.ax"
 
-# x64
-regsvr32 "C:\Program Files\VisioForge\VLC Source\VisioForge_VLC_Source_x64.ax"
+REM x64
+regsvr32 "C:\Program Files\VisioForge\VisioForge VLC Source DirectShow SDK x64\Redist\x64\VisioForge_VLC_Source_x64.ax"
 ```
 
 **Processing Filters Pack** (multiple filters):
 
 ```
-# Video Effects
-regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Effects_Pro.ax"
-regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
+REM Video Effects
+regsvr32 "C:\Program Files\VisioForge\VisioForge Processing Filters Pack\Redist\Filters\VisioForge_Video_Effects_Pro.ax"
+regsvr32 "C:\Program Files\VisioForge\VisioForge Processing Filters Pack\Redist\Filters\VisioForge_Video_Effects_Pro_x64.ax"
 
-# Video Mixer
-regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Mixer.ax"
-regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Video_Mixer_x64.ax"
+REM Video Mixer
+regsvr32 "C:\Program Files\VisioForge\VisioForge Processing Filters Pack\Redist\Filters\VisioForge_Video_Mixer.ax"
+regsvr32 "C:\Program Files\VisioForge\VisioForge Processing Filters Pack\Redist\Filters\VisioForge_Video_Mixer_x64.ax"
 
-# Audio Enhancer
-regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Audio_Enhancer.ax"
-regsvr32 "C:\Program Files\VisioForge\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
+REM Audio Enhancer
+regsvr32 "C:\Program Files\VisioForge\VisioForge Processing Filters Pack\Redist\Filters\VisioForge_Audio_Enhancer.ax"
+regsvr32 "C:\Program Files\VisioForge\VisioForge Processing Filters Pack\Redist\Filters\VisioForge_Audio_Enhancer_x64.ax"
 ```
 
 **Encoding Filters Pack** (multiple filters):
 
 ```
-# NVENC Encoder
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_NVENC.ax"
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_NVENC_x64.ax"
+REM NVENC Encoder
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_NVENC.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_NVENC_x64.ax"
 
-# H.264 Encoder
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_H264_Encoder.ax"
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
+REM H.264 Encoder
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_H264_Encoder.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_H264_Encoder_x64.ax"
 
-# AAC Encoder
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_AAC_Encoder.ax"
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
+REM AAC Encoder
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_AAC_Encoder.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_AAC_Encoder_x64.ax"
 
-# MP4 Muxer
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_MP4_Muxer.ax"
-regsvr32 "C:\Program Files\VisioForge\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
+REM MP4 Muxer
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_MP4_Muxer.ax"
+regsvr32 "C:\Program Files (x86)\VisioForge\VisioForge Encoding Filters Pack\Redist\Filters\VisioForge_MP4_Muxer_x64.ax"
 ```
 
 **Virtual Camera SDK**:
 
 ```
-# Virtual Camera Driver
-regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Virtual_Camera.ax"
-regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Virtual_Camera_x64.ax"
+REM Virtual Camera Driver
+regsvr32 "C:\Program Files\VisioForge\VisioForge Virtual Camera SDK\Redist\VisioForge_Virtual_Camera.ax"
+regsvr32 "C:\Program Files\VisioForge\VisioForge Virtual Camera SDK\Redist\VisioForge_Virtual_Camera_x64.ax"
 
-# Push Source Filter
-regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Push_Video_Source.ax"
-regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Push_Video_Source_x64.ax"
+REM Push Source Filter
+regsvr32 "C:\Program Files\VisioForge\VisioForge Virtual Camera SDK\Redist\VisioForge_Push_Video_Source.ax"
+regsvr32 "C:\Program Files\VisioForge\VisioForge Virtual Camera SDK\Redist\VisioForge_Push_Video_Source_x64.ax"
 ```
 
 ---
@@ -116874,7 +116895,7 @@ regsvr32 "C:\Program Files\VisioForge\Virtual Camera\VisioForge_Push_Video_Sourc
 
 Register filters programmatically from your application code.
 
-#### Using LoadLibrary and DllRegisterServer
+#### Using LoadLibraryEx and DllRegisterServer
 
 ```
 #include <windows.h>
@@ -116882,7 +116903,8 @@ Register filters programmatically from your application code.
 typedef HRESULT (STDAPICALLTYPE *LPFNDLLREGISTERSERVER)();
 HRESULT RegisterFilter(const wchar_t* filterPath)
 {
-    HMODULE hModule = LoadLibraryW(filterPath);
+    // LOAD_WITH_ALTERED_SEARCH_PATH: the filter's own DLLs (FFmpeg, VLC) load from the filter's folder
+    HMODULE hModule = LoadLibraryExW(filterPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
         DWORD error = GetLastError();
@@ -116911,7 +116933,8 @@ HRESULT RegisterFilter(const wchar_t* filterPath)
 }
 HRESULT UnregisterFilter(const wchar_t* filterPath)
 {
-    HMODULE hModule = LoadLibraryW(filterPath);
+    // LOAD_WITH_ALTERED_SEARCH_PATH: the filter's own DLLs (FFmpeg, VLC) load from the filter's folder
+    HMODULE hModule = LoadLibraryExW(filterPath, nullptr, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
         return HRESULT_FROM_WIN32(GetLastError());
@@ -116931,7 +116954,7 @@ HRESULT UnregisterFilter(const wchar_t* filterPath)
 // Usage
 int main()
 {
-    const wchar_t* filterPath = L"C:\\Program Files\\VisioForge\\FFMPEG Source\\VisioForge_FFMPEG_Source_x64.ax";
+    const wchar_t* filterPath = L"C:\\Program Files (x86)\\VisioForge\\FFMPEG Source DirectShow filter\\Redist\\x64\\VisioForge_FFMPEG_Source_x64.ax";
     HRESULT hr = RegisterFilter(filterPath);
     if (SUCCEEDED(hr))
     {
@@ -116947,21 +116970,20 @@ int main()
 
 #### Using reg\_special.exe Utility
 
-VisioForge SDKs include a `reg_special.exe` utility for simplified registration:
+Several VisioForge filter setups (VLC Source, Virtual Camera SDK, Video Encryption SDK, the Encoding and the Processing Filters Packs) ship a `reg_special.exe` utility next to their filters. It registers every `.ax` and `.ocx` file in its own folder:
 
 ```
 #include <windows.h>
 #include <shellapi.h>
-HRESULT RegisterWithUtility(const wchar_t* filterPath)
+// reg_special.exe registers every .ax and .ocx file in its own folder; -u unregisters them.
+// It always exits with 0: the result for each file goes to reg_special.log in that folder.
+HRESULT RunRegSpecial(const wchar_t* regSpecialPath, bool unregister)
 {
-    // Build command line
-    wchar_t cmdLine[MAX_PATH * 2];
-    swprintf_s(cmdLine, L"reg_special.exe /regserver \"%s\"", filterPath);
     // Execute registration utility
     SHELLEXECUTEINFO sei = { sizeof(sei) };
     sei.lpVerb = L"runas";  // Run as administrator
-    sei.lpFile = L"reg_special.exe";
-    sei.lpParameters = cmdLine;
+    sei.lpFile = regSpecialPath;  // full path to reg_special.exe in the filters folder
+    sei.lpParameters = unregister ? L"-u" : nullptr;
     sei.nShow = SW_HIDE;
     sei.fMask = SEE_MASK_NOCLOSEPROCESS;
     if (!ShellExecuteEx(&sei))
@@ -116970,10 +116992,8 @@ HRESULT RegisterWithUtility(const wchar_t* filterPath)
     }
     // Wait for completion
     WaitForSingleObject(sei.hProcess, INFINITE);
-    DWORD exitCode;
-    GetExitCodeProcess(sei.hProcess, &exitCode);
     CloseHandle(sei.hProcess);
-    return (exitCode == 0) ? S_OK : E_FAIL;
+    return S_OK;
 }
 ```
 
@@ -116990,8 +117010,11 @@ using System.ComponentModel;
 
 public class FilterRegistration
 {
+    // LOAD_WITH_ALTERED_SEARCH_PATH: the filter's own DLLs (FFmpeg, VLC) load from the filter's folder
+    private const uint LOAD_WITH_ALTERED_SEARCH_PATH = 0x00000008;
+
     [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
-    private static extern IntPtr LoadLibrary(string lpFileName);
+    private static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hFile, uint dwFlags);
 
     [DllImport("kernel32.dll", SetLastError = true)]
     private static extern bool FreeLibrary(IntPtr hModule);
@@ -117007,7 +117030,7 @@ public class FilterRegistration
 
     public static void RegisterFilter(string filterPath)
     {
-        IntPtr hModule = LoadLibrary(filterPath);
+        IntPtr hModule = LoadLibraryEx(filterPath, IntPtr.Zero, LOAD_WITH_ALTERED_SEARCH_PATH);
         if (hModule == IntPtr.Zero)
         {
             throw new Win32Exception(Marshal.GetLastWin32Error(),
@@ -117042,7 +117065,7 @@ public class FilterRegistration
 
     public static void UnregisterFilter(string filterPath)
     {
-        IntPtr hModule = LoadLibrary(filterPath);
+        IntPtr hModule = LoadLibraryEx(filterPath, IntPtr.Zero, LOAD_WITH_ALTERED_SEARCH_PATH);
         if (hModule == IntPtr.Zero)
         {
             throw new Win32Exception(Marshal.GetLastWin32Error());
@@ -117103,7 +117126,7 @@ class Program
 {
     static void Main(string[] args)
     {
-        string filterPath = @"C:\Program Files\VisioForge\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax";
+        string filterPath = @"C:\Program Files (x86)\VisioForge\FFMPEG Source DirectShow filter\Redist\x64\VisioForge_FFMPEG_Source_x64.ax";
 
         try
         {
@@ -117132,12 +117155,12 @@ class Program
 ### Method 2: Using Registry Editor
 
 ```
-# Open Registry Editor
+REM Open Registry Editor
 regedit
-# Navigate to:
+REM Navigate to:
 HKEY_CLASSES_ROOT\CLSID\{GUID}
-# Example for FFMPEG Source:
-# HKEY_CLASSES_ROOT\CLSID\{1974D893-83E4-4F89-9908-795C524CC17E}
+REM Example for FFMPEG Source:
+REM HKEY_CLASSES_ROOT\CLSID\{C5255DE3-50A7-4714-B763-D99E96E4CD52}
 ```
 
 ### Method 3: Programmatic Verification (C++)
@@ -117162,7 +117185,7 @@ int main()
     CoInitialize(NULL);
     // FFMPEG Source Filter CLSID
     CLSID ffmpegSourceClsid =
-        { 0x1974D893, 0x83E4, 0x4F89, { 0x99, 0x08, 0x79, 0x5C, 0x52, 0x4C, 0xC1, 0x7E } };
+        { 0xC5255DE3, 0x50A7, 0x4714, { 0xB7, 0x63, 0xD9, 0x9E, 0x96, 0xE4, 0xCD, 0x52 } };
     if (IsFilterRegistered(ffmpegSourceClsid))
     {
         std::cout << "FFMPEG Source filter is registered" << std::endl;
@@ -117178,13 +117201,17 @@ int main()
 
 ### Method 4: Programmatic Verification (.NET/C#)
 
-## ``` using System; using System.Runtime.InteropServices; public static bool IsFilterRegistered(Guid clsid) { try { Type comType = Type.GetTypeFromCLSID(clsid, throwOnError: false); if (comType == null) return false; object instance = Activator.CreateInstance(comType); if (instance != null) { Marshal.ReleaseComObject(instance); return true; } } catch { return false; } return false; } // Usage Guid ffmpegSourceClsid = new Guid("1974D893-83E4-4F89-9908-795C524CC17E"); if (IsFilterRegistered(ffmpegSourceClsid)) { Console.WriteLine("FFMPEG Source filter is registered"); } ```
+## ``` using System; using System.Runtime.InteropServices; public static bool IsFilterRegistered(Guid clsid) { try { Type comType = Type.GetTypeFromCLSID(clsid, throwOnError: false); if (comType == null) return false; object instance = Activator.CreateInstance(comType); if (instance != null) { Marshal.ReleaseComObject(instance); return true; } } catch { return false; } return false; } // Usage Guid ffmpegSourceClsid = new Guid("C5255DE3-50A7-4714-B763-D99E96E4CD52"); if (IsFilterRegistered(ffmpegSourceClsid)) { Console.WriteLine("FFMPEG Source filter is registered"); } ```
 
 ## Troubleshooting
 
 ### Issue: "DllRegisterServer failed" or "Error 0x80004005"
 
-**Causes**: - Not running as Administrator - Missing dependencies (DLLs) - Wrong architecture (x86 vs x64)
+**Causes**:
+
+- Not running as Administrator
+- Missing dependencies (DLLs)
+- Wrong architecture (x86 vs x64)
 
 **Solutions**:
 
@@ -117214,11 +117241,18 @@ int main()
 
 **Cause**: File is not a valid DirectShow filter or is corrupted.
 
-**Solutions**: - Verify file integrity - Re-download or reinstall SDK - Check if file is a DirectShow filter (.ax extension)
+**Solutions**:
+
+- Verify file integrity
+- Re-download or reinstall SDK
+- Check if file is a DirectShow filter (.ax extension)
 
 ### Issue: Filter registered but not found in applications
 
-**Causes**: - 32-bit/64-bit mismatch - Filter registered in wrong HKEY (per-user vs system-wide)
+**Causes**:
+
+- 32-bit/64-bit mismatch
+- Filter registered in wrong HKEY (per-user vs system-wide)
 
 **Solutions**:
 
@@ -117243,13 +117277,17 @@ int main()
 **Solution**:
 
 ```
-# Always run as Administrator for filter registration
-# Right-click Command Prompt → Run as Administrator
+REM Always run as Administrator for filter registration
+REM Right-click Command Prompt → Run as Administrator
 ```
 
 ### Issue: Registration succeeds but filter doesn't work
 
-**Causes**: - Missing license key - Missing runtime dependencies - Incorrect installation path
+**Causes**:
+
+- Missing license key
+- Missing runtime dependencies
+- Incorrect installation path
 
 **Solutions**:
 
@@ -117271,7 +117309,7 @@ For xcopy deployment without registration, use registration-free COM with manife
 
 ### Creating Manifest File
 
-**filter.manifest** (place next to .ax file):
+**VisioForge.FFMPEGSource.manifest** (the file name must match the assembly name; place it in the application folder, next to the .ax file, its DLLs and `cacert.pem`):
 
 ```
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -117282,13 +117320,27 @@ For xcopy deployment without registration, use registration-free COM with manife
     version="1.0.0.0"/>
   <file name="VisioForge_FFMPEG_Source_x64.ax">
     <comClass
-      clsid="{1974D893-83E4-4F89-9908-795C524CC17E}"
+      clsid="{C5255DE3-50A7-4714-B763-D99E96E4CD52}"
+      threadingModel="Both"/>
+    <comClass
+      clsid="{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}"
+      threadingModel="Both"/>
+    <comClass
+      clsid="{D6EA52DC-1F28-4155-8CC8-081FED639473}"
       threadingModel="Both"/>
   </file>
 </assembly>
 ```
 
-**application.exe.manifest** (place next to your .exe):
+For a 32-bit application, name the x86 filter in the `file` element: `VisioForge_FFMPEG_Source.ax`, with the DLLs and `cacert.pem` of the `x86` folder next to it.
+
+**Application manifest**: add the `dependency` element below to the manifest embedded in your .exe.
+
+- .NET: add it to the project's `app.manifest` (Add > New Item > Application Manifest File) and keep that file's `trustInfo` and `compatibility` sections. The project file must reference it: `<ApplicationManifest>app.manifest</ApplicationManifest>` (Visual Studio adds this line).
+- C++: put it in a manifest file of its own and list that file under Manifest Tool > Input and Output > Additional Manifest Files.
+- A `YourApp.exe.manifest` file next to the .exe is used only when the .exe has no embedded manifest.
+
+The minimal manifest below shows the element:
 
 ```
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
@@ -117308,7 +117360,12 @@ For xcopy deployment without registration, use registration-free COM with manife
 </assembly>
 ```
 
-**Limitations**: - More complex to set up - Requires manifest files - May not work with all DirectShow filters - System-registered filters take precedence
+**Limitations**:
+
+- More complex to set up
+- Requires manifest files
+- Graph building (`RenderFile`, Intelligent Connect) does not find the filters: the filter mapper lists only registered filters. Create them with `CoCreateInstance` and connect the pins yourself (`IGraphBuilder::AddFilter`, `ConnectDirect`)
+- Only your own process sees the filters: a filter that other applications must find, such as the Virtual Camera or the Virtual Audio Card, needs registration (`regsvr32`)
 
 ---
 
@@ -117330,31 +117387,18 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 
-REM Set installation path
-set INSTALL_PATH=C:\Program Files\VisioForge
+REM Folder where the FFMPEG Source setup installs both filters
+set INSTALL_PATH=C:\Program Files (x86)\VisioForge\FFMPEG Source DirectShow filter\Redist
 set FAILED=
 set FOUND=
 
-REM Register FFMPEG Source
+REM Register FFMPEG Source (x64 and x86)
 echo Registering FFMPEG Source...
-call :register "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
+call :register "%INSTALL_PATH%\x64\VisioForge_FFMPEG_Source_x64.ax"
+call :register "%INSTALL_PATH%\x86\VisioForge_FFMPEG_Source.ax"
 
-REM Register VLC Source
-echo Registering VLC Source...
-call :register "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source_x64.ax"
-
-REM Register Processing Filters
-echo Registering Processing Filters...
-call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
-call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
-call :register "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
-
-REM Register Encoding Filters
-echo Registering Encoding Filters...
-call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
-call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
-call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
-call :register "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
+REM Register the other filters your application ships the same way, from their own folders:
+REM call :register "<filter folder>\<filter>.ax"
 
 echo.
 if not defined FOUND (
@@ -117404,20 +117448,16 @@ if %errorLevel% neq 0 (
     exit /b 1
 )
 
-set INSTALL_PATH=C:\Program Files\VisioForge
+set INSTALL_PATH=C:\Program Files (x86)\VisioForge\FFMPEG Source DirectShow filter\Redist
 set FAILED=
 set FOUND=
 
 REM Unregister all filters
-call :unregister "%INSTALL_PATH%\FFMPEG Source\VisioForge_FFMPEG_Source_x64.ax"
-call :unregister "%INSTALL_PATH%\VLC Source\VisioForge_VLC_Source_x64.ax"
-call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Effects_Pro_x64.ax"
-call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Video_Mixer_x64.ax"
-call :unregister "%INSTALL_PATH%\Processing Filters\VisioForge_Audio_Enhancer_x64.ax"
-call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_NVENC_x64.ax"
-call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_H264_Encoder_x64.ax"
-call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_AAC_Encoder_x64.ax"
-call :unregister "%INSTALL_PATH%\Encoding Filters\VisioForge_MP4_Muxer_x64.ax"
+call :unregister "%INSTALL_PATH%\x64\VisioForge_FFMPEG_Source_x64.ax"
+call :unregister "%INSTALL_PATH%\x86\VisioForge_FFMPEG_Source.ax"
+
+REM Unregister the other filters your application ships the same way:
+REM call :unregister "<filter folder>\<filter>.ax"
 
 echo.
 if not defined FOUND (
@@ -118400,6 +118440,9 @@ Create a complete WiX installer for a DirectShow filter with automatic registrat
       <ComponentGroupRef Id="ApplicationComponents" />
     </Feature>
 
+    <!-- Links VCRedist.wxs, so its runtime check runs -->
+    <PropertyRef Id="VCREDIST2022_X64" />
+
     <!-- Custom actions for registration -->
     <CustomAction Id="RegisterFilters"
                   Directory="FilterFolder"
@@ -118415,9 +118458,27 @@ Create a complete WiX installer for a DirectShow filter with automatic registrat
                   Impersonate="no"
                   Return="ignore" />
 
+    <!-- Rollback: unregister the filter if the install fails after RegisterFilters -->
+    <CustomAction Id="RegisterFiltersRollback"
+                  Directory="FilterFolder"
+                  ExeCommand="cmd.exe /c regsvr32 /s /u VisioForge_FFMPEG_Source_x64.ax"
+                  Execute="rollback"
+                  Impersonate="no"
+                  Return="ignore" />
+
+    <!-- Rollback of an uninstall: register the filter again -->
+    <CustomAction Id="UnregisterFiltersRollback"
+                  Directory="FilterFolder"
+                  ExeCommand="cmd.exe /c regsvr32 /s VisioForge_FFMPEG_Source_x64.ax"
+                  Execute="rollback"
+                  Impersonate="no"
+                  Return="ignore" />
+
     <InstallExecuteSequence>
-      <Custom Action="RegisterFilters" After="InstallFiles">NOT Installed</Custom>
-      <Custom Action="UnregisterFilters" Before="RemoveFiles">Installed</Custom>
+      <Custom Action="RegisterFiltersRollback" Before="RegisterFilters">NOT Installed</Custom>
+      <Custom Action="RegisterFilters" After="InstallFiles">NOT Installed OR REINSTALL</Custom>
+      <Custom Action="UnregisterFiltersRollback" Before="UnregisterFilters">REMOVE="ALL"</Custom>
+      <Custom Action="UnregisterFilters" Before="RemoveFiles">REMOVE="ALL"</Custom>
     </InstallExecuteSequence>
 
   </Product>
@@ -118439,16 +118500,15 @@ Create a complete WiX installer for a DirectShow filter with automatic registrat
               KeyPath="yes" />
       </Component>
 
-      <!-- FFmpeg Dependencies -->
+      <!-- FFmpeg Dependencies (VCRedist.wxs checks for the VC++ 2015-2022 runtime) -->
       <Component Id="FFMPEGLibraries" Guid="YOUR-GUID-2">
         <File Id="avcodec63" Source="$(var.SourceDir)\avcodec-63.dll" />
-        <File Id="avdevice63" Source="$(var.SourceDir)\avdevice-63.dll" />
-        <File Id="avfilter12" Source="$(var.SourceDir)\avfilter-12.dll" />
         <File Id="avformat63" Source="$(var.SourceDir)\avformat-63.dll" />
         <File Id="avutil61" Source="$(var.SourceDir)\avutil-61.dll" />
         <File Id="swresample7" Source="$(var.SourceDir)\swresample-7.dll" />
         <File Id="swscale10" Source="$(var.SourceDir)\swscale-10.dll" />
         <File Id="cacert" Source="$(var.SourceDir)\cacert.pem" />
+        <File Id="dav1dLicense" Source="$(var.SourceDir)\dav1d-license.txt" />
       </Component>
 
     </ComponentGroup>
@@ -118469,11 +118529,12 @@ Create a complete WiX installer for a DirectShow filter with automatic registrat
                       Root="HKLM"
                       Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
                       Name="Installed"
-                      Type="raw" />
+                      Type="raw"
+                      Win64="no" />
     </Property>
 
     <Condition Message="This application requires Visual C++ 2015-2022 Redistributable (x64). Please install it from https://aka.ms/vs/17/release/vc_redist.x64.exe">
-      <![CDATA[Installed OR VCREDIST2022_X64]]>
+      <![CDATA[Installed OR VCREDIST2022_X64 = "#1"]]>
     </Condition>
 
   </Fragment>
@@ -118484,11 +118545,11 @@ Create a complete WiX installer for a DirectShow filter with automatic registrat
 
 ```
 # Using WiX 3.x command line
-candle.exe Product.wxs Filters.wxs VCRedist.wxs -ext WixUIExtension
+candle.exe -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixUIExtension
 light.exe -out MyApp.msi Product.wixobj Filters.wixobj VCRedist.wixobj -ext WixUIExtension
 
-# Using WiX 4.x (newer syntax)
-wix build Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixext -out MyApp.msi
+# Using WiX 4.x (newer syntax); convert the WiX 3 sources above first: wix convert *.wxs
+wix build -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixext -out MyApp.msi
 ```
 
 ---
@@ -118565,6 +118626,9 @@ For more control, create a custom action DLL.
 
 #pragma comment(lib, "msi.lib")
 
+// Build this DLL as x64: a custom action DLL runs in a process of its own bitness,
+// so only an x64 DLL can load the x64 filter
+
 // Forward declarations
 typedef HRESULT (STDAPICALLTYPE *LPFNDLLREGISTERSERVER)();
 typedef HRESULT (STDAPICALLTYPE *LPFNDLLUNREGISTERSERVER)();
@@ -118580,13 +118644,14 @@ void LogMessage(MSIHANDLE hInstall, LPCTSTR message)
 // Custom action: Register DirectShow filters
 extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHANDLE hInstall)
 {
-    TCHAR installDir[MAX_PATH];
-    DWORD installDirSize = MAX_PATH;
+    TCHAR filterDir[MAX_PATH];
+    DWORD filterDirSize = MAX_PATH;
 
-    // Get INSTALLFOLDER property
-    if (MsiGetProperty(hInstall, TEXT("INSTALLFOLDER"), installDir, &installDirSize) != ERROR_SUCCESS)
+    // A deferred custom action reads only CustomActionData, set to [FilterFolder] in CustomActions.wxs
+    if (MsiGetProperty(hInstall, TEXT("CustomActionData"), filterDir, &filterDirSize) != ERROR_SUCCESS
+        || filterDirSize == 0)
     {
-        LogMessage(hInstall, TEXT("Failed to get INSTALLFOLDER property"));
+        LogMessage(hInstall, TEXT("CustomActionData (filter folder) is empty or longer than MAX_PATH"));
         return ERROR_INSTALL_FAILURE;
     }
 
@@ -118594,11 +118659,11 @@ extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHAN
 
     // Build path to filter
     TCHAR filterPath[MAX_PATH];
-    StringCchCopy(filterPath, MAX_PATH, installDir);
-    StringCchCat(filterPath, MAX_PATH, TEXT("Filters\\VisioForge_FFMPEG_Source_x64.ax"));
+    StringCchCopy(filterPath, MAX_PATH, filterDir);
+    StringCchCat(filterPath, MAX_PATH, TEXT("VisioForge_FFMPEG_Source_x64.ax"));
 
     // Load filter DLL
-    HMODULE hModule = LoadLibrary(filterPath);
+    HMODULE hModule = LoadLibraryEx(filterPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
         TCHAR errorMsg[512];
@@ -118640,38 +118705,43 @@ extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHAN
 // Custom action: Unregister DirectShow filters
 extern "C" __declspec(dllexport) UINT __stdcall UnregisterDirectShowFilters(MSIHANDLE hInstall)
 {
-    TCHAR installDir[MAX_PATH];
-    DWORD installDirSize = MAX_PATH;
+    TCHAR filterDir[MAX_PATH];
+    DWORD filterDirSize = MAX_PATH;
 
-    if (MsiGetProperty(hInstall, TEXT("INSTALLFOLDER"), installDir, &installDirSize) != ERROR_SUCCESS)
+    if (MsiGetProperty(hInstall, TEXT("CustomActionData"), filterDir, &filterDirSize) != ERROR_SUCCESS
+        || filterDirSize == 0)
     {
         // Don't fail uninstall if we can't get the path
+        LogMessage(hInstall, TEXT("CustomActionData (filter folder) is empty or longer than MAX_PATH, filter not unregistered"));
         return ERROR_SUCCESS;
     }
 
     LogMessage(hInstall, TEXT("Unregistering DirectShow filters..."));
 
     TCHAR filterPath[MAX_PATH];
-    StringCchCopy(filterPath, MAX_PATH, installDir);
-    StringCchCat(filterPath, MAX_PATH, TEXT("Filters\\VisioForge_FFMPEG_Source_x64.ax"));
+    StringCchCopy(filterPath, MAX_PATH, filterDir);
+    StringCchCat(filterPath, MAX_PATH, TEXT("VisioForge_FFMPEG_Source_x64.ax"));
 
-    HMODULE hModule = LoadLibrary(filterPath);
+    HMODULE hModule = LoadLibraryEx(filterPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
-        // Filter may already be deleted, don't fail
+        // Filter may already be deleted, don't fail, but log why it did not load
+        TCHAR errorMsg[512];
+        StringCchPrintf(errorMsg, 512, TEXT("Failed to load filter: %s (Error: %d)"),
+                       filterPath, GetLastError());
+        LogMessage(hInstall, errorMsg);
         return ERROR_SUCCESS;
     }
 
     LPFNDLLUNREGISTERSERVER pfnUnregister =
         (LPFNDLLUNREGISTERSERVER)GetProcAddress(hModule, "DllUnregisterServer");
 
-    if (pfnUnregister)
-    {
-        pfnUnregister();
-    }
-
+    HRESULT hr = pfnUnregister ? pfnUnregister() : E_NOTIMPL;
     FreeLibrary(hModule);
-    LogMessage(hInstall, TEXT("DirectShow filters unregistered"));
+
+    TCHAR resultMsg[256];
+    StringCchPrintf(resultMsg, 256, TEXT("DirectShow filters unregistered: HRESULT 0x%08X"), hr);
+    LogMessage(hInstall, resultMsg);
 
     return ERROR_SUCCESS;
 }
@@ -118693,6 +118763,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
     <!-- Binary for custom actions -->
     <Binary Id="CustomActionsDLL" SourceFile="$(var.CustomActions.TargetPath)" />
 
+    <!-- A deferred action cannot read INSTALLFOLDER: pass the filter folder in CustomActionData -->
+    <CustomAction Id="SetRegisterFiltersCA" Property="RegisterFiltersCA" Value="[FilterFolder]" />
+    <CustomAction Id="SetUnregisterFiltersCA" Property="UnregisterFiltersCA" Value="[FilterFolder]" />
+
     <!-- Define custom actions -->
     <CustomAction Id="RegisterFiltersCA"
                   BinaryKey="CustomActionsDLL"
@@ -118710,11 +118784,17 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
 
     <!-- Schedule custom actions -->
     <InstallExecuteSequence>
+      <Custom Action="SetRegisterFiltersCA" Before="RegisterFiltersCA">
+        NOT Installed OR REINSTALL
+      </Custom>
       <Custom Action="RegisterFiltersCA" After="InstallFiles">
-        NOT Installed
+        NOT Installed OR REINSTALL
+      </Custom>
+      <Custom Action="SetUnregisterFiltersCA" Before="UnregisterFiltersCA">
+        REMOVE="ALL"
       </Custom>
       <Custom Action="UnregisterFiltersCA" Before="RemoveFiles">
-        Installed
+        REMOVE="ALL"
       </Custom>
     </InstallExecuteSequence>
 
@@ -118789,16 +118869,16 @@ Section "MyApp (required)" SecMain
   ; Install FFMPEG Source Filter
   File "Filters\VisioForge_FFMPEG_Source_x64.ax"
   File "Filters\avcodec-63.dll"
-  File "Filters\avdevice-63.dll"
-  File "Filters\avfilter-12.dll"
   File "Filters\avformat-63.dll"
   File "Filters\avutil-61.dll"
   File "Filters\swresample-7.dll"
   File "Filters\swscale-10.dll"
   File "Filters\cacert.pem"
+  File "Filters\dav1d-license.txt"
   ; Register DirectShow filter
   DetailPrint "Registering DirectShow filters..."
-  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"' $0
+  ; NSIS installers are 32-bit: $WINDIR\sysnative\regsvr32.exe runs the 64-bit regsvr32 directly for the x64 filter
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"' $0
   ${If} $0 != 0
     MessageBox MB_OK|MB_ICONEXCLAMATION "Filter registration failed. Code: $0"
   ${EndIf}
@@ -118832,7 +118912,7 @@ Section "VLC Source Filter" SecVLC
   File /r "Filters\plugins\*.*"
   ; Register VLC Source filter
   DetailPrint "Registering VLC Source filter..."
-  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"' $0
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"' $0
   ${If} $0 != 0
     MessageBox MB_OK|MB_ICONEXCLAMATION "Filter registration failed. Code: $0"
   ${EndIf}
@@ -118868,8 +118948,8 @@ FunctionEnd
 Section "Uninstall"
   ; Unregister filters
   DetailPrint "Unregistering DirectShow filters..."
-  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"'
-  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"'
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s /u "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"'
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s /u "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"'
   ; Remove files
   Delete "$INSTDIR\MyApp.exe"
   Delete "$INSTDIR\MyApp.exe.config"
@@ -118877,6 +118957,8 @@ Section "Uninstall"
   ; Remove Filters directory
   Delete "$INSTDIR\Filters\*.ax"
   Delete "$INSTDIR\Filters\*.dll"
+  Delete "$INSTDIR\Filters\cacert.pem"
+  Delete "$INSTDIR\Filters\dav1d-license.txt"
   RMDir /r "$INSTDIR\Filters\plugins"
   RMDir "$INSTDIR\Filters"
   ; Remove installation directory
@@ -118923,7 +119005,7 @@ silent_mode:
 
 ### NSIS: Custom Plugin for Registration
 
-Create a custom NSIS plugin for more control.
+Create a custom NSIS plugin for more control. NSIS installers and their plugins are 32-bit processes, so a plugin can load and register only the x86 filter (`VisioForge_FFMPEG_Source.ax`). Register the x64 filter with the 64-bit `regsvr32`, as in the basic script above. The x86 filter needs a folder of its own with the x86 FFmpeg DLLs, `cacert.pem`, `dav1d-license.txt` and the x86 VC++ runtime (`msvcp140.dll`, `vcruntime140.dll`); the usage below installs it to `$INSTDIR\Filters\x86`.
 
 #### FilterRegistration.cpp (NSIS Plugin)
 
@@ -118944,7 +119026,7 @@ extern "C" void __declspec(dllexport) RegisterFilter(
     TCHAR filterPath[MAX_PATH];
     popstring(filterPath);
     // Load DLL
-    HMODULE hModule = LoadLibrary(filterPath);
+    HMODULE hModule = LoadLibraryEx(filterPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
         pushstring(_T("ERROR"));
@@ -118973,12 +119055,19 @@ BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
 Usage in NSIS script:
 
 ```
+; In the install section: the x86 filter folder (the x86 .ax, FFmpeg DLLs, cacert.pem, dav1d-license.txt and VC++ runtime)
+SetOutPath "$INSTDIR\Filters\x86"
+File "Filters\x86\*.*"
 ; Load plugin
-FilterRegistration::RegisterFilter "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"
+FilterRegistration::RegisterFilter "$INSTDIR\Filters\x86\VisioForge_FFMPEG_Source.ax"
 Pop $0
 ${If} $0 == "ERROR"
     MessageBox MB_OK "Filter registration failed"
 ${EndIf}
+
+; In the Uninstall section, before the files are removed: NSIS is 32-bit, so $SYSDIR holds the 32-bit regsvr32
+ExecWait '"$SYSDIR\regsvr32.exe" /s /u "$INSTDIR\Filters\x86\VisioForge_FFMPEG_Source.ax"'
+RMDir /r "$INSTDIR\Filters\x86"
 ```
 
 ---
@@ -119005,19 +119094,23 @@ ${EndIf}
 4. Name: `Register DirectShow Filters`
 5. Type: `Stored in the Directory Table`
 6. Working Directory: `[INSTALLDIR]Filters`
-7. Filename: `regsvr32.exe`
+7. Filename: `[System64Folder]regsvr32.exe`
 8. Command Line: `/s VisioForge_FFMPEG_Source_x64.ax`
 9. Run: `Deferred Execution in System Context`
-10. Condition: `NOT Installed`
+10. Condition: `NOT Installed OR REINSTALL`
 11. For uninstall:
 12. Name: `Unregister DirectShow Filters`
-13. Command Line: `/s /u VisioForge_FFMPEG_Source_x64.ax`
-14. Sequence: Before **RemoveFiles**
-15. Condition: `Installed`
+13. Type: `Stored in the Directory Table`
+14. Working Directory: `[INSTALLDIR]Filters`
+15. Filename: `[System64Folder]regsvr32.exe`
+16. Command Line: `/s /u VisioForge_FFMPEG_Source_x64.ax`
+17. Run: `Deferred Execution in System Context`
+18. Sequence: Before **RemoveFiles**
+19. Condition: `REMOVE="ALL"`
 
 #### Method 2: Using Custom DLL
 
-1. Create C++ DLL with registration code (similar to WiX example above)
+1. Create C++ DLL with registration code (similar to WiX example above), built as x64 for the x64 filter
 2. Add DLL to **Support Files** in InstallShield
 3. Create custom action:
 4. Type: `DLL from the installation`
@@ -119061,13 +119154,12 @@ Source: "MyApp.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; FFMPEG Source Filter
 Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion regserver restartreplace uninsrestartdelete
 Source: "Filters\avcodec-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avdevice-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avfilter-12.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\avformat-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\avutil-61.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\swresample-7.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\swscale-10.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\cacert.pem"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\dav1d-license.txt"; DestDir: "{app}\Filters"; Flags: ignoreversion
 [Icons]
 Name: "{group}\MyApp"; Filename: "{app}\MyApp.exe"
 Name: "{group}\Uninstall MyApp"; Filename: "{uninstallexe}"
@@ -119100,7 +119192,7 @@ end;
 
 #### Advanced Inno Setup: Custom Registration
 
-## ``` [Files] ; Don't use regserver flag - we'll register manually Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion [Code] // Import Windows API functions function LoadLibrary(lpFileName: String): THandle; external 'LoadLibraryW@kernel32.dll stdcall'; function FreeLibrary(hModule: THandle): Boolean; external 'FreeLibrary@kernel32.dll stdcall'; function GetProcAddress(hModule: THandle; lpProcName: AnsiString): Longword; external 'GetProcAddress@kernel32.dll stdcall'; type TDllRegisterServer = function: HRESULT; // Register DirectShow filter function RegisterDirectShowFilter(FilterPath: String): Boolean; var hModule: THandle; DllRegisterServer: TDllRegisterServer; RegisterFunc: Longword; hr: HRESULT; begin Result := False; hModule := LoadLibrary(FilterPath); if hModule = 0 then begin Log('Failed to load filter: ' + FilterPath); Exit; end; try RegisterFunc := GetProcAddress(hModule, 'DllRegisterServer'); if RegisterFunc = 0 then begin Log('DllRegisterServer not found'); Exit; end; @DllRegisterServer := Pointer(RegisterFunc); hr := DllRegisterServer(); Result := Succeeded(hr); if Result then Log('Filter registered successfully') else Log('Filter registration failed: ' + IntToHex(hr, 8)); finally FreeLibrary(hModule); end; end; // Called after installation procedure CurStepChanged(CurStep: TSetupStep); var FilterPath: String; begin if CurStep = ssPostInstall then begin FilterPath := ExpandConstant('{app}\Filters\VisioForge_FFMPEG_Source_x64.ax'); if not RegisterDirectShowFilter(FilterPath) then begin MsgBox('Warning: DirectShow filter registration failed.' + #13#10 + 'You may need to register it manually.', mbError, MB_OK); end; end; end; // Called before uninstallation procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep); var ResultCode: Integer; FilterPath: String; begin if CurUninstallStep = usUninstall then begin FilterPath := ExpandConstant('{app}\Filters\VisioForge_FFMPEG_Source_x64.ax'); // Unregister using regsvr32 Exec('regsvr32.exe', '/s /u "' + FilterPath + '"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode); end; end; ```
+## ``` [Files] ; No regserver flag: the [Code] section registers the filter and reports a failure Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion [Code] // RegisterServer and UnregisterServer run the regsvr32 of the bitness their first parameter names, // so the 32-bit Setup registers the x64 filter with the 64-bit regsvr32 procedure CurStepChanged(CurStep: TSetupStep); var FilterPath: String; begin if CurStep = ssPostInstall then begin FilterPath := ExpandConstant('{app}\Filters\VisioForge_FFMPEG_Source_x64.ax'); try RegisterServer(True, FilterPath, False); Log('Filter registered successfully'); except Log('Filter registration failed: ' + GetExceptionMessage); MsgBox('Warning: DirectShow filter registration failed.' + #13#10 + 'You may need to register it manually.', mbError, MB_OK); end; end; end; // Called before uninstallation procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep); var FilterPath: String; begin if CurUninstallStep = usUninstall then begin FilterPath := ExpandConstant('{app}\Filters\VisioForge_FFMPEG_Source_x64.ax'); if not UnregisterServer(True, FilterPath, False) then Log('Filter unregistration failed: ' + FilterPath); end; end; ```
 
 ## Silent Installation
 
@@ -119239,16 +119331,17 @@ Ensure proper rollback if installation fails:
 <!-- WiX rollback example -->
 <CustomAction Id="RegisterFiltersRollback"
               Directory="FilterFolder"
-              ExeCommand="regsvr32 /s /u VisioForge_FFMPEG_Source_x64.ax"
+              ExeCommand="cmd.exe /c regsvr32 /s /u VisioForge_FFMPEG_Source_x64.ax"
               Execute="rollback"
-              Impersonate="no" />
+              Impersonate="no"
+              Return="ignore" />
 
 <InstallExecuteSequence>
   <Custom Action="RegisterFiltersRollback" Before="RegisterFiltersCA">
     NOT Installed
   </Custom>
   <Custom Action="RegisterFiltersCA" After="InstallFiles">
-    NOT Installed
+    NOT Installed OR REINSTALL
   </Custom>
 </InstallExecuteSequence>
 ```
@@ -119314,7 +119407,7 @@ ${EndIf}
 
 ### Automated Testing
 
-## ``` # PowerShell test script $installerPath = ".\MyAppSetup.msi" $logPath = ".\install_test.log" # Install silently Start-Process msiexec.exe -ArgumentList "/i `"$installerPath`" /quiet /l*v `"$logPath`"" -Wait # Check if filter registered $filterCLSID = "{1974D893-83E4-4F89-9908-795C524CC17E}" $regPath = "HKLM:\SOFTWARE\Classes\CLSID\$filterCLSID" if (Test-Path $regPath) { Write-Host "Filter registered successfully" -ForegroundColor Green } else { Write-Host "Filter registration failed" -ForegroundColor Red Exit 1 } # Uninstall Start-Process msiexec.exe -ArgumentList "/x `"$installerPath`" /quiet" -Wait # Verify cleanup if (Test-Path $regPath) { Write-Host "Filter not unregistered" -ForegroundColor Red Exit 1 } else { Write-Host "Uninstall successful" -ForegroundColor Green } ```
+## ``` # PowerShell test script $installerPath = ".\MyAppSetup.msi" $logPath = ".\install_test.log" # Install silently Start-Process msiexec.exe -ArgumentList "/i `"$installerPath`" /quiet /l*v `"$logPath`"" -Wait # Check if filter registered $filterCLSID = "{C5255DE3-50A7-4714-B763-D99E96E4CD52}" $regPath = "HKLM:\SOFTWARE\Classes\CLSID\$filterCLSID" if (Test-Path $regPath) { Write-Host "Filter registered successfully" -ForegroundColor Green } else { Write-Host "Filter registration failed" -ForegroundColor Red Exit 1 } # Uninstall Start-Process msiexec.exe -ArgumentList "/x `"$installerPath`" /quiet" -Wait # Verify cleanup if (Test-Path $regPath) { Write-Host "Filter not unregistered" -ForegroundColor Red Exit 1 } else { Write-Host "Uninstall successful" -ForegroundColor Green } ```
 
 ## Troubleshooting
 
@@ -119400,13 +119493,15 @@ This document provides a complete list of files required to redistribute each Di
 
 ### Core Files
 
+The same `.ax` file also contains the FFMPEG Video Decoder filter (CLSID `{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}`): registering the file registers both filters, and the decoder needs no files beyond the ones listed below.
+
 #### x86 (32-bit)
 
-**Filter**: - `VisioForge_FFMPEG_Source.ax` - Main DirectShow filter **FFmpeg Libraries** (required): - `avcodec-63.dll` - Video/audio codec library - `avdevice-63.dll` - Device handling - `avfilter-12.dll` - Audio/video filtering - `avformat-63.dll` - Container format handling - `avutil-61.dll` - Utility functions - `swresample-7.dll` - Audio resampling - `swscale-10.dll` - Video scaling and color conversion - `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources **Total Size**: ~80-100 MB
+**Filter**: - `VisioForge_FFMPEG_Source.ax` - Main DirectShow filter **FFmpeg Libraries** (required): - `avcodec-63.dll` - Video/audio codec library - `avformat-63.dll` - Container format handling - `avutil-61.dll` - Utility functions - `swresample-7.dll` - Audio resampling - `swscale-10.dll` - Video scaling and color conversion - `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources - `dav1d-license.txt` - dav1d license notice, shipped with the FFmpeg libraries **Visual C++ runtime** (next to the filter, see Dependencies): - `msvcp140.dll` - `vcruntime140.dll` **Total Size**: ~33 MB
 
 #### x64 (64-bit)
 
-**Filter**: - `VisioForge_FFMPEG_Source_x64.ax` - Main DirectShow filter (64-bit) **FFmpeg Libraries** (required): - `avcodec-63.dll` - 64-bit version - `avdevice-63.dll` - 64-bit version - `avfilter-12.dll` - 64-bit version - `avformat-63.dll` - 64-bit version - `avutil-61.dll` - 64-bit version - `swresample-7.dll` - 64-bit version - `swscale-10.dll` - 64-bit version - `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources **Total Size**: ~90-110 MB
+**Filter**: - `VisioForge_FFMPEG_Source_x64.ax` - Main DirectShow filter (64-bit) **FFmpeg Libraries** (required): - `avcodec-63.dll` - 64-bit version - `avformat-63.dll` - 64-bit version - `avutil-61.dll` - 64-bit version - `swresample-7.dll` - 64-bit version - `swscale-10.dll` - 64-bit version - `cacert.pem` - Root certificates; required for https://, rtmps:// and tls:// sources - `dav1d-license.txt` - dav1d license notice, shipped with the FFmpeg libraries **Visual C++ runtime** (next to the filter, see Dependencies): - `msvcp140.dll` - `vcruntime140.dll` - `vcruntime140_1.dll` **Total Size**: ~45 MB
 
 ### Installation Directory Structure
 
@@ -119415,23 +119510,26 @@ YourApp\
 ├── x86\
 │   ├── VisioForge_FFMPEG_Source.ax
 │   ├── avcodec-63.dll
-│   ├── avdevice-63.dll
-│   ├── avfilter-12.dll
 │   ├── avformat-63.dll
 │   ├── avutil-61.dll
 │   ├── swresample-7.dll
 │   ├── swscale-10.dll
-│   └── cacert.pem
+│   ├── cacert.pem
+│   ├── dav1d-license.txt
+│   ├── msvcp140.dll
+│   └── vcruntime140.dll
 └── x64\
     ├── VisioForge_FFMPEG_Source_x64.ax
     ├── avcodec-63.dll
-    ├── avdevice-63.dll
-    ├── avfilter-12.dll
     ├── avformat-63.dll
     ├── avutil-61.dll
     ├── swresample-7.dll
     ├── swscale-10.dll
-    └── cacert.pem
+    ├── cacert.pem
+    ├── dav1d-license.txt
+    ├── msvcp140.dll
+    ├── vcruntime140.dll
+    └── vcruntime140_1.dll
 ```
 
 The x86 and x64 FFmpeg DLLs have the same names, so each architecture needs its own folder next to its own filter.
@@ -119442,8 +119540,8 @@ The x86 and x64 FFmpeg DLLs have the same names, so each architecture needs its 
 
 ### Dependencies
 
-- **Visual C++ Redistributable 2015-2022** (x86 or x64)
-- Download: https://aka.ms/vs/17/release/vc\_redist.x64.exe
+- **Visual C++ 2015-2022 runtime**: ship `msvcp140.dll` and `vcruntime140*.dll` next to the filter, as the FFMPEG Source setup does, or install the Visual C++ Redistributable 2015-2022 of the filter's architecture
+- Download: https://aka.ms/vs/17/release/vc\_redist.x64.exe (x64), https://aka.ms/vs/17/release/vc\_redist.x86.exe (x86)
 
 ---
 
@@ -119732,7 +119830,7 @@ YourApp\
 
 ### Visual C++ Redistributables
 
-All SDKs require Visual C++ Redistributable 2015-2022.
+All SDKs except Virtual Camera SDK require the Visual C++ 2015-2022 runtime, from the Visual C++ Redistributable 2015-2022. FFMPEG Source can ship the runtime DLLs next to the filter instead (see its section).
 
 **Download Links**: - x86: https://aka.ms/vs/17/release/vc\_redist.x86.exe - x64: https://aka.ms/vs/17/release/vc\_redist.x64.exe
 
@@ -119787,7 +119885,7 @@ For each SDK, you must include: 1. ✅ **Filter Files** - All .ax files for your
 
 | SDK | Minimum Size | With All Options |
 | --- | --- | --- |
-| **FFMPEG Source** | ~80 MB (x86) | ~190 MB (both arch) |
+| **FFMPEG Source** | ~33 MB (x86) | ~78 MB (both arch) |
 | **VLC Source** | ~150 MB | ~200 MB (with locales) |
 | **Processing Filters** | ~20 MB | ~180 MB (with LAV) |
 | **Encoding Filters** | ~40 MB | ~300 MB (complete) |
@@ -119939,7 +120037,7 @@ Play a local media file with default settings.
 
 // CLSID for FFMPEG Source Filter
 DEFINE_GUID(CLSID_VFFFMPEGSource,
-    0x1974d893, 0x83e4, 0x4f89, 0x99, 0x8, 0x79, 0x5c, 0x52, 0x4c, 0xc1, 0x7e);
+    0xc5255de3, 0x50a7, 0x4714, 0xb7, 0x63, 0xd9, 0x9e, 0x96, 0xe4, 0xcd, 0x52);
 
 HRESULT PlayFile(LPCWSTR filename, HWND hVideoWindow)
 {
@@ -121095,7 +121193,10 @@ public class FFMPEGSourcePlayer
 ```
 // FFMPEG Source Filter CLSID — same value used across the C# / C++ samples and
 // the registry registration in ../deployment/filter-registration.md.
-public static readonly Guid CLSID_VFFFMPEGSource = new Guid("1974D893-83E4-4F89-9908-795C524CC17E");
+public static readonly Guid CLSID_VFFFMPEGSource = new Guid("C5255DE3-50A7-4714-B763-D99E96E4CD52");
+
+// FFMPEG Video Decoder filter CLSID — in the same .ax file as the FFMPEG Source
+public static readonly Guid CLSID_VFFFMPEGVideoDecoder = new Guid("934BBFAE-DE28-46C9-A2EC-85C84A1992BA");
 
 // IFFMPEGSourceSettings interface — for the canonical IID see the interface header
 // (`IFFmpegSourceSettings.h` / `IFFmpegSourceSettings.cs`) linked from
@@ -121232,6 +121333,14 @@ IPin* GetPin(IBaseFilter* pFilter, PIN_DIRECTION PinDir, int nPin)
 }
 ```
 
+## FFMPEG Video Decoder Filter
+
+The same `.ax` file contains a second filter, the **VisioForge FFMPEG Video Decoder** (CLSID `{934BBFAE-DE28-46C9-A2EC-85C84A1992BA}`). It is a transform filter that decodes video in graphs whose source is another splitter, such as the LAV Splitter or the AVI Splitter. Registering the `.ax` file registers both filters.
+
+- **Input**: MJPEG, H.264 (H264 and AVC1), HEVC, MPEG-2, MPEG-4 Part 2, VC-1 (WVC1 and WMV3). The input type must carry the frame size and the frame duration; a type without them is refused.
+- **Output**: NV12, YV12, YUY2, RGB32 and RGB24.
+- **Merit**: `MERIT_DO_NOT_USE`, so Intelligent Connect never inserts it. Add it to the graph yourself with `CoCreateInstance` and connect the splitter's video pin to its input pin.
+
 ## Integration with Processing Filters
 
 Enhance your media pipeline by connecting the FFMPEG Source filter with additional processing components:
@@ -121318,7 +121427,7 @@ The `IFFMPEGSourceSettings` interface provides advanced configuration options fo
 ## Interface Definition
 
 - **Interface Name**: `IFFMPEGSourceSettings`
-- **Filter CLSID it queries through**: `{1974D893-83E4-4F89-9908-795C524CC17E}` (the FFMPEG Source filter — the interface IID itself is distinct; consult the header).
+- **Filter CLSID it queries through**: `{C5255DE3-50A7-4714-B763-D99E96E4CD52}` (the FFMPEG Source filter — the interface IID is `{1974D893-83E4-4F89-9908-795C524CC17E}`).
 - **Inherits From**: `IUnknown`
 
 ### Interface Definition Files
@@ -154036,7 +154145,16 @@ During video capture, editing, or playback, the software offers the capability t
 
 ## Advanced tools for video capture
 
-VisioForge Video Capture SDK .NET is a C# library for recording video from webcams, IP cameras, desktop screens and capture cards inside your own application. It connects to USB cameras, to IP cameras over RTSP and ONVIF, and to Blackmagic DeckLink cards on Windows, macOS and Linux. Recordings are saved to MP4, WebM, MKV or AVI, with hardware encoding on NVIDIA, Intel and AMD GPUs. One session can preview the picture, record it to a file and stream it over RTMP or SRT at the same time. The cross-platform engine runs on Windows, macOS, Linux, Android and iOS, and the classic Windows engine adds DV camcorders and TV tuners. For example, a surveillance app can record an IP camera around the clock, while a tutorial tool records the desktop together with microphone audio. Delphi and ActiveX developers get capture through the All-in-One Media Framework. Media Player SDK and Video Edit SDK, shown below, cover playback and editing in the same API style.
+VisioForge Video Capture SDK .NET is a C# library for recording video from webcams, IP cameras, desktop screens and capture cards inside your own application.
+
+-   It connects to USB cameras, to IP cameras over RTSP and ONVIF, and to Blackmagic DeckLink cards on Windows, macOS and Linux.
+-   Recordings are saved to MP4, WebM, MKV or AVI, with hardware encoding on NVIDIA, Intel and AMD GPUs.
+-   One session can preview the picture, record it to a file and stream it over RTMP or SRT at the same time.
+-   The cross-platform engine runs on Windows, macOS, Linux, Android and iOS, and the classic Windows engine adds DV camcorders and TV tuners.
+
+For example, a surveillance app can record an IP camera around the clock, while a tutorial tool records the desktop together with microphone audio.
+
+Delphi and ActiveX developers get capture through the All-in-One Media Framework. Media Player SDK and Video Edit SDK, shown below, cover playback and editing in the same API style.
 
 ## Professional SDK Products
 
@@ -154142,15 +154260,21 @@ Leveraging VisioForge's multimedia SDKs can enable the development of various in
 
 ### Video conferencing software
 
-Create a state-of-the-art video conferencing application with VisioForge video and audio frameworks for developers, offering high-definition video and crystal-clear audio capabilities. Incorporate features like customizable virtual backgrounds, noise cancellation, and augmented reality filters for a more engaging meeting experience. Allow for interactive elements such as real-time screen sharing, collaborative whiteboards, and session recording. Design the interface for ease of use, ensuring smooth setup and connection even for users with minimal technical expertise. Include advanced security protocols to ensure confidential meetings remain private, making it an ideal solution for corporate, educational, and personal use.
+Create a state-of-the-art video conferencing application with VisioForge video and audio frameworks for developers, offering high-definition video and crystal-clear audio capabilities. Incorporate features like customizable virtual backgrounds, noise cancellation, and augmented reality filters for a more engaging meeting experience. Allow for interactive elements such as real-time screen sharing, collaborative whiteboards, and session recording.
+
+Design the interface for ease of use, ensuring smooth setup and connection even for users with minimal technical expertise. Include advanced security protocols to ensure confidential meetings remain private, making it an ideal solution for corporate, educational, and personal use.
 
 ### Security surveillance systems
 
-Develop a comprehensive security surveillance system using VisioForge frameworks. This system could feature real-time video processing with support for multiple camera inputs, offering comprehensive coverage and high-resolution footage. Implement advanced AI algorithms for facial recognition, motion detection, and anomaly alerts to enhance security measures. The system could also include features like night vision compatibility, automatic incident recording, and instant alerts to security personnel or law enforcement. Ensure easy scalability to accommodate varying sizes of premises, from small retail stores to large industrial complexes.
+Develop a comprehensive security surveillance system using VisioForge frameworks. This system could feature real-time video processing with support for multiple camera inputs, offering comprehensive coverage and high-resolution footage. Implement advanced AI algorithms for facial recognition, motion detection, and anomaly alerts to enhance security measures.
+
+The system could also include features like night vision compatibility, automatic incident recording, and instant alerts to security personnel or law enforcement. Ensure easy scalability to accommodate varying sizes of premises, from small retail stores to large industrial complexes.
 
 ### Live streaming platforms
 
-Utilize VisioForge SDKs to build a robust live streaming platform, capable of handling high-quality video and audio streams. This platform could support multi-camera setups, allowing for dynamic angle switching during live events. Integrate real-time video effects and transitions for a professional broadcast feel. Implement adaptive bitrate streaming to ensure optimal viewing experience across different devices and internet speeds. Include features for viewer interaction like live chats, polls, and Q&A sessions. Offer monetization options such as pay-per-view, subscriptions, or advertising. Provide detailed analytics for content creators to track viewer engagement and optimize their broadcasts.
+Utilize VisioForge SDKs to build a robust live streaming platform, capable of handling high-quality video and audio streams. This platform could support multi-camera setups, allowing for dynamic angle switching during live events. Integrate real-time video effects and transitions for a professional broadcast feel.
+
+Implement adaptive bitrate streaming to ensure optimal viewing experience across different devices and internet speeds. Include features for viewer interaction like live chats, polls, and Q&A sessions. Offer monetization options such as pay-per-view, subscriptions, or advertising. Provide detailed analytics for content creators to track viewer engagement and optimize their broadcasts.
 
 ### Video editing suites
 
@@ -154232,7 +154356,11 @@ The SDK is highly compatible with more than 10 video and audio input sources and
 
 ## Video capture tools for developers
 
-Video Capture SDK .NET is a C# library for recording video from USB webcams, IP cameras over RTSP and ONVIF, desktop screens, and Blackmagic Decklink capture cards on Windows, macOS and Linux. The cross-platform engine, VideoCaptureCoreX, is built on GStreamer and runs on Windows, macOS, Linux, Android and iOS. The classic VideoCaptureCore engine uses DirectShow and runs on Windows only. Recordings go to MP4 with H.264 or HEVC video and AAC audio, to WebM with VP8, VP9 or AV1, or to MKV and AVI. Hardware encoding uses Intel Quick Sync, NVIDIA NVENC or AMD AMF when the GPU supports it. For example, a WPF or MAUI app can preview a webcam, record it to MP4, and stream the same feed over RTMP or SRT in one session. The SDK handles device enumeration, format selection and audio source management, so application code stays focused on its own logic. Installation starts with the VisioForge.DotNet.VideoCapture NuGet package.
+Video Capture SDK .NET is a C# library for recording video from USB webcams, IP cameras over RTSP and ONVIF, desktop screens, and Blackmagic Decklink capture cards on Windows, macOS and Linux. The cross-platform engine, VideoCaptureCoreX, is built on GStreamer and runs on Windows, macOS, Linux, Android and iOS. The classic VideoCaptureCore engine uses DirectShow and runs on Windows only.
+
+Recordings go to MP4 with H.264 or HEVC video and AAC audio, to WebM with VP8, VP9 or AV1, or to MKV and AVI. Hardware encoding uses Intel Quick Sync, NVIDIA NVENC or AMD AMF when the GPU supports it.
+
+For example, a WPF or MAUI app can preview a webcam, record it to MP4, and stream the same feed over RTMP or SRT in one session. The SDK handles device enumeration, format selection and audio source management, so application code stays focused on its own logic. Installation starts with the VisioForge.DotNet.VideoCapture NuGet package.
 
 ### VIDEO CAPTURE PIPELINE
 
@@ -154576,7 +154704,11 @@ Professional video capture, multi-camera recording, chroma key processing
 
 ## Video Capture in C#
 
-Video capture in C# takes about a dozen lines with Video Capture SDK .NET; recording a webcam to MP4 shows the whole path. Install the VisioForge.DotNet.VideoCapture NuGet package and call VisioForgeX.InitSDKAsync() once at startup. Create a VideoCaptureCoreX bound to a VideoView, take a camera from Video\_SourcesAsync() and assign it to Video\_Source as VideoCaptureDeviceSourceSettings; a fixed resolution and frame rate come from the camera's VideoFormats list. Pass new MP4Output("output.mp4") to Outputs\_Add, assign a microphone from Audio\_SourcesAsync() to Audio\_Source via CreateSourceSettingsVC() with Audio\_Record set to true, and call StartAsync(); StopAsync() closes the file. On Windows the video is encoded to H.264 on the GPU encoder the SDK finds (NVIDIA NVENC, Intel Quick Sync or AMD AMF), or with OpenH264 when there is none, and the audio to AAC. The preview keeps running in the same VideoView while the file is written, in WPF, WinForms, MAUI and Avalonia apps alike. The [save webcam video guide](/help/docs/dotnet/videocapture/guides/save-webcam-video/) adds WebM output, snapshots and the redistributable packages for each platform.
+Video capture in C# takes about a dozen lines with Video Capture SDK .NET; recording a webcam to MP4 shows the whole path. Install the VisioForge.DotNet.VideoCapture NuGet package and call VisioForgeX.InitSDKAsync() once at startup. Create a VideoCaptureCoreX bound to a VideoView, take a camera from Video\_SourcesAsync() and assign it to Video\_Source as VideoCaptureDeviceSourceSettings; a fixed resolution and frame rate come from the camera's VideoFormats list.
+
+Pass new MP4Output("output.mp4") to Outputs\_Add, assign a microphone from Audio\_SourcesAsync() to Audio\_Source via CreateSourceSettingsVC() with Audio\_Record set to true, and call StartAsync(); StopAsync() closes the file. On Windows the video is encoded to H.264 on the GPU encoder the SDK finds (NVIDIA NVENC, Intel Quick Sync or AMD AMF), or with OpenH264 when there is none, and the audio to AAC.
+
+The preview keeps running in the same VideoView while the file is written, in WPF, WinForms, MAUI and Avalonia apps alike. The [save webcam video guide](/help/docs/dotnet/videocapture/guides/save-webcam-video/) adds WebM output, snapshots and the redistributable packages for each platform.
 
 ## Code Samples
 
@@ -154784,7 +154916,13 @@ await videoCapture1.StartAsync();
 
 ## Connect to an RTSP or ONVIF IP Camera in C#
 
-Video Capture SDK .NET connects to an RTSP or ONVIF IP camera with one call: RTSPSourceSettings.CreateAsync(uri, login, password, audioEnabled) probes the stream, reads its format and returns a source for Video\_Source. Protocol-level RTSP libraries such as RtspClientSharp and SharpRTSP hand over encoded frames, leaving decoding, display and file writing to your code; here one VideoCaptureCoreX instance previews the camera and, with Outputs\_Add(new MP4Output("camera.mp4")), records it as well. UseGPUDecoder moves decoding to the graphics card, and LowLatencyMode cuts the default 500 ms latency buffer to 150 ms for live monitoring. FallbackSwitch shows a still image or text when the stream fails; it decodes the stream itself, so UseGPUDecoder does not apply alongside it. To find cameras without typing addresses, DeviceEnumerator.Shared.ONVIF\_ListSourcesAsync discovers ONVIF devices on the local network. The [RTSP camera guide](/help/docs/dotnet/videocapture/video-sources/ip-cameras/rtsp/) covers low-latency and troubleshooting settings, and the [camera directory](/help/docs/dotnet/camera-brands/) lists RTSP URL formats for Hikvision, Dahua, Axis and more than 50 other brands.
+Video Capture SDK .NET connects to an RTSP or ONVIF IP camera with one call: RTSPSourceSettings.CreateAsync(uri, login, password, audioEnabled) probes the stream, reads its format and returns a source for Video\_Source.
+
+Protocol-level RTSP libraries such as RtspClientSharp and SharpRTSP hand over encoded frames, leaving decoding, display and file writing to your code; here one VideoCaptureCoreX instance previews the camera and, with Outputs\_Add(new MP4Output("camera.mp4")), records it as well. UseGPUDecoder moves decoding to the graphics card, and LowLatencyMode cuts the default 500 ms latency buffer to 150 ms for live monitoring.
+
+FallbackSwitch shows a still image or text when the stream fails; it decodes the stream itself, so UseGPUDecoder does not apply alongside it. To find cameras without typing addresses, DeviceEnumerator.Shared.ONVIF\_ListSourcesAsync discovers ONVIF devices on the local network.
+
+The [RTSP camera guide](/help/docs/dotnet/videocapture/video-sources/ip-cameras/rtsp/) covers low-latency and troubleshooting settings, and the [camera directory](/help/docs/dotnet/camera-brands/) lists RTSP URL formats for Hikvision, Dahua, Axis and more than 50 other brands.
 
 ## Choose Your License
 
@@ -155257,7 +155395,9 @@ Media Player SDK .NET is a video player SDK for C# that embeds video and audio p
 
 From €250/year · Lifetime from €900 [Bundles from €700/year](https://www.visioforge.com/media-player-sdk-net#bundles)
 
-The Media Player SDK .Net enables developers to seamlessly integrate a wide range of media playback capabilities into their applications, including support for video, audio, DVD, Blu-ray, and various network streams. This SDK also provides the ability to render overlay bitmaps and text with effects on top of the video. It offers flexibility in playback engines: the cross-platform MediaPlayerCoreX engine runs on Windows, macOS, Linux, Android and iOS with GStreamer-based decoding, while the classic Windows-only MediaPlayerCore engine adds DirectShow playback with optional FFMPEG filters or VLC, and DVD support.
+The Media Player SDK .Net enables developers to seamlessly integrate a wide range of media playback capabilities into their applications, including support for video, audio, DVD, Blu-ray, and various network streams. This SDK also provides the ability to render overlay bitmaps and text with effects on top of the video.
+
+It offers flexibility in playback engines: the cross-platform MediaPlayerCoreX engine runs on Windows, macOS, Linux, Android and iOS with GStreamer-based decoding, while the classic Windows-only MediaPlayerCore engine adds DirectShow playback with optional FFMPEG filters or VLC, and DVD support.
 
 ## Installation
 
@@ -155289,7 +155429,11 @@ The SDK allows developers to select specific video and audio sources, apply a ra
 
 ## Build custom apps with our media player
 
-Media Player SDK .NET is a C# library for playing video and audio files and network streams inside .NET applications. The cross-platform engine, MediaPlayerCoreX, is built on GStreamer and runs on Windows, macOS, Linux, Android and iOS. The classic MediaPlayerCore engine uses DirectShow and runs on Windows only, with FFMPEG and VLC source modes and DVD playback. The SDK opens MP4, MKV, MOV, AVI, MPEG-TS and WMV files with H.264, HEVC, AV1 or VP9 video. It also plays RTSP, RTMP, SRT, HLS and MPEG-DASH streams from cameras and media servers. Hardware decoding uses NVIDIA, Intel Quick Sync or AMD AMF when the GPU supports it, and VAAPI on Linux. For example, a WPF or MAUI app can open an RTSP camera, seek a recorded MP4 and draw a text overlay on the picture. Video views exist for WPF, WinForms, MAUI, Avalonia and Uno Platform, and a Unity package brings the same engine to Unity 6. Installation starts with the VisioForge.DotNet.MediaPlayer NuGet package.
+Media Player SDK .NET is a C# library for playing video and audio files and network streams inside .NET applications. The cross-platform engine, MediaPlayerCoreX, is built on GStreamer and runs on Windows, macOS, Linux, Android and iOS. The classic MediaPlayerCore engine uses DirectShow and runs on Windows only, with FFMPEG and VLC source modes and DVD playback.
+
+The SDK opens MP4, MKV, MOV, AVI, MPEG-TS and WMV files with H.264, HEVC, AV1 or VP9 video. It also plays RTSP, RTMP, SRT, HLS and MPEG-DASH streams from cameras and media servers. Hardware decoding uses NVIDIA, Intel Quick Sync or AMD AMF when the GPU supports it, and VAAPI on Linux.
+
+For example, a WPF or MAUI app can open an RTSP camera, seek a recorded MP4 and draw a text overlay on the picture. Video views exist for WPF, WinForms, MAUI, Avalonia and Uno Platform, and a Unity package brings the same engine to Unity 6. Installation starts with the VisioForge.DotNet.MediaPlayer NuGet package.
 
 ### MEDIA PLAYBACK PIPELINE
 
@@ -156042,11 +156186,17 @@ Cross-platform support for Windows, macOS, Linux, Android, and iOS
 
 From €250/year · Lifetime from €900 [Bundles from €700/year](https://www.visioforge.com/video-edit-sdk-net#bundles)
 
-The cross-platform VideoEditCoreX engine is built on GStreamer Editing Services, and the classic VideoEditCore engine uses DirectShow on Windows only. Clips go onto the timeline through Input\_AddVideoFile and Input\_AddAudioFile, and the movie renders when Start is called. Output formats include MP4, WebM, MKV, MOV, AVI, MPEG-TS, MXF and animated GIF, plus audio-only MP3, M4A, FLAC, OPUS and WAV. Hardware encoding uses NVIDIA NVENC, Intel Quick Sync or AMD AMF when the GPU supports it. For example, a batch tool can join an intro, a screen recording and an outro, add a logo and background music, and save one MP4. Installation starts with the VisioForge.DotNet.VideoEdit NuGet package.
+The cross-platform VideoEditCoreX engine is built on GStreamer Editing Services, and the classic VideoEditCore engine uses DirectShow on Windows only. Clips go onto the timeline through Input\_AddVideoFile and Input\_AddAudioFile, and the movie renders when Start is called. Output formats include MP4, WebM, MKV, MOV, AVI, MPEG-TS, MXF and animated GIF, plus audio-only MP3, M4A, FLAC, OPUS and WAV.
+
+Hardware encoding uses NVIDIA NVENC, Intel Quick Sync or AMD AMF when the GPU supports it. For example, a batch tool can join an intro, a screen recording and an outro, add a logo and background music, and save one MP4. Installation starts with the VisioForge.DotNet.VideoEdit NuGet package.
 
 ## What is a video editing SDK?
 
-A video editing SDK is a library that adds timeline editing to your own application. Your code places clips on a timeline, trims them, adds transitions, titles and effects, previews the result and renders a new file. Video Edit SDK .NET does this in .NET applications: desktop apps built with WinForms, WPF, Avalonia or .NET MAUI, console and server tools that render in batches, Android and iOS apps through .NET MAUI, and Unity projects. Unlike running FFmpeg from the command line, the timeline, the preview and the progress events stay inside your process. Unlike editor SDKs for the browser, it does not run in a web page; a web product calls it on the server instead.
+A video editing SDK is a library that adds timeline editing to your own application. Your code places clips on a timeline, trims them, adds transitions, titles and effects, previews the result and renders a new file.
+
+Video Edit SDK .NET does this in .NET applications: desktop apps built with WinForms, WPF, Avalonia or .NET MAUI, console and server tools that render in batches, Android and iOS apps through .NET MAUI, and Unity projects.
+
+Unlike running FFmpeg from the command line, the timeline, the preview and the progress events stay inside your process. Unlike editor SDKs for the browser, it does not run in a web page; a web product calls it on the server instead.
 
 ## Quick facts
 
@@ -156116,15 +156266,29 @@ Hardware-accelerated rendering with Intel, NVIDIA, and AMD support
 
 ### SDK STRUCTURE
 
-Video Edit SDK .NET has two engines. VideoEditCoreX is the cross-platform engine, built on GStreamer Editing Services, and runs on Windows, macOS, Linux, Android and iOS. VideoEditCore is the classic Windows engine, built on DirectShow. Both take video, audio and image files: AVI, MP4, MPEG-1/2, WMV, QuickTime MOV, VP8/VP9 and AV1 video, WAV, MP3, Vorbis, WMA, AAC, Speex and Opus audio, BMP, PNG, GIF, JPEG, TIFF and WebP images, and any other format for which a decoder is installed. VideoEditCoreX also reads clips and images from a .NET Stream, and every clip can be trimmed by a start and stop time when it is added. VideoEditCoreX writes 20 output formats; VideoEditCore can also stream the result over the network or send it to a Blackmagic DeckLink card.
+Video Edit SDK .NET has two engines. VideoEditCoreX is the cross-platform engine, built on GStreamer Editing Services, and runs on Windows, macOS, Linux, Android and iOS. VideoEditCore is the classic Windows engine, built on DirectShow.
+
+Both take video, audio and image files: AVI, MP4, MPEG-1/2, WMV, QuickTime MOV, VP8/VP9 and AV1 video, WAV, MP3, Vorbis, WMA, AAC, Speex and Opus audio, BMP, PNG, GIF, JPEG, TIFF and WebP images, and any other format for which a decoder is installed.
+
+VideoEditCoreX also reads clips and images from a .NET Stream, and every clip can be trimmed by a start and stop time when it is added. VideoEditCoreX writes 20 output formats; VideoEditCore can also stream the result over the network or send it to a Blackmagic DeckLink card.
 
 ### VIDEO EDITING PIPELINE
 
-Editing happens on a timeline. On VideoEditCoreX, each Input\_Add call places a clip on it: Input\_AddAudioVideoFile for a clip with sound, Input\_AddVideoFile or Input\_AddAudioFile for one track, and Input\_AddImageFile for a still with a set duration. Without an insert time a clip goes after the last one; with one, it lands at that point. Input\_AddVideoLayer adds a layer for multi-layer composition, such as a watermark over the main clip. When Start is called, the engine decodes each clip, applies transitions, effects and text overlays, encodes the result and writes it in the format set in Output\_Format. If Output\_Format is left empty, the same timeline plays in the video view as a preview, and Position\_Set seeks within it. Progress and errors arrive through the OnProgress, OnError and OnStop events.
+Editing happens on a timeline. On VideoEditCoreX, each Input\_Add call places a clip on it: Input\_AddAudioVideoFile for a clip with sound, Input\_AddVideoFile or Input\_AddAudioFile for one track, and Input\_AddImageFile for a still with a set duration.
+
+Without an insert time a clip goes after the last one; with one, it lands at that point. Input\_AddVideoLayer adds a layer for multi-layer composition, such as a watermark over the main clip.
+
+When Start is called, the engine decodes each clip, applies transitions, effects and text overlays, encodes the result and writes it in the format set in Output\_Format. If Output\_Format is left empty, the same timeline plays in the video view as a preview, and Position\_Set seeks within it.
+
+Progress and errors arrive through the OnProgress, OnError and OnStop events.
 
 ### OUTPUT FORMATS
 
-VideoEditCoreX renders to 20 formats through the Output\_Format property: MP4, WebM, MKV, MOV, AVI, DV, FLV, MPEG-TS, MXF, WMV, Ogg Theora and animated GIF for video, and MP3, M4A, FLAC, Opus, Ogg Vorbis, Speex, WAV and WMA for audio only. MP4 uses H.264 or HEVC video with AAC audio, encoded in software or on the GPU with NVIDIA NVENC, Intel Quick Sync or AMD AMF; on Android and Apple devices the H.264 encoder uses MediaCodec and VideoToolbox when the device has them. VideoEditCore on Windows adds FFmpeg-based outputs such as MPEG-1/2/4 and FLV, and can encode through any third-party DirectShow filter installed on the system.
+VideoEditCoreX renders to 20 formats through the Output\_Format property: MP4, WebM, MKV, MOV, AVI, DV, FLV, MPEG-TS, MXF, WMV, Ogg Theora and animated GIF for video, and MP3, M4A, FLAC, Opus, Ogg Vorbis, Speex, WAV and WMA for audio only.
+
+MP4 uses H.264 or HEVC video with AAC audio, encoded in software or on the GPU with NVIDIA NVENC, Intel Quick Sync or AMD AMF; on Android and Apple devices the H.264 encoder uses MediaCodec and VideoToolbox when the device has them.
+
+VideoEditCore on Windows adds FFmpeg-based outputs such as MPEG-1/2/4 and FLV, and can encode through any third-party DirectShow filter installed on the system.
 
 ### VIDEO PROCESSING
 
@@ -156201,7 +156365,9 @@ Unity editing is delivered through the VideoEditCoreX engine. Verified on Unity 
 
 ## Video Editing on Android and iOS
 
-The same VideoEditCoreX timeline runs inside a .NET MAUI app on Android and iOS, as well as on Mac Catalyst and Windows, from one codebase. Add clips from the device gallery, preview the result in the MAUI VideoView control, and render an MP4 file on the device. H.264 goes to the hardware encoder when the device has one, MediaCodec on Android and VideoToolbox on iOS, and to a software encoder otherwise. The NuGet packages are VisioForge.DotNet.VideoEdit and VisioForge.DotNet.Core.UI.MAUI, plus a redistributable for each target platform.
+The same VideoEditCoreX timeline runs inside a .NET MAUI app on Android and iOS, as well as on Mac Catalyst and Windows, from one codebase. Add clips from the device gallery, preview the result in the MAUI VideoView control, and render an MP4 file on the device.
+
+H.264 goes to the hardware encoder when the device has one, MediaCodec on Android and VideoToolbox on iOS, and to a software encoder otherwise. The NuGet packages are VisioForge.DotNet.VideoEdit and VisioForge.DotNet.Core.UI.MAUI, plus a redistributable for each target platform.
 
 ### Join two clips into an MP4 in a .NET MAUI app
 
@@ -156731,7 +156897,11 @@ Yes. Create a .NET MAUI app, add the VisioForge.DotNet.VideoEdit package and the
 
 ### How long does it take to integrate a video editing SDK?
 
-The engine side is small. Add the VisioForge.DotNet.VideoEdit NuGet package and the redistributable package for each target platform, then create VideoEditCoreX, add clips, set Output\_Format and call Start. The SimpleEdit sample for .NET MAUI joins clips from the gallery into an MP4 in about 250 lines of C#, UI handlers included, and the Video Join Demo X samples do the same in WinForms and WPF. The 30-day trial is fully functional, so the whole integration can be built and tested before you buy.
+The engine side is small. Add the VisioForge.DotNet.VideoEdit NuGet package and the redistributable package for each target platform, then create VideoEditCoreX, add clips, set Output\_Format and call Start.
+
+The SimpleEdit sample for .NET MAUI joins clips from the gallery into an MP4 in about 250 lines of C#, UI handlers included, and the Video Join Demo X samples do the same in WinForms and WPF.
+
+The 30-day trial is fully functional, so the whole integration can be built and tested before you buy.
 
 ### How does the video editing pipeline work?
 
@@ -156755,7 +156925,13 @@ Build video pipelines from blocks in C# — camera, codec, effect, output — re
 
 From €500/year · Lifetime from €1,800 [Bundles from €700/year](https://www.visioforge.com/media-blocks-sdk-net#bundles)
 
-Create powerful multimedia applications easily and flexibly with Media Blocks SDK .NET — a modular toolkit that lets you build complex video workflows like a visual constructor (camera → codec → output). It supports recording to MP4, MKV, and AVI, as well as streaming via HLS, RTMP, and RTSP, offering a rich set of effects including color correction, deinterlacing, watermarks, screen capture, and audio processing. With built-in computer vision, QR-code recognition, face tracking, and full support for Blackmagic and ONVIF devices, it brings professional-grade features to any project. The SDK works seamlessly with Unity, WinForms, WPF, MAUI, Uno Platform, Xamarin, and Avalonia, making it easy to integrate advanced media capabilities into desktop, mobile, and game-engine apps.
+Create powerful multimedia applications easily and flexibly with Media Blocks SDK .NET — a modular toolkit that lets you build complex video workflows like a visual constructor (camera → codec → output).
+
+It supports recording to MP4, MKV, and AVI, as well as streaming via HLS, RTMP, and RTSP, offering a rich set of effects including color correction, deinterlacing, watermarks, screen capture, and audio processing.
+
+With built-in computer vision, QR-code recognition, face tracking, and full support for Blackmagic and ONVIF devices, it brings professional-grade features to any project.
+
+The SDK works seamlessly with Unity, WinForms, WPF, MAUI, Uno Platform, Xamarin, and Avalonia, making it easy to integrate advanced media capabilities into desktop, mobile, and game-engine apps.
 
 Want a ready-made component instead of a pipeline you assemble yourself? [Video Capture SDK .NET](/video-capture-sdk-net) · [Media Player SDK .NET](/media-player-sdk-net) · [Video Edit SDK .NET](/video-edit-sdk-net)
 
@@ -156773,7 +156949,11 @@ Works on Windows, macOS, Linux, Android, and iOS with all major .NET UI framewor
 
 GPU-accelerated encoding/decoding with NVIDIA, Intel, and AMD support for maximum performance
 
-Media Blocks SDK .NET is the pipeline layer of the VisioForge .NET stack: instead of configuring one ready-made component, you assemble an application from individual blocks — a source, any number of processing blocks, and one or more sinks — and connect them with MediaBlocksPipeline.Connect. The 200+ blocks cover file and webcam sources, RTSP and ONVIF IP cameras with PTZ, Blackmagic DeckLink, Basler and FLIR industrial cameras, colour correction, deinterlacing, chroma key, overlays and audio processing, AI inference, recording to MP4, MKV, MOV, WebM, MPEG-TS and MXF, and streaming over HLS, RTMP, RTSP, SRT and NDI. A single pipeline can record, stream and preview at the same time by splitting the flow through a TeeBlock. The SDK installs from the VisioForge.DotNet.MediaBlocks NuGet package and runs on Windows, macOS, Linux, Android and iOS with WinForms, WPF, MAUI, Uno Platform, Avalonia and Unity.
+Media Blocks SDK .NET is the pipeline layer of the VisioForge .NET stack: instead of configuring one ready-made component, you assemble an application from individual blocks — a source, any number of processing blocks, and one or more sinks — and connect them with MediaBlocksPipeline.Connect.
+
+The 200+ blocks cover file and webcam sources, RTSP and ONVIF IP cameras with PTZ, Blackmagic DeckLink, Basler and FLIR industrial cameras, colour correction, deinterlacing, chroma key, overlays and audio processing, AI inference, recording to MP4, MKV, MOV, WebM, MPEG-TS and MXF, and streaming over HLS, RTMP, RTSP, SRT and NDI.
+
+A single pipeline can record, stream and preview at the same time by splitting the flow through a TeeBlock. The SDK installs from the VisioForge.DotNet.MediaBlocks NuGet package and runs on Windows, macOS, Linux, Android and iOS with WinForms, WPF, MAUI, Uno Platform, Avalonia and Unity.
 
 ## Built on GStreamer
 
@@ -156993,7 +157173,15 @@ Choose between an annual or a lifetime license
 
 [Bundles from €700/year](https://www.visioforge.com/media-blocks-sdk-net#bundles)
 
-Media Blocks SDK .NET is licensed per developer in three forms. The Developer License costs €500 per year (a subscription that auto-renews, or a one-time payment for 12 months), includes every minor and major upgrade released during that year, and the SDK keeps working after the subscription ends — you simply stop receiving new versions. The Workgroup License costs €1,000 per year and covers three named developers in one organization on the same terms. The Lifetime·Team License is a single payment of €1,800 and carries minor and major updates, and every future feature, for the lifetime of the product. All three include all 200+ processing blocks, email support and royalty-free distribution rights, so no runtime fee is due for the applications you ship. Non-commercial use is free on request, and a source-code license is available from €10,000, quoted on request. All three licences can be paid at checkout (a subscription by card or SEPA Direct Debit, a one-time payment also by iDEAL, Klarna and other methods), or by bank transfer against an invoice. If a project needs more than one VisioForge SDK, the .NET bundles cost less than the same products bought separately.
+Media Blocks SDK .NET is licensed per developer in three forms.
+
+-   The Developer License costs €500 per year (a subscription that auto-renews, or a one-time payment for 12 months), includes every minor and major upgrade released during that year, and the SDK keeps working after the subscription ends — you simply stop receiving new versions.
+-   The Workgroup License costs €1,000 per year and covers three named developers in one organization on the same terms.
+-   The Lifetime·Team License is a single payment of €1,800 and carries minor and major updates, and every future feature, for the lifetime of the product.
+
+All three include all 200+ processing blocks, email support and royalty-free distribution rights, so no runtime fee is due for the applications you ship. Non-commercial use is free on request, and a source-code license is available from €10,000, quoted on request.
+
+All three licences can be paid at checkout (a subscription by card or SEPA Direct Debit, a one-time payment also by iDEAL, Klarna and other methods), or by bank transfer against an invoice. If a project needs more than one VisioForge SDK, the .NET bundles cost less than the same products bought separately.
 
 ### Developer License
 
@@ -157107,7 +157295,11 @@ Source code licensing for this SDK is available from €10,000, quoted on reques
 
 Add AI inference, privacy redaction, open-vocabulary detection, vision-language understanding, semantic search, and speech recognition directly to Media Blocks SDK .NET pipelines.
 
-Each AI feature in Media Blocks SDK .NET is a pipeline block from the VisioForge.DotNet.Core.AI or VisioForge.DotNet.Core.AI.Whisper package. It connects between sources, renderers, encoders and streaming outputs like any other block. YOLOObjectDetectorBlock runs YOLOX, YOLOv8 or RT-DETR models, and ObjectAnalyticsBlock adds ByteTrack IDs, line crossings and zone counters. OcrBlock and LicensePlateRecognizerBlock read text and plates, FaceRecognitionBlock matches faces against an enrolled gallery, and PIIRedactionBlock blurs faces, plates and text. The ONNX Runtime blocks run on the CPU or on CUDA, DirectML and CoreML when the matching runtime is installed. SpeechToTextBlock transcribes audio locally with Whisper and Silero VAD and writes SRT or VTT subtitles. For example, an RTSP camera pipeline can count people crossing a line while it records to MP4. Model files are supplied or downloaded by the application, so teams keep control over model choice and licensing.
+Each AI feature in Media Blocks SDK .NET is a pipeline block from the VisioForge.DotNet.Core.AI or VisioForge.DotNet.Core.AI.Whisper package. It connects between sources, renderers, encoders and streaming outputs like any other block. YOLOObjectDetectorBlock runs YOLOX, YOLOv8 or RT-DETR models, and ObjectAnalyticsBlock adds ByteTrack IDs, line crossings and zone counters.
+
+OcrBlock and LicensePlateRecognizerBlock read text and plates, FaceRecognitionBlock matches faces against an enrolled gallery, and PIIRedactionBlock blurs faces, plates and text. The ONNX Runtime blocks run on the CPU or on CUDA, DirectML and CoreML when the matching runtime is installed.
+
+SpeechToTextBlock transcribes audio locally with Whisper and Silero VAD and writes SRT or VTT subtitles. For example, an RTSP camera pipeline can count people crossing a line while it records to MP4. Model files are supplied or downloaded by the application, so teams keep control over model choice and licensing.
 
 Browse the AI blocks
 
@@ -157153,9 +157345,19 @@ The same block instances also plug directly into VideoCaptureCoreX and MediaPlay
 
 ## Live Video Compositor
 
-Build OBS-like live video production software with the Live Video Compositor — a real-time, multi-input, multi-output video composition engine built on top of Media Blocks SDK .NET. Dynamically add and remove cameras, screen captures, media files, RTSP/IP camera feeds, and NDI sources as layered inputs, mix them with GPU-accelerated rendering, and simultaneously output to recording files and live streaming platforms. Designed for multi-camera switching, picture-in-picture layouts, live overlays, and broadcast-quality audio mixing — all fully controllable from C# code at runtime.
+Build OBS-like live video production software with the Live Video Compositor — a real-time, multi-input, multi-output video composition engine built on top of Media Blocks SDK .NET.
 
-The Live Video Compositor is a multi-input, multi-output composition engine built on the same pipeline model. You create it with a canvas size and frame rate — LiveVideoCompositorSettings(1920, 1080, new VideoFrameRate(25)) — then add each source as an input with its own destination rectangle and Z-order: a camera filling the background, a screen capture as a picture-in-picture overlay, a media file, an RTSP camera or an NDI feed. Inputs and outputs are added and removed with Input\_AddAsync and Output\_AddAsync while the composition is running, and each input runs in its own isolated pipeline, so one failing source does not stop the others. Layers are mixed with GPU-accelerated OpenGL rendering with a CPU fallback, and the result can go to several destinations at once — an MP4 or WebM recording, a YouTube or Facebook live stream, a DeckLink card and an on-screen preview.
+Dynamically add and remove cameras, screen captures, media files, RTSP/IP camera feeds, and NDI sources as layered inputs, mix them with GPU-accelerated rendering, and simultaneously output to recording files and live streaming platforms.
+
+Designed for multi-camera switching, picture-in-picture layouts, live overlays, and broadcast-quality audio mixing — all fully controllable from C# code at runtime.
+
+The Live Video Compositor is a multi-input, multi-output composition engine built on the same pipeline model.
+
+You create it with a canvas size and frame rate — LiveVideoCompositorSettings(1920, 1080, new VideoFrameRate(25)) — then add each source as an input with its own destination rectangle and Z-order: a camera filling the background, a screen capture as a picture-in-picture overlay, a media file, an RTSP camera or an NDI feed.
+
+Inputs and outputs are added and removed with Input\_AddAsync and Output\_AddAsync while the composition is running, and each input runs in its own isolated pipeline, so one failing source does not stop the others.
+
+Layers are mixed with GPU-accelerated OpenGL rendering with a CPU fallback, and the result can go to several destinations at once — an MP4 or WebM recording, a YouTube or Facebook live stream, a DeckLink card and an on-screen preview.
 
 ### Dynamic Inputs & Outputs
 
@@ -157371,7 +157573,9 @@ Create a MediaBlocksPipeline instance, add source blocks (file, camera, RTSP, sc
 
 ### Is Media Blocks SDK .NET based on GStreamer?
 
-Yes. Media Blocks SDK .NET is a commercial .NET SDK built on GStreamer. You work with typed blocks rather than the raw GStreamer API, and CustomMediaBlock adds any GStreamer element or bin description to a pipeline. The GStreamer libraries ship in the VisioForge.CrossPlatform.Core.\* NuGet packages on Windows, macOS, Android and iOS. On Android the app also references a Java bindings project from the VisioForge samples repository. On Linux the SDK uses the distribution's GStreamer, version 1.22 or later (Ubuntu 24.04 ships 1.24), installed with the distribution's package manager, plus the VisioForge.CrossPlatform.Core.Linux.x64 or VisioForge.CrossPlatform.Core.Linux.arm64 package.
+Yes. Media Blocks SDK .NET is a commercial .NET SDK built on GStreamer. You work with typed blocks rather than the raw GStreamer API, and CustomMediaBlock adds any GStreamer element or bin description to a pipeline. The GStreamer libraries ship in the VisioForge.CrossPlatform.Core.\* NuGet packages on Windows, macOS, Android and iOS.
+
+On Android the app also references a Java bindings project from the VisioForge samples repository. On Linux the SDK uses the distribution's GStreamer, version 1.22 or later (Ubuntu 24.04 ships 1.24), installed with the distribution's package manager, plus the VisioForge.CrossPlatform.Core.Linux.x64 or VisioForge.CrossPlatform.Core.Linux.arm64 package.
 
 ### Does Media Blocks SDK work on macOS, Linux, and mobile platforms?
 
@@ -157391,7 +157595,11 @@ Yes. The SDK includes source blocks for GenICam-compatible industrial cameras (B
 
 ### What is the Live Video Compositor and how does it differ from building pipelines manually?
 
-The Live Video Compositor is a high-level real-time video composition engine built on top of Media Blocks SDK. While you can assemble custom mixing pipelines manually with individual blocks, the compositor provides a complete architecture for OBS-like applications out of the box — including bridge-based input isolation, GPU-accelerated compositing, dynamic source and output management at runtime, Z-order layer control, live text and image overlays, post-composition effects, and audio VU metering. It is ideal for building multi-camera switching systems, live streaming software, or broadcast production tools in C# and .NET.
+The Live Video Compositor is a high-level real-time video composition engine built on top of Media Blocks SDK.
+
+While you can assemble custom mixing pipelines manually with individual blocks, the compositor provides a complete architecture for OBS-like applications out of the box — including bridge-based input isolation, GPU-accelerated compositing, dynamic source and output management at runtime, Z-order layer control, live text and image overlays, post-composition effects, and audio VU metering.
+
+It is ideal for building multi-camera switching systems, live streaming software, or broadcast production tools in C# and .NET.
 
 ### Can I use Media Blocks SDK in Unity?
 
@@ -160145,13 +160353,13 @@ The trial version is fully functional for 30 days and may display a watermark or
 
 # FFmpeg Source DirectShow Filter — Universal Media Decoder for DirectShow Apps
 
-FFmpeg Source DirectShow Filter is a DirectShow source filter that decodes media with FFmpeg in any Windows DirectShow app. It opens MP4, MKV, WebM, MPEG-TS and AVI files and RTSP, RTMP and HLS streams, with GPU decoding on NVIDIA, Intel and AMD cards and .NET, C++ and Delphi APIs.
+FFmpeg Source DirectShow Filter is a DirectShow source filter that decodes media with FFmpeg in any Windows DirectShow app. It opens MP4, MKV, WebM, MPEG-TS and AVI files and RTSP, RTMP and HLS streams. GPU decoding runs on NVIDIA, Intel and AMD cards, and the filter has .NET, C++ and Delphi APIs.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_ffmpeg_source_filter_setup.exe)[View Pricing](https://www.visioforge.com/ffmpeg-source-directshow-filter#pricing)[Code Samples on GitHub](https://github.com/visioforge/directshow-samples)
 
 From €250/year · Lifetime from €750 [Bundles from €750/year](https://www.visioforge.com/ffmpeg-source-directshow-filter#bundles)
 
-The FFmpeg Source DirectShow Filter seamlessly integrates into any DirectShow application to decode and playback video or audio files and network streams. This powerful SDK includes FFmpeg DLLs and a DirectShow filter with standard file selection capabilities and custom interfaces for efficient and flexible multimedia processing in your applications.
+The FFmpeg Source DirectShow Filter seamlessly integrates into any DirectShow application to decode and playback video or audio files and network streams. This powerful SDK includes FFmpeg DLLs and a DirectShow filter. The filter offers standard file selection capabilities and custom interfaces for efficient and flexible multimedia processing in your applications.
 
 ## Key Benefits
 
@@ -160633,7 +160841,7 @@ Windows 11, Windows 10, Windows 8/8.1, Windows 7, Windows Server 2016 and later
 
 ### What is the FFmpeg Source DirectShow Filter?
 
-The FFmpeg Source DirectShow Filter is a professional media decoder built on the FFmpeg library that integrates into any DirectShow application. It acts as a source filter in a DirectShow filter graph, enabling playback of 200+ video and audio formats — including MP4, MKV, WebM, AVI, HEVC, VP9, and ProRes — without installing additional codec packs.
+The FFmpeg Source DirectShow Filter is a professional media decoder built on the FFmpeg library that integrates into any DirectShow application. It acts as a source filter in a DirectShow filter graph. It plays 200+ video and audio formats, including MP4, MKV, WebM, AVI, HEVC, VP9 and ProRes, without installing additional codec packs.
 
 ### What media formats and codecs are supported?
 
@@ -166466,13 +166674,13 @@ Media Blocks SDK .NET supports .NET 6, .NET 7, .NET 8, .NET 9, and .NET 10. FFMp
 
 ## Get Started with Media Blocks SDK .NET
 
-[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)
+[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)[Media Blocks block reference](/media-blocks-sdk-net/blocks)
 
 FFmpeg is free and open source (ffmpeg.org, verified 2026-11-04); costs compared here are commercial wrapper licences and developer time.
 
 ## Related Comparisons
 
-[Media Blocks SDK vs LEADTOOLS →](/compare/media-blocks-vs-leadtools)[Media Blocks SDK vs LibVLCSharp →](/compare/media-blocks-vs-libvlcsharp)[Video Capture SDK vs FFmpeg Wrappers →](/compare/video-capture-vs-ffmpeg)[Media Player SDK vs FFmpeg Wrappers →](/compare/media-player-vs-ffmpeg)[Video Edit SDK vs FFmpeg Wrappers →](/compare/video-edit-vs-ffmpeg)
+[Media Blocks SDK vs LEADTOOLS →](/compare/media-blocks-vs-leadtools)[Media Blocks SDK vs LibVLCSharp →](/compare/media-blocks-vs-libvlcsharp)[Video Capture SDK vs FFmpeg Wrappers →](/compare/video-capture-vs-ffmpeg)[Media Player SDK vs FFmpeg Wrappers →](/compare/media-player-vs-ffmpeg)[Video Edit SDK vs FFmpeg Wrappers →](/compare/video-edit-vs-ffmpeg)[Media Blocks SDK vs Ozeki Camera SDK →](/compare/media-blocks-vs-ozeki-camera-sdk)
 
 ---END OF PAGE---
 
@@ -166829,7 +167037,7 @@ Yes. Media Blocks SDK .NET provides built-in NDI source and sink blocks, an RTSP
 
 ## Get Started with Media Blocks SDK .NET
 
-[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)
+[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)[Media Blocks block reference](/media-blocks-sdk-net/blocks)
 
 LEADTOOLS prices as shown on componentsource.com/product/leadtools-multimedia/prices and leadtools.com/sdk/multimedia, verified 2026-11-04. Deployment and runtime licences are not price-listed and are quoted individually. Prices may change without notice. ComponentSource notes that its prices may include a personal discount.
 
@@ -167333,7 +167541,7 @@ Media Blocks SDK is a modular pipeline framework with 400+ processing blocks for
 
 ## Get Started with Media Blocks SDK .NET
 
-[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)
+[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)[Media Blocks block reference](/media-blocks-sdk-net/blocks)
 
 LibVLCSharp is open source; Videolabs commercial license pricing at videolabs.io/store/libvlcsharp/, verified 2026-11-02. Prices may change without notice.
 
@@ -167741,13 +167949,13 @@ Yes. Media Blocks SDK .NET provides dedicated blocks for RTMP, RTSP, SRT, HLS, D
 
 ## Get Started with Media Blocks SDK .NET
 
-[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)
+[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)[Media Blocks block reference](/media-blocks-sdk-net/blocks)
 
 Medialooks lists no MFormats prices on its own site; the MFormats prices shown are ComponentSource reseller prices (componentsource.com/product/mformats/prices), verified 2026-11-04. ComponentSource notes that its prices may include a personal discount. Product information at medialooks.com/mformats.
 
 ## Related Comparisons
 
-[Media Blocks SDK vs FFmpeg Wrappers →](/compare/media-blocks-vs-ffmpeg)[Video Capture SDK vs MFormats →](/compare/video-capture-vs-mformats)[Media Player SDK vs MFormats →](/compare/media-player-vs-mformats)[Video Capture SDK vs FFmpeg Wrappers →](/compare/video-capture-vs-ffmpeg)[Video Edit SDK vs FFmpeg Wrappers →](/compare/video-edit-vs-ffmpeg)
+[Media Blocks SDK vs FFmpeg Wrappers →](/compare/media-blocks-vs-ffmpeg)[Video Capture SDK vs MFormats →](/compare/video-capture-vs-mformats)[Media Player SDK vs MFormats →](/compare/media-player-vs-mformats)[Video Capture SDK vs FFmpeg Wrappers →](/compare/video-capture-vs-ffmpeg)[Video Edit SDK vs FFmpeg Wrappers →](/compare/video-edit-vs-ffmpeg)[Media Blocks SDK vs Ozeki Camera SDK →](/compare/media-blocks-vs-ozeki-camera-sdk)
 
 ---END OF PAGE---
 
@@ -168155,7 +168363,7 @@ Media Blocks SDK supports HLS streaming output as a pipeline sink block, along w
 
 ## Ready to Build Your Media Pipeline?
 
-[Installation Guide](https://www.visioforge.com/help/docs/dotnet/install/)[API Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)[Media Blocks SDK Product Page](/media-blocks-sdk-net)
+[Installation Guide](https://www.visioforge.com/help/docs/dotnet/install/)[API Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Code Samples](https://github.com/visioforge/.Net-SDK-s-samples)[Media Blocks SDK Product Page](/media-blocks-sdk-net)[Media Blocks block reference](/media-blocks-sdk-net/blocks)
 
 Ozeki Camera SDK prices as published at camera-sdk.com/p\_3402-prices.html, verified 2026-11-16. Prices may change without notice.
 
@@ -168467,13 +168675,13 @@ Yes. Media Blocks SDK .NET provides built-in blocks for RTMP, RTSP, SRT, HLS, DA
 
 ## Get Started with Media Blocks SDK .NET
 
-[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)
+[Installation guide](/help/docs/dotnet/install/)[Documentation](https://www.visioforge.com/help/docs/dotnet/mediablocks/)[Browse code samples](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)[Visit product page](/media-blocks-sdk-net)[Media Blocks block reference](/media-blocks-sdk-net/blocks)
 
 Datastead prices as published at datastead.com/purchase.html (TVideoGrabber €700; RTSP/RTMP/HTTP/ONVIF Source Filter and Multipurpose Encoder €950 each; NDI Filters €400; Suite of all four products €2,100), per developer excluding VAT, verified 2026-11-02. Prices may change without notice.
 
 ## Related Comparisons
 
-[Media Blocks SDK vs FFmpeg Wrappers →](/compare/media-blocks-vs-ffmpeg)[Video Capture SDK vs TVideoGrabber →](/compare/video-capture-vs-tvideograbber)[Media Player SDK vs TVideoGrabber →](/compare/media-player-vs-tvideograbber)[Video Capture SDK vs FFmpeg Wrappers →](/compare/video-capture-vs-ffmpeg)[Media Player SDK vs LibVLCSharp →](/compare/media-player-vs-libvlcsharp)
+[Media Blocks SDK vs FFmpeg Wrappers →](/compare/media-blocks-vs-ffmpeg)[Video Capture SDK vs TVideoGrabber →](/compare/video-capture-vs-tvideograbber)[Media Player SDK vs TVideoGrabber →](/compare/media-player-vs-tvideograbber)[Video Capture SDK vs FFmpeg Wrappers →](/compare/video-capture-vs-ffmpeg)[Media Player SDK vs LibVLCSharp →](/compare/media-player-vs-libvlcsharp)[Media Blocks SDK vs Ozeki Camera SDK →](/compare/media-blocks-vs-ozeki-camera-sdk)
 
 ---END OF PAGE---
 

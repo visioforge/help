@@ -14,6 +14,10 @@ primary_api_classes:
   - VideoEditCore
   - FastEditSeekMode
 
+video:
+  id: EASyGlUymvY
+  upload_date: 2026-11-24T07:00:00Z
+  duration: PT1M3S
 ---
 
 # Cortar un video sin recodificar en C\#
@@ -33,6 +37,14 @@ Esta página corta una parte de un archivo de video en un archivo nuevo con [Vid
     buscar en `llms.txt`. No requiere autenticación.
 
     Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Tutorial en video
+
+El video de un minuto escribe y ejecuta esta aplicación de consola: 30 segundos de una película 720p se cortan en aproximadamente medio segundo.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/EASyGlUymvY?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Paquetes NuGet necesarios
 

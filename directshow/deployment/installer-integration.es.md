@@ -106,18 +106,18 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
 <?xml version="1.0" encoding="UTF-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
   <Product Id="*"
-           Name="MyApp con filtros DirectShow"
+           Name="MyApp with DirectShow Filters"
            Language="1033"
            Version="1.0.0.0"
-           Manufacturer="Su Empresa"
-           UpgradeCode="SU-GUID-AQUÍ">
+           Manufacturer="Your Company"
+           UpgradeCode="YOUR-GUID-HERE">
 
     <Package InstallerVersion="200"
              Compressed="yes"
              InstallScope="perMachine"
              Platform="x64" />
 
-    <MajorUpgrade DowngradeErrorMessage="Ya está instalada una versión más nueva." />
+    <MajorUpgrade DowngradeErrorMessage="A newer version is already installed." />
 
     <MediaTemplate EmbedCab="yes" />
 
@@ -136,6 +136,9 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
       <ComponentGroupRef Id="ApplicationComponents" />
     </Feature>
 
+    <!-- Enlaza VCRedist.wxs para que se ejecute su comprobación del runtime -->
+    <PropertyRef Id="VCREDIST2022_X64" />
+
     <!-- Acciones personalizadas para registro -->
     <CustomAction Id="RegisterFilters"
                   Directory="FilterFolder"
@@ -151,9 +154,27 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
                   Impersonate="no"
                   Return="ignore" />
 
+    <!-- Reversión: desregistrar el filtro si la instalación falla después de RegisterFilters -->
+    <CustomAction Id="RegisterFiltersRollback"
+                  Directory="FilterFolder"
+                  ExeCommand="cmd.exe /c regsvr32 /s /u VisioForge_FFMPEG_Source_x64.ax"
+                  Execute="rollback"
+                  Impersonate="no"
+                  Return="ignore" />
+
+    <!-- Reversión de una desinstalación: volver a registrar el filtro -->
+    <CustomAction Id="UnregisterFiltersRollback"
+                  Directory="FilterFolder"
+                  ExeCommand="cmd.exe /c regsvr32 /s VisioForge_FFMPEG_Source_x64.ax"
+                  Execute="rollback"
+                  Impersonate="no"
+                  Return="ignore" />
+
     <InstallExecuteSequence>
-      <Custom Action="RegisterFilters" After="InstallFiles">NOT Installed</Custom>
-      <Custom Action="UnregisterFilters" Before="RemoveFiles">Installed</Custom>
+      <Custom Action="RegisterFiltersRollback" Before="RegisterFilters">NOT Installed</Custom>
+      <Custom Action="RegisterFilters" After="InstallFiles">NOT Installed OR REINSTALL</Custom>
+      <Custom Action="UnregisterFiltersRollback" Before="UnregisterFilters">REMOVE="ALL"</Custom>
+      <Custom Action="UnregisterFilters" Before="RemoveFiles">REMOVE="ALL"</Custom>
     </InstallExecuteSequence>
 
   </Product>
@@ -169,22 +190,21 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
     <ComponentGroup Id="FilterComponents" Directory="FilterFolder">
 
       <!-- Filtro FFMPEG Source -->
-      <Component Id="FFMPEGSourceFilter" Guid="SU-GUID-1">
+      <Component Id="FFMPEGSourceFilter" Guid="YOUR-GUID-1">
         <File Id="FFMPEGSourceAX"
               Source="$(var.SourceDir)\VisioForge_FFMPEG_Source_x64.ax"
               KeyPath="yes" />
       </Component>
 
-      <!-- Dependencias FFMPEG -->
-      <Component Id="FFMPEGLibraries" Guid="SU-GUID-2">
+      <!-- Dependencias FFMPEG (VCRedist.wxs comprueba el runtime de VC++ 2015-2022) -->
+      <Component Id="FFMPEGLibraries" Guid="YOUR-GUID-2">
         <File Id="avcodec63" Source="$(var.SourceDir)\avcodec-63.dll" />
-        <File Id="avdevice63" Source="$(var.SourceDir)\avdevice-63.dll" />
-        <File Id="avfilter12" Source="$(var.SourceDir)\avfilter-12.dll" />
         <File Id="avformat63" Source="$(var.SourceDir)\avformat-63.dll" />
         <File Id="avutil61" Source="$(var.SourceDir)\avutil-61.dll" />
         <File Id="swresample7" Source="$(var.SourceDir)\swresample-7.dll" />
         <File Id="swscale10" Source="$(var.SourceDir)\swscale-10.dll" />
         <File Id="cacert" Source="$(var.SourceDir)\cacert.pem" />
+        <File Id="dav1dLicense" Source="$(var.SourceDir)\dav1d-license.txt" />
       </Component>
 
     </ComponentGroup>
@@ -205,11 +225,12 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
                       Root="HKLM"
                       Key="SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64"
                       Name="Installed"
-                      Type="raw" />
+                      Type="raw"
+                      Win64="no" />
     </Property>
 
-    <Condition Message="Esta aplicación requiere Visual C++ 2015-2022 Redistributable (x64). Por favor instálelo desde https://aka.ms/vs/17/release/vc_redist.x64.exe">
-      <![CDATA[Installed OR VCREDIST2022_X64]]>
+    <Condition Message="This application requires Visual C++ 2015-2022 Redistributable (x64). Please install it from https://aka.ms/vs/17/release/vc_redist.x64.exe">
+      <![CDATA[Installed OR VCREDIST2022_X64 = "#1"]]>
     </Condition>
 
   </Fragment>
@@ -220,11 +241,11 @@ Cree un instalador WiX completo para un filtro DirectShow con registro automáti
 
 ```bash
 # Usando WiX 3.x línea de comandos
-candle.exe Product.wxs Filters.wxs VCRedist.wxs -ext WixUIExtension
+candle.exe -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixUIExtension
 light.exe -out MyApp.msi Product.wixobj Filters.wixobj VCRedist.wixobj -ext WixUIExtension
 
-# Usando WiX 4.x (sintaxis más nueva)
-wix build Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixext -out MyApp.msi
+# Usando WiX 4.x (sintaxis más nueva); convierta antes las fuentes WiX 3 anteriores: wix convert *.wxs
+wix build -arch x64 Product.wxs Filters.wxs VCRedist.wxs -ext WixToolset.UI.wixext -out MyApp.msi
 ```
 
 ---
@@ -236,10 +257,10 @@ Cree un paquete que incluya Visual C++ Redistributable.
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi"
      xmlns:bal="http://schemas.microsoft.com/wix/BalExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension">
-  <Bundle Name="Configuración Completa MyApp"
+  <Bundle Name="MyApp Complete Setup"
           Version="1.0.0.0"
-          Manufacturer="Su Empresa"
-          UpgradeCode="SU-BUNDLE-GUID">
+          Manufacturer="Your Company"
+          UpgradeCode="YOUR-BUNDLE-GUID">
     <BootstrapperApplicationRef Id="WixStandardBootstrapperApplication.RtfLicense">
       <bal:WixStandardBootstrapperApplication
         LicenseFile="License.rtf"
@@ -294,6 +315,9 @@ Para más control, cree una acción personalizada DLL.
 
 #pragma comment(lib, "msi.lib")
 
+// Compile esta DLL como x64: una DLL de acción personalizada se ejecuta en un proceso de su propia arquitectura,
+// así que solo una DLL x64 puede cargar el filtro x64
+
 // Declaraciones hacia adelante
 typedef HRESULT (STDAPICALLTYPE *LPFNDLLREGISTERSERVER)();
 typedef HRESULT (STDAPICALLTYPE *LPFNDLLUNREGISTERSERVER)();
@@ -309,29 +333,30 @@ void LogMessage(MSIHANDLE hInstall, LPCTSTR message)
 // Acción personalizada: Registrar filtros DirectShow
 extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHANDLE hInstall)
 {
-    TCHAR installDir[MAX_PATH];
-    DWORD installDirSize = MAX_PATH;
+    TCHAR filterDir[MAX_PATH];
+    DWORD filterDirSize = MAX_PATH;
 
-    // Obtener propiedad INSTALLFOLDER
-    if (MsiGetProperty(hInstall, TEXT("INSTALLFOLDER"), installDir, &installDirSize) != ERROR_SUCCESS)
+    // Una acción personalizada diferida solo lee CustomActionData, que CustomActions.wxs establece en [FilterFolder]
+    if (MsiGetProperty(hInstall, TEXT("CustomActionData"), filterDir, &filterDirSize) != ERROR_SUCCESS
+        || filterDirSize == 0)
     {
-        LogMessage(hInstall, TEXT("Error al obtener propiedad INSTALLFOLDER"));
+        LogMessage(hInstall, TEXT("CustomActionData (filter folder) is empty or longer than MAX_PATH"));
         return ERROR_INSTALL_FAILURE;
     }
 
-    LogMessage(hInstall, TEXT("Registrando filtros DirectShow..."));
+    LogMessage(hInstall, TEXT("Registering DirectShow filters..."));
 
     // Construir ruta al filtro
     TCHAR filterPath[MAX_PATH];
-    StringCchCopy(filterPath, MAX_PATH, installDir);
-    StringCchCat(filterPath, MAX_PATH, TEXT("Filters\\VisioForge_FFMPEG_Source_x64.ax"));
+    StringCchCopy(filterPath, MAX_PATH, filterDir);
+    StringCchCat(filterPath, MAX_PATH, TEXT("VisioForge_FFMPEG_Source_x64.ax"));
 
     // Cargar DLL del filtro
-    HMODULE hModule = LoadLibrary(filterPath);
+    HMODULE hModule = LoadLibraryEx(filterPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
         TCHAR errorMsg[512];
-        StringCchPrintf(errorMsg, 512, TEXT("Error al cargar filtro: %s (Error: %d)"),
+        StringCchPrintf(errorMsg, 512, TEXT("Failed to load filter: %s (Error: %d)"),
                        filterPath, GetLastError());
         LogMessage(hInstall, errorMsg);
         return ERROR_INSTALL_FAILURE;
@@ -343,7 +368,7 @@ extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHAN
 
     if (!pfnRegister)
     {
-        LogMessage(hInstall, TEXT("DllRegisterServer no encontrado en filtro"));
+        LogMessage(hInstall, TEXT("DllRegisterServer not found in filter"));
         FreeLibrary(hModule);
         return ERROR_INSTALL_FAILURE;
     }
@@ -354,13 +379,13 @@ extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHAN
 
     if (SUCCEEDED(hr))
     {
-        LogMessage(hInstall, TEXT("Filtros DirectShow registrados exitosamente"));
+        LogMessage(hInstall, TEXT("DirectShow filters registered successfully"));
         return ERROR_SUCCESS;
     }
     else
     {
         TCHAR errorMsg[256];
-        StringCchPrintf(errorMsg, 256, TEXT("Registro de filtro falló: HRESULT 0x%08X"), hr);
+        StringCchPrintf(errorMsg, 256, TEXT("Filter registration failed: HRESULT 0x%08X"), hr);
         LogMessage(hInstall, errorMsg);
         return ERROR_INSTALL_FAILURE;
     }
@@ -369,40 +394,51 @@ extern "C" __declspec(dllexport) UINT __stdcall RegisterDirectShowFilters(MSIHAN
 // Acción personalizada: Desregistrar filtros DirectShow
 extern "C" __declspec(dllexport) UINT __stdcall UnregisterDirectShowFilters(MSIHANDLE hInstall)
 {
-    TCHAR installDir[MAX_PATH];
-    DWORD installDirSize = MAX_PATH;
+    TCHAR filterDir[MAX_PATH];
+    DWORD filterDirSize = MAX_PATH;
 
-    if (MsiGetProperty(hInstall, TEXT("INSTALLFOLDER"), installDir, &installDirSize) != ERROR_SUCCESS)
+    if (MsiGetProperty(hInstall, TEXT("CustomActionData"), filterDir, &filterDirSize) != ERROR_SUCCESS
+        || filterDirSize == 0)
     {
         // No fallar desinstalación si no podemos obtener la ruta
+        LogMessage(hInstall, TEXT("CustomActionData (filter folder) is empty or longer than MAX_PATH, filter not unregistered"));
         return ERROR_SUCCESS;
     }
 
-    LogMessage(hInstall, TEXT("Desregistrando filtros DirectShow..."));
+    LogMessage(hInstall, TEXT("Unregistering DirectShow filters..."));
 
     TCHAR filterPath[MAX_PATH];
-    StringCchCopy(filterPath, MAX_PATH, installDir);
-    StringCchCat(filterPath, MAX_PATH, TEXT("Filters\\VisioForge_FFMPEG_Source_x64.ax"));
+    StringCchCopy(filterPath, MAX_PATH, filterDir);
+    StringCchCat(filterPath, MAX_PATH, TEXT("VisioForge_FFMPEG_Source_x64.ax"));
 
-    HMODULE hModule = LoadLibrary(filterPath);
+    HMODULE hModule = LoadLibraryEx(filterPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
-        // El filtro puede ya estar eliminado, no fallar
+        // Puede que el filtro ya se haya eliminado: no fallar, pero registrar por qué no se cargó
+        TCHAR errorMsg[512];
+        StringCchPrintf(errorMsg, 512, TEXT("Failed to load filter: %s (Error: %d)"),
+                       filterPath, GetLastError());
+        LogMessage(hInstall, errorMsg);
         return ERROR_SUCCESS;
     }
 
     LPFNDLLUNREGISTERSERVER pfnUnregister =
         (LPFNDLLUNREGISTERSERVER)GetProcAddress(hModule, "DllUnregisterServer");
 
-    if (pfnUnregister)
-    {
-        pfnUnregister();
-    }
-
+    HRESULT hr = pfnUnregister ? pfnUnregister() : E_NOTIMPL;
     FreeLibrary(hModule);
-    LogMessage(hInstall, TEXT("Filtros DirectShow desregistrados"));
+
+    TCHAR resultMsg[256];
+    StringCchPrintf(resultMsg, 256, TEXT("DirectShow filters unregistered: HRESULT 0x%08X"), hr);
+    LogMessage(hInstall, resultMsg);
 
     return ERROR_SUCCESS;
+}
+
+// Punto de entrada de la DLL
+BOOL APIENTRY DllMain(HMODULE hModule, DWORD reason, LPVOID reserved)
+{
+    return TRUE;
 }
 ```
 
@@ -415,6 +451,10 @@ extern "C" __declspec(dllexport) UINT __stdcall UnregisterDirectShowFilters(MSIH
 
     <!-- Binario para acciones personalizadas -->
     <Binary Id="CustomActionsDLL" SourceFile="$(var.CustomActions.TargetPath)" />
+
+    <!-- Una acción diferida no puede leer INSTALLFOLDER: pase la carpeta del filtro en CustomActionData -->
+    <CustomAction Id="SetRegisterFiltersCA" Property="RegisterFiltersCA" Value="[FilterFolder]" />
+    <CustomAction Id="SetUnregisterFiltersCA" Property="UnregisterFiltersCA" Value="[FilterFolder]" />
 
     <!-- Definir acciones personalizadas -->
     <CustomAction Id="RegisterFiltersCA"
@@ -433,11 +473,17 @@ extern "C" __declspec(dllexport) UINT __stdcall UnregisterDirectShowFilters(MSIH
 
     <!-- Programar acciones personalizadas -->
     <InstallExecuteSequence>
+      <Custom Action="SetRegisterFiltersCA" Before="RegisterFiltersCA">
+        NOT Installed OR REINSTALL
+      </Custom>
       <Custom Action="RegisterFiltersCA" After="InstallFiles">
-        NOT Installed
+        NOT Installed OR REINSTALL
+      </Custom>
+      <Custom Action="SetUnregisterFiltersCA" Before="UnregisterFiltersCA">
+        REMOVE="ALL"
       </Custom>
       <Custom Action="UnregisterFiltersCA" Before="RemoveFiles">
-        Installed
+        REMOVE="ALL"
       </Custom>
     </InstallExecuteSequence>
 
@@ -489,12 +535,12 @@ RequestExecutionLevel admin
 ; Información de versión
 VIProductVersion "1.0.0.0"
 VIAddVersionKey "ProductName" "MyApp"
-VIAddVersionKey "CompanyName" "Su Empresa"
-VIAddVersionKey "FileDescription" "Instalador MyApp"
+VIAddVersionKey "CompanyName" "Your Company"
+VIAddVersionKey "FileDescription" "MyApp Installer"
 VIAddVersionKey "FileVersion" "1.0.0.0"
 ;--------------------------------
 ; Secciones del instalador
-Section "MyApp (requerido)" SecMain
+Section "MyApp (required)" SecMain
   SectionIn RO
   ; Establecer ruta de salida
   SetOutPath "$INSTDIR"
@@ -507,18 +553,18 @@ Section "MyApp (requerido)" SecMain
   ; Instalar filtro FFMPEG Source
   File "Filters\VisioForge_FFMPEG_Source_x64.ax"
   File "Filters\avcodec-63.dll"
-  File "Filters\avdevice-63.dll"
-  File "Filters\avfilter-12.dll"
   File "Filters\avformat-63.dll"
   File "Filters\avutil-61.dll"
   File "Filters\swresample-7.dll"
   File "Filters\swscale-10.dll"
   File "Filters\cacert.pem"
+  File "Filters\dav1d-license.txt"
   ; Registrar filtro DirectShow
-  DetailPrint "Registrando filtros DirectShow..."
-  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"' $0
+  DetailPrint "Registering DirectShow filters..."
+  ; Los instaladores NSIS son de 32 bits: $WINDIR\sysnative\regsvr32.exe ejecuta directamente el regsvr32 de 64 bits para el filtro x64
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"' $0
   ${If} $0 != 0
-    MessageBox MB_OK|MB_ICONEXCLAMATION "Registro de filtro falló. Código: $0"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Filter registration failed. Code: $0"
   ${EndIf}
   ; Almacenar carpeta de instalación
   WriteRegStr HKLM "Software\MyApp" "InstallDir" $INSTDIR
@@ -532,14 +578,14 @@ Section "MyApp (requerido)" SecMain
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "DisplayName" "MyApp"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "UninstallString" "$INSTDIR\Uninstall.exe"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "DisplayIcon" "$INSTDIR\MyApp.exe"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "Publisher" "Su Empresa"
+  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "Publisher" "Your Company"
   WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "DisplayVersion" "1.0.0.0"
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "NoModify" 1
   WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\MyApp" "NoRepair" 1
 SectionEnd
 ;--------------------------------
 ; Secciones opcionales
-Section "Filtro VLC Source" SecVLC
+Section "VLC Source Filter" SecVLC
   SetOutPath "$INSTDIR\Filters"
   ; Instalar filtro VLC Source
   File "Filters\VisioForge_VLC_Source_x64.ax"
@@ -549,17 +595,17 @@ Section "Filtro VLC Source" SecVLC
   SetOutPath "$INSTDIR\Filters\plugins"
   File /r "Filters\plugins\*.*"
   ; Registrar filtro VLC Source
-  DetailPrint "Registrando filtro VLC Source..."
-  ExecWait 'regsvr32 /s "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"' $0
+  DetailPrint "Registering VLC Source filter..."
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"' $0
   ${If} $0 != 0
-    MessageBox MB_OK|MB_ICONEXCLAMATION "Registro de filtro falló. Código: $0"
+    MessageBox MB_OK|MB_ICONEXCLAMATION "Filter registration failed. Code: $0"
   ${EndIf}
 SectionEnd
 ;--------------------------------
 ; Descripciones de sección
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} "Archivos de aplicación principales y filtro FFMPEG Source (requerido)"
-  !insertmacro MUI_DESCRIPTION_TEXT ${SecVLC} "Filtro VLC Source para soporte de formato adicional (opcional)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecMain} "Main application files and FFMPEG Source filter (required)"
+  !insertmacro MUI_DESCRIPTION_TEXT ${SecVLC} "VLC Source filter for additional format support (optional)"
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
 ;--------------------------------
 ; Funciones del instalador
@@ -568,13 +614,13 @@ Function .onInit
   ${If} ${RunningX64}
     ; OK
   ${Else}
-    MessageBox MB_OK|MB_ICONSTOP "Esta aplicación requiere Windows 64-bit."
+    MessageBox MB_OK|MB_ICONSTOP "This application requires 64-bit Windows."
     Abort
   ${EndIf}
   ; Verificar Visual C++ Redistributable 2015-2022
   ReadRegDWORD $0 HKLM "SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64" "Installed"
   ${If} $0 != 1
-    MessageBox MB_YESNO|MB_ICONQUESTION "Visual C++ 2015-2022 Redistributable (x64) es requerido.$\n$\n¿Descargar e instalar ahora?" IDYES download IDNO skip
+    MessageBox MB_YESNO|MB_ICONQUESTION "Visual C++ 2015-2022 Redistributable (x64) is required.$\n$\nDownload and install now?" IDYES download IDNO skip
     download:
       ExecShell "open" "https://aka.ms/vs/17/release/vc_redist.x64.exe"
       Abort
@@ -585,9 +631,9 @@ FunctionEnd
 ; Sección desinstalador
 Section "Uninstall"
   ; Desregistrar filtros
-  DetailPrint "Desregistrando filtros DirectShow..."
-  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"'
-  ExecWait 'regsvr32 /s /u "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"'
+  DetailPrint "Unregistering DirectShow filters..."
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s /u "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"'
+  ExecWait '"$WINDIR\sysnative\regsvr32.exe" /s /u "$INSTDIR\Filters\VisioForge_VLC_Source_x64.ax"'
   ; Remover archivos
   Delete "$INSTDIR\MyApp.exe"
   Delete "$INSTDIR\MyApp.exe.config"
@@ -595,6 +641,8 @@ Section "Uninstall"
   ; Remover directorio Filters
   Delete "$INSTDIR\Filters\*.ax"
   Delete "$INSTDIR\Filters\*.dll"
+  Delete "$INSTDIR\Filters\cacert.pem"
+  Delete "$INSTDIR\Filters\dav1d-license.txt"
   RMDir /r "$INSTDIR\Filters\plugins"
   RMDir "$INSTDIR\Filters"
   ; Remover directorio de instalación
@@ -643,7 +691,7 @@ silent_mode:
 
 ---
 ### NSIS: Plugin personalizado para registro
-Cree un plugin NSIS para más control.
+Cree un plugin NSIS para más control. Los instaladores NSIS y sus plugins son procesos de 32 bits, por lo que un plugin solo puede cargar y registrar el filtro x86 (`VisioForge_FFMPEG_Source.ax`). Registre el filtro x64 con el `regsvr32` de 64 bits, como en el script básico anterior. El filtro x86 necesita su propia carpeta con las DLL de FFmpeg x86, `cacert.pem`, `dav1d-license.txt` y el runtime de VC++ x86 (`msvcp140.dll`, `vcruntime140.dll`); el uso siguiente lo instala en `$INSTDIR\Filters\x86`.
 #### FilterRegistration.cpp (plugin NSIS)
 ```cpp
 #include <windows.h>
@@ -662,7 +710,7 @@ extern "C" void __declspec(dllexport) RegisterFilter(
     TCHAR filterPath[MAX_PATH];
     popstring(filterPath);
     // Cargar DLL
-    HMODULE hModule = LoadLibrary(filterPath);
+    HMODULE hModule = LoadLibraryEx(filterPath, NULL, LOAD_WITH_ALTERED_SEARCH_PATH);
     if (!hModule)
     {
         pushstring(_T("ERROR"));
@@ -689,12 +737,19 @@ BOOL WINAPI DllMain(HANDLE hInst, ULONG ul_reason_for_call, LPVOID lpReserved)
 ```
 Uso en script NSIS:
 ```nsis
+; En la sección de instalación: la carpeta del filtro x86 (el .ax x86, las DLL de FFmpeg, cacert.pem, dav1d-license.txt y el runtime de VC++)
+SetOutPath "$INSTDIR\Filters\x86"
+File "Filters\x86\*.*"
 ; Cargar plugin
-FilterRegistration::RegisterFilter "$INSTDIR\Filters\VisioForge_FFMPEG_Source_x64.ax"
+FilterRegistration::RegisterFilter "$INSTDIR\Filters\x86\VisioForge_FFMPEG_Source.ax"
 Pop $0
 ${If} $0 == "ERROR"
-    MessageBox MB_OK "Registro de filtro falló"
+    MessageBox MB_OK "Filter registration failed"
 ${EndIf}
+
+; En la sección Uninstall, antes de eliminar los archivos: NSIS es de 32 bits, así que $SYSDIR contiene el regsvr32 de 32 bits
+ExecWait '"$SYSDIR\regsvr32.exe" /s /u "$INSTDIR\Filters\x86\VisioForge_FFMPEG_Source.ax"'
+RMDir /r "$INSTDIR\Filters\x86"
 ```
 ---
 
@@ -722,20 +777,24 @@ ${EndIf}
    - Name: `Register DirectShow Filters`
    - Type: `Stored in the Directory Table`
    - Working Directory: `[INSTALLDIR]Filters`
-   - Filename: `regsvr32.exe`
+   - Filename: `[System64Folder]regsvr32.exe`
    - Command Line: `/s VisioForge_FFMPEG_Source_x64.ax`
    - Run: `Deferred Execution in System Context`
-   - Condition: `NOT Installed`
+   - Condition: `NOT Installed OR REINSTALL`
 
 4. Para desinstalar:
    - Name: `Unregister DirectShow Filters`
+   - Type: `Stored in the Directory Table`
+   - Working Directory: `[INSTALLDIR]Filters`
+   - Filename: `[System64Folder]regsvr32.exe`
    - Command Line: `/s /u VisioForge_FFMPEG_Source_x64.ax`
+   - Run: `Deferred Execution in System Context`
    - Sequence: antes de **RemoveFiles**
-   - Condition: `Installed`
+   - Condition: `REMOVE="ALL"`
 
 #### Método 2: Usando DLL personalizada
 
-1. Crear DLL C++ con código de registro (similar al ejemplo WiX arriba)
+1. Crear DLL C++ con código de registro (similar al ejemplo WiX arriba), compilada como x64 para el filtro x64
 2. Agregar DLL a **Support Files** en InstallShield
 3. Crear acción personalizada:
    - Type: `DLL from the installation`
@@ -775,19 +834,18 @@ Source: "MyApp.exe"; DestDir: "{app}"; Flags: ignoreversion
 ; Filtro FFMPEG Source
 Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion regserver restartreplace uninsrestartdelete
 Source: "Filters\avcodec-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avdevice-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
-Source: "Filters\avfilter-12.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\avformat-63.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\avutil-61.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\swresample-7.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\swscale-10.dll"; DestDir: "{app}\Filters"; Flags: ignoreversion
 Source: "Filters\cacert.pem"; DestDir: "{app}\Filters"; Flags: ignoreversion
+Source: "Filters\dav1d-license.txt"; DestDir: "{app}\Filters"; Flags: ignoreversion
 [Icons]
 Name: "{group}\MyApp"; Filename: "{app}\MyApp.exe"
-Name: "{group}\Desinstalar MyApp"; Filename: "{uninstallexe}"
+Name: "{group}\Uninstall MyApp"; Filename: "{uninstallexe}"
 [Run]
 ; Opcionalmente lanzar aplicación después de instalar
-Filename: "{app}\MyApp.exe"; Description: "Lanzar MyApp"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\MyApp.exe"; Description: "Launch MyApp"; Flags: nowait postinstall skipifsilent
 [Registry]
 Root: HKLM; Subkey: "Software\MyApp"; ValueType: string; ValueName: "InstallDir"; ValueData: "{app}"; Flags: uninsdeletekey
 [Code]
@@ -802,8 +860,8 @@ begin
   if not RegQueryDWordValue(HKLM, 'SOFTWARE\Microsoft\VisualStudio\14.0\VC\Runtimes\x64',
                             'Installed', VCInstalled) or (VCInstalled <> 1) then
   begin
-    if MsgBox('Visual C++ 2015-2022 Redistributable (x64) es requerido.' + #13#10 +
-              '¿Descargar e instalar ahora?', mbConfirmation, MB_YESNO) = IDYES then
+    if MsgBox('Visual C++ 2015-2022 Redistributable (x64) is required.' + #13#10 +
+              'Download and install now?', mbConfirmation, MB_YESNO) = IDYES then
     begin
       ShellExec('open', 'https://aka.ms/vs/17/release/vc_redist.x64.exe', '', '', SW_SHOW, ewNoWait, ResultCode);
       Result := False;  // Abortar instalación
@@ -814,52 +872,11 @@ end;
 #### Inno Setup avanzado: Registro personalizado
 ```pascal
 [Files]
-; No usar flag regserver - registraremos manualmente
+; Sin el flag regserver: la sección [Code] registra el filtro e informa de un fallo
 Source: "Filters\VisioForge_FFMPEG_Source_x64.ax"; DestDir: "{app}\Filters"; Flags: ignoreversion
 [Code]
-// Importar funciones API de Windows
-function LoadLibrary(lpFileName: String): THandle;
-  external 'LoadLibraryW@kernel32.dll stdcall';
-function FreeLibrary(hModule: THandle): Boolean;
-  external 'FreeLibrary@kernel32.dll stdcall';
-function GetProcAddress(hModule: THandle; lpProcName: AnsiString): Longword;
-  external 'GetProcAddress@kernel32.dll stdcall';
-type
-  TDllRegisterServer = function: HRESULT;
-// Registrar filtro DirectShow
-function RegisterDirectShowFilter(FilterPath: String): Boolean;
-var
-  hModule: THandle;
-  DllRegisterServer: TDllRegisterServer;
-  RegisterFunc: Longword;
-  hr: HRESULT;
-begin
-  Result := False;
-  hModule := LoadLibrary(FilterPath);
-  if hModule = 0 then
-  begin
-    Log('Error al cargar filtro: ' + FilterPath);
-    Exit;
-  end;
-  try
-    RegisterFunc := GetProcAddress(hModule, 'DllRegisterServer');
-    if RegisterFunc = 0 then
-    begin
-      Log('DllRegisterServer no encontrado');
-      Exit;
-    end;
-    @DllRegisterServer := Pointer(RegisterFunc);
-    hr := DllRegisterServer();
-    Result := Succeeded(hr);
-    if Result then
-      Log('Filtro registrado exitosamente')
-    else
-      Log('Registro de filtro falló: ' + IntToHex(hr, 8));
-  finally
-    FreeLibrary(hModule);
-  end;
-end;
-// Llamado después de instalación
+// RegisterServer y UnregisterServer ejecutan el regsvr32 de la arquitectura que indica su primer parámetro,
+// así que el Setup de 32 bits registra el filtro x64 con el regsvr32 de 64 bits
 procedure CurStepChanged(CurStep: TSetupStep);
 var
   FilterPath: String;
@@ -867,24 +884,26 @@ begin
   if CurStep = ssPostInstall then
   begin
     FilterPath := ExpandConstant('{app}\Filters\VisioForge_FFMPEG_Source_x64.ax');
-    if not RegisterDirectShowFilter(FilterPath) then
-    begin
-      MsgBox('Advertencia: Registro de filtro DirectShow falló.' + #13#10 +
-             'Puede necesitar registrarlo manualmente.', mbError, MB_OK);
+    try
+      RegisterServer(True, FilterPath, False);
+      Log('Filter registered successfully');
+    except
+      Log('Filter registration failed: ' + GetExceptionMessage);
+      MsgBox('Warning: DirectShow filter registration failed.' + #13#10 +
+             'You may need to register it manually.', mbError, MB_OK);
     end;
   end;
 end;
 // Llamado antes de desinstalación
 procedure CurUninstallStepChanged(CurUninstallStep: TUninstallStep);
 var
-  ResultCode: Integer;
   FilterPath: String;
 begin
   if CurUninstallStep = usUninstall then
   begin
     FilterPath := ExpandConstant('{app}\Filters\VisioForge_FFMPEG_Source_x64.ax');
-    // Desregistrar usando regsvr32
-    Exec('regsvr32.exe', '/s /u "' + FilterPath + '"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+    if not UnregisterServer(True, FilterPath, False) then
+      Log('Filter unregistration failed: ' + FilterPath);
   end;
 end;
 ```
@@ -903,8 +922,11 @@ msiexec /i MyApp.msi /quiet /norestart
 # Instalar silenciosamente con log
 msiexec /i MyApp.msi /quiet /norestart /l*v install.log
 
+# Desinstalar silenciosamente
+msiexec /x MyApp.msi /quiet /norestart
+
 # Instalar silenciosamente con directorio de instalación personalizado
-msiexec /i MyApp.msi /quiet INSTALLFOLDER="C:\RutaPersonalizada\MyApp"
+msiexec /i MyApp.msi /quiet INSTALLFOLDER="C:\CustomPath\MyApp"
 ```
 
 #### NSIS
@@ -914,7 +936,7 @@ msiexec /i MyApp.msi /quiet INSTALLFOLDER="C:\RutaPersonalizada\MyApp"
 MyAppSetup.exe /S
 
 # Instalar silenciosamente con directorio personalizado
-MyAppSetup.exe /S /D=C:\RutaPersonalizada\MyApp
+MyAppSetup.exe /S /D=C:\CustomPath\MyApp
 
 # Desinstalar silenciosamente
 Uninstall.exe /S
@@ -930,7 +952,7 @@ MyAppSetup.exe /SILENT
 MyAppSetup.exe /VERYSILENT
 
 # Instalar silenciosamente con directorio personalizado
-MyAppSetup.exe /SILENT /DIR="C:\RutaPersonalizada\MyApp"
+MyAppSetup.exe /SILENT /DIR="C:\CustomPath\MyApp"
 
 # Desinstalar silenciosamente
 unins000.exe /SILENT
@@ -961,7 +983,7 @@ SectionEnd
 <DirectoryRef Id="TARGETDIR">
   <Merge Id="VCRedist" SourceFile="$(var.VCRedistMergeModule)" DiskId="1" Language="0"/>
 </DirectoryRef>
-<Feature Id="VCRedist" Title="Runtime Visual C++" AllowAdvertise="no" Display="hidden" Level="1">
+<Feature Id="VCRedist" Title="Visual C++ Runtime" AllowAdvertise="no" Display="hidden" Level="1">
   <MergeRef Id="VCRedist"/>
 </Feature>
 ```
@@ -1008,11 +1030,11 @@ HRESULT hr = RegisterFilter(filterPath);
 if (FAILED(hr))
 {
     if (hr == REGDB_E_CLASSNOTREG)
-        LogError("Clase no registrada - verificar dependencias");
+        LogError("Class not registered - check dependencies");
     else if (hr == E_ACCESSDENIED)
-        LogError("Acceso denegado - requiere privilegios admin");
+        LogError("Access denied - requires admin privileges");
     else
-        LogError("Registro falló con HRESULT: 0x%08X", hr);
+        LogError("Registration failed with HRESULT: 0x%08X", hr);
 }
 ```
 
@@ -1024,16 +1046,17 @@ Asegurar reversión apropiada si instalación falla:
 <!-- Ejemplo de reversión WiX -->
 <CustomAction Id="RegisterFiltersRollback"
               Directory="FilterFolder"
-              ExeCommand="regsvr32 /s /u VisioForge_FFMPEG_Source_x64.ax"
+              ExeCommand="cmd.exe /c regsvr32 /s /u VisioForge_FFMPEG_Source_x64.ax"
               Execute="rollback"
-              Impersonate="no" />
+              Impersonate="no"
+              Return="ignore" />
 
 <InstallExecuteSequence>
   <Custom Action="RegisterFiltersRollback" Before="RegisterFiltersCA">
     NOT Installed
   </Custom>
   <Custom Action="RegisterFiltersCA" After="InstallFiles">
-    NOT Installed
+    NOT Installed OR REINSTALL
   </Custom>
 </InstallExecuteSequence>
 ```
@@ -1101,22 +1124,22 @@ $logPath = ".\install_test.log"
 # Instalar silenciosamente
 Start-Process msiexec.exe -ArgumentList "/i `"$installerPath`" /quiet /l*v `"$logPath`"" -Wait
 # Verificar si filtro registrado
-$filterCLSID = "{1974D893-83E4-4F89-9908-795C524CC17E}"
+$filterCLSID = "{C5255DE3-50A7-4714-B763-D99E96E4CD52}"
 $regPath = "HKLM:\SOFTWARE\Classes\CLSID\$filterCLSID"
 if (Test-Path $regPath) {
-    Write-Host "Filtro registrado exitosamente" -ForegroundColor Green
+    Write-Host "Filter registered successfully" -ForegroundColor Green
 } else {
-    Write-Host "Registro de filtro falló" -ForegroundColor Red
+    Write-Host "Filter registration failed" -ForegroundColor Red
     Exit 1
 }
 # Desinstalar
 Start-Process msiexec.exe -ArgumentList "/x `"$installerPath`" /quiet" -Wait
 # Verificar limpieza
 if (Test-Path $regPath) {
-    Write-Host "Filtro no desregistrado" -ForegroundColor Red
+    Write-Host "Filter not unregistered" -ForegroundColor Red
     Exit 1
 } else {
-    Write-Host "Desinstalación exitosa" -ForegroundColor Green
+    Write-Host "Uninstall successful" -ForegroundColor Green
 }
 ```
 ---

@@ -1,5 +1,5 @@
 ---
-title: VisioForge MCP Server for AI-Assisted .NET Development
+title: "VisioForge MCP Server: AI-Assisted .NET Development"
 description: Connect your AI coding assistant to the VisioForge MCP Server for instant access to API documentation, deployment guides, code examples, and SDK knowledge.
 tags:
   - Video Capture SDK

@@ -1,5 +1,5 @@
 ---
-title: Install .NET SDKs with NuGet, Visual Studio and Rider
+title: "Install .NET SDKs: NuGet, Visual Studio, and Rider"
 description: Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
 sidebar_label: Installation
 order: 21
