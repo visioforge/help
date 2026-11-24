@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-23 19:43:24 UTC (6600cefb331)
+**Generated:** 2026-11-24 06:35:36 UTC (6b10ca3594b)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 467 help documentation pages + 74 website pages
+**Content Sources:** 468 help documentation pages + 74 website pages
 
 ---
 
@@ -61714,6 +61714,34 @@ public void ExtractFrameAsSkiaBitmap()
 }
 ```
 
+#### Saving One Frame a Minute as PNG
+
+A complete console app: it saves nine frames as PNG files, one a minute from 0:30 to 8:30. `GetFileSnapshotSKBitmap` returns `null` when there is no frame at a position, for example past the end of the file, so that position is skipped. `SKBitmap.Encode` writes the PNG. On a 10-minute, 1280x720 H.264 movie the nine frames took about three seconds.
+
+```
+using System;
+using System.IO;
+using SkiaSharp;
+using VisioForge.Core;
+using VisioForge.Core.MediaInfoReaderX;
+
+await VisioForgeX.InitSDKAsync();
+for (var sec = 30; sec < 540; sec += 60)
+{
+    using var frame = MediaInfoReaderX
+        .GetFileSnapshotSKBitmap("movie.mp4",
+            TimeSpan.FromSeconds(sec));
+    if (frame == null) continue;
+    using var png = frame.Encode(
+        SKEncodedImageFormat.Png, 100);
+    File.WriteAllBytes($"frame-{sec}.png",
+        png.ToArray());
+}
+VisioForgeX.DestroySDK();
+```
+
+The full project is [extract-frames-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/extract-frames-short-console), a Windows x64 console app that references the SDK's native packages for that platform, `VisioForge.CrossPlatform.Core.Windows.x64` and `VisioForge.CrossPlatform.Libav.Windows.x64`. File names are relative to the working directory, so put `movie.mp4` in the folder you start the app from.
+
 #### Working with Raw RGB Data
 
 For more advanced scenarios or when you need direct pixel manipulation, you can extract frames as RGB byte arrays:
@@ -67280,6 +67308,7 @@ For trimming, use `Input_AddVideoFile` with a `VideoFileSource(filename, startTi
 - **Specific tasks**
   - Merge / concatenate clips → [getting-started.md](../getting-started/)
   - Video from one file + audio from another, no re-encoding → [output-file-from-multiple-sources.md](../code-samples/output-file-from-multiple-sources/)
+  - Cut a part of a file, no re-encoding → [cut-video-without-reencoding.md](../code-samples/cut-video-without-reencoding/)
   - Trim / multi-segment from one file → [several-segments.md](../code-samples/several-segments/)
   - Transitions between clips → [transition-video.md](../code-samples/transition-video/), [transitions reference](../transitions/)
   - Text overlay → [add-text-overlay.md](../code-samples/add-text-overlay/)
@@ -67828,6 +67857,124 @@ For more code samples and advanced techniques, visit our [GitHub repository](htt
 ---END OF PAGE---
 
 
+## Cut a Video Without Re-encoding in a Few Lines of C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/cut-video-without-reencoding/
+**Description:** Copy a part of a video file into a new file without re-encoding, in a few lines of C# with Video Edit SDK .NET and VideoEditCore.FastEdit_CutFileAsync.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, MP4, C#, NuGet
+**API:** VideoEditCore, FastEditSeekMode
+
+# Cut a Video Without Re-encoding in C#
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+This page cuts a part of a video file into a new file with [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) and its `VideoEditCore` engine, in a C# console app. `FastEdit_CutFileAsync` copies the compressed streams as they are, so nothing is re-encoded: the codecs, resolution, frame rate and bit rate stay the same, there is no quality loss, and 30 seconds of a 720p movie are saved in about half a second.
+
+`VideoEditCore` is the SDK's Windows engine; its `FastEdit_` methods run the FFmpeg tool that comes in the FFmpeg redist package.
+
+AI coding agents: use the VisioForge MCP server
+
+Building this with **Claude Code**, **Cursor**, or another AI coding agent? Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage/) at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable code samples, and deployment guides — more accurate than grepping `llms.txt`. No authentication required.
+
+Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Required NuGet packages
+
+- [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit/) — the SDK with `VideoEditCore`
+- [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — the FFmpeg tool the `FastEdit_` methods run; for an x86 app, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
+
+```
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]" />
+```
+
+The redist is x64, so set `PlatformTarget` to `x64` in the project file:
+
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <TargetFramework>net10.0-windows</TargetFramework>
+  <PlatformTarget>x64</PlatformTarget>
+  <ImplicitUsings>enable</ImplicitUsings>
+</PropertyGroup>
+```
+
+## The code
+
+The whole console app: it copies 1:00 to 1:30 of `movie.mp4` into `cut.mp4`.
+
+```
+using System;
+using VisioForge.Core.VideoEdit;
+
+await using var core = new VideoEditCore();
+core.OnError += (s, e) =>
+    Console.WriteLine(e.Message);
+var ok = await core.FastEdit_CutFileAsync(
+    "movie.mp4",
+    TimeSpan.FromSeconds(60),
+    TimeSpan.FromSeconds(90),
+    "cut.mp4");
+Console.WriteLine(ok ? "Done" : "Failed");
+```
+
+The full project is [cut-video-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/_VideoTutorials/cut-video-short-console). File names are relative to the working directory, so put `movie.mp4` in the folder you start the app from.
+
+## How it works
+
+1. **The engine** — `VideoEditCore` needs no video view for a cut. `await using` disposes it when the app ends.
+2. **Errors** — `OnError` reports why a cut failed, for example a missing input file or a missing FFmpeg redist; the app prints it before `Failed`.
+3. **The cut** — `FastEdit_CutFileAsync(input, start, stop, output)` copies the part from `start` to `stop` into the output file without re-encoding, and returns `true` when the file is saved. A `stop` of `TimeSpan.Zero` cuts to the end of the file.
+4. **Keyframes** — the cut starts on the keyframe at or before `start`. The frames between that keyframe and `start` are copied too. In an MP4 or MOV output they are marked to be skipped, so a player starts at `start`; in other containers, and for an MPEG-TS input, the cut plays from that keyframe and is that much longer.
+
+The output on a 10-minute Big Buck Bunny (1280x720 H.264 at 24 fps, AAC), checked with ffprobe: 30.0 seconds, the source's H.264 High profile and AAC. The first video packet of the cut is the source's keyframe at 57.75 s, byte for byte the same size; the frames before 1:00 carry the discard flag. [Big Buck Bunny](https://peach.blender.org/) (c) Blender Foundation, under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+```
+ffprobe -v error -of compact cut.mp4 -show_entries format=duration:stream=codec_name,profile,width,height
+stream|codec_name=h264|profile=High|width=1280|height=720
+stream|codec_name=aac|profile=LC
+format|duration=30.000544
+```
+
+## Notes
+
+- **Seek mode** — the overload with `FastEditSeekMode` chooses where FFmpeg seeks. `FastEditSeekMode.Input` (the default) starts on the keyframe at or before the start position. `FastEditSeekMode.Output` drops the video up to the first keyframe after it, so a cut shorter than one keyframe interval can come out without video, and a `stop` of `TimeSpan.Zero` copies the whole file.
+- **Frame accuracy** — a cut without re-encoding cannot start between keyframes. For a cut on an exact frame, re-encode with the timeline of `VideoEditCore` or `VideoEditCoreX`.
+- **The container** — the output gets the source's codecs, so keep a container that holds them: an MP4 for H.264 or H.265 with AAC, an MKV for others.
+- **The FFmpeg redist** — without the FFmpeg redist package, the `FastEdit_` methods have no tool to run. Deploy it with your app; see the [deployment guide](../../deployment/).
+
+## Sample Applications
+
+- [Cut video short console (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/_VideoTutorials/cut-video-short-console) — the code of this page
+- [Cut Video File (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/WPF/CSharp/Cut%20Video%20File) — the same call behind a WPF window with a progress bar
+
+## Frequently Asked Questions
+
+### How do I cut a video without re-encoding in C#?
+
+Create `VideoEditCore` and call `FastEdit_CutFileAsync(inputFile, start, stop, outputFile)`. The streams are copied as they are, so the cut takes about as long as copying that part of the file.
+
+### Why does my cut start a little before the start time?
+
+A cut without re-encoding starts on a keyframe. With the default seek mode the frames from the keyframe before the start time are copied but marked to be skipped, so in an MP4 or MOV file players start at the start time; some editors show them anyway. Other containers, and an MPEG-TS input, play from the keyframe.
+
+### Can I cut to the end of the file?
+
+Yes: pass `TimeSpan.Zero` as the stop time.
+
+### Is the quality the same as the source?
+
+Yes. Nothing is decoded or encoded, so every copied frame is the source's frame.
+
+## See Also
+
+- [Merge video and audio without re-encoding](../output-file-from-multiple-sources/) — the video of one file and the audio of another, copied into one MP4
+- [Several segments](../several-segments/) — join parts of files into one video, re-encoded
+- [Deployment](../../deployment/) — the redists `VideoEditCore` needs on the user's PC
+- [Video Edit SDK .NET Product Page](https://www.visioforge.com/video-edit-sdk-net)
+
+---END OF PAGE---
+
+
 ## Video Editing Code Examples for C# and .NET Developers
 **URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/
 **Description:** Ready-to-use C# code examples for VisioForge Video Edit SDK .NET. Overlays, transitions, trimming, merging, and audio control with detailed tutorials.
@@ -67855,6 +68002,7 @@ This page collects ready-to-use C# recipes for the most common editing scenarios
 
 ### Video Composition
 
+- [**Cut a Video Without Re-encoding**](cut-video-without-reencoding/) — A part of a file copied into a new file, in a few lines of C#
 - [**Merge Video and Audio Without Re-encoding**](output-file-from-multiple-sources/) — The video of one file and the audio of another, copied into one MP4
 - [**Working with Video Segments**](several-segments/) — Extract and use multiple segments from the same source file
 - [**Transition Effects Between Video Fragments**](transition-video/) — Implementing smooth transitions between clips

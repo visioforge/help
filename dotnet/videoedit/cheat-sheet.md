@@ -158,6 +158,7 @@ For trimming, use `Input_AddVideoFile` with a `VideoFileSource(filename, startTi
 - **Specific tasks**
     - Merge / concatenate clips → [getting-started.md](./getting-started.md)
     - Video from one file + audio from another, no re-encoding → [output-file-from-multiple-sources.md](./code-samples/output-file-from-multiple-sources.md)
+    - Cut a part of a file, no re-encoding → [cut-video-without-reencoding.md](./code-samples/cut-video-without-reencoding.md)
     - Trim / multi-segment from one file → [several-segments.md](./code-samples/several-segments.md)
     - Transitions between clips → [transition-video.md](./code-samples/transition-video.md), [transitions reference](./transitions.md)
     - Text overlay → [add-text-overlay.md](./code-samples/add-text-overlay.md)

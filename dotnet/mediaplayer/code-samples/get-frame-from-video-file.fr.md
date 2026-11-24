@@ -146,6 +146,34 @@ public void ExtractFrameAsSkiaBitmap()
 }
 ```
 
+#### Enregistrer une image par minute en PNG
+
+Une application console complète : elle enregistre neuf images en fichiers PNG, une par minute de 0:30 à 8:30. `GetFileSnapshotSKBitmap` renvoie `null` quand il n'y a pas d'image à une position, par exemple après la fin du fichier, et cette position est ignorée. `SKBitmap.Encode` écrit le PNG. Sur un film H.264 de 10 minutes en 1280x720, les neuf images ont pris environ trois secondes.
+
+```csharp
+using System;
+using System.IO;
+using SkiaSharp;
+using VisioForge.Core;
+using VisioForge.Core.MediaInfoReaderX;
+
+await VisioForgeX.InitSDKAsync();
+for (var sec = 30; sec < 540; sec += 60)
+{
+    using var frame = MediaInfoReaderX
+        .GetFileSnapshotSKBitmap("movie.mp4",
+            TimeSpan.FromSeconds(sec));
+    if (frame == null) continue;
+    using var png = frame.Encode(
+        SKEncodedImageFormat.Png, 100);
+    File.WriteAllBytes($"frame-{sec}.png",
+        png.ToArray());
+}
+VisioForgeX.DestroySDK();
+```
+
+Le projet complet est [extract-frames-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/extract-frames-short-console), une application console Windows x64 qui référence les paquets natifs du SDK pour cette plateforme, `VisioForge.CrossPlatform.Core.Windows.x64` et `VisioForge.CrossPlatform.Libav.Windows.x64`. Les noms de fichier sont relatifs au répertoire de travail : placez donc `movie.mp4` dans le dossier depuis lequel vous lancez l'application.
+
 #### Travail avec des données RGB brutes
 
 Pour des scénarios plus avancés ou lorsque vous avez besoin d'une manipulation directe des pixels, vous pouvez extraire les images sous forme de tableaux d'octets RGB :

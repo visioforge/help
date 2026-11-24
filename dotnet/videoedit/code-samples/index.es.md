@@ -30,6 +30,7 @@ Esta página recopila recetas en C# listas para usar para los escenarios de edic
 
 ### Composición de video
 
+- [**Cortar un video sin recodificar**](cut-video-without-reencoding.md) — Una parte de un archivo copiada en un archivo nuevo, con unas líneas de C#
 - [**Unir video y audio sin recodificar**](output-file-from-multiple-sources.md) — El video de un archivo y el audio de otro, copiados en un MP4
 - [**Trabajar con segmentos de video**](several-segments.md) — Extraiga y use varios segmentos del mismo archivo fuente
 - [**Efectos de transición entre fragmentos de video**](transition-video.md) — Implementación de transiciones suaves entre clips

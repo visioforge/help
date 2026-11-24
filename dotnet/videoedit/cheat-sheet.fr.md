@@ -158,6 +158,7 @@ Pour le rognage, utilisez plutôt `Input_AddVideoFile` avec un `VideoFileSource(
 - **Tâches spécifiques**
     - Fusionner / concaténer des clips → [getting-started.md](./getting-started.md)
     - Vidéo d'un fichier + audio d'un autre, sans réencodage → [output-file-from-multiple-sources.md](./code-samples/output-file-from-multiple-sources.md)
+    - Couper une partie d'un fichier, sans réencodage → [cut-video-without-reencoding.md](./code-samples/cut-video-without-reencoding.md)
     - Rogner / multi-segments depuis un seul fichier → [several-segments.md](./code-samples/several-segments.md)
     - Transitions entre clips → [transition-video.md](./code-samples/transition-video.md), [référence des transitions](./transitions.md)
     - Superposition de texte → [add-text-overlay.md](./code-samples/add-text-overlay.md)

@@ -30,6 +30,7 @@ This page collects ready-to-use C# recipes for the most common editing scenarios
 
 ### Video Composition
 
+- [**Cut a Video Without Re-encoding**](cut-video-without-reencoding.md) — A part of a file copied into a new file, in a few lines of C#
 - [**Merge Video and Audio Without Re-encoding**](output-file-from-multiple-sources.md) — The video of one file and the audio of another, copied into one MP4
 - [**Working with Video Segments**](several-segments.md) — Extract and use multiple segments from the same source file
 - [**Transition Effects Between Video Fragments**](transition-video.md) — Implementing smooth transitions between clips

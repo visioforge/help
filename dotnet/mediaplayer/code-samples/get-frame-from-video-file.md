@@ -146,6 +146,35 @@ public void ExtractFrameAsSkiaBitmap()
 }
 ```
 
+#### Saving One Frame a Minute as PNG
+
+A complete console app: it saves nine frames as PNG files, one a minute from 0:30 to 8:30. `GetFileSnapshotSKBitmap` returns `null` when there is no frame at a position, for example past the end of the file, so that position is skipped. `SKBitmap.Encode` writes the PNG. On a 10-minute, 1280x720 H.264 movie the nine frames took about three seconds.
+
+<!-- vf-compile -->
+```csharp
+using System;
+using System.IO;
+using SkiaSharp;
+using VisioForge.Core;
+using VisioForge.Core.MediaInfoReaderX;
+
+await VisioForgeX.InitSDKAsync();
+for (var sec = 30; sec < 540; sec += 60)
+{
+    using var frame = MediaInfoReaderX
+        .GetFileSnapshotSKBitmap("movie.mp4",
+            TimeSpan.FromSeconds(sec));
+    if (frame == null) continue;
+    using var png = frame.Encode(
+        SKEncodedImageFormat.Png, 100);
+    File.WriteAllBytes($"frame-{sec}.png",
+        png.ToArray());
+}
+VisioForgeX.DestroySDK();
+```
+
+The full project is [extract-frames-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/extract-frames-short-console), a Windows x64 console app that references the SDK's native packages for that platform, `VisioForge.CrossPlatform.Core.Windows.x64` and `VisioForge.CrossPlatform.Libav.Windows.x64`. File names are relative to the working directory, so put `movie.mp4` in the folder you start the app from.
+
 #### Working with Raw RGB Data
 
 For more advanced scenarios or when you need direct pixel manipulation, you can extract frames as RGB byte arrays:
