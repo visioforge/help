@@ -20,6 +20,10 @@ primary_api_classes:
   - SystemAudioSourceBlock
   - MediaBlocksPipeline
 
+video:
+  id: dXehQhz7xa0
+  upload_date: 2026-11-24T15:25:52Z
+  duration: PT59S
 ---
 
 # Captura de Audio y Grabación de Sonido del Sistema en C# .NET
@@ -149,6 +153,45 @@ class Program
     }
 }
 ```
+
+### La versión corta
+
+El vídeo de un minuto ejecuta esta aplicación de consola y reproduce el archivo MP3 que ha grabado.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/dXehQhz7xa0?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Una aplicación de consola completa: graba el micrófono predeterminado en `mic.mp3` hasta que se pulsa Intro. `DeviceEnumerator.Shared.AudioSourcesAsync()` lista las entradas de audio de todas las API de audio del equipo; en Windows, `IsDefault` marca la entrada WASAPI2 `Default Audio Capture Device`, que sigue al micrófono seleccionado en la configuración de sonido de Windows. Para grabar otra entrada, pase como primer argumento una parte de su nombre que no tenga ningún otro dispositivo, exactamente como la muestra la configuración de sonido de Windows (cuentan las mayúsculas y los acentos). Cada dispositivo de salida aparece también como entrada loopback con su propio nombre, de modo que pasar el nombre de una salida, como `Altavoces`, graba lo que reproduce esa salida. Un dispositivo puede aparecer en más de una API de audio, y se usa la primera entrada cuyo nombre contiene el texto, sea cual sea su API. Si no hay entrada predeterminada, o ningún nombre coincide, `First` lanza una excepción. `CreateSourceSettingsVC()` abre el dispositivo en su formato predeterminado. `Audio_Play = false` evita que el sonido salga por los altavoces, `Audio_Record = true` lo envía a la salida y `MP3Output` lo codifica en MP3, a 192 kbps CBR de forma predeterminada. `StopAsync` termina el archivo: cerrar la ventana o pulsar Ctrl+C termina la aplicación sin llamarlo, y el archivo queda sin terminar.
+
+```csharp
+using System;
+using System.Linq;
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var rec = new VideoCaptureCoreX();
+rec.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var mics = await DeviceEnumerator.Shared
+    .AudioSourcesAsync();
+var mic = args.Length > 0
+    ? mics.First(d => d.Name.Contains(args[0]))
+    : mics.First(d => d.IsDefault);
+rec.Audio_Source =
+    mic.CreateSourceSettingsVC();
+rec.Audio_Play = false;
+rec.Audio_Record = true;
+rec.Outputs_Add(new MP3Output("mic.mp3"));
+if (!await rec.StartAsync()) return;
+Console.ReadLine();
+await rec.StopAsync();
+```
+
+En el vídeo, la aplicación se ejecuta como `dotnet run -- Speakers`: la entrada es el loopback de los altavoces de la máquina virtual, que graba un clip de voz sintética reproducido en esa máquina; no se usó ningún micrófono en directo. `ffprobe` muestra MP3 a 192 kb/s, codificado a partir de la entrada del dispositivo a 48000 Hz en estéreo. El proyecto completo es [audio-capture-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/audio-capture-short-console), una aplicación de consola para Windows x64 que referencia `VisioForge.DotNet.VideoCapture` y el paquete nativo del SDK para esa plataforma, `VisioForge.CrossPlatform.Core.Windows.x64`.
 
 ## Capturar Audio del Sistema (Altavoz / Loopback)
 
@@ -374,3 +417,7 @@ Ejemplos de trabajo completos están disponibles en GitHub:
 - [Renderizado de Audio — Reproducción](../audio-rendering/index.md)
 - [Grabación y Edición WMA](../../general/guides/wma-recording-editing.md)
 - [Captura de Pantalla con Audio](../video-tutorials/screen-capture-mp4.md)
+
+## Transcripción del vídeo
+
+Grabe un micrófono en un archivo MP3, en unas pocas líneas de C#. Cargue el SDK y cree el motor de captura. Liste las entradas de audio y tome la que se nombra en la línea de comandos, o el micrófono predeterminado. Solo audio, sin reproducirlo, grabado en un archivo MP3. Inicie, espere a Intro y detenga: `StopAsync` termina el archivo. Aquí graba los altavoces de la máquina virtual, que reproducen un clip de voz sintética, no un micrófono en directo. `ffprobe` lee MP3 a 48 kHz, estéreo, 192 kb/s. La guía añade el sonido del sistema, otros formatos y dispositivos.

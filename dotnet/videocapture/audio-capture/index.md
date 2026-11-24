@@ -20,6 +20,10 @@ primary_api_classes:
   - SystemAudioSourceBlock
   - MediaBlocksPipeline
 
+video:
+  id: dXehQhz7xa0
+  upload_date: 2026-11-24T15:25:52Z
+  duration: PT59S
 ---
 
 # Audio Capture and System Sound Recording in C# .NET
@@ -149,6 +153,46 @@ class Program
     }
 }
 ```
+
+### The Short Version
+
+The one-minute video runs this console app and plays back the MP3 file it recorded.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/dXehQhz7xa0?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+A complete console app: it records the default microphone to `mic.mp3` until Enter is pressed. `DeviceEnumerator.Shared.AudioSourcesAsync()` lists the audio inputs of every audio API on the machine; on Windows, `IsDefault` marks the WASAPI2 entry `Default Audio Capture Device`, which follows the microphone selected in the Windows sound settings. To record another input, pass a part of its name that no other device has, exactly as the Windows sound settings show it (case and accents count), as the first argument. Each output device is listed as a loopback input under its own name, so passing an output's name, such as `Speakers`, records what that output plays. A device can be listed under more than one audio API, and the first entry whose name contains the text is used, whatever its API. With no default input, or no name that matches, `First` throws. `CreateSourceSettingsVC()` opens the device in its default format. `Audio_Play = false` keeps the sound off the speakers, `Audio_Record = true` sends it to the output, and `MP3Output` encodes it as MP3, 192 kbps CBR by default. `StopAsync` finishes the file: closing the window or pressing Ctrl+C ends the app without it, and the file is left unfinished.
+
+<!-- vf-compile -->
+```csharp
+using System;
+using System.Linq;
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var rec = new VideoCaptureCoreX();
+rec.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var mics = await DeviceEnumerator.Shared
+    .AudioSourcesAsync();
+var mic = args.Length > 0
+    ? mics.First(d => d.Name.Contains(args[0]))
+    : mics.First(d => d.IsDefault);
+rec.Audio_Source =
+    mic.CreateSourceSettingsVC();
+rec.Audio_Play = false;
+rec.Audio_Record = true;
+rec.Outputs_Add(new MP3Output("mic.mp3"));
+if (!await rec.StartAsync()) return;
+Console.ReadLine();
+await rec.StopAsync();
+```
+
+In the video the app runs as `dotnet run -- Speakers`: the input is the virtual machine's speakers loopback, recording a synthetic voice clip played on that machine; no live microphone was used. `ffprobe` shows MP3 at 192 kb/s, encoded from the device's 48000 Hz stereo input. The full project is [audio-capture-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/audio-capture-short-console), a Windows x64 console app that references `VisioForge.DotNet.VideoCapture` and the SDK's native package for that platform, `VisioForge.CrossPlatform.Core.Windows.x64`.
 
 ## Capture System Audio (Speaker / Loopback)
 
@@ -374,3 +418,7 @@ Complete working examples are available on GitHub:
 - [Audio Rendering — Playback](../audio-rendering/index.md)
 - [WMA Recording and Editing](../../general/guides/wma-recording-editing.md)
 - [Screen Capture with Audio](../video-tutorials/screen-capture-mp4.md)
+
+## Video Transcript
+
+Record a microphone to an MP3 file, in a few lines of C#. Load the SDK and create the capture engine. List the audio inputs, and take the one named on the command line, or the default microphone. Audio only, not played back, recorded to an MP3 file. Start, wait for Enter, and stop: `StopAsync` finishes the file. Here it records the virtual machine's speakers, which play a synthetic voice clip, not a live microphone. `ffprobe` reads MP3 at 48 kHz, stereo, 192 kb/s. The guide adds system sound, other formats and devices.
