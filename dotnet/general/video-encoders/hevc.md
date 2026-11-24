@@ -105,7 +105,7 @@ NVIDIA's NVENC technology provides dedicated encoding hardware on GeForce and pr
   - Main (8-bit)
   - Main10 (10-bit HDR)
   - Main444 (high color precision)
-  - Extended bit depth options (12-bit)
+  - Main444x10 (4:4:4, 10-bit)
 
 - **Advanced Encoding Features**:
   - B-frame support with adaptive placement

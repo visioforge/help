@@ -65,6 +65,7 @@ En alternative ou en complément de FFMPEG, vous pouvez utiliser le moteur VLC p
 * **VLC :**
   * [Programme d'installation x86](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe)
   * [Programme d'installation x64](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+  * Les programmes d'installation x86 et x64 s'installent côte à côte. Sur un ordinateur où un ancien programme d'installation x64 a été exécuté après le x86, les fichiers x64 ont été placés dans le dossier x86 : installez le nouveau programme d'installation x64, puis exécutez le programme d'installation x86, même s'il est déjà installé (il restaure les fichiers x86 sans afficher de fenêtre).
 
 ### Utilisation du programme d'installation
 

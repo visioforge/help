@@ -83,6 +83,7 @@ Para escenarios donde el acceso de administrador está disponible, los instalado
 - Integración FFMPEG: [x86](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
 - Soporte de Salida MP4: [x86](https://files.visioforge.com/redists_net/redist_dotnet_mp4_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_mp4_x64.exe)
 - Integración de Fuente VLC: [x86](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+    - Los instaladores x86 y x64 se instalan uno junto al otro. En un equipo donde un instalador x64 anterior se ejecutó después del x86, los archivos x64 quedaron en la carpeta x86: instale el nuevo instalador x64 y después ejecute el instalador x86, aunque ya esté instalado (restaura los archivos x86 sin mostrar ventanas).
 - Soporte de Formatos Adicionales: WebM ([x86](https://files.visioforge.com/redists_net/redist_dotnet_webm_x86.exe)) y formatos XIPH ([x86](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe))
 - Filtros LAV: [x86](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
 

@@ -65,6 +65,7 @@ Como alternativa o adición a FFMPEG, puede usar el motor VLC para fuentes de ar
 * **VLC:**
   * [Instalador x86](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe)
   * [Instalador x64](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+  * Los instaladores x86 y x64 se instalan uno junto al otro. En un equipo donde un instalador x64 anterior se ejecutó después del x86, los archivos x64 quedaron en la carpeta x86: instale el nuevo instalador x64 y después ejecute el instalador x86, aunque ya esté instalado (restaura los archivos x86 sin mostrar ventanas).
 
 ### Uso del instalador
 

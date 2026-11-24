@@ -105,7 +105,7 @@ La tecnología NVENC de NVIDIA proporciona hardware de codificación dedicado en
   - Main (8-bit)
   - Main10 (HDR de 10 bits)
   - Main444 (alta precisión de color)
-  - Opciones de profundidad de bits extendida (12 bits)
+  - Main444x10 (4:4:4, 10 bits)
 
 - **Características avanzadas de codificación**:
   - Soporte de cuadros B con colocación adaptativa

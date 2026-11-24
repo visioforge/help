@@ -105,7 +105,7 @@ La technologie NVENC de NVIDIA fournit du matériel d'encodage dédié sur les G
   - Main (8 bits)
   - Main10 (10 bits HDR)
   - Main444 (haute précision de couleur)
-  - Options de profondeur de bit étendue (12 bits)
+  - Main444x10 (4:4:4, 10 bits)
 
 - **Fonctionnalités d'encodage avancées** :
   - Prise en charge des B-frames avec placement adaptatif

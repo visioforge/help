@@ -31,6 +31,11 @@ primary_api_classes:
   - HLSPlaylistType
   - H264EncoderBlock
 
+video:
+  id: Cw3UCgzu2wI
+  upload_date: 2026-11-24T20:18:00Z
+  duration: PT1M
+
 ---
 
 # Complete Guide to HLS Network Streaming Implementation in .NET
@@ -72,6 +77,94 @@ Since HLS is entirely HTTP-based, you'll need either a dedicated HTTP server or 
 ## Implementing HLS Streaming with Media Blocks SDK
 
 The Media Blocks SDK offers a comprehensive approach to HLS streaming through its pipeline architecture, giving developers granular control over each aspect of the streaming process.
+
+### The Short Version
+
+The one-minute video runs this console app and plays the stream in a browser.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/Cw3UCgzu2wI?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+A complete console app: it streams the first webcam live over HLS until Enter is pressed. `SystemVideoSourceBlock` captures the camera and `H264EncoderBlock` encodes the video to H.264. `HLSSinkBlock` cuts the stream into MPEG-TS segments of about five seconds (`TargetDuration`, cut at keyframes) and writes them, with the `playlist.m3u8` playlist, into the `hls` subfolder of the app folder; it keeps the last ten segments on disk and the last five in the playlist. The app first deletes the segments and the playlist a previous run left there, so a player never picks up the old stream. With `Custom_HTTP_Server_Enabled`, the sink's built-in HTTP server serves that subfolder, and only it, on port 8088: open `http://localhost:8088/` in a browser. The stream has video only; the example below adds a microphone with `AACEncoderBlock`.
+
+<!-- vf-compile -->
+```csharp
+using System;
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+var cam = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(
+        cams[0]));
+var h264 = new H264EncoderBlock();
+var dir = Path.Combine(
+    AppContext.BaseDirectory, "hls");
+Directory.CreateDirectory(dir);
+var old = Directory.GetFiles(dir, "*.ts");
+foreach (var f in old) File.Delete(f);
+var m3u8 = Path.Combine(dir, "playlist.m3u8");
+File.Delete(m3u8);
+var hls = new HLSSinkBlock(new HLSSinkSettings
+{
+    Location = Path.Combine(
+        dir, "segment_%05d.ts"),
+    PlaylistLocation = m3u8,
+    Custom_HTTP_Server_Enabled = true,
+    Custom_HTTP_Server_Port = 8088
+});
+p.Connect(cam.Output, h264.Input);
+p.Connect(h264.Output, hls.CreateNewInput(
+    MediaBlockPadMediaType.Video));
+if (!await p.StartAsync()) return;
+Console.WriteLine("http://localhost:8088/");
+Console.ReadLine();
+await p.StopAsync();
+```
+
+The `hls` subfolder also holds `index.htm`, copied there at build time. The server sends it as the folder's default page, and it plays the playlist with [hls.js](https://github.com/video-dev/hls.js), or with the browser's own HLS playback where hls.js cannot run (older iPhones, or when the CDN script does not load):
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Live HLS from a webcam</title>
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@1.7.4/dist/hls.min.js"></script>
+</head>
+<body style="margin:0;background:#000">
+  <video id="video" controls autoplay muted playsinline style="display:block;width:100%;height:100vh"></video>
+  <script>
+    // The app's built-in HTTP server serves this page, the playlist and the segments from the hls folder.
+    const video = document.getElementById("video");
+    if (window.Hls && Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource("playlist.m3u8");
+      hls.attachMedia(video);
+    } else {
+      // No hls.js (no MSE, or the CDN did not load): the browser's own HLS playback, where it has one.
+      video.src = "playlist.m3u8";
+    }
+  </script>
+</body>
+</html>
+```
+
+The first segment is written about five seconds after the start, so a page opened earlier finds no playlist yet: reload it. `ffprobe` on a segment reports `mpegts` with H.264 video at the resolution and frame rate the camera negotiated. Without administrator rights the server answers on this machine only (`localhost`). To reach it from other devices, run two commands once as administrator: reserve the port with `netsh http add urlacl url=http://*:8088/ user=<DOMAIN>\<user> listen=yes`, and open it in Windows Firewall with `netsh advfirewall firewall add rule name="HLS 8088" dir=in action=allow protocol=TCP localport=8088`.
+
+The full project is [hls-webcam-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/hls-webcam-short-console), a Windows x64 console app that references `VisioForge.DotNet.MediaBlocks` and the SDK's native package for that platform, `VisioForge.CrossPlatform.Core.Windows.x64`.
 
 ### Creating a Basic HLS Stream
 

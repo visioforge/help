@@ -127,6 +127,7 @@ For scenarios where you prefer installer-based deployment, the SDK offers automa
 * **VLC Source Package** (for file/IP camera sources):
   * [x86 Installer](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x86.exe)
   * [x64 Installer](https://files.visioforge.com/redists_net/redist_dotnet_vlc_x64.exe)
+  * The x86 and x64 installers install side by side. On a computer where an earlier x64 installer was run after the x86 one, the x64 files went into the x86 folder: install the new x64 installer, then run the x86 installer, even if it is already installed (it restores the x86 files silently).
 
 #### Audio Format Support
 
