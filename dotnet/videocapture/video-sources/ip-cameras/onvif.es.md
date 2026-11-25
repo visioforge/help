@@ -301,7 +301,11 @@ Para `VideoCaptureCore`, asigne a `IPCameraSourceSettings.ONVIF_SourceProfile` e
     
     // Opcional: Agregar renderizado de audio
     var audioRenderer = new AudioRendererBlock();
-    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    // AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+    if (rtspSource.AudioOutput != null)
+    {
+        pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    }
     
     // Iniciar vista previa
     await pipeline.StartAsync();

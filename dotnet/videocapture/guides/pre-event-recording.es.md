@@ -362,13 +362,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Paquete principal del SDK (administrado):
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
 ```
 
 Dependencias nativas para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 Para plataformas alternativas (macOS, Linux, Android, iOS), use los paquetes de dependencias nativas correspondientes. Vea la [Guía de Despliegue](../../deployment-x/index.md) para más detalles.

@@ -104,14 +104,14 @@ graph TD;
 Vous aurez besoin du VisioForge Media Blocks SDK. Ajoutez-le à votre projet .NET via NuGet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Selon votre plateforme cible, ajoutez le paquet de runtime natif correspondant. Pour Windows x64 :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 Pour les dépendances détaillées par plateforme, consultez le [guide de déploiement](../../deployment-x/index.md).
@@ -385,10 +385,24 @@ var rtspSettings = await RTSPSourceSettings.CreateAsync(
 var rtspSource = new RTSPSourceBlock(rtspSettings);
 _videoSource = rtspSource;
 
+// AudioOutput vaut null si la source a été créée avec audioEnabled: false ou si les informations de la caméra n'indiquent pas d'audio ; en mode de compatibilité avec l'audio activé, il existe même si la caméra n'envoie pas d'audio.
+// Affectez audioEnabled avant _preEventBlock.AudioEnabled, pour qu'aucune branche audio n'attende un flux qui n'arrive jamais.
+audioEnabled = rtspSource.AudioOutput != null;
+
 // Le chemin vidéo est identique : rtspSource -> motionDetector -> tee -> ...
 
-// L'audio provient de la source RTSP au lieu d'un périphérique audio système :
-_pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+// La branche audio prend l'audio RTSP à la place du périphérique audio système :
+if (audioEnabled)
+{
+    _audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio);
+    _audioRenderer = new AudioRendererBlock();
+    _aacEncoder = new AACEncoderBlock();
+
+    _pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+    _pipeline.Connect(_audioTee, _audioRenderer);
+    _pipeline.Connect(_audioTee, _aacEncoder);
+    _pipeline.Connect(_aacEncoder.Output, _preEventBlock.AudioInput);
+}
 ```
 
 ## Options de configuration

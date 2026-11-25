@@ -138,6 +138,37 @@ if (fileSource.SubtitleOutput != null)
 }
 ```
 
+### Conserver la dernière image après l'arrêt
+
+Par défaut, la vue revient à son arrière-plan lorsque le média se termine ou que le pipeline s'arrête. Définissez `KeepLastFrame` pour que la vue conserve la dernière image, par exemple pour montrer où un film s'est terminé :
+
+```csharp
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1)
+{
+    KeepLastFrame = true,
+};
+```
+
+Les moteurs X lisent le même réglage sur la vue : `VideoView1.RendererSettings.KeepLastFrame = true` avant le démarrage.
+
+- La valeur par défaut est `false`, ce qui conserve le comportement des versions précédentes.
+- L'image reste affichée jusqu'au démarrage suivant. Le letterbox s'y applique comme à la vidéo. Une exception : sur Android, `VideoViewTX` (qu'utilisent les vues MAUI et Uno sur cette plateforme) l'efface si la vue est redimensionnée ou si sa surface est recréée pendant l'arrêt, par exemple lors d'une rotation.
+- Tant que le pipeline est arrêté, `Snapshot_Get` et `Snapshot_GetAsync` renvoient cette image, afin que l'application puisse l'enregistrer ou l'utiliser comme couverture.
+- `LiveVideoCompositor` avec `KeepLastFrame` sur sa vue principale arrête son pipeline principal avant ses entrées : la vue conserve ainsi la dernière image composée plutôt que l'arrière-plan du compositeur.
+- Les moteurs DirectShow classiques (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) ont leurs propres réglages de rendu et continuent d'effacer la vue à l'arrêt.
+
+| Plateforme | Vues | Vérifié sur (désactivé et activé) |
+|------------|------|-----------------------------------|
+| Windows | WinForms, WPF, Avalonia | Bureau Windows 11 |
+| Windows | WinUI, MAUI (`VideoViewX`, `SkiaVideoView`) | Bureau Windows 11 |
+| Windows | Uno | Pas encore vérifié |
+| Linux | Avalonia | Ubuntu 24.04, X11 |
+| Android | `VideoView`, `VideoViewGL`, `VideoViewTX` | Téléphone Android 16, émulateur Android |
+| Android | MAUI, Uno, Avalonia | Pas encore vérifié |
+| iOS | Vues Apple, MAUI | Pas encore vérifié sur un appareil |
+| Mac Catalyst | Vues Apple, MAUI | Bureau macOS 27 |
+| macOS | Vues Apple, Avalonia | Bureau macOS 27 |
+
 ## Compatibilité avec les plateformes
 
 Le bloc moteur de rendu vidéo offre une large compatibilité avec de multiples systèmes d'exploitation et appareils :

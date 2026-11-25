@@ -1,6 +1,6 @@
 ---
-title: TVFVideoCapture Installation Guide for Delphi 6 to 11
-description: Install TVFVideoCapture packages in Delphi 6/7 through Delphi 11+ with complete setup instructions, library paths, and configuration.
+title: TVFVideoCapture Installation Guide for Delphi 6 to 13
+description: Install TVFVideoCapture packages in Delphi 6/7 through Delphi 13 with complete setup instructions, library paths, and configuration.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -16,6 +16,17 @@ primary_api_classes:
 # Comprehensive TVFVideoCapture Installation Guide for Delphi Developers
 
 > Related products: [All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+## Automatic Installation (Delphi 6 to Delphi 13)
+
+The SDK installer registers the package with every Delphi it finds on the computer, Delphi 6 through Delphi 13, for the Windows user who runs it:
+
+- it adds the `Video Capture\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+- it registers the precompiled package `VisioForge_VideoCapture_Package.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFVideoCapture` is on the **VisioForge** page of the component palette, ready to drop on a form, and the demo projects under `Demos\Source code` compile without further setup.
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup.
 
 ## Installation in Borland Delphi 6/7
 
@@ -97,7 +108,7 @@ After installing the framework, navigate to the `Video Capture\Packages\Delphi <
 
 ### Step 2: Select the Appropriate Build Configuration
 
-Choose the Release build configuration to ensure optimal component performance.
+Choose the Release build configuration to ensure optimal component performance, and the **Windows 32-bit** target platform: the IDE installs the package from its 32-bit build. Both are the project's defaults. Open the project from the `Delphi <version>` folder, not from `Delphi <version> x64`.
 
 ![Selecting Release build configuration](delphi11-1.webp)
 
@@ -117,7 +128,7 @@ Confirm that the installation completed successfully before proceeding with deve
 
 ### Multi-Architecture Support
 
-TVFVideoCapture supports both x86 and x64 architectures, allowing you to develop applications for different platform targets. You can install both package versions simultaneously to support flexible deployment scenarios.
+TVFVideoCapture supports both x86 and x64 architectures, allowing you to develop applications for different platform targets. The IDE uses the 32-bit package at design time; your applications can still target Windows 64-bit (Delphi XE2 and later) through the `Delphi <version> x64` folder on the Windows 64-bit library path.
 
 ### Library Path Configuration
 

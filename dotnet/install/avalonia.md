@@ -81,12 +81,12 @@ The Avalonia template uses central package management, so NuGet writes the versi
 
 ```xml
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.23" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.23" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.16" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.25" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.22" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.25" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.23" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.10.26" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="2026.10.26" />

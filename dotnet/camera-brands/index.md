@@ -98,7 +98,11 @@ Connect to any RTSP camera using one of three VisioForge SDK approaches:
     var audioRenderer = new AudioRendererBlock();
 
     pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
-    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    // AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+    if (rtspSource.AudioOutput != null)
+    {
+        pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    }
 
     await pipeline.StartAsync();
     ```

@@ -1,6 +1,6 @@
 ---
-title: Guía de Instalación de TVFVideoCapture para Delphi 6 a 11
-description: Instale paquetes TVFVideoCapture en Delphi 6/7 hasta Delphi 11+ con instrucciones completas de configuración, rutas de biblioteca y configuración.
+title: Guía de Instalación de TVFVideoCapture para Delphi 6 a 13
+description: Instale paquetes TVFVideoCapture en Delphi 6/7 hasta Delphi 13 con instrucciones completas de configuración, rutas de biblioteca y configuración.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -16,6 +16,17 @@ primary_api_classes:
 # Guía de Instalación Completa de TVFVideoCapture para Desarrolladores Delphi
 
 > Productos relacionados: [All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+## Instalación automática (Delphi 6 a Delphi 13)
+
+El instalador del SDK registra el paquete en cada Delphi que encuentra en el equipo, de Delphi 6 a Delphi 13, para el usuario de Windows que lo ejecuta:
+
+- agrega la carpeta `Video Capture\Packages\Delphi <versión>` a la ruta de biblioteca de Windows 32 bits, y, desde Delphi XE2, la carpeta `Delphi <versión> x64` a la de Windows 64 bits;
+- registra el paquete precompilado `VisioForge_VideoCapture_Package.bpl` de esa carpeta, de modo que el IDE lo carga al iniciarse. El registro es para el IDE de 32 bits, el que Delphi inicia de forma predeterminada; si usa el IDE de 64 bits de Delphi 12 o 13, inicie el de 32 bits para diseñar con el componente.
+
+Cierre Delphi antes de ejecutar el instalador. Después inicie Delphi: `TVFVideoCapture` está en la página **VisioForge** de la paleta de componentes, listo para colocarlo en un formulario, y los proyectos de demostración de `Demos\Source code` se compilan sin más configuración.
+
+Si Delphi estaba abierto durante la instalación, el instalador se ejecutó con otra cuenta de Windows (por ejemplo, la cuenta de un administrador indicada en la solicitud de elevación), o instaló Delphi después del SDK, cierre Delphi y ejecute **Install Delphi packages** desde la carpeta **VisioForge Video Capture SDK** del menú Inicio (la única carpeta del instalador, para los tres productos). Hace el mismo registro para el usuario actual y muestra en su ventana cada Delphi para el que no se incluye un paquete precompilado; instale allí el paquete a mano, como se describe a continuación. La ejecución del propio instalador escribe esa lista en `VFPackageInstaller.log`, en la carpeta `%TEMP%` de la cuenta que ejecutó el instalador.
 
 ## Instalación en Borland Delphi 6/7
 
@@ -97,7 +108,7 @@ Después de instalar el framework, navegue a la carpeta `Video Capture\Packages\
 
 ### Paso 2: Seleccionar la Configuración de Compilación Apropiada
 
-Elija la configuración de compilación Release para asegurar el rendimiento óptimo del componente.
+Elija la configuración de compilación Release para asegurar el rendimiento óptimo del componente, y la plataforma de destino **Windows 32-bit**: el IDE instala el paquete a partir de su compilación de 32 bits. Ambas son los valores predeterminados del proyecto. Abra el proyecto desde la carpeta `Delphi <versión>`, no desde `Delphi <versión> x64`.
 
 ![Seleccionando configuración de compilación Release](delphi11-1.webp)
 
@@ -117,7 +128,7 @@ Confirme que la instalación se completó exitosamente antes de proceder con el 
 
 ### Soporte Multi-Arquitectura
 
-TVFVideoCapture soporta arquitecturas x86 y x64, permitiéndole desarrollar aplicaciones para diferentes objetivos de plataforma. Puede instalar ambas versiones de paquete simultáneamente para soportar escenarios de despliegue flexibles.
+TVFVideoCapture soporta arquitecturas x86 y x64, permitiéndole desarrollar aplicaciones para diferentes objetivos de plataforma. El IDE usa el paquete de 32 bits en tiempo de diseño; sus aplicaciones pueden apuntar igualmente a Windows 64 bits (Delphi XE2 y posteriores) mediante la carpeta `Delphi <versión> x64` en la ruta de biblioteca de Windows 64 bits.
 
 ### Configuración de Ruta de Biblioteca
 

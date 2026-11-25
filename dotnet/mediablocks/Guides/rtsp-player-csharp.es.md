@@ -61,14 +61,14 @@ Los casos de uso comunes incluyen paneles de vigilancia, aplicaciones NVR (graba
 Agregue el paquete NuGet del Media Blocks SDK a su proyecto:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 También necesita los paquetes de runtime específicos de la plataforma. Para Windows:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 Para otras plataformas (macOS, Linux, Android, iOS), consulte la [Guía de Despliegue](../../deployment-x/index.md).
@@ -106,7 +106,11 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 // Crear renderizador de audio (opcional)
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 // Iniciar reproducción
 await pipeline.StartAsync();

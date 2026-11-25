@@ -110,8 +110,8 @@ Ajoutez les paquets suivants à votre projet :
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -123,8 +123,8 @@ Ajoutez les paquets redistribuables spécifiques à chaque plateforme à votre p
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -132,7 +132,7 @@ Ajoutez les paquets redistribuables spécifiques à chaque plateforme à votre p
 
 ```xml
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -217,19 +217,19 @@ Voici un exemple complet de fichier `.csproj` pour une application Uno Platform 
   
   <!-- Références principales VisioForge -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.25]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]"/>
   </ItemGroup>
   
   <!-- Plateforme Windows -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
   </ItemGroup>
   
   <!-- Plateforme Android -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
   

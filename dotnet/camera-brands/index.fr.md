@@ -98,7 +98,11 @@ Connectez-vous à n'importe quelle caméra RTSP en utilisant l'une des trois app
     var audioRenderer = new AudioRendererBlock();
 
     pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
-    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    // AudioOutput vaut null si la source a été créée avec audioEnabled: false ou si les informations de la caméra n'indiquent pas d'audio ; en mode de compatibilité avec l'audio activé, il existe même si la caméra n'envoie pas d'audio.
+    if (rtspSource.AudioOutput != null)
+    {
+        pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    }
 
     await pipeline.StartAsync();
     ```

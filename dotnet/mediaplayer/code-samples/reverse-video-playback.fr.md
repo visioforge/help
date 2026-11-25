@@ -22,8 +22,8 @@ primary_api_classes:
   - UniversalSourceSettings
   - MediaPlayerCore
 video:
-  id: 70NC7wAvehw
-  upload_date: 2026-11-16T19:09:43Z
+  id: sL9v_lKJYyM
+  upload_date: 2026-11-25T08:05:15Z
   duration: PT12M59S
 
 ---
@@ -37,7 +37,7 @@ La lecture inversée nécessite une source où l'on peut se déplacer : un fichi
 ## Tutoriel YouTube
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/70NC7wAvehw?controls=1" title="Lire une vidéo à l'envers en C# WPF - tutoriel YouTube" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/sL9v_lKJYyM?controls=1" title="Lire une vidéo à l'envers en C# WPF - tutoriel YouTube" frameborder="0" allowfullscreen></iframe>
 </div>
 
 [Code source sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/reverse-playback-csharp-wpf)
@@ -287,14 +287,14 @@ Pour une application Windows x64 :
 
 ```xml
 <!-- MediaPlayerCoreX; for Media Blocks use VisioForge.DotNet.MediaBlocks instead -->
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]" />
 
 <!-- MediaPlayerCore -->
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]" />
 ```
 
 Les autres plateformes utilisent leurs propres redistribuables : voir [Déploiement multiplateforme](../../deployment-x/index.md) et [Déploiement de Media Player SDK](../deployment.md).

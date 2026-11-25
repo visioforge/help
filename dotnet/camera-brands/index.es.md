@@ -98,7 +98,11 @@ Conéctate a cualquier cámara RTSP usando uno de los tres enfoques del VisioFor
     var audioRenderer = new AudioRendererBlock();
 
     pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
-    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    // AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+    if (rtspSource.AudioOutput != null)
+    {
+        pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+    }
 
     await pipeline.StartAsync();
     ```

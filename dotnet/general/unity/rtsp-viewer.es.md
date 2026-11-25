@@ -105,6 +105,7 @@ _videoSink = new BufferSinkBlock(VideoFormatX.RGBA);
 _videoSink.OnVideoFrameBuffer += _videoView.OnFrameBuffer;
 _pipeline.Connect(_source.VideoOutput, _videoSink.Input);
 
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
 if (_renderAudio && _source.AudioOutput != null)
 {
     _audioRenderer = new AudioRendererBlock();

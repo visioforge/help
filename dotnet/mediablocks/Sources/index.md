@@ -1177,7 +1177,11 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);      
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
@@ -2052,8 +2056,8 @@ The first constructor argument is `IVideoSourceSettings`. Supported implementati
 
 **Diagnostic methods:**
 
-- `GetStatus()` — returns current fallback/main source state as a string
-- `GetStatistics()` — returns a dictionary of retry count and buffering statistics
+- `GetStatus()` — returns the state as a string: `Stopped`, `Buffering`, `Retrying` or `Running` (`Not initialized` before the pipeline starts)
+- `GetStatistics()` — returns a dictionary of retry and buffering statistics: `NumRetry` and `NumFallbackRetry` (`ulong`), `BufferingPercent` and `FallbackBufferingPercent` (`int`), `LastRetryReason` and `LastFallbackRetryReason` (`int`: 0 none, 1 error, 2 end of stream, 3 state change failure, 4 timeout)
 - `Unblock()` — manually unblocks when `ManualUnblock` is enabled
 
 #### The sample pipeline

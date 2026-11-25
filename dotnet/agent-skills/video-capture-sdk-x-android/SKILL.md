@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK X (cross-platform edition) i
 
 This skill helps you add **VisioForge Video Capture SDK X** — the cross-platform "X" edition of the capture SDK — to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). The X SDK shares its runtime with Media Blocks (GStreamer-backed under the hood) and exposes a high-level capture-and-record god-object (`VideoCaptureCoreX`) that mirrors the legacy `VideoCaptureCore` API. The same C# code works unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewGL` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.11.23`**, Android redist at the version shown in the csproj below (the [official Simple Video Capture Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/Simple%20Video%20Capture) is the reference for the project layout, not for the version to pin — it can lag a release). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.25`**, Android redist at the version shown in the csproj below (the [official Simple Video Capture Android sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Android/Simple%20Video%20Capture) is the reference for the project layout, not for the version to pin — it can lag a release). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -28,7 +28,7 @@ Pinned NuGet versions: wrapper **`2026.11.23`**, Android redist at the version s
 
 ### Target framework
 
-Video Capture SDK X releases after 2026.11.23 support `net10.0-android` and `net11.0-android` for the native Android host; 2026.11.6 ships `net9.0-android` and `net10.0-android`, with no `net11.0-android` target. The upstream Simple Video Capture sample pins **`net10.0-android`** with `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` (Android 9.0 / API level 28 minimum) — match these unless you have a reason not to. The SDK itself needs Android 7.0 (API level 24): its native GStreamer libraries are built for API 24, so 24 is the lowest `SupportedOSPlatformVersion` that works, and the sample pins 28 by its own choice. Two features need more: USB (UVC) camera capture needs API 28, and audio playback capture needs API 29.
+Video Capture SDK X releases after 2026.11.25 support `net10.0-android` and `net11.0-android` for the native Android host; 2026.11.6 ships `net9.0-android` and `net10.0-android`, with no `net11.0-android` target. The upstream Simple Video Capture sample pins **`net10.0-android`** with `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` (Android 9.0 / API level 28 minimum) — match these unless you have a reason not to. The SDK itself needs Android 7.0 (API level 24): its native GStreamer libraries are built for API 24, so 24 is the lowest `SupportedOSPlatformVersion` that works, and the sample pins 28 by its own choice. Two features need more: USB (UVC) camera capture needs API 28, and audio playback capture needs API 29.
 
 ### NuGet packages + AndroidDependency
 
@@ -36,8 +36,8 @@ A native Android capture project needs **two NuGet packages plus one ProjectRefe
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
   <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
 </ItemGroup>
 <ItemGroup>

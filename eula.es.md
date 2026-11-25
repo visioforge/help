@@ -145,7 +145,15 @@ Si alguna disposición de este Contrato se considera inaplicable o inválida, di
 
 Este Contrato constituye el acuerdo completo entre usted y el Licenciante con respecto al tema del mismo y reemplaza todos los entendimientos anteriores o contemporáneos con respecto a dicho tema. Ninguna enmienda o modificación de este Contrato será vinculante a menos que sea por escrito y firmada por el Licenciante.
 
-## 14. INFORMACIÓN DE CONTACTO
+## 14. INFORME DE INSTALACIÓN
+
+**14.1.** Los instaladores de los SDK .NET, de FFMPEG Source, VLC Source, RTSP, Video Encryption SDK y de los Encoding y Processing Filters Packs, y de los SDK Delphi y ActiveX All-in-One envían al Licenciante un breve informe por HTTPS cuando termina la instalación: que ha finalizado (los instaladores de Windows también informan de una instalación que ha fallado o se ha cancelado), el producto, su versión y, en los instaladores de Windows, si se trata de una primera instalación o de una actualización. El paquete de Unity envía el mismo informe la primera vez que se abre en el Editor de Unity un proyecto que lo contiene, una vez por carpeta de proyecto para cada cuenta de usuario.
+
+**14.2.** El informe no contiene ningún nombre, nombre de usuario, nombre de equipo, ruta de archivo ni otro identificador. Como cualquier solicitud web, llega al servidor del Licenciante desde su dirección IP; la dirección no se almacena con el informe ni se transmite a terceros. El Licenciante utiliza los informes únicamente para contar las instalaciones de cada producto y detectar los instaladores que fallan.
+
+**14.3.** Puede desactivar el informe: ejecute un instalador de Windows con `INSTALLREPORT=0` en la línea de comandos; en macOS, cree el archivo `/Users/Shared/VisioForge/no-install-report` antes de instalar; para el paquete de Unity, establezca la variable de entorno `VISIOFORGE_INSTALLREPORT` en `0` antes de abrir el proyecto, en el entorno con el que se inician el Editor de Unity o Unity Hub (reinicie Unity Hub después de definirla); esa carpeta de proyecto ya no se informará nunca para esa cuenta de usuario, aunque la variable se elimine más tarde. La instalación no depende del informe. Los paquetes NuGet y los redistribuibles que distribuye con sus aplicaciones no envían ningún informe.
+
+## 15. INFORMACIÓN DE CONTACTO
 
 Si tiene alguna pregunta sobre este Contrato, por favor contacte al Licenciante en:
 
@@ -159,4 +167,4 @@ Sitio web: www.visioforge.com
 
 ---
 © VisioForge. Todos los derechos reservados.
-Última actualización: 2026-08-27
+Última actualización: 2026-11-25

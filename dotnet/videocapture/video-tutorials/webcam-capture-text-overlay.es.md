@@ -277,7 +277,7 @@ ffprobe -v error -of compact output.mp4 -show_entries format=format_name,duratio
 
 ### Qué vamos a construir
 
-Vamos a dibujar texto sobre una grabación de webcam en una aplicación C# WinForms con el VisioForge Video Capture SDK. Esto es lo que vamos a construir. Una aplicación WinForms que graba una webcam en MP4 con vista previa en directo. Sobre el video dibuja un rótulo que puede cambiar mientras graba, la fecha y la hora, el número de fotograma y el tiempo transcurrido desde que empezó la grabación. Esta es la aplicación terminada, grabando desde una Logitech C920. El texto se dibuja dentro de los fotogramas del video, así que está en la vista previa y en el archivo. ¿Dónde resulta útil? La fecha y la hora en cada fotograma es lo que necesitan las grabaciones de seguridad y las que sirven como prueba. Un número de fotograma permite encontrar y comparar más tarde un fotograma exacto. El tiempo de grabación alinea el video con los registros y los datos de sensores. Y un rótulo indica lo que se ve en cámara, como el operador, la prueba o el puesto, y puede cambiarlo cuando cambian las cosas.
+Vamos a dibujar texto sobre una grabación de webcam en una aplicación C# WinForms con el VisioForge Video Capture SDK. Esto es lo que vamos a construir. Una aplicación WinForms que graba una webcam en MP4 con vista previa en directo. Sobre el video dibuja un rótulo que puede cambiar mientras graba, la fecha y la hora, el número de fotograma y el tiempo transcurrido desde que empezó la grabación. Esta es la aplicación terminada, grabando desde una Logitech BRIO. El texto se dibuja dentro de los fotogramas del video, así que está en la vista previa y en el archivo. ¿Dónde resulta útil? La fecha y la hora en cada fotograma es lo que necesitan las grabaciones de seguridad y las que sirven como prueba. Un número de fotograma permite encontrar y comparar más tarde un fotograma exacto. El tiempo de grabación alinea el video con los registros y los datos de sensores. Y un rótulo indica lo que se ve en cámara, como el operador, la prueba o el puesto, y puede cambiarlo cuando cambian las cosas.
 
 ### Requisitos previos
 
@@ -329,7 +329,7 @@ Cerrar la ventana mientras graba dejaría el MP4 sin terminar. En la ventana Pro
 
 ### Ejecutarla
 
-Ejecute la aplicación desde Visual Studio. Las listas de cámara, formato y micrófono se llenan con los dispositivos. Start inicia la grabación. La C920 tarda unos segundos en enviar su primer fotograma. Luego aparecen sobre el video el rótulo, el reloj, el número de fotograma y el tiempo de grabación. Escriba un rótulo nuevo y haga clic en Apply. El texto nuevo aparece en el siguiente fotograma. Stop termina output.mp4, y luego cerramos la ventana.
+Ejecute la aplicación desde Visual Studio. Las listas de cámara, formato y micrófono se llenan con los dispositivos. Start inicia la grabación. La cámara tarda un momento en enviar su primer fotograma. Luego aparecen sobre el video el rótulo, el reloj, el número de fotograma y el tiempo de grabación. Escriba un rótulo nuevo y haga clic en Apply. El texto nuevo aparece en el siguiente fotograma. Stop termina output.mp4, y luego cerramos la ventana.
 
 ### Comprobar el archivo
 

@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-25 09:43:32 UTC (97e5826e19d)
+**Generated:** 2026-11-25 19:17:11 UTC (28143afa58b)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 470 help documentation pages + 74 website pages
 
@@ -4968,7 +4968,11 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 var audioRenderer = new AudioRendererBlock();
 
 pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
@@ -11467,7 +11471,7 @@ For MAUI projects targeting macOS (through MacCatalyst), add these packages:
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
   <!-- Only for the OpenCV blocks -->
   <PackageReference Include="VisioForge.CrossPlatform.OpenCV.macOS" Version="[2026.11.12.2]"/>
 </ItemGroup>
@@ -11999,8 +12003,8 @@ Add the following packages to your project:
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -12012,8 +12016,8 @@ Add platform-specific redistributable packages to your project:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -12021,7 +12025,7 @@ Add platform-specific redistributable packages to your project:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -12106,19 +12110,19 @@ Here is a complete example `.csproj` file for an Uno Platform application with V
 
   <!-- VisioForge Core References -->
   <ItemGroup>
-    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.23]"/>
-    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
+    <PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="[2026.11.25]"/>
+    <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]"/>
   </ItemGroup>
 
   <!-- Windows Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
   </ItemGroup>
 
   <!-- Android Platform -->
   <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
     <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
   </ItemGroup>
 
@@ -28868,8 +28872,8 @@ Get platform-specific file copying/build configuration code. Returns MSBuild tar
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
   <ProjectReference Include="..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -38323,6 +38327,16 @@ Feature names go over HTTPS to `https://analytics.visioforge.org`, a separate an
 
 The first time a process sends anything, the SDK writes one line naming what is sent, where, and how to turn it off - both to the log and to the debug output.
 
+## Install reports
+
+Apart from the debugging telemetry above, the VisioForge installers below send one report when they end, so that we can count the installations of each product and see which installers fail:
+
+- The Windows installers (the .NET SDK; FFMPEG Source, VLC Source, RTSP, Video Encryption SDK and the Encoding and Processing Filters Packs; the Delphi and ActiveX All-in-One SDKs) report whether the installation finished, failed or was cancelled, the product, its version, and whether it was a first install or an upgrade. To turn the report off, run the installer with `INSTALLREPORT=0` on the command line.
+- The macOS package reports a finished installation, the product and its version. To turn it off, create the file `/Users/Shared/VisioForge/no-install-report` before installing.
+- The Unity package reports, with the package version, the first time a project that contains it is opened in the Unity Editor: once per project folder for each user account. It sends nothing in batch mode (CI) or when the environment variable `VISIOFORGE_INSTALLREPORT` is `0`. Set the variable before the project is first opened, in the environment the Unity Editor or Unity Hub starts with - a user environment variable on Windows, `launchctl setenv VISIOFORGE_INSTALLREPORT 0` on macOS (lost at logout or restart, so set it again before opening a new project) - and restart Unity Hub. A project folder opened while the variable is `0` is never reported for that user account, even after the variable is gone.
+
+The report goes over HTTPS to `https://www.visioforge.com/api/installer-report` and carries nothing else: no name, user name, computer name, file path or other identifier. Like any web request, it reaches the server from your IP address, which is not stored with the report or passed on. The reports are counted in Google Analytics. If a report cannot be sent, the installation is not affected. NuGet packages and the redistributables you ship with your application never send one.
+
 ## See also
 
 - [Sending logs](../sendlogs/) - collecting the full debug log for support
@@ -39311,6 +39325,7 @@ _videoSink = new BufferSinkBlock(VideoFormatX.RGBA);
 _videoSink.OnVideoFrameBuffer += _videoView.OnFrameBuffer;
 _pipeline.Connect(_source.VideoOutput, _videoSink.Input);
 
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
 if (_renderAudio && _source.AudioOutput != null)
 {
     _audioRenderer = new AudioRendererBlock();
@@ -43843,12 +43858,12 @@ The Avalonia template uses central package management, so NuGet writes the versi
 
 ```
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.23" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.23" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.16" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.25" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.22" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.25" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.23" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.10.26" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="2026.10.26" />
@@ -45103,11 +45118,11 @@ The Uno template uses central package management, so NuGet writes the versions t
 
 ```
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.23" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.23" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.16" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.11.16" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.5" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.11.25" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.25" />
   <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.23" />
 </ItemGroup>
 ```
@@ -45397,13 +45412,13 @@ The native engines go into the project file instead, each under the condition of
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]" />
 </ItemGroup>
 <ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
   <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]" />
@@ -46998,12 +47013,12 @@ Platform-specific native runtimes — add the ones you target:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.25]"/>
 
 <!-- macOS / macCatalyst -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
@@ -47012,7 +47027,7 @@ Platform-specific native runtimes — add the ones you target:
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
@@ -48454,13 +48469,13 @@ core.TriggerPreEventRecording(0, "/recordings/event_001.mkv");
 Major SDK package (managed):
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
 ```
 
 Native dependencies for Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 For alternative platforms (macOS, Linux, Android, iOS), use the corresponding native dependency packages. See the [Deployment Guide](../../../deployment-x/) for details.
@@ -48506,9 +48521,9 @@ Recording webcam video in VB.NET applications is a common requirement for video 
 Add the following packages to your VB.NET project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 ## Complete VB.NET Webcam Recording Example
@@ -48981,7 +48996,7 @@ Video Capture SDK .NET relies on native libraries to access webcam devices and p
 Main SDK package:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
 ```
 
 ### Platform-Specific Redist Packages
@@ -48989,8 +49004,8 @@ Main SDK package:
 Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 For other platforms:
@@ -49094,9 +49109,9 @@ Recording your desktop screen in VB.NET (Visual Basic .NET) applications is esse
 Add the following packages to your VB.NET project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 ## Complete VB.NET Screen Recording Example
@@ -49624,8 +49639,8 @@ Add platform-specific native dependencies:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 
 <!-- macOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
@@ -49994,8 +50009,8 @@ Use the latest NuGet package versions of the SDK for .NET in your project.
 Add the following NuGet packages to your project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
 ```
 
 The `VideoCapture` package contains the main video capture functionality, while the `Core.UI.MAUI` package contains the `VideoView` control for video preview in .NET MAUI apps.
@@ -50008,8 +50023,8 @@ Add the following NuGet packages to your project based on target platform:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -50017,7 +50032,7 @@ Add the following NuGet packages to your project based on target platform:
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 ```
@@ -54636,7 +54651,11 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 // Optional: Add audio rendering
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 // Start preview
 await pipeline.StartAsync();
@@ -55443,7 +55462,11 @@ var camera = new RTSPSourceBlock(rtsp);
 
 // Camera video and audio to this PC.
 pipeline.Connect(camera.VideoOutput, new VideoRendererBlock(pipeline, VideoView1).Input);
-pipeline.Connect(camera.AudioOutput, new AudioRendererBlock().Input);
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (camera.AudioOutput != null)
+{
+    pipeline.Connect(camera.AudioOutput, new AudioRendererBlock().Input);
+}
 
 // Microphone to the camera speaker.
 var mic = (await DeviceEnumerator.Shared.AudioSourcesAsync())[0];
@@ -61542,7 +61565,7 @@ ffprobe -v error -of compact output.mp4 -show_entries format=format_name,duratio
 
 ### What we build
 
-Let's draw text over a webcam recording in a C# WinForms app with the VisioForge Video Capture SDK. Here's what we build. A WinForms app that records a webcam to MP4 with a live preview. Over the video it draws a caption that you can change while it records, the date and time, the frame number, and the time since the recording started. This is the finished app, recording from a Logitech C920. The text is drawn into the video frames, so it's in the preview and in the file. Where does this help? A date and time on every frame is what security and evidence recordings need. A frame number lets you find and compare an exact frame later. The recording time lines the video up with logs and sensor data. And a caption labels what's on camera, like the operator, the test or the station, and you can change it as things change.
+Let's draw text over a webcam recording in a C# WinForms app with the VisioForge Video Capture SDK. Here's what we build. A WinForms app that records a webcam to MP4 with a live preview. Over the video it draws a caption that you can change while it records, the date and time, the frame number, and the time since the recording started. This is the finished app, recording from a Logitech BRIO. The text is drawn into the video frames, so it's in the preview and in the file. Where does this help? A date and time on every frame is what security and evidence recordings need. A frame number lets you find and compare an exact frame later. The recording time lines the video up with logs and sensor data. And a caption labels what's on camera, like the operator, the test or the station, and you can change it as things change.
 
 ### Prerequisites
 
@@ -61594,7 +61617,7 @@ Closing the window while it records would leave the MP4 unfinished. In the Prope
 
 ### Run it
 
-Run the app from Visual Studio. The camera, format and microphone lists fill in from the devices. Start begins the recording. The C920 takes a few seconds to send its first frame. Then the caption, the clock, the frame number and the recording time appear over the video. Type a new caption and click Apply. The new text shows on the next frame. Stop finishes output.mp4, and then we close the window.
+Run the app from Visual Studio. The camera, format and microphone lists fill in from the devices. Start begins the recording. The camera takes a moment to send its first frame. Then the caption, the clock, the frame number and the recording time appear over the video. Type a new caption and click Apply. The new text shows on the next frame. Stop finishes output.mp4, and then we close the window.
 
 ### Check the file
 
@@ -61652,21 +61675,21 @@ All cross-platform targets use a GStreamer-backed decoding pipeline with hardwar
 Main SDK package (always required):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
 ```
 
 Windows x64 native runtime:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 Windows x86 native runtime:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.25]"/>
 ```
 
 macOS (native) and MacCatalyst (MAUI macOS):
@@ -61686,15 +61709,15 @@ On Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` replaces the `.Linux
 Android and iOS:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 Optional UI framework packages — add whichever you target:
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.25]"/>
 ```
 
 Full per-IDE install walkthrough: [install/index.md](../../install/).
@@ -62354,9 +62377,9 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 - [VisioForge.DotNet.Core.Redist.LAV.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/) — the LAV splitter and decoders, which find the video and audio tracks in the stream and decode them
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]" />
 ```
 
 These are the x64 packages, so the project sets `<PlatformTarget>x64</PlatformTarget>`; a 32-bit app takes the `.x86` packages instead. See the [deployment guide](../../deployment/) for the full list.
@@ -63501,14 +63524,14 @@ For a Windows x64 app:
 
 ```
 <!-- MediaPlayerCoreX; for Media Blocks use VisioForge.DotNet.MediaBlocks instead -->
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]" />
 
 <!-- MediaPlayerCore -->
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]" />
 ```
 
 Other platforms take their own redistributables: see [Cross-platform deployment](../../../deployment-x/) and [Media Player SDK deployment](../../deployment/).
@@ -64321,8 +64344,8 @@ The main project, `SimplePlayerMVVM.csproj`, targets multiple platforms. Key pac
   <PackageReference Include="Avalonia.Android" Version="12.1.6" />
  </ItemGroup>
  <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.25]"/>
  </ItemGroup>
 </Project>
 ```
@@ -64344,8 +64367,8 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <OutputType>WinExe</OutputType>
   </PropertyGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
   </ItemGroup>
   <PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <TargetFramework>net10.0-macos</TargetFramework>
@@ -64389,7 +64412,7 @@ Each platform head project (`SimplePlayerMVVM.Android.csproj`, `SimplePlayerMVVM
     <ProjectReference Include="..\SimplePlayerMVVM\SimplePlayerMVVM.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
   </ItemGroup>
 </Project>
 ```
@@ -65299,8 +65322,8 @@ To abstract platform-specific functionality, interfaces are defined in the core 
   ```
   ```xml
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
-    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+    <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
   </ItemGroup>
   <ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
     <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
@@ -66051,18 +66074,18 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 ## NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
 
 <!-- Platform redists — include only the targets you build for -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.22]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android"
-                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.11.5]"/>
+                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS"
                   Condition="$(TargetFramework.Contains('ios'))" Version="[2026.11.23]"/>
 ```
@@ -66364,9 +66387,9 @@ Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — the FFmpeg (libav) codecs that many formats decode through
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 These are the x64 packages, so the project sets `<PlatformTarget>x64</PlatformTarget>`; a 32-bit app takes the `.x86` packages instead. See [Windows deployment](../../../deployment-x/Windows/) for the full list.
@@ -66961,9 +66984,9 @@ This guide walks you through building a full-featured video player application i
 ## Required NuGet Packages
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 ## Complete VB.NET Video Player Example
@@ -67229,8 +67252,8 @@ Add platform-specific native dependencies:
 
 ```
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 
 <!-- macOS -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
@@ -67471,7 +67494,7 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]"/>
 ```
 
 It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.
@@ -68147,8 +68170,8 @@ The one-minute video writes and runs this console app: 30 seconds of a 720p movi
 - [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — the FFmpeg tool the `FastEdit_` methods run; for an x86 app, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.25]" />
 ```
 
 The redist is x64, so set `PlatformTarget` to `x64` in the project file:
@@ -68639,8 +68662,8 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 - [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — the FFmpeg tool the `FastEdit_` methods run; for an x86 app, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.25]" />
 ```
 
 The redist is x64, so set `PlatformTarget` to `x64` in the project file:
@@ -69614,8 +69637,8 @@ Its code: [images-to-video-short-console on GitHub](https://github.com/visioforg
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer and the native libraries the engine runs on, among them the H.264 encoder
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]" />
 ```
 
 ## The project file
@@ -70633,8 +70656,8 @@ The full sample is on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/
 Two packages: the SDK itself and the MAUI `VideoView` control.
 
 ```
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
 ```
 
 `VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control — on its own it cannot compile `VideoEditCoreX`. The `VisioForge.DotNet.VideoEdit` package is what brings the engine in.
@@ -70643,7 +70666,7 @@ Then add the redistributable for each platform you build for. See [Installing in
 
 ```
 <ItemGroup Condition="$(TargetFramework.Contains('-android'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
   <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
 </ItemGroup>
 
@@ -70658,8 +70681,8 @@ Then add the redistributable for each platform you build for. See [Installing in
 </ItemGroup>
 
 <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -76491,22 +76514,22 @@ Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visiofo
 Main SDK package (all platforms):
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Windows x64 runtime (pick x86 for 32-bit apps):
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
 <!-- Optional: extra decoders/encoders via Libav -->
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 Windows x86:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86.UPX" Version="[2026.11.25]"/>
 ```
 
 macOS (native and MAUI / macCatalyst):
@@ -76526,15 +76549,15 @@ On Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` replaces the `.Linux
 Android and iOS:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.5]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
 ```
 
 UI integration packages (optional, per framework):
 
 ```
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="[2026.11.25]"/>
 ```
 
 Full install walkthrough: [install/index.md](../../install/).
@@ -79527,10 +79550,10 @@ The control builds and manages this pipeline for you through `HlsStreamManager`.
 
 <ItemGroup>
   <Reference Include="System.Web" />
-  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.UI.WebForms" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
@@ -83448,8 +83471,12 @@ pipeline.Connect(videoResize.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Wire the audio path (RTSP audio → AAC → MP4 sink audio pad)
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start recording
 await pipeline.StartAsync();
@@ -83522,8 +83549,12 @@ pipeline.Connect(colorEffects.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Audio chain
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start
 await pipeline.StartAsync();
@@ -83582,8 +83613,12 @@ pipeline.Connect(rtspSource.VideoOutput, faceBlur.Input);
 pipeline.Connect(faceBlur.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start
 await pipeline.StartAsync();
@@ -83647,8 +83682,12 @@ pipeline.Connect(textOverlay.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Audio chain
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start
 await pipeline.StartAsync();
@@ -84062,14 +84101,14 @@ graph TD;
 You'll need the VisioForge Media Blocks SDK. Add it to your .NET project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Depending on your target platform, add the corresponding native runtime package. For Windows x64:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 For detailed platform-specific dependencies, see the [Deployment Guide](../../../deployment-x/).
@@ -84338,10 +84377,24 @@ var rtspSettings = await RTSPSourceSettings.CreateAsync(
 var rtspSource = new RTSPSourceBlock(rtspSettings);
 _videoSource = rtspSource;
 
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+// Set audioEnabled before _preEventBlock.AudioEnabled, so no audio branch waits on a stream that never comes.
+audioEnabled = rtspSource.AudioOutput != null;
+
 // Video path is the same: rtspSource -> motionDetector -> tee -> ...
 
-// Audio comes from the RTSP source instead of a system audio device:
-_pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+// The audio branch takes the RTSP audio in place of the system audio device:
+if (audioEnabled)
+{
+    _audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio);
+    _audioRenderer = new AudioRendererBlock();
+    _aacEncoder = new AACEncoderBlock();
+
+    _pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+    _pipeline.Connect(_audioTee, _audioRenderer);
+    _pipeline.Connect(_audioTee, _aacEncoder);
+    _pipeline.Connect(_aacEncoder.Output, _preEventBlock.AudioInput);
+}
 ```
 
 ## Configuration Options
@@ -85298,14 +85351,14 @@ For complete working examples, see the [RTSP demos on GitHub](https://github.com
 Add the Media Blocks SDK NuGet package to your project:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 You also need the platform-specific runtime packages. For Windows:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 For other platforms (macOS, Linux, Android, iOS), see the [Deployment Guide](../../../deployment-x/).
@@ -85343,7 +85396,11 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 // Create audio renderer (optional)
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 // Start playback
 await pipeline.StartAsync();
@@ -85671,14 +85728,14 @@ The main idea is to take the raw video stream from the RTSP source and directly 
 You'll need the VisioForge Media Blocks SDK. You can add it to your .NET project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Depending on your target platform (Windows, macOS, Linux, including ARM-based systems like Jetson Nano for embedded camera applications), you will also need the corresponding native runtime packages. For example, on Windows to record video:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 For detailed information about deployment requirements, and platform-specific dependencies, please refer to our [Deployment Guide](../../../deployment-x/). It's important to check these details to ensure your video stream capture application works correctly.
@@ -86322,14 +86379,14 @@ graph LR;
 Add the Media Blocks SDK to your project via NuGet:
 
 ```
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 On Windows you also need the native runtime packages. For recording (muxing) you need the core runtime; the Libav package supplies the muxers:
 
 ```
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 For macOS, Linux, Android, and iOS runtime packages and platform-specific notes, see the [Deployment Guide](../../../deployment-x/).
@@ -96277,7 +96334,11 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
@@ -97138,8 +97199,8 @@ The first constructor argument is `IVideoSourceSettings`. Supported implementati
 
 **Diagnostic methods:**
 
-- `GetStatus()` — returns current fallback/main source state as a string
-- `GetStatistics()` — returns a dictionary of retry count and buffering statistics
+- `GetStatus()` — returns the state as a string: `Stopped`, `Buffering`, `Retrying` or `Running` (`Not initialized` before the pipeline starts)
+- `GetStatistics()` — returns a dictionary of retry and buffering statistics: `NumRetry` and `NumFallbackRetry` (`ulong`), `BufferingPercent` and `FallbackBufferingPercent` (`int`), `LastRetryReason` and `LastFallbackRetryReason` (`int`: 0 none, 1 error, 2 end of stream, 3 state change failure, 4 timeout)
 - `Unblock()` — manually unblocks when `ManualUnblock` is enabled
 
 #### The sample pipeline
@@ -109172,6 +109233,37 @@ if (fileSource.SubtitleOutput != null)
 }
 ```
 
+### Keeping the Last Frame After Stop
+
+By default the view clears to its background when the media ends or the pipeline stops. Set `KeepLastFrame` to keep the last frame on the view instead, for example to show where a film ended:
+
+```
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1)
+{
+    KeepLastFrame = true,
+};
+```
+
+The X engines read the same setting from the view: `VideoView1.RendererSettings.KeepLastFrame = true` before the start.
+
+- The default is `false`, which keeps the behaviour of earlier versions.
+- The frame stays until the next start. Letterbox applies to it as to the video. One exception: on Android, `VideoViewTX` (which the MAUI and Uno views use there) clears it when the view is resized or its surface is recreated while stopped, for example on rotation.
+- While the pipeline is stopped, `Snapshot_Get` and `Snapshot_GetAsync` return that frame, so an app can save it or use it as a cover.
+- `LiveVideoCompositor` with `KeepLastFrame` on its main view stops its main pipeline before its inputs, so the view keeps the last composed picture rather than the compositor's background.
+- The classic DirectShow engines (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) have their own renderer settings and keep clearing on stop.
+
+| Platform | Views | Checked on (off and on) |
+| --- | --- | --- |
+| Windows | WinForms, WPF, Avalonia | Windows 11 desktop |
+| Windows | WinUI, MAUI (`VideoViewX`, `SkiaVideoView`) | Windows 11 desktop |
+| Windows | Uno | Not checked yet |
+| Linux | Avalonia | Ubuntu 24.04, X11 |
+| Android | `VideoView`, `VideoViewGL`, `VideoViewTX` | Android 16 phone, Android emulator |
+| Android | MAUI, Uno, Avalonia | Not checked yet |
+| iOS | Apple views, MAUI | Not checked on a device yet |
+| Mac Catalyst | Apple views, MAUI | macOS 27 desktop |
+| macOS | Apple views, Avalonia | macOS 27 desktop |
+
 ## Platform Compatibility
 
 The Video Renderer block offers wide compatibility across multiple operating systems and devices:
@@ -110845,7 +110937,7 @@ For further assistance or specific issues not covered here, please contact Visio
 
 ## Install Media Player SDK in Delphi — 32/64-bit Setup
 **URL:** https://www.visioforge.com/help/docs/delphi/mediaplayer/install/delphi/
-**Description:** Install VisioForge Media Player SDK in Delphi 10.x-12.x — VCL/FMX components, package registration, library paths. Windows 32/64-bit supported.
+**Description:** Install VisioForge Media Player SDK in Delphi 6 to 13 — VCL/FMX components, package registration, library paths. Windows 32/64-bit supported.
 **Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Playback, MP4
 **API:** TVFMediaPlayer
 
@@ -110888,7 +110980,18 @@ This process unpacks the SDK, including the pre-compiled units (`.dcu`), the com
 
 ## Step 3: Integrating with the Delphi IDE
 
-After running the main installer, the next critical step is integrating the `TVFMediaPlayer` component into the Delphi IDE so you can use it visually in the form designer and reference its units in your code. The process differs slightly between older (Delphi 6/7) and newer (Delphi 2005+) versions.
+After running the main installer, the next critical step is integrating the `TVFMediaPlayer` component into the Delphi IDE so you can use it visually in the form designer and reference its units in your code.
+
+### Automatic Registration (Delphi 6 to Delphi 13)
+
+The installer does this for you, for every Delphi it finds on the computer, Delphi 6 through Delphi 13, and for the Windows user who runs it:
+
+- it adds the `Media Player\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+- it registers the precompiled package `VisioForge_Media_Player.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFMediaPlayer` is on the **VisioForge** page of the component palette, and the demo projects under `Demos\Source code` compile without further setup. Continue with [Step 5: Verification](#step-5-verification).
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup. The manual process differs slightly between older (Delphi 6/7) and newer (Delphi 2005+) versions.
 
 **Important:** For all Delphi versions, it's recommended to run the Delphi IDE itself **as administrator** during the package installation process. This helps avoid potential permission issues when compiling and registering the component package.
 
@@ -110919,7 +111022,7 @@ These older versions require manual configuration of paths and package installat
 
 *Note on Architecture:* Delphi 6/7 are strictly 32-bit (x86) environments. Therefore, you will only be installing and using the 32-bit version of the `TVFMediaPlayer` component. The SDK might contain 64-bit files, but they are not applicable here.
 
-### Installation in Delphi 2005 and Later (XE, 10.x, 11.x, 12.x)
+### Installation in Delphi 2005 and Later (XE, 10.x, 11.x, 12.x, 13)
 
 Modern Delphi versions offer a more streamlined process and robust support for multiple platforms (Win32, Win64).
 
@@ -110936,15 +111039,16 @@ Modern Delphi versions offer a more streamlined process and robust support for m
    - Click `OK` to save the Options.
 5. **Open the Package File:**
    - Go to `File -> Open Project...`.
-   - Navigate to the `Media Player\Packages` directory within the VisioForge installation. Find the subfolder corresponding to your Delphi version and platform (e.g., `Delphi XE11`, `Delphi XE12`, `Delphi 13`, or the matching `Delphi <version> x64` folder for 64-bit).
+   - Navigate to the `Media Player\Packages` directory within the VisioForge installation. Find the subfolder corresponding to your Delphi version (e.g., `Delphi XE11`, `Delphi XE12`, `Delphi 13`) — not the `Delphi <version> x64` folder: the IDE installs the package from its 32-bit build.
    - Open the package project `VisioForge_Media_Player.dproj` (or `VisioForge_Media_Player.dpk`). There is a single package that provides both runtime and design-time functionality.
 6. **Compile and Install:**
+   - Keep the Release build configuration and the **Windows 32-bit** target platform, the project's defaults.
    - In the Project Manager, right-click on the package project (`.dpk` file).
    - Select `Compile` from the context menu.
    - Once compiled successfully, right-click again and select `Install`.
 7. **Confirmation:** Delphi will confirm the installation, and the components will appear on the palette.
 
-*Note on Architecture:* Modern Delphi supports both 32-bit (Win32) and 64-bit (Win64) targets. The VisioForge SDK typically provides pre-compiled units (`.dcu`) for both. When you compile and install the package, Delphi usually handles registering it for the currently active platform. You can switch platforms in the Project Manager and rebuild/reinstall if necessary, although often the IDE handles this association correctly after the initial install.
+*Note on Architecture:* Modern Delphi supports both 32-bit (Win32) and 64-bit (Win64) targets, and the SDK ships precompiled units (`.dcu`) for both. The package installed into the IDE is the 32-bit one; your applications can still target Windows 64-bit, with the `Delphi <version> x64` folder on the Windows 64-bit library path.
 
 ## Step 4: Project Configuration
 
@@ -113719,15 +113823,26 @@ By following this installation guide, you'll have successfully integrated the TV
 ---END OF PAGE---
 
 
-## TVFVideoCapture Installation Guide for Delphi 6 to 11
+## TVFVideoCapture Installation Guide for Delphi 6 to 13
 **URL:** https://www.visioforge.com/help/docs/delphi/videocapture/install/delphi/
-**Description:** Install TVFVideoCapture packages in Delphi 6/7 through Delphi 11+ with complete setup instructions, library paths, and configuration.
+**Description:** Install TVFVideoCapture packages in Delphi 6/7 through Delphi 13 with complete setup instructions, library paths, and configuration.
 **Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Capture
 **API:** TVFVideoCapture
 
 # Comprehensive TVFVideoCapture Installation Guide for Delphi Developers
 
 > Related products: [All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+## Automatic Installation (Delphi 6 to Delphi 13)
+
+The SDK installer registers the package with every Delphi it finds on the computer, Delphi 6 through Delphi 13, for the Windows user who runs it:
+
+- it adds the `Video Capture\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+- it registers the precompiled package `VisioForge_VideoCapture_Package.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFVideoCapture` is on the **VisioForge** page of the component palette, ready to drop on a form, and the demo projects under `Demos\Source code` compile without further setup.
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup.
 
 ## Installation in Borland Delphi 6/7
 
@@ -113787,7 +113902,7 @@ After installing the framework, navigate to the `Video Capture\Packages\Delphi <
 
 ### Step 2: Select the Appropriate Build Configuration
 
-Choose the Release build configuration to ensure optimal component performance.
+Choose the Release build configuration to ensure optimal component performance, and the **Windows 32-bit** target platform: the IDE installs the package from its 32-bit build. Both are the project's defaults. Open the project from the `Delphi <version>` folder, not from `Delphi <version> x64`.
 
 ### Step 3: Install the Component Package
 
@@ -113801,7 +113916,7 @@ Confirm that the installation completed successfully before proceeding with deve
 
 ### Multi-Architecture Support
 
-TVFVideoCapture supports both x86 and x64 architectures, allowing you to develop applications for different platform targets. You can install both package versions simultaneously to support flexible deployment scenarios.
+TVFVideoCapture supports both x86 and x64 architectures, allowing you to develop applications for different platform targets. The IDE uses the 32-bit package at design time; your applications can still target Windows 64-bit (Delphi XE2 and later) through the `Delphi <version> x64` folder on the Windows 64-bit library path.
 
 ### Library Path Configuration
 
@@ -116729,7 +116844,7 @@ By following this detailed guide, you'll have TVFVideoEdit successfully integrat
 
 ## Install TVFVideoEdit in Delphi - Setup and Configuration
 **URL:** https://www.visioforge.com/help/docs/delphi/videoedit/install/delphi/
-**Description:** Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11+ with library paths, package building, and troubleshooting configuration.
+**Description:** Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11 to 13 with library paths, package building, and troubleshooting configuration.
 **Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
 **API:** TVFVideoEdit
 
@@ -116744,6 +116859,17 @@ Before beginning the installation process, ensure that you have:
 1. Appropriate Delphi version installed and properly configured
 2. Administrative rights for package installation
 3. Downloaded the latest version of the TVFVideoEdit library
+
+## Automatic Installation (Delphi 6 to Delphi 13)
+
+The SDK installer registers the package with every Delphi it finds on the computer, Delphi 6 through Delphi 13, for the Windows user who runs it:
+
+- it adds the `Video Edit\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+- it registers the precompiled package `VisioForge_Video_Edit_Package.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFVideoEdit` is on the **VisioForge** page of the component palette, ready to drop on a form, and the demo projects under `Demos\Source code` compile without further setup.
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup.
 
 ## Installing in Borland Delphi 6/7
 
@@ -116781,20 +116907,20 @@ Click the Install button to register the components with Delphi's component pale
 
 ### Architecture Support
 
-For Delphi 2005 and later versions, both x86 and x64 versions are available. You can utilize the 64-bit version if you need to develop 64-bit applications. Note that the IDE itself may require the x86 version for design-time operations.
+For Delphi XE2 and later versions, both x86 and x64 versions are available. You can utilize the 64-bit version if you need to develop 64-bit applications. The IDE itself uses the x86 version at design time.
 
 ## Installing in Delphi 11 and Later
 
 Modern Delphi versions feature a streamlined installation process:
 
 1. Open the `VisioForge_Video_Edit_Package.dproj` package project located in the `Video Edit\Packages\Delphi <version>` folder after installation
-2. Select the Release build configuration from the dropdown menu
+2. Select the Release build configuration from the dropdown menu and the **Windows 32-bit** target platform (both are the project's defaults); the IDE installs the package from its 32-bit build, so open the project from the `Delphi <version>` folder, not from `Delphi <version> x64`
 3. Build and install the package using the IDE's build commands
 4. The components will be registered and ready to use
 
 ## Project Configuration Best Practices
 
-You can install both x86 and x64 packages based on your project requirements. Ensure you've properly configured your application's library path settings:
+The IDE uses the 32-bit package at design time; your applications can target Windows 32-bit or, from Delphi XE2 on, 64-bit. Ensure you've properly configured your application's library path settings:
 
 1. Add the correct library folder path to your project options
 2. Configure the path to properly locate `.dcu` files
@@ -136972,9 +137098,9 @@ The package has no dependency on the rest of the VisioForge SDK. It targets .NET
 ## Install
 
 ```
-<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.VirtualCamera" Version="[2026.11.25]" />
 <!-- The virtual camera and virtual audio card filters -->
-<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.23]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.VirtualCamera.x64" Version="[2026.11.25]" />
 ```
 
 `Redist.VirtualCamera.x64` carries the filters Zoom, OBS and browsers load: the consumer application loads the filter, and those applications are 64-bit (see below for other consumers). Build your application for x64 or ARM64 so they see its frames: a 32-bit process pushes to a stream that only 32-bit consumers read. Each `Redist.VirtualCamera` package brings the `Redist.Shared` package of its architecture, with the `VisioForge_MFP*.dll` and `VisioForge_MFPX*.dll` its filters load (and `vcomp140.dll` on x64). An application that is not x64 and calls `PushFrameBgra` or `PushFrameBgr24` also references `Redist.Shared` of its own architecture (`.x86` or `.arm64`) for the color conversion.
@@ -147404,7 +147530,7 @@ dotnet restore
 
 ```
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]"/>
   <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoFingerprinting" Version="[2026.11.17]"/>
 
   <!-- Optional: MongoDB integration -->
@@ -154714,7 +154840,15 @@ If any provision of this Agreement is held to be unenforceable or invalid, such 
 
 This Agreement constitutes the entire agreement between you and Licensor regarding the subject matter hereof and supersedes all prior or contemporaneous understandings regarding such subject matter. No amendment to or modification of this Agreement will be binding unless in writing and signed by Licensor.
 
-## 14. CONTACT INFORMATION
+## 14. INSTALLATION REPORT
+
+**14.1.** The installers of the .NET SDKs, of FFMPEG Source, VLC Source, RTSP, Video Encryption SDK and the Encoding and Processing Filters Packs, and of the Delphi and ActiveX All-in-One SDKs send Licensor one short report over HTTPS when the installation ends: that it finished (the Windows installers also report one that failed or was cancelled), the product, its version and, for the Windows installers, whether it was a first install or an upgrade. The Unity package sends the same report the first time a project that contains it is opened in the Unity Editor, once per project folder for each user account.
+
+**14.2.** The report contains no name, user name, computer name, file path or other identifier. Like any web request, it reaches Licensor's server from your IP address; the address is not stored with the report or passed on. Licensor uses the reports only to count the installations of each product and to find installers that fail.
+
+**14.3.** You may turn the report off: run a Windows installer with `INSTALLREPORT=0` on the command line; on macOS, create the file `/Users/Shared/VisioForge/no-install-report` before installing; for the Unity package, set the environment variable `VISIOFORGE_INSTALLREPORT` to `0` before opening the project, in the environment the Unity Editor or Unity Hub starts with (restart Unity Hub after setting it); that project folder is then never reported for that user account, even if the variable is removed later. The installation does not depend on the report. NuGet packages and the redistributables you ship with your applications send no report.
+
+## 15. CONTACT INFORMATION
 
 If you have any questions about this Agreement, please contact Licensor at:
 
@@ -154722,7 +154856,7 @@ If you have any questions about this Agreement, please contact Licensor at:
 
 ---
 
-© VisioForge. All rights reserved. Last Updated: 2026-08-27
+© VisioForge. All rights reserved. Last Updated: 2026-11-25
 
 ---END OF PAGE---
 
@@ -155642,7 +155776,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
 
 -   [Supported input devices and other sources](/help/docs/dotnet/videocapture/video-sources/)• Web cameras• TV tuners (Windows only) and capture cards• DV and MPEG camcorders (Windows only)• Screen capture• HTTP/UDP/TCP network streams
 -   [Video Preview](/help/docs/dotnet/videocapture/video-tutorials/camera-video-preview/)
@@ -155663,7 +155797,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
 
 -   [Supported input devices and other sources](/help/docs/dotnet/videocapture/video-sources/)+• RTSP/ONVIF IP cameras• RTMP and other network streams
 -   [Video Preview](/help/docs/dotnet/videocapture/video-tutorials/camera-video-preview/)
@@ -155688,7 +155822,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
 
 -   [Supported input devices and other sources](/help/docs/dotnet/videocapture/video-sources/)+• Blackmagic Decklink• DVB-T/DVB-C/DVB-S/ATSC devices (BETA)
 -   [Video Preview](/help/docs/dotnet/videocapture/video-tutorials/camera-video-preview/)
@@ -155740,7 +155874,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
 
  |
 
@@ -155748,7 +155882,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
 
  |
 
@@ -155756,7 +155890,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -156502,7 +156636,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
 
 -   Video files playback
 -   Audio files playback
@@ -156524,7 +156658,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
 
 -   Video files playback
 -   Audio files playback
@@ -156553,7 +156687,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
 
 -   Video files playback
 -   Audio files playback
@@ -156605,7 +156739,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
 
  |
 
@@ -156613,7 +156747,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
 
  |
 
@@ -156621,7 +156755,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -157214,7 +157348,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -157231,7 +157365,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -157254,7 +157388,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -157294,7 +157428,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
 
  |
 
@@ -157302,7 +157436,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
 
  |
 
@@ -157310,7 +157444,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -157893,7 +158027,7 @@ Annual license for one named developer
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
 
 -   Free minor and major upgrades for one year
 -   SDK continues functioning after subscription ends
@@ -157909,7 +158043,7 @@ Annual license for three named developers
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual3)
+[💳Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual3)
 
 -   Free minor and major upgrades for one year
 -   SDK continues functioning after subscription ends
@@ -157925,7 +158059,7 @@ BEST VALUE
 
 Buy Lifetime·Team License
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=lifetime)
 
 -   Minor and major updates for the product lifetime
 -   Email support
@@ -158544,7 +158678,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -158561,7 +158695,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -158582,7 +158716,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -158620,7 +158754,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
 
  |
 
@@ -158628,7 +158762,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
 
  |
 
@@ -158636,7 +158770,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -159113,9 +159247,9 @@ Flexible licensing options for businesses and developers. Start with our free tr
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq)
+[Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
 
@@ -159134,9 +159268,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k)
+[Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual3)
 
@@ -159155,7 +159289,7 @@ Minor and major updates for the product lifetime with Lifetime·Team
 -   Lifetime·Team license included
 -   Best value for long-term
 
-[Buy Now](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=lifetime)
 
 ### Source Code License
 
@@ -159171,7 +159305,7 @@ Full source code access
 -   Modify & extend the source
 -   Custom builds for your own applications
 
-[Buy Now](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=sourceCode&period=lifetime)
+[Buy Now](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=sourceCode&period=lifetime)
 
 Need a license for educational, research, or non-profit projects? [Contact us](mailto:sales@visioforge.com) for special non-commercial licensing options.
 
@@ -159213,7 +159347,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ## C# Code Example
 
@@ -159643,9 +159777,9 @@ Annual license
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M)
+[Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
 
@@ -159667,9 +159801,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n)
+[Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual3)
 
@@ -159691,7 +159825,7 @@ One-time payment with minor and major updates for the product lifetime
 -   One-time payment
 -   Commercial use allowed
 
-[Buy Now](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=lifetime)
 
 Need custom encryption algorithms or special features? [Contact us](mailto:sales@visioforge.com) for tailored solutions.
 
@@ -159699,7 +159833,7 @@ Need custom encryption algorithms or special features? [Contact us](mailto:sales
 
 The source code license costs €4,000, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ### [Online Help](/help/)
 
@@ -160014,9 +160148,9 @@ Annual license
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy)
+[Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
 
@@ -160037,9 +160171,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q)
+[Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual3)
 
@@ -160060,7 +160194,7 @@ One-time payment with minor and major updates for the product lifetime
 -   Royalty-free distribution
 -   One-time payment
 
-[Buy Now](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=lifetime)
 
 ### Runtime License
 
@@ -160079,9 +160213,9 @@ Per server core annual license
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE)
+[Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=runtime&period=annual)
 
@@ -160091,7 +160225,7 @@ Need custom features or special requirements? [Contact us](mailto:sales@visiofor
 
 The source code license costs €4,000, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## System Requirements
 
@@ -160441,7 +160575,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
 
 -   Supported input devices and sources• Webcams and USB cameras• TV tuners (Windows only)• DV/MPEG camcorders (Windows only)• Screen capture
 -   Video preview
@@ -160462,7 +160596,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
 
 -   Supported input devices and sources+• IP cameras (RTSP/HTTP/MMS)• Network streams
 -   Video preview
@@ -160487,7 +160621,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
 
 -   Supported input devices and sources+• Additional engines for network streams
 -   Video preview
@@ -160529,7 +160663,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
 
  |
 
@@ -160537,7 +160671,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
 
  |
 
@@ -160545,7 +160679,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
 
  |
 | Features
@@ -160903,9 +161037,9 @@ Annual license - 1 year of updates and support
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08)
+[Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
 
@@ -160928,9 +161062,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05)
+[Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual3)
 
@@ -160953,7 +161087,7 @@ One-time payment with minor and major updates for the product lifetime
 -   Commercial use allowed
 -   No watermark or nag-screen
 
-[Buy Lifetime·Team License](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=lifetime)
+[Buy Lifetime·Team License](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=lifetime)
 
 Need custom builds or special features? [Contact us](mailto:sales@visioforge.com) for tailored solutions.
 
@@ -160961,7 +161095,7 @@ Need custom builds or special features? [Contact us](mailto:sales@visioforge.com
 
 The source code license costs €1,500, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## 💰 Save More with Bundle Packages
 
@@ -161001,7 +161135,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ### [Online Help](/help/)
 
@@ -161327,9 +161461,9 @@ Professional licensing for commercial applications with comprehensive codec supp
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41)
+[Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
 
@@ -161350,9 +161484,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y)
+[Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual3)
 
@@ -161373,7 +161507,7 @@ One-time purchase with minor and major updates for the product lifetime
 -   Free minor and major upgrades
 -   Commercial use allowed
 
-[Buy Now](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=lifetime)
 
 Need custom builds or enterprise licensing? [Contact us](mailto:sales@visioforge.com) for tailored solutions.
 
@@ -161381,7 +161515,7 @@ Need custom builds or enterprise licensing? [Contact us](mailto:sales@visioforge
 
 The source code license costs €1,500, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## 💰 Save More with Bundle Packages
 
@@ -161421,7 +161555,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ## Purchase Benefits
 
@@ -161702,9 +161836,9 @@ Annual license for one named developer
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03)
+[Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
 
@@ -161725,9 +161859,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00)
+[Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual3)
 
@@ -161748,7 +161882,7 @@ One-time payment with minor and major updates for the product lifetime
 -   Never expires
 -   Commercial use allowed
 
-[Buy Now](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=lifetime)
 
 Not sure which license you need? Contact our sales team for guidance on the best option for your project.
 
@@ -161756,7 +161890,7 @@ Not sure which license you need? Contact our sales team for guidance on the best
 
 The source code license costs €1,500, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## 💰 Save More with Bundle Packages
 
@@ -161796,7 +161930,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ### [Online Help](/help/)
 
@@ -162025,9 +162159,9 @@ Most Popular
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46)
+[Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
 
@@ -162048,9 +162182,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43)
+[Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43?prefilled_promo_code=BLACKFRIDAY2026)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual3)
 
@@ -162069,7 +162203,7 @@ Lifetime license for teams
 -   Source code samples
 -   Custom configuration
 
-[Buy Lifetime](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=lifetime)
+[Buy Lifetime](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=lifetime)
 
 ### Source Code License
 
@@ -162086,7 +162220,7 @@ Full C++ source code access
 -   Custom builds for your own applications
 -   Technical documentation
 
-[Buy Source Code](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=sourceCode&period=lifetime)
+[Buy Source Code](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=sourceCode&period=lifetime)
 
 ## 💰 Save More with Bundle Packages
 
@@ -162126,7 +162260,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ## Quick Start Guide
 
@@ -162487,23 +162621,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=annual)
 
--   [Video Capture SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR69AFdZ42Ga2Dm9AA)
--   [Video Capture SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o0056wC6Wq4Lug0G)
--   [Video Capture SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/00weVegFx5bN5hLcGEg7e2r)
--   [Video Capture SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZueVe9d5gUvdOheOMg7e2s)
--   [Video Capture SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t)
--   [Video Capture SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUcMRcV0cgKem4bIJ)
--   [Video Capture SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gw6ot5sy5Sm6TCdSA)
--   [Video Capture SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/4gM3cw3SL6fR4dHbCAg7e2u)
--   [Video Capture SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gM4gA9d5aw7h0t5ecg7e2v)
--   [Video Capture SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w)
--   [Video Capture SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi)
--   [Video Capture SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz)
--   [Video Capture SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm3cw0GzeMneSlcGEg7e2x)
--   [Video Capture SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIaEY60T8nZ7pT220g7e2y)
--   [Video Capture SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z)
+-   [Video Capture SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR69AFdZ42Ga2Dm9AA?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o0056wC6Wq4Lug0G?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/00weVegFx5bN5hLcGEg7e2r?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZueVe9d5gUvdOheOMg7e2s?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUcMRcV0cgKem4bIJ?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gw6ot5sy5Sm6TCdSA?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/4gM3cw3SL6fR4dHbCAg7e2u?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gM4gA9d5aw7h0t5ecg7e2v?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm3cw0GzeMneSlcGEg7e2x?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIaEY60T8nZ7pT220g7e2y?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Media Player SDK .NET](/media-player-sdk-net#pricing)
 
@@ -162513,23 +162647,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=annual)
 
--   [Media Player SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/7sI9AF08efsWcdW7sE)
--   [Media Player SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/14k1492gm6Wq0ve8yj)
--   [Media Player SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQbldeMn39D7mkg7e2A)
--   [Media Player SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x26oIexp33FbG9fSQg7e2B)
--   [Media Player SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C)
--   [Media Player SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEU5kpf380y20ve5kx)
--   [Media Player SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY28d1ci1C61zi8yk)
--   [Media Player SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQ9AUgFx1ZBfWp5ecg7e2D)
--   [Media Player SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ14o4WP7jV7pT4a8g7e2E)
--   [Media Player SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F)
--   [Media Player SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F)
--   [Media Player SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l)
--   [Media Player SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sYfZi1KDgUv25zgWUg7e2G)
--   [Media Player SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bJe8wQfBtdIjdOh0XWg7e2H)
--   [Media Player SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I)
+-   [Media Player SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/7sI9AF08efsWcdW7sE?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/14k1492gm6Wq0ve8yj?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQbldeMn39D7mkg7e2A?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x26oIexp33FbG9fSQg7e2B?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEU5kpf380y20ve5kx?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY28d1ci1C61zi8yk?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQ9AUgFx1ZBfWp5ecg7e2D?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ14o4WP7jV7pT4a8g7e2E?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sYfZi1KDgUv25zgWUg7e2G?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bJe8wQfBtdIjdOh0XWg7e2H?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Video Edit SDK .NET](/video-edit-sdk-net#pricing)
 
@@ -162539,23 +162673,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=annual)
 
--   [Video Edit SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR66ot08e94yem49AG)
--   [Video Edit SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00gfZ33kq1C67XG01L)
--   [Video Edit SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sY9AU4WP7jVh0tdKIg7e2J)
--   [Video Edit SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B67sM8918nZeSl6igg7e2K)
--   [Video Edit SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L)
--   [Video Edit SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEaEJ08ecgK7XGdQX)
--   [Video Edit SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sI4gl3kqdkO7XG29U)
--   [Video Edit SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/28EdRaexp6fRbG90XWg7e2M)
--   [Video Edit SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq5kE8910Vx6lPdKIg7e2N)
--   [Video Edit SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O)
--   [Video Edit SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2)
--   [Video Edit SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h)
--   [Video Edit SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJefZi74Xaw75hL7mkg7e2P)
--   [Video Edit SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIcN69d5bAb39Daywg7e2Q)
--   [Video Edit SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R)
+-   [Video Edit SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR66ot08e94yem49AG?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00gfZ33kq1C67XG01L?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sY9AU4WP7jVh0tdKIg7e2J?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B67sM8918nZeSl6igg7e2K?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEaEJ08ecgK7XGdQX?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sI4gl3kqdkO7XG29U?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/28EdRaexp6fRbG90XWg7e2M?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq5kE8910Vx6lPdKIg7e2N?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJefZi74Xaw75hL7mkg7e2P?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIcN69d5bAb39Daywg7e2Q?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Video Edit SDK FFmpeg .NET](/video-edit-sdk-ffmpeg-net#pricing)
 
@@ -162565,23 +162699,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=annual)
 
--   [Video Edit SDK FFmpeg .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEbIN1cigx091KaFm)
--   [Video Edit SDK FFmpeg .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe8wBg7ccgK1zi6qd)
--   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqdRa2OHaw74dH220g7e2S)
--   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dRm14o1KDcEf4dH364g7e2T)
--   [Video Edit SDK FFmpeg .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U)
--   [Video Edit SDK FFmpeg .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/00gcMRaMS80u1zi5l4)
--   [Video Edit SDK FFmpeg .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY149aMS0y2a5O7ui)
--   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq6oIexp0VxaC55ecg7e2V)
--   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNibJ2fBteMn5hL5ecg7e2W)
--   [Video Edit SDK FFmpeg .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X)
--   [Video Edit SDK FFmpeg .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi)
--   [Video Edit SDK FFmpeg .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3)
--   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/14A00k2OH1ZB39DfSQg7e2Y)
--   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EfZidtl9s3eSl6igg7e2Z)
--   [Video Edit SDK FFmpeg .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30)
+-   [Video Edit SDK FFmpeg .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEbIN1cigx091KaFm?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe8wBg7ccgK1zi6qd?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqdRa2OHaw74dH220g7e2S?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dRm14o1KDcEf4dH364g7e2T?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/00gcMRaMS80u1zi5l4?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY149aMS0y2a5O7ui?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq6oIexp0VxaC55ecg7e2V?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNibJ2fBteMn5hL5ecg7e2W?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/14A00k2OH1ZB39DfSQg7e2Y?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EfZidtl9s3eSl6igg7e2Z?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Media Blocks SDK .NET](/media-blocks-sdk-net#pricing)
 
@@ -162591,13 +162725,13 @@ LicenseDeveloper: €500 yearWorkgroup: €1,000 yearLifetime·Team: €1,800 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
 
--   [Media Blocks SDK .NET — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK)
--   [Media Blocks SDK .NET — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc)
--   [Media Blocks SDK .NET — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31)
--   [Media Blocks SDK .NET — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32)
--   [Media Blocks SDK .NET — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33)
+-   [Media Blocks SDK .NET — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Blocks SDK .NET — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Blocks SDK .NET — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Blocks SDK .NET — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Blocks SDK .NET — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33?prefilled_promo_code=BLACKFRIDAY2026)
 
 [All-in-One Media Framework](/all-in-one-media-framework#pricing)
 
@@ -162607,21 +162741,21 @@ StandardDeveloper: €350 yearLifetime·Team: €800 lifetimeProfessionalDevelop
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=annual)
 
--   [All-in-One Media Framework — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/8wMdQV7AG6Wq7XG4hO)
--   [All-in-One Media Framework — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dR6dQV4ou94ycdW9CA)
--   [All-in-One Media Framework — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d)
--   [All-in-One Media Framework — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/fZebIN9IOfsW6TC3dJ)
--   [All-in-One Media Framework — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM9AF3kq1C60ve2aa)
--   [All-in-One Media Framework — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQexp6fReSl7mkg7e3e)
--   [All-in-One Media Framework — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w7sM891bAb39D8qog7e3f)
--   [All-in-One Media Framework — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g)
--   [All-in-One Media Framework — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm)
--   [All-in-One Media Framework — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9)
--   [All-in-One Media Framework — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJe4gAfBtaw77pT9usg7e3h)
--   [All-in-One Media Framework — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oUcN674X5bNbG98qog7e3i)
--   [All-in-One Media Framework — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j)
+-   [All-in-One Media Framework — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/8wMdQV7AG6Wq7XG4hO?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dR6dQV4ou94ycdW9CA?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/fZebIN9IOfsW6TC3dJ?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM9AF3kq1C60ve2aa?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQexp6fReSl7mkg7e3e?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w7sM891bAb39D8qog7e3f?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJe4gAfBtaw77pT9usg7e3h?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oUcN674X5bNbG98qog7e3i?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Virtual Camera SDK](/virtual-camera-sdk#pricing)
 
@@ -162631,14 +162765,14 @@ LicenseDeveloper: €500 yearWorkgroup: €1,000 yearLifetime·Team: €1,800 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
 
--   [Virtual Camera SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq)
--   [Virtual Camera SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6)
--   [Virtual Camera SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k)
--   [Virtual Camera SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l)
--   [Virtual Camera SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m)
--   [Virtual Camera SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P)
+-   [Virtual Camera SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Virtual Camera SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Virtual Camera SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Virtual Camera SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Virtual Camera SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Virtual Camera SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Video Encryption SDK](/video-encryption-sdk#pricing)
 
@@ -162648,14 +162782,14 @@ LicenseDeveloper: €500 yearWorkgroup: €1,000 yearLifetime·Team: €1,800 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
 
--   [Video Encryption SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M)
--   [Video Encryption SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj)
--   [Video Encryption SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n)
--   [Video Encryption SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o)
--   [Video Encryption SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p)
--   [Video Encryption SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R)
+-   [Video Encryption SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Encryption SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Encryption SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Encryption SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Encryption SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Encryption SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R?prefilled_promo_code=BLACKFRIDAY2026)
 
 [Video Fingerprinting SDK](/video-fingerprinting-sdk#pricing)
 
@@ -162665,16 +162799,16 @@ LicenseDeveloper: €900 yearWorkgroup: €1,800 yearLifetime·Team: €2,400 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
 
--   [Video Fingerprinting SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy)
--   [Video Fingerprinting SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv)
--   [Video Fingerprinting SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q)
--   [Video Fingerprinting SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r)
--   [Video Fingerprinting SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s)
--   [Video Fingerprinting SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S)
--   [Video Fingerprinting SDK — Runtime, per server core, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE)
--   [Video Fingerprinting SDK — Runtime, per server core, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12)
+-   [Video Fingerprinting SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — Runtime, per server core, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — Runtime, per server core, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12?prefilled_promo_code=BLACKFRIDAY2026)
 
 [FFmpeg Source DirectShow Filter](/ffmpeg-source-directshow-filter#pricing)
 
@@ -162684,14 +162818,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
 
--   [FFmpeg Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41)
--   [FFmpeg Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42)
--   [FFmpeg Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y)
--   [FFmpeg Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z)
--   [FFmpeg Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40)
--   [FFmpeg Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a)
+-   [FFmpeg Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026)
+-   [FFmpeg Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026)
+-   [FFmpeg Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y?prefilled_promo_code=BLACKFRIDAY2026)
+-   [FFmpeg Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z?prefilled_promo_code=BLACKFRIDAY2026)
+-   [FFmpeg Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40?prefilled_promo_code=BLACKFRIDAY2026)
+-   [FFmpeg Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a?prefilled_promo_code=BLACKFRIDAY2026)
 
 [VLC Source DirectShow Filter](/vlc-source-directshow-filter#pricing)
 
@@ -162701,14 +162835,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
 
--   [VLC Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46)
--   [VLC Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47)
--   [VLC Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43)
--   [VLC Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44)
--   [VLC Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45)
--   [VLC Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b)
+-   [VLC Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026)
+-   [VLC Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026)
+-   [VLC Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43?prefilled_promo_code=BLACKFRIDAY2026)
+-   [VLC Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44?prefilled_promo_code=BLACKFRIDAY2026)
+-   [VLC Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45?prefilled_promo_code=BLACKFRIDAY2026)
+-   [VLC Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b?prefilled_promo_code=BLACKFRIDAY2026)
 
 [DirectShow Processing Filters Pack](/processing-filters-pack#pricing)
 
@@ -162718,14 +162852,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
 
--   [DirectShow Processing Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03)
--   [DirectShow Processing Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04)
--   [DirectShow Processing Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00)
--   [DirectShow Processing Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01)
--   [DirectShow Processing Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02)
--   [DirectShow Processing Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c)
+-   [DirectShow Processing Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Processing Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Processing Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Processing Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Processing Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Processing Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c?prefilled_promo_code=BLACKFRIDAY2026)
 
 [DirectShow Encoding Filters Pack](/encoding-filters-pack#pricing)
 
@@ -162735,14 +162869,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
 
--   [DirectShow Encoding Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08)
--   [DirectShow Encoding Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09)
--   [DirectShow Encoding Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05)
--   [DirectShow Encoding Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06)
--   [DirectShow Encoding Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07)
--   [DirectShow Encoding Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d)
+-   [DirectShow Encoding Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Encoding Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Encoding Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Encoding Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Encoding Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Encoding Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d?prefilled_promo_code=BLACKFRIDAY2026)
 
 ## Save with Bundle Deals
 
@@ -162760,13 +162894,13 @@ vs €1,900 / year buying the 5 products separately
 
 Purchase Options
 
-[💳Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-professional&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-professional&edition=license&period=annual)
 
--   [.NET Bundle Professional — Developer: Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li)
--   [.NET Bundle Professional — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d)
--   [.NET Bundle Professional — Workgroup: Subscription — renews yearly](https://buy.stripe.com/28E14odtl47JbG9eOMg7e34)
--   [.NET Bundle Professional — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x29AU4WP0Vx39DfSQg7e35)
--   [.NET Bundle Professional — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2expcEf11v8qog7e36)
+-   [.NET Bundle Professional — Developer: Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Professional — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Professional — Workgroup: Subscription — renews yearly](https://buy.stripe.com/28E14odtl47JbG9eOMg7e34?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Professional — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x29AU4WP0Vx39DfSQg7e35?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Professional — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2expcEf11v8qog7e36?prefilled_promo_code=BLACKFRIDAY2026)
 
 #### What's Included:
 
@@ -162796,13 +162930,13 @@ vs €2,500 / year buying the 5 products separately
 
 Purchase Options
 
-[💳Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-premium&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-premium&edition=license&period=annual)
 
--   [.NET Bundle Premium — Developer: Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk)
--   [.NET Bundle Premium — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e)
--   [.NET Bundle Premium — Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq00k74X0Vx4dH6igg7e37)
--   [.NET Bundle Premium — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVqeVedtl47JeSlaywg7e38)
--   [.NET Bundle Premium — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/eVq7sM3SLdIjcKdgWUg7e39)
+-   [.NET Bundle Premium — Developer: Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Premium — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Premium — Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq00k74X0Vx4dH6igg7e37?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Premium — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVqeVedtl47JeSlaywg7e38?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Premium — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/eVq7sM3SLdIjcKdgWUg7e39?prefilled_promo_code=BLACKFRIDAY2026)
 
 #### What's Included:
 
@@ -162830,13 +162964,13 @@ vs €1,500 / year buying the 5 products separately
 
 Purchase Options
 
-[💳Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=directshow-allinone&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=directshow-allinone&edition=license&period=annual)
 
--   [DirectShow All-In-One Bundle — Developer: Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W)
--   [DirectShow All-In-One Bundle — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X)
--   [DirectShow All-In-One Bundle — Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQeVeexp47J9y17mkg7e3T)
--   [DirectShow All-In-One Bundle — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFabJ2bld5bNcKdaywg7e3U)
--   [DirectShow All-In-One Bundle — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E00kfBtcEf4dHaywg7e3V)
+-   [DirectShow All-In-One Bundle — Developer: Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow All-In-One Bundle — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow All-In-One Bundle — Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQeVeexp47J9y17mkg7e3T?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow All-In-One Bundle — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFabJ2bld5bNcKdaywg7e3U?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow All-In-One Bundle — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E00kfBtcEf4dHaywg7e3V?prefilled_promo_code=BLACKFRIDAY2026)
 
 #### What's Included:
 
@@ -162854,7 +162988,7 @@ Purchase Options
 -   Email support
 -   1 year of updates
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 All licenses include royalty-free distribution rights.
 
@@ -165640,7 +165774,7 @@ We collect information when users interact with our services, for example, when 
 -   •**Contact Information**: Name, email address, and other contact details provided when purchasing our services, contacting our support, or subscribing to our emails
 -   •**Transaction Information**: We use Stripe as a payment processor and during transactions, it collects certain transaction details. Please note that Stripe operates as a separate controller and has its own privacy policy, which we recommend you review
 -   •**Telemetry Data**: Our SDKs report their own errors to us while a debugger is attached to your application, so that failures encountered during development reach us. Released applications you distribute report nothing. Reported data is redacted before it leaves your machine — credentials, file paths, host names, IP and MAC addresses, device identifiers, GUIDs and e-mail addresses are removed — and carries no identifier that survives a restart. Reporting can be switched off with the Debug\_Telemetry property
--   •**Installer Report**: When our SDK installer for Windows finishes, fails or is cancelled, it sends our server one short report: which of the three happened, the installer version, and whether it was a first install or an upgrade over an earlier version. The report contains no name, user name, computer name, file path or other identifier; your IP address is not stored with it or passed on. We count these reports in Google Analytics. To turn the report off, run the installer with INSTALLREPORT=0 on the command line. If the report cannot be sent — no network, a proxy or a firewall — the installation is not affected
+-   •**Installer Report**: When one of our installers ends, it sends our server one short report: the Windows installers of the .NET SDK, the DirectShow products FFMPEG Source, VLC Source, RTSP, Video Encryption SDK, Encoding Filters Pack, Processing Filters Pack and the Delphi and ActiveX SDKs when they finish, fail or are cancelled; the macOS package when it finishes; the Unity package the first time a project that contains it is opened in the Unity Editor, once per project folder for each user account and never in batch mode. The report says what happened, which product it was, its version and, from a Windows installer, whether it was a first install or an upgrade over an earlier version. We use these reports only to count the installations of each product and to find installers that fail, and we count them in Google Analytics. The report contains no name, user name, computer name, file path or other identifier; like any web request it reaches our server from your IP address, which is not stored with it or passed on. To turn the report off, run a Windows installer with INSTALLREPORT=0 on the command line; on macOS, create the file /Users/Shared/VisioForge/no-install-report before installing; for the Unity package, set the environment variable VISIOFORGE\_INSTALLREPORT=0 where the Unity Editor sees it (for example a user variable, before Unity Hub starts) before the project is first opened. NuGet packages, redistributables and the Virtual Camera installer send no report. If the report cannot be sent — no network, a proxy or a firewall — the installation is not affected
 
 ## How We Use Your Personal Data
 
@@ -165718,7 +165852,7 @@ If you have any questions or suggestions about our Privacy Policy, do not hesita
 
 By using our site or services, you consent to the terms outlined in this Privacy Policy.
 
-**Last updated: November 23, 2026**
+**Last updated: November 25, 2026**
 
 ---END OF PAGE---
 

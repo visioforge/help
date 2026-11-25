@@ -21,9 +21,9 @@ primary_api_classes:
   - MP4HWOutput
   - VideoView
 video:
-  id: NNqmz2vJyQc
-  upload_date: 2026-11-10T16:30:06Z
-  duration: PT9M
+  id: q4zS8CnmPHw
+  upload_date: 2026-11-25T08:05:24Z
+  duration: PT9M1S
 
 ---
 
@@ -48,7 +48,7 @@ C'est la même application que dans le [tutoriel webcam vers MP4 en WinForms](vi
 La vidéo suivante construit l'application pas à pas :
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/NNqmz2vJyQc?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/q4zS8CnmPHw?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 ### La version courte

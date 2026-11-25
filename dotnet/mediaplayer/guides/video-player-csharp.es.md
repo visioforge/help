@@ -31,9 +31,9 @@ primary_api_classes:
   - AudioRendererSettings
   - ErrorsEventArgs
 video:
-  id: YJbUV370TKo
-  upload_date: 2026-11-12T05:22:05Z
-  duration: PT12M7S
+  id: ve02KGsY4vg
+  upload_date: 2026-11-25T08:05:12Z
+  duration: PT12M8S
 
 ---
 
@@ -66,7 +66,7 @@ Este tutorial crea un reproductor de video **para escritorio Windows** en C# con
 ## Tutorial de YouTube
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/YJbUV370TKo?controls=1" title="Crear un reproductor de video en C# WPF - tutorial de YouTube" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/ve02KGsY4vg?controls=1" title="Crear un reproductor de video en C# WPF - tutorial de YouTube" frameborder="0" allowfullscreen></iframe>
 </div>
 
 [Código fuente en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/video-player-csharp-wpf)
@@ -92,9 +92,9 @@ Su código: [video-player-short-wpf en GitHub](https://github.com/visioforge/.Ne
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — los códecs FFmpeg (libav) con los que se decodifican muchos formatos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
 ```
 
 Son los paquetes x64, por lo que el proyecto define `<PlatformTarget>x64</PlatformTarget>`; una aplicación de 32 bits usa los paquetes `.x86`. Consulte [Despliegue en Windows](../../deployment-x/Windows.md) para la lista completa.

@@ -138,6 +138,37 @@ if (fileSource.SubtitleOutput != null)
 }
 ```
 
+### Keeping the Last Frame After Stop
+
+By default the view clears to its background when the media ends or the pipeline stops. Set `KeepLastFrame` to keep the last frame on the view instead, for example to show where a film ended:
+
+```csharp
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1)
+{
+    KeepLastFrame = true,
+};
+```
+
+The X engines read the same setting from the view: `VideoView1.RendererSettings.KeepLastFrame = true` before the start.
+
+- The default is `false`, which keeps the behaviour of earlier versions.
+- The frame stays until the next start. Letterbox applies to it as to the video. One exception: on Android, `VideoViewTX` (which the MAUI and Uno views use there) clears it when the view is resized or its surface is recreated while stopped, for example on rotation.
+- While the pipeline is stopped, `Snapshot_Get` and `Snapshot_GetAsync` return that frame, so an app can save it or use it as a cover.
+- `LiveVideoCompositor` with `KeepLastFrame` on its main view stops its main pipeline before its inputs, so the view keeps the last composed picture rather than the compositor's background.
+- The classic DirectShow engines (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) have their own renderer settings and keep clearing on stop.
+
+| Platform | Views | Checked on (off and on) |
+|----------|-------|-------------------------|
+| Windows | WinForms, WPF, Avalonia | Windows 11 desktop |
+| Windows | WinUI, MAUI (`VideoViewX`, `SkiaVideoView`) | Windows 11 desktop |
+| Windows | Uno | Not checked yet |
+| Linux | Avalonia | Ubuntu 24.04, X11 |
+| Android | `VideoView`, `VideoViewGL`, `VideoViewTX` | Android 16 phone, Android emulator |
+| Android | MAUI, Uno, Avalonia | Not checked yet |
+| iOS | Apple views, MAUI | Not checked on a device yet |
+| Mac Catalyst | Apple views, MAUI | macOS 27 desktop |
+| macOS | Apple views, Avalonia | macOS 27 desktop |
+
 ## Platform Compatibility
 
 The Video Renderer block offers wide compatibility across multiple operating systems and devices:

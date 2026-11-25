@@ -1,6 +1,6 @@
 ---
 title: Install Media Player SDK in Delphi — 32/64-bit Setup
-description: Install VisioForge Media Player SDK in Delphi 10.x-12.x — VCL/FMX components, package registration, library paths. Windows 32/64-bit supported.
+description: Install VisioForge Media Player SDK in Delphi 6 to 13 — VCL/FMX components, package registration, library paths. Windows 32/64-bit supported.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -53,7 +53,18 @@ This process unpacks the SDK, including the pre-compiled units (`.dcu`), the com
 
 ## Step 3: Integrating with the Delphi IDE
 
-After running the main installer, the next critical step is integrating the `TVFMediaPlayer` component into the Delphi IDE so you can use it visually in the form designer and reference its units in your code. The process differs slightly between older (Delphi 6/7) and newer (Delphi 2005+) versions.
+After running the main installer, the next critical step is integrating the `TVFMediaPlayer` component into the Delphi IDE so you can use it visually in the form designer and reference its units in your code.
+
+### Automatic Registration (Delphi 6 to Delphi 13)
+
+The installer does this for you, for every Delphi it finds on the computer, Delphi 6 through Delphi 13, and for the Windows user who runs it:
+
+* it adds the `Media Player\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+* it registers the precompiled package `VisioForge_Media_Player.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFMediaPlayer` is on the **VisioForge** page of the component palette, and the demo projects under `Demos\Source code` compile without further setup. Continue with [Step 5: Verification](#step-5-verification).
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup. The manual process differs slightly between older (Delphi 6/7) and newer (Delphi 2005+) versions.
 
 **Important:** For all Delphi versions, it's recommended to run the Delphi IDE itself **as administrator** during the package installation process. This helps avoid potential permission issues when compiling and registering the component package.
 
@@ -84,7 +95,7 @@ These older versions require manual configuration of paths and package installat
 
 *Note on Architecture:* Delphi 6/7 are strictly 32-bit (x86) environments. Therefore, you will only be installing and using the 32-bit version of the `TVFMediaPlayer` component. The SDK might contain 64-bit files, but they are not applicable here.
 
-### Installation in Delphi 2005 and Later (XE, 10.x, 11.x, 12.x)
+### Installation in Delphi 2005 and Later (XE, 10.x, 11.x, 12.x, 13)
 
 Modern Delphi versions offer a more streamlined process and robust support for multiple platforms (Win32, Win64).
 
@@ -101,15 +112,16 @@ Modern Delphi versions offer a more streamlined process and robust support for m
     * Click `OK` to save the Options.
 5. **Open the Package File:**
     * Go to `File -> Open Project...`.
-    * Navigate to the `Media Player\Packages` directory within the VisioForge installation. Find the subfolder corresponding to your Delphi version and platform (e.g., `Delphi XE11`, `Delphi XE12`, `Delphi 13`, or the matching `Delphi <version> x64` folder for 64-bit).
+    * Navigate to the `Media Player\Packages` directory within the VisioForge installation. Find the subfolder corresponding to your Delphi version (e.g., `Delphi XE11`, `Delphi XE12`, `Delphi 13`) — not the `Delphi <version> x64` folder: the IDE installs the package from its 32-bit build.
     * Open the package project `VisioForge_Media_Player.dproj` (or `VisioForge_Media_Player.dpk`). There is a single package that provides both runtime and design-time functionality.
 6. **Compile and Install:**
+    * Keep the Release build configuration and the **Windows 32-bit** target platform, the project's defaults.
     * In the Project Manager, right-click on the package project (`.dpk` file).
     * Select `Compile` from the context menu.
     * Once compiled successfully, right-click again and select `Install`.
 7. **Confirmation:** Delphi will confirm the installation, and the components will appear on the palette.
 
-*Note on Architecture:* Modern Delphi supports both 32-bit (Win32) and 64-bit (Win64) targets. The VisioForge SDK typically provides pre-compiled units (`.dcu`) for both. When you compile and install the package, Delphi usually handles registering it for the currently active platform. You can switch platforms in the Project Manager and rebuild/reinstall if necessary, although often the IDE handles this association correctly after the initial install.
+*Note on Architecture:* Modern Delphi supports both 32-bit (Win32) and 64-bit (Win64) targets, and the SDK ships precompiled units (`.dcu`) for both. The package installed into the IDE is the 32-bit one; your applications can still target Windows 64-bit, with the `Delphi <version> x64` folder on the Windows 64-bit library path.
 
 ## Step 4: Project Configuration
 

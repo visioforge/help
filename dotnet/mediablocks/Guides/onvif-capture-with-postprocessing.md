@@ -201,8 +201,12 @@ pipeline.Connect(videoResize.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Wire the audio path (RTSP audio → AAC → MP4 sink audio pad)
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start recording
 await pipeline.StartAsync();
@@ -276,8 +280,12 @@ pipeline.Connect(colorEffects.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Audio chain
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start
 await pipeline.StartAsync();
@@ -336,8 +344,12 @@ pipeline.Connect(rtspSource.VideoOutput, faceBlur.Input);
 pipeline.Connect(faceBlur.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start
 await pipeline.StartAsync();
@@ -403,8 +415,12 @@ pipeline.Connect(textOverlay.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Audio chain
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Start
 await pipeline.StartAsync();

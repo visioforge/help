@@ -55,18 +55,18 @@ primary_api_classes:
 ## NuGet Packages
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.23]"/>
-<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.25]"/>
 
 <!-- Platform redists — include only the targets you build for -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64"
-                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.16]"/>
+                  Condition="$(TargetFramework.Contains('windows'))" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS"
                   Condition="$(TargetFramework.Contains('maccatalyst'))" Version="[2026.11.22]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.Android"
-                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.11.5]"/>
+                  Condition="$(TargetFramework.Contains('android'))" Version="[2026.11.25]"/>
 <PackageReference Include="VisioForge.CrossPlatform.Core.iOS"
                   Condition="$(TargetFramework.Contains('ios'))" Version="[2026.11.23]"/>
 ```

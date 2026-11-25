@@ -104,14 +104,14 @@ graph TD;
 You'll need the VisioForge Media Blocks SDK. Add it to your .NET project via NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Depending on your target platform, add the corresponding native runtime package. For Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 For detailed platform-specific dependencies, see the [Deployment Guide](../../deployment-x/index.md).
@@ -385,10 +385,24 @@ var rtspSettings = await RTSPSourceSettings.CreateAsync(
 var rtspSource = new RTSPSourceBlock(rtspSettings);
 _videoSource = rtspSource;
 
+// AudioOutput is null when the source was created with audioEnabled: false or the camera info shows no audio; in compatibility mode with audio on it exists even for a camera without audio.
+// Set audioEnabled before _preEventBlock.AudioEnabled, so no audio branch waits on a stream that never comes.
+audioEnabled = rtspSource.AudioOutput != null;
+
 // Video path is the same: rtspSource -> motionDetector -> tee -> ...
 
-// Audio comes from the RTSP source instead of a system audio device:
-_pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+// The audio branch takes the RTSP audio in place of the system audio device:
+if (audioEnabled)
+{
+    _audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio);
+    _audioRenderer = new AudioRendererBlock();
+    _aacEncoder = new AACEncoderBlock();
+
+    _pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+    _pipeline.Connect(_audioTee, _audioRenderer);
+    _pipeline.Connect(_audioTee, _aacEncoder);
+    _pipeline.Connect(_aacEncoder.Output, _preEventBlock.AudioInput);
+}
 ```
 
 ## Configuration Options

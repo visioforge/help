@@ -60,14 +60,14 @@ Les cas d'usage courants incluent les tableaux de bord de vidéosurveillance, le
 Ajoutez le paquet NuGet du Media Blocks SDK à votre projet :
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Vous avez également besoin des paquets de runtime spécifiques à la plateforme. Pour Windows :
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 Pour les autres plateformes (macOS, Linux, Android, iOS), consultez le [guide de déploiement](../../deployment-x/index.md).
@@ -105,7 +105,11 @@ pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 // Créer le moteur de rendu audio (facultatif)
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+// AudioOutput vaut null si la source a été créée avec audioEnabled: false ou si les informations de la caméra n'indiquent pas d'audio ; en mode de compatibilité avec l'audio activé, il existe même si la caméra n'envoie pas d'audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 // Démarrer la lecture
 await pipeline.StartAsync();

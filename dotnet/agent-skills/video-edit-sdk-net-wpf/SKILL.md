@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a Windows WPF application. The SDK is a non-linear editor (NLE): it cuts, trims, merges, transcodes, and applies effects to **existing** video and audio files. It does **not** capture from cameras or screen — for live capture see `video-capture-sdk-net-wpf`. The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform editing (macOS, iOS, Android, Linux), use `video-edit-sdk-x-wpf` or one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills.
 
-Pinned NuGet version: **`2026.11.23`** (matches the official Cut Video File and Video Join Demo samples). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.11.25`** (matches the official Cut Video File and Video Join Demo samples). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -37,11 +37,11 @@ Video Edit SDK .NET 2026.x supports `net472`, `net5.0-windows`, `net6.0-windows`
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoEdit.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoEdit.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 

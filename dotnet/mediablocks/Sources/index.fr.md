@@ -1173,7 +1173,11 @@ var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
 pipeline.Connect(rtspSource.VideoOutput, videoRenderer.Input);
 
 var audioRenderer = new AudioRendererBlock();
-pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);      
+// AudioOutput vaut null si la source a été créée avec audioEnabled: false ou si les informations de la caméra n'indiquent pas d'audio ; en mode de compatibilité avec l'audio activé, il existe même si la caméra n'envoie pas d'audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, audioRenderer.Input);
+}
 
 await pipeline.StartAsync();
 ```
@@ -2048,8 +2052,8 @@ Propriétés **`FallbackSwitchSettingsBase`** (partagées par tous les types de 
 
 **Méthodes de diagnostic :**
 
-- `GetStatus()` — renvoie l'état courant de la source principale/de repli sous forme de chaîne
-- `GetStatistics()` — renvoie un dictionnaire du nombre de tentatives et de statistiques de mise en tampon
+- `GetStatus()` — renvoie l'état sous forme de chaîne : `Stopped`, `Buffering`, `Retrying` ou `Running` (`Not initialized` avant le démarrage du pipeline)
+- `GetStatistics()` — renvoie un dictionnaire de statistiques de tentatives et de mise en tampon : `NumRetry` et `NumFallbackRetry` (`ulong`), `BufferingPercent` et `FallbackBufferingPercent` (`int`), `LastRetryReason` et `LastFallbackRetryReason` (`int` : 0 aucune, 1 erreur, 2 fin de flux, 3 échec de changement d'état, 4 délai dépassé)
 - `Unblock()` — débloque manuellement lorsque `ManualUnblock` est activé
 
 #### Exemple de pipeline

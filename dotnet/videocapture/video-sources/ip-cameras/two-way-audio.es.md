@@ -92,7 +92,11 @@ var camera = new RTSPSourceBlock(rtsp);
 
 // Vídeo y audio de la cámara hacia este PC.
 pipeline.Connect(camera.VideoOutput, new VideoRendererBlock(pipeline, VideoView1).Input);
-pipeline.Connect(camera.AudioOutput, new AudioRendererBlock().Input);
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+if (camera.AudioOutput != null)
+{
+    pipeline.Connect(camera.AudioOutput, new AudioRendererBlock().Input);
+}
 
 // Micrófono hacia el altavoz de la cámara.
 var mic = (await DeviceEnumerator.Shared.AudioSourcesAsync())[0];

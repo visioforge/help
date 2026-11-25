@@ -104,14 +104,14 @@ graph TD;
 Necesitará el Media Blocks SDK .NET. Agréguelo a su proyecto .NET vía NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
 ```
 
 Dependiendo de su plataforma objetivo, agregue el paquete runtime nativo correspondiente. Para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.16]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.16]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
 ```
 
 Para dependencias específicas de plataforma detalladas, vea la [Guía de Despliegue](../../deployment-x/index.md).
@@ -375,7 +375,7 @@ public partial class MainWindow : Window, IDisposable
 Cuando use una cámara IP RTSP en lugar de una cámara local, reemplace la configuración de la fuente:
 
 ```csharp
-// Replace SystemVideoSourceBlock with RTSPSourceBlock
+// Sustituya SystemVideoSourceBlock por RTSPSourceBlock
 var rtspSettings = await RTSPSourceSettings.CreateAsync(
     new Uri("rtsp://192.168.1.21:554/Streaming/Channels/101"),
     login: "admin",
@@ -385,10 +385,24 @@ var rtspSettings = await RTSPSourceSettings.CreateAsync(
 var rtspSource = new RTSPSourceBlock(rtspSettings);
 _videoSource = rtspSource;
 
-// Video path is the same: rtspSource -> motionDetector -> tee -> ...
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+// Asigne audioEnabled antes de _preEventBlock.AudioEnabled, para que ninguna rama de audio espere un flujo que nunca llega.
+audioEnabled = rtspSource.AudioOutput != null;
 
-// Audio comes from the RTSP source instead of a system audio device:
-_pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+// La ruta de vídeo es la misma: rtspSource -> motionDetector -> tee -> ...
+
+// La rama de audio toma el audio RTSP en lugar del dispositivo de audio del sistema:
+if (audioEnabled)
+{
+    _audioTee = new TeeBlock(2, MediaBlockPadMediaType.Audio);
+    _audioRenderer = new AudioRendererBlock();
+    _aacEncoder = new AACEncoderBlock();
+
+    _pipeline.Connect(rtspSource.AudioOutput, _audioTee.Input);
+    _pipeline.Connect(_audioTee, _audioRenderer);
+    _pipeline.Connect(_audioTee, _aacEncoder);
+    _pipeline.Connect(_aacEncoder.Output, _preEventBlock.AudioInput);
+}
 ```
 
 ## Opciones de Configuración

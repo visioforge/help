@@ -277,7 +277,7 @@ ffprobe -v error -of compact output.mp4 -show_entries format=format_name,duratio
 
 ### Ce que nous construisons
 
-Dessinons du texte sur un enregistrement de webcam dans une application C# WinForms avec le VisioForge Video Capture SDK. Voici ce que nous construisons. Une application WinForms qui enregistre une webcam en MP4 avec un aperçu en direct. Sur la vidéo, elle dessine une légende que vous pouvez modifier pendant l'enregistrement, la date et l'heure, le numéro d'image et le temps écoulé depuis le début de l'enregistrement. Voici l'application terminée, qui enregistre depuis une Logitech C920. Le texte est dessiné dans les images de la vidéo : il apparaît dans l'aperçu et dans le fichier. À quoi cela sert-il ? La date et l'heure sur chaque image, c'est ce dont ont besoin les enregistrements de sécurité et ceux qui servent de preuve. Un numéro d'image permet de retrouver et de comparer plus tard une image précise. Le temps d'enregistrement aligne la vidéo sur les journaux et les données des capteurs. Et une légende indique ce qui est à l'écran, comme l'opérateur, le test ou le poste, et vous pouvez la modifier quand les choses changent.
+Dessinons du texte sur un enregistrement de webcam dans une application C# WinForms avec le VisioForge Video Capture SDK. Voici ce que nous construisons. Une application WinForms qui enregistre une webcam en MP4 avec un aperçu en direct. Sur la vidéo, elle dessine une légende que vous pouvez modifier pendant l'enregistrement, la date et l'heure, le numéro d'image et le temps écoulé depuis le début de l'enregistrement. Voici l'application terminée, qui enregistre depuis une Logitech BRIO. Le texte est dessiné dans les images de la vidéo : il apparaît dans l'aperçu et dans le fichier. À quoi cela sert-il ? La date et l'heure sur chaque image, c'est ce dont ont besoin les enregistrements de sécurité et ceux qui servent de preuve. Un numéro d'image permet de retrouver et de comparer plus tard une image précise. Le temps d'enregistrement aligne la vidéo sur les journaux et les données des capteurs. Et une légende indique ce qui est à l'écran, comme l'opérateur, le test ou le poste, et vous pouvez la modifier quand les choses changent.
 
 ### Prérequis
 
@@ -329,7 +329,7 @@ Fermer la fenêtre pendant l'enregistrement laisserait le MP4 inachevé. Dans la
 
 ### Lancer l'application
 
-Lancez l'application depuis Visual Studio. Les listes de caméras, de formats et de micros se remplissent avec les périphériques. Start lance l'enregistrement. La C920 met quelques secondes à envoyer sa première image. Puis la légende, l'horloge, le numéro d'image et le temps d'enregistrement apparaissent sur la vidéo. Tapez une nouvelle légende et cliquez sur Apply. Le nouveau texte s'affiche à l'image suivante. Stop termine output.mp4, puis nous fermons la fenêtre.
+Lancez l'application depuis Visual Studio. Les listes de caméras, de formats et de micros se remplissent avec les périphériques. Start lance l'enregistrement. La caméra met un instant à envoyer sa première image. Puis la légende, l'horloge, le numéro d'image et le temps d'enregistrement apparaissent sur la vidéo. Tapez une nouvelle légende et cliquez sur Apply. Le nouveau texte s'affiche à l'image suivante. Stop termine output.mp4, puis nous fermons la fenêtre.
 
 ### Vérifier le fichier
 

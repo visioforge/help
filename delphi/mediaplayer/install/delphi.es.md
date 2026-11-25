@@ -1,6 +1,6 @@
 ---
 title: Instalar Media Player SDK en Delphi — Setup 32/64 bits
-description: Instale VisioForge Media Player SDK en Delphi 10.x-12.x — componentes VCL/FMX, registro de paquetes, rutas de bibliotecas. Windows 32/64 bits compatible.
+description: Instale VisioForge Media Player SDK en Delphi 6 a 13 — componentes VCL/FMX, registro de paquetes, rutas de bibliotecas. Windows 32/64 bits compatible.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -53,7 +53,18 @@ Este proceso desempaqueta el SDK, incluyendo las unidades precompiladas (`.dcu`)
 
 ## Paso 3: Integrando con el IDE de Delphi
 
-Después de ejecutar el instalador principal, el siguiente paso crítico es integrar el componente `TVFMediaPlayer` en el IDE de Delphi para poder usarlo visualmente en el diseñador de formularios y referenciar sus unidades en su código. El proceso difiere ligeramente entre versiones antiguas (Delphi 6/7) y más nuevas (Delphi 2005+).
+Después de ejecutar el instalador principal, el siguiente paso crítico es integrar el componente `TVFMediaPlayer` en el IDE de Delphi para poder usarlo visualmente en el diseñador de formularios y referenciar sus unidades en su código.
+
+### Registro automático (Delphi 6 a Delphi 13)
+
+El instalador del SDK registra el paquete en cada Delphi que encuentra en el equipo, de Delphi 6 a Delphi 13, para el usuario de Windows que lo ejecuta:
+
+* agrega la carpeta `Media Player\Packages\Delphi <versión>` a la ruta de biblioteca de Windows 32 bits, y, desde Delphi XE2, la carpeta `Delphi <versión> x64` a la de Windows 64 bits;
+* registra el paquete precompilado `VisioForge_Media_Player.bpl` de esa carpeta, de modo que el IDE lo carga al iniciarse. El registro es para el IDE de 32 bits, el que Delphi inicia de forma predeterminada; si usa el IDE de 64 bits de Delphi 12 o 13, inicie el de 32 bits para diseñar con el componente.
+
+Cierre Delphi antes de ejecutar el instalador. Después inicie Delphi: `TVFMediaPlayer` está en la página **VisioForge** de la paleta de componentes, listo para colocarlo en un formulario, y los proyectos de demostración de `Demos\Source code` se compilan sin más configuración. Continúe con el [Paso 5: Verificación](#paso-5-verificacion).
+
+Si Delphi estaba abierto durante la instalación, el instalador se ejecutó con otra cuenta de Windows (por ejemplo, la cuenta de un administrador indicada en la solicitud de elevación), o instaló Delphi después del SDK, cierre Delphi y ejecute **Install Delphi packages** desde la carpeta **VisioForge Video Capture SDK** del menú Inicio (la única carpeta del instalador, para los tres productos). Hace el mismo registro para el usuario actual y muestra en su ventana cada Delphi para el que no se incluye un paquete precompilado; instale allí el paquete a mano, como se describe a continuación. La ejecución del propio instalador escribe esa lista en `VFPackageInstaller.log`, en la carpeta `%TEMP%` de la cuenta que ejecutó el instalador. El proceso manual difiere ligeramente entre versiones antiguas (Delphi 6/7) y más nuevas (Delphi 2005+).
 
 **Importante:** Para todas las versiones de Delphi, se recomienda ejecutar el IDE de Delphi **como administrador** durante el proceso de instalación del paquete. Esto ayuda a evitar posibles problemas de permisos al compilar y registrar el paquete del componente.
 
@@ -84,7 +95,7 @@ Estas versiones antiguas requieren configuración manual de rutas e instalación
 
 *Nota sobre Arquitectura:* Delphi 6/7 son estrictamente entornos de 32 bits (x86). Por lo tanto, solo instalará y usará la versión de 32 bits del componente `TVFMediaPlayer`. El SDK puede contener archivos de 64 bits, pero no son aplicables aquí.
 
-### Instalación en Delphi 2005 y Posterior (XE, 10.x, 11.x, 12.x)
+### Instalación en Delphi 2005 y Posterior (XE, 10.x, 11.x, 12.x, 13)
 
 Las versiones modernas de Delphi ofrecen un proceso más optimizado y soporte robusto para múltiples plataformas (Win32, Win64).
 
@@ -101,15 +112,16 @@ Las versiones modernas de Delphi ofrecen un proceso más optimizado y soporte ro
     * Haga clic en `OK` para guardar las Opciones.
 5. **Abrir el Archivo del Paquete:**
     * Vaya a `File -> Open Project...`.
-    * Navegue al directorio `Media Player\Packages` dentro de la instalación de VisioForge. Encuentre la subcarpeta correspondiente a su versión de Delphi y plataforma (ej., `Delphi XE11`, `Delphi XE12`, `Delphi 13`, o la carpeta `Delphi <versión> x64` correspondiente para 64 bits).
+    * Navegue al directorio `Media Player\Packages` dentro de la instalación de VisioForge. Encuentre la subcarpeta correspondiente a su versión de Delphi (ej., `Delphi XE11`, `Delphi XE12`, `Delphi 13`), no la carpeta `Delphi <versión> x64`: el IDE instala el paquete a partir de su compilación de 32 bits.
     * Abra el proyecto de paquete `VisioForge_Media_Player.dproj` (o `VisioForge_Media_Player.dpk`). Existe un paquete único que proporciona tanto la funcionalidad de runtime como de tiempo de diseño.
 6. **Compilar e Instalar:**
+    * Mantenga la configuración de compilación Release y la plataforma de destino **Windows 32-bit**, los valores predeterminados del proyecto.
     * En el Administrador de Proyectos, haga clic derecho en el proyecto del paquete (archivo `.dpk`).
     * Seleccione `Compile` del menú contextual.
     * Una vez compilado exitosamente, haga clic derecho nuevamente y seleccione `Install`.
 7. **Confirmación:** Delphi confirmará la instalación, y los componentes aparecerán en la paleta.
 
-*Nota sobre Arquitectura:* Delphi moderno soporta tanto objetivos de 32 bits (Win32) como de 64 bits (Win64). El SDK de VisioForge típicamente proporciona unidades precompiladas (`.dcu`) para ambos. Cuando compila e instala el paquete, Delphi usualmente maneja el registro para la plataforma actualmente activa. Puede cambiar plataformas en el Administrador de Proyectos y reconstruir/reinstalar si es necesario, aunque a menudo el IDE maneja esta asociación correctamente después de la instalación inicial.
+*Nota sobre Arquitectura:* Delphi moderno soporta tanto objetivos de 32 bits (Win32) como de 64 bits (Win64), y el SDK incluye unidades precompiladas (`.dcu`) para ambos. El paquete instalado en el IDE es el de 32 bits; sus aplicaciones pueden seguir apuntando a Windows 64 bits, con la carpeta `Delphi <versión> x64` en la ruta de biblioteca de Windows 64 bits.
 
 ## Paso 4: Configuración del Proyecto
 

@@ -202,8 +202,12 @@ pipeline.Connect(videoResize.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Cablear el camino de audio (RTSP audio → AAC → pad de audio del MP4)
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Iniciar grabación
 await pipeline.StartAsync();
@@ -278,8 +282,12 @@ pipeline.Connect(colorEffects.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Cadena de audio
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Iniciar
 await pipeline.StartAsync();
@@ -338,8 +346,12 @@ pipeline.Connect(rtspSource.VideoOutput, faceBlur.Input);
 pipeline.Connect(faceBlur.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Iniciar
 await pipeline.StartAsync();
@@ -405,8 +417,12 @@ pipeline.Connect(textOverlay.Output, h264Encoder.Input);
 pipeline.Connect(h264Encoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Video));
 
 // Cadena de audio
-pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
-pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+// AudioOutput es null si la fuente se creó con audioEnabled: false o la información de la cámara no muestra audio; en modo de compatibilidad con audio activado existe aunque la cámara no envíe audio.
+if (rtspSource.AudioOutput != null)
+{
+    pipeline.Connect(rtspSource.AudioOutput, aacEncoder.Input);
+    pipeline.Connect(aacEncoder.Output, mp4Sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+}
 
 // Iniciar
 await pipeline.StartAsync();

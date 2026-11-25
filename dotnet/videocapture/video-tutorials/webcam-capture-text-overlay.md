@@ -277,7 +277,7 @@ ffprobe -v error -of compact output.mp4 -show_entries format=format_name,duratio
 
 ### What we build
 
-Let's draw text over a webcam recording in a C# WinForms app with the VisioForge Video Capture SDK. Here's what we build. A WinForms app that records a webcam to MP4 with a live preview. Over the video it draws a caption that you can change while it records, the date and time, the frame number, and the time since the recording started. This is the finished app, recording from a Logitech C920. The text is drawn into the video frames, so it's in the preview and in the file. Where does this help? A date and time on every frame is what security and evidence recordings need. A frame number lets you find and compare an exact frame later. The recording time lines the video up with logs and sensor data. And a caption labels what's on camera, like the operator, the test or the station, and you can change it as things change.
+Let's draw text over a webcam recording in a C# WinForms app with the VisioForge Video Capture SDK. Here's what we build. A WinForms app that records a webcam to MP4 with a live preview. Over the video it draws a caption that you can change while it records, the date and time, the frame number, and the time since the recording started. This is the finished app, recording from a Logitech BRIO. The text is drawn into the video frames, so it's in the preview and in the file. Where does this help? A date and time on every frame is what security and evidence recordings need. A frame number lets you find and compare an exact frame later. The recording time lines the video up with logs and sensor data. And a caption labels what's on camera, like the operator, the test or the station, and you can change it as things change.
 
 ### Prerequisites
 
@@ -329,7 +329,7 @@ Closing the window while it records would leave the MP4 unfinished. In the Prope
 
 ### Run it
 
-Run the app from Visual Studio. The camera, format and microphone lists fill in from the devices. Start begins the recording. The C920 takes a few seconds to send its first frame. Then the caption, the clock, the frame number and the recording time appear over the video. Type a new caption and click Apply. The new text shows on the next frame. Stop finishes output.mp4, and then we close the window.
+Run the app from Visual Studio. The camera, format and microphone lists fill in from the devices. Start begins the recording. The camera takes a moment to send its first frame. Then the caption, the clock, the frame number and the recording time appear over the video. Type a new caption and click Apply. The new text shows on the next frame. Stop finishes output.mp4, and then we close the window.
 
 ### Check the file
 

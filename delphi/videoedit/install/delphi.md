@@ -1,6 +1,6 @@
 ---
 title: Install TVFVideoEdit in Delphi - Setup and Configuration
-description: Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11+ with library paths, package building, and troubleshooting configuration.
+description: Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11 to 13 with library paths, package building, and troubleshooting configuration.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -24,6 +24,17 @@ Before beginning the installation process, ensure that you have:
 1. Appropriate Delphi version installed and properly configured
 2. Administrative rights for package installation
 3. Downloaded the latest version of the TVFVideoEdit library
+
+## Automatic Installation (Delphi 6 to Delphi 13)
+
+The SDK installer registers the package with every Delphi it finds on the computer, Delphi 6 through Delphi 13, for the Windows user who runs it:
+
+- it adds the `Video Edit\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+- it registers the precompiled package `VisioForge_Video_Edit_Package.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFVideoEdit` is on the **VisioForge** page of the component palette, ready to drop on a form, and the demo projects under `Demos\Source code` compile without further setup.
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup.
 
 ## Installing in Borland Delphi 6/7
 
@@ -83,20 +94,20 @@ Click the Install button to register the components with Delphi's component pale
 
 ### Architecture Support
 
-For Delphi 2005 and later versions, both x86 and x64 versions are available. You can utilize the 64-bit version if you need to develop 64-bit applications. Note that the IDE itself may require the x86 version for design-time operations.
+For Delphi XE2 and later versions, both x86 and x64 versions are available. You can utilize the 64-bit version if you need to develop 64-bit applications. The IDE itself uses the x86 version at design time.
 
 ## Installing in Delphi 11 and Later
 
 Modern Delphi versions feature a streamlined installation process:
 
 1. Open the `VisioForge_Video_Edit_Package.dproj` package project located in the `Video Edit\Packages\Delphi <version>` folder after installation
-2. Select the Release build configuration from the dropdown menu
+2. Select the Release build configuration from the dropdown menu and the **Windows 32-bit** target platform (both are the project's defaults); the IDE installs the package from its 32-bit build, so open the project from the `Delphi <version>` folder, not from `Delphi <version> x64`
 3. Build and install the package using the IDE's build commands
 4. The components will be registered and ready to use
 
 ## Project Configuration Best Practices
 
-You can install both x86 and x64 packages based on your project requirements. Ensure you've properly configured your application's library path settings:
+The IDE uses the 32-bit package at design time; your applications can target Windows 32-bit or, from Delphi XE2 on, 64-bit. Ensure you've properly configured your application's library path settings:
 
 1. Add the correct library folder path to your project options
 2. Configure the path to properly locate `.dcu` files

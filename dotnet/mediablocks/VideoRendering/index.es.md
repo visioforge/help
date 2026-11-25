@@ -138,6 +138,37 @@ if (fileSource.SubtitleOutput != null)
 }
 ```
 
+### Mantener el último fotograma después de detener
+
+De forma predeterminada, la vista se limpia a su fondo cuando el medio termina o el pipeline se detiene. Establezca `KeepLastFrame` para que la vista conserve el último fotograma, por ejemplo para mostrar dónde terminó una película:
+
+```csharp
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1)
+{
+    KeepLastFrame = true,
+};
+```
+
+Los motores X leen la misma opción de la vista: `VideoView1.RendererSettings.KeepLastFrame = true` antes de iniciar.
+
+- El valor predeterminado es `false`, que mantiene el comportamiento de las versiones anteriores.
+- El fotograma permanece hasta el siguiente inicio. Letterbox se le aplica igual que al video. Una excepción: en Android, `VideoViewTX` (que usan allí las vistas de MAUI y Uno) lo borra si la vista cambia de tamaño o se recrea su superficie mientras está detenida, por ejemplo al girar el dispositivo.
+- Mientras el pipeline está detenido, `Snapshot_Get` y `Snapshot_GetAsync` devuelven ese fotograma, para que la aplicación pueda guardarlo o usarlo como portada.
+- `LiveVideoCompositor` con `KeepLastFrame` en su vista principal detiene su pipeline principal antes que sus entradas, de modo que la vista conserva la última imagen compuesta y no el fondo del compositor.
+- Los motores DirectShow clásicos (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) tienen su propia configuración de renderizado y siguen limpiando la vista al detenerse.
+
+| Plataforma | Vistas | Comprobado en (desactivado y activado) |
+|------------|--------|----------------------------------------|
+| Windows | WinForms, WPF, Avalonia | Escritorio de Windows 11 |
+| Windows | WinUI, MAUI (`VideoViewX`, `SkiaVideoView`) | Escritorio de Windows 11 |
+| Windows | Uno | Aún no comprobado |
+| Linux | Avalonia | Ubuntu 24.04, X11 |
+| Android | `VideoView`, `VideoViewGL`, `VideoViewTX` | Teléfono con Android 16, emulador de Android |
+| Android | MAUI, Uno, Avalonia | Aún no comprobado |
+| iOS | Vistas de Apple, MAUI | Aún no comprobado en un dispositivo |
+| Mac Catalyst | Vistas de Apple, MAUI | Escritorio de macOS 27 |
+| macOS | Vistas de Apple, Avalonia | Escritorio de macOS 27 |
+
 ## Compatibilidad de Plataformas
 
 El bloque Renderizador de Video ofrece amplia compatibilidad a través de múltiples sistemas operativos y dispositivos:

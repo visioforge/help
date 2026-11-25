@@ -1,6 +1,6 @@
 ---
-title: Guide d'installation de TVFVideoCapture pour Delphi 6 à 11
-description: Installez les paquets TVFVideoCapture dans Delphi 6/7 jusqu'à Delphi 11+ avec instructions de configuration complètes, chemins de bibliothèque et configuration.
+title: Guide d'installation de TVFVideoCapture pour Delphi 6 à 13
+description: Installez les paquets TVFVideoCapture dans Delphi 6/7 jusqu'à Delphi 13 avec instructions de configuration complètes, chemins de bibliothèque et configuration.
 tags:
   - All-in-One Media Framework
   - Delphi
@@ -16,6 +16,17 @@ primary_api_classes:
 # Guide complet d'installation de TVFVideoCapture pour les développeurs Delphi
 
 > Produits associés : [All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+## Installation automatique (Delphi 6 à Delphi 13)
+
+Le programme d'installation du SDK enregistre le paquet dans chaque Delphi qu'il trouve sur l'ordinateur, de Delphi 6 à Delphi 13, pour l'utilisateur Windows qui l'exécute :
+
+- il ajoute le dossier `Video Capture\Packages\Delphi <version>` au chemin de bibliothèque Windows 32 bits, et, à partir de Delphi XE2, le dossier `Delphi <version> x64` à celui de Windows 64 bits ;
+- il enregistre le paquet précompilé `VisioForge_VideoCapture_Package.bpl` de ce dossier, afin que l'IDE le charge au démarrage. L'enregistrement concerne l'IDE 32 bits, celui que Delphi démarre par défaut ; si vous utilisez l'IDE 64 bits de Delphi 12 ou 13, démarrez l'IDE 32 bits pour concevoir avec le composant.
+
+Fermez Delphi avant d'exécuter le programme d'installation. Démarrez ensuite Delphi : `TVFVideoCapture` se trouve sur la page **VisioForge** de la palette de composants, prêt à être déposé sur une fiche, et les projets de démonstration de `Demos\Source code` se compilent sans autre configuration.
+
+Si Delphi était ouvert pendant l'installation, si le programme d'installation s'est exécuté sous un autre compte Windows (par exemple celui d'un administrateur saisi à l'invite d'élévation), ou si vous avez installé Delphi après le SDK, fermez Delphi et lancez **Install Delphi packages** depuis le dossier **VisioForge Video Capture SDK** du menu Démarrer (l'unique dossier du programme d'installation, pour les trois produits). Il effectue le même enregistrement pour l'utilisateur courant et affiche dans sa fenêtre chaque Delphi pour lequel aucun paquet précompilé n'est livré ; installez-y le paquet à la main, comme décrit ci-dessous. L'exécution du programme d'installation lui-même écrit cette liste dans `VFPackageInstaller.log`, dans le dossier `%TEMP%` du compte qui a exécuté le programme d'installation.
 
 ## Installation dans Borland Delphi 6/7
 
@@ -97,7 +108,7 @@ Après avoir installé le framework, naviguez vers le dossier `Video Capture\Pac
 
 ### Étape 2 : sélectionner la configuration de compilation appropriée
 
-Choisissez la configuration de compilation Release pour garantir des performances optimales du composant.
+Choisissez la configuration de compilation Release pour garantir des performances optimales du composant, et la plateforme cible **Windows 32-bit** : l'IDE installe le paquet à partir de sa version 32 bits. Ce sont les valeurs par défaut du projet. Ouvrez le projet depuis le dossier `Delphi <version>`, et non depuis `Delphi <version> x64`.
 
 ![Sélection de la configuration de compilation Release](delphi11-1.webp)
 
@@ -117,7 +128,7 @@ Confirmez que l'installation s'est terminée avec succès avant de poursuivre le
 
 ### Prise en charge multi-architecture
 
-TVFVideoCapture prend en charge les architectures x86 et x64, vous permettant de développer des applications pour différentes cibles de plateforme. Vous pouvez installer simultanément les deux versions de paquets pour prendre en charge des scénarios de déploiement flexibles.
+TVFVideoCapture prend en charge les architectures x86 et x64, vous permettant de développer des applications pour différentes cibles de plateforme. L'IDE utilise le paquet 32 bits à la conception ; vos applications peuvent tout de même cibler Windows 64 bits (Delphi XE2 et versions ultérieures) grâce au dossier `Delphi <version> x64` dans le chemin de bibliothèque Windows 64 bits.
 
 ### Configuration du chemin de bibliothèque
 

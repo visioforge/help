@@ -25,9 +25,9 @@ primary_api_classes:
   - CompressorExpanderAudioEffect
 
 video:
-  id: VsFSrYD80XE
-  upload_date: 2026-11-20T15:10:00Z
-  duration: PT11M57S
+  id: FahOo-ih3ac
+  upload_date: 2026-11-25T08:05:03Z
+  duration: PT12M1S
 ---
 
 # Efectos de Audio en Tiempo Real para Aplicaciones .NET
@@ -41,7 +41,7 @@ VisioForge Media Framework proporciona más de 30 efectos de audio para el proce
 El video crea el mismo reproductor en Visual Studio: una ventana WPF con un ecualizador de diez bandas, eco, reverberación y tono, cada uno cambiado mientras el archivo se reproduce.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/VsFSrYD80XE?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/FahOo-ih3ac?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 ## SDKs y Plataformas

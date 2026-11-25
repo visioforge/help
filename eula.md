@@ -145,7 +145,15 @@ If any provision of this Agreement is held to be unenforceable or invalid, such 
 
 This Agreement constitutes the entire agreement between you and Licensor regarding the subject matter hereof and supersedes all prior or contemporaneous understandings regarding such subject matter. No amendment to or modification of this Agreement will be binding unless in writing and signed by Licensor.
 
-## 14. CONTACT INFORMATION
+## 14. INSTALLATION REPORT
+
+**14.1.** The installers of the .NET SDKs, of FFMPEG Source, VLC Source, RTSP, Video Encryption SDK and the Encoding and Processing Filters Packs, and of the Delphi and ActiveX All-in-One SDKs send Licensor one short report over HTTPS when the installation ends: that it finished (the Windows installers also report one that failed or was cancelled), the product, its version and, for the Windows installers, whether it was a first install or an upgrade. The Unity package sends the same report the first time a project that contains it is opened in the Unity Editor, once per project folder for each user account.
+
+**14.2.** The report contains no name, user name, computer name, file path or other identifier. Like any web request, it reaches Licensor's server from your IP address; the address is not stored with the report or passed on. Licensor uses the reports only to count the installations of each product and to find installers that fail.
+
+**14.3.** You may turn the report off: run a Windows installer with `INSTALLREPORT=0` on the command line; on macOS, create the file `/Users/Shared/VisioForge/no-install-report` before installing; for the Unity package, set the environment variable `VISIOFORGE_INSTALLREPORT` to `0` before opening the project, in the environment the Unity Editor or Unity Hub starts with (restart Unity Hub after setting it); that project folder is then never reported for that user account, even if the variable is removed later. The installation does not depend on the report. NuGet packages and the redistributables you ship with your applications send no report.
+
+## 15. CONTACT INFORMATION
 
 If you have any questions about this Agreement, please contact Licensor at:
 
@@ -159,4 +167,4 @@ Website: www.visioforge.com
 
 ---
 © VisioForge. All rights reserved.
-Last Updated: 2026-08-27
+Last Updated: 2026-11-25

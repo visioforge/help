@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Edit SDK .NET (non-linear editor) into a
 
 This skill helps you add **VisioForge Video Edit SDK .NET** to a headless .NET console application — for scripts, scheduled jobs, server-side processing, and CI pipelines that cut, trim, merge, transcode, or apply effects to existing video files. The SDK is a non-linear editor (NLE): it does **not** capture from cameras or screen — for that see `video-capture-sdk-net-wpf`. The SDK is Windows-only (DirectShow / Media Foundation under the hood); for cross-platform batch editing (macOS, Linux containers) see the [Video Edit SDK X product page](https://www.visioforge.com/video-edit-sdk-net).
 
-Pinned NuGet version: **`2026.11.23`** (matches the official Main Demo CLI sample at `_SETUP/GitHub/Video Edit SDK/Console/CSharp/Main Demo CLI/`). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.11.25`** (matches the official Main Demo CLI sample at `_SETUP/GitHub/Video Edit SDK/Console/CSharp/Main Demo CLI/`). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,13 +35,13 @@ Video Edit SDK .NET 2026.x supports `net472`, `net5.0-windows`, `net6.0-windows`
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoEdit.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.XIPH.x64" Version="[2026.11.23]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.WebM.x64" Version="[2026.11.23]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoEdit.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.XIPH.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.WebM.x64" Version="[2026.11.25]"/>
 </ItemGroup>
 ```
 
