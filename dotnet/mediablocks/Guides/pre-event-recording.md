@@ -30,6 +30,11 @@ primary_api_classes:
   - VideoRendererBlock
   - H264EncoderBlock
 
+video:
+  id: q351uIbeKEw
+  upload_date: 2026-11-25T18:52:09Z
+  duration: PT7M25S
+
 ---
 
 # How to Implement Pre-Event Recording for IP Cameras in C\#
@@ -39,6 +44,7 @@ primary_api_classes:
 ## Table of Contents
 
 - [Overview](#overview)
+- [Video Tutorial: Motion-Triggered Recording in C# WPF](#video-tutorial-motion-triggered-recording-in-c-wpf)
 - [Core Features](#core-features)
 - [How It Works](#how-it-works)
 - [Prerequisites](#prerequisites)
@@ -54,10 +60,28 @@ Pre-event recording (also known as circular buffer recording or retrospective re
 
 This guide demonstrates how to record IP camera streams and webcam video with pre-event buffering using the VisioForge Media Blocks SDK for .NET. It covers RTSP camera capture, motion detection triggered recording, and saving event clips to MP4 or MPEG-TS files.
 
+## Video Tutorial: Motion-Triggered Recording in C# WPF
+
+The tutorial walks through the Pre-Event Recording WPF demo: an RTSP IP camera goes through motion detection to a preview and to `PreEventRecordingBlock`, which keeps the last seconds of encoded video and audio in memory. Motion starts the recording, so each saved file begins before the motion did. The video also covers extending and stopping a recording, and MPEG-TS files that stay playable after a power loss.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/q351uIbeKEw?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### The short version
+
+A console app in a few lines of C#: it buffers the video of an RTSP camera in memory and, when you press Enter, saves up to 10 seconds from before that moment, starting at a key frame, and five more seconds of live video to an MP4 file.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/L_iDqBfU5fY?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [pre-event-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/pre-event-short-console) on GitHub.
+
 ## Core Features
 
 - **Continuous buffering**: Encoded frames are stored in a managed circular buffer with configurable duration
-- **Keyframe-aware**: Recording always starts from the nearest video keyframe (I-frame) for proper playback
+- **Keyframe-aware**: Recording always starts from the earliest video keyframe (I-frame) in the buffer for proper playback
 - **Event-triggered output**: Files are created only when events occur — no continuous disk writes
 - **Automatic post-event recording**: Configurable post-event duration with auto-stop
 - **Extend on re-trigger**: If triggered again during recording, the post-event timer resets without creating a new file
@@ -456,7 +480,7 @@ pipeline.Connect(rtspSource.VideoOutput, preEventBlock.VideoInput);
 ## Key Considerations
 
 - **Memory usage**: 30 seconds of buffered H.264 video at 4 Mbps plus AAC audio at 128 kbps uses approximately 15.5 MB of managed memory per camera. Scale accordingly when monitoring multiple cameras.
-- **Keyframe alignment**: The actual pre-event duration in the output file may be slightly less than configured, as the buffer drains from the nearest keyframe. With a typical 2-second GOP, the actual pre-event footage starts within 2 seconds of the configured duration.
+- **Keyframe alignment**: The actual pre-event duration in the output file may be slightly less than configured, as the buffer drains from its earliest keyframe. With a typical 2-second GOP, the actual pre-event footage starts within 2 seconds of the configured duration.
 - **Re-trigger behavior**: Calling `TriggerRecording()` while already recording extends the current recording rather than creating a new file. Call `StopRecording()` first if you need a new file.
 - **Container format**: Use MP4 for maximum compatibility. Use MPEG-TS for crash safety in unattended/headless deployments where power loss or crashes may occur.
 - **Encoded input required**: The `PreEventRecordingBlock` expects encoded frames. When using sources that output raw video (like `SystemVideoSourceBlock`), add encoder blocks (H264, HEVC) between the source and the pre-event block.

@@ -30,6 +30,11 @@ primary_api_classes:
   - VideoRendererBlock
   - H264EncoderBlock
 
+video:
+  id: q351uIbeKEw
+  upload_date: 2026-11-25T18:52:09Z
+  duration: PT7M25S
+
 ---
 
 # Cómo Implementar Grabación Pre-Evento para Cámaras IP en C\#
@@ -39,6 +44,7 @@ primary_api_classes:
 ## Tabla de Contenidos
 
 - [Resumen](#resumen)
+- [Tutorial en video: grabación activada por movimiento en C# WPF](#tutorial-en-video-grabacion-activada-por-movimiento-en-c-wpf)
 - [Características Principales](#caracteristicas-principales)
 - [Cómo Funciona](#como-funciona)
 - [Prerrequisitos](#prerrequisitos)
@@ -54,10 +60,28 @@ La grabación pre-evento (también conocida como grabación con buffer circular 
 
 Esta guía demuestra cómo grabar streams de cámaras IP y video de webcam con almacenamiento pre-evento usando Media Blocks SDK .NET. Cubre captura de cámara RTSP, grabación activada por detección de movimiento y guardado de clips de eventos en archivos MP4 o MPEG-TS.
 
+## Tutorial en video: grabación activada por movimiento en C# WPF
+
+El tutorial recorre la demo WPF Pre-Event Recording: una cámara IP RTSP pasa por la detección de movimiento hacia una vista previa y hacia `PreEventRecordingBlock`, que guarda en memoria los últimos segundos de video y audio codificados. El movimiento inicia la grabación, así que cada archivo guardado empieza antes que el movimiento. El video también muestra cómo prolongar y detener una grabación, y los archivos MPEG-TS que siguen reproduciéndose tras un corte de corriente.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/q351uIbeKEw?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### La versión corta
+
+Una aplicación de consola en pocas líneas de C#: mantiene en memoria el video de una cámara RTSP y, cuando usted pulsa Enter, guarda en un archivo MP4 hasta 10 segundos anteriores a ese momento, a partir de un fotograma clave, y cinco segundos más de video en vivo.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/L_iDqBfU5fY?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [pre-event-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/pre-event-short-console) en GitHub.
+
 ## Características Principales
 
 - **Almacenamiento continuo en buffer**: Los fotogramas codificados se almacenan en un buffer circular administrado con duración configurable
-- **Consciente de keyframes**: La grabación siempre comienza desde el keyframe de video más cercano (I-frame) para reproducción correcta
+- **Consciente de keyframes**: La grabación siempre comienza desde el keyframe de video (I-frame) más antiguo del buffer para reproducción correcta
 - **Salida activada por eventos**: Los archivos se crean solo cuando ocurren eventos — sin escrituras continuas en disco
 - **Grabación post-evento automática**: Duración post-evento configurable con detención automática
 - **Extensión al re-disparar**: Si se activa nuevamente durante la grabación, el temporizador post-evento se reinicia sin crear un nuevo archivo
@@ -456,7 +480,7 @@ pipeline.Connect(rtspSource.VideoOutput, preEventBlock.VideoInput);
 ## Consideraciones Clave
 
 - **Uso de memoria**: 30 segundos de video H.264 almacenado a 4 Mbps más audio AAC a 128 kbps usa aproximadamente 15.5 MB de memoria administrada por cámara. Escale según corresponda al monitorear múltiples cámaras.
-- **Alineación de keyframes**: La duración pre-evento real en el archivo de salida puede ser ligeramente menor que la configurada, ya que el buffer se drena desde el keyframe más cercano. Con un GOP típico de 2 segundos, el metraje pre-evento real comienza dentro de 2 segundos de la duración configurada.
+- **Alineación de keyframes**: La duración pre-evento real en el archivo de salida puede ser ligeramente menor que la configurada, ya que el buffer se drena desde su keyframe más antiguo. Con un GOP típico de 2 segundos, el metraje pre-evento real comienza dentro de 2 segundos de la duración configurada.
 - **Comportamiento de re-disparo**: Llamar a `TriggerRecording()` mientras ya está grabando extiende la grabación actual en lugar de crear un nuevo archivo. Llame a `StopRecording()` primero si necesita un nuevo archivo.
 - **Formato de contenedor**: Use MP4 para máxima compatibilidad. Use MPEG-TS para seguridad ante fallos en despliegues desatendidos/headless donde pueden ocurrir cortes de energía o fallos.
 - **Entrada codificada requerida**: El `PreEventRecordingBlock` espera fotogramas codificados. Cuando use fuentes que producen video raw (como `SystemVideoSourceBlock`), agregue bloques codificadores (H264, HEVC) entre la fuente y el bloque pre-evento.

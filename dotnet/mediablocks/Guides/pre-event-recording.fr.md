@@ -30,6 +30,11 @@ primary_api_classes:
   - VideoRendererBlock
   - H264EncoderBlock
 
+video:
+  id: q351uIbeKEw
+  upload_date: 2026-11-25T18:52:09Z
+  duration: PT7M25S
+
 ---
 
 # Implémenter l'enregistrement pré-événement pour caméras IP en C\#
@@ -39,6 +44,7 @@ primary_api_classes:
 ## Table des matières
 
 - [Vue d'ensemble](#vue-densemble)
+- [Tutoriel vidéo : enregistrement déclenché par le mouvement en C# WPF](#tutoriel-video-enregistrement-declenche-par-le-mouvement-en-c-wpf)
 - [Fonctionnalités principales](#fonctionnalites-principales)
 - [Fonctionnement](#fonctionnement)
 - [Prérequis](#prerequis)
@@ -54,10 +60,28 @@ L'enregistrement pré-événement (également appelé enregistrement par tampon 
 
 Ce guide montre comment enregistrer les flux de caméras IP et la vidéo webcam avec mise en tampon pré-événement à l'aide du VisioForge Media Blocks SDK pour .NET. Il couvre la capture caméra RTSP, l'enregistrement déclenché par détection de mouvement, et l'enregistrement des clips d'événement vers des fichiers MP4 ou MPEG-TS.
 
+## Tutoriel vidéo : enregistrement déclenché par le mouvement en C# WPF
+
+Le tutoriel parcourt la démo WPF Pre-Event Recording : une caméra IP RTSP passe par la détection de mouvement vers un aperçu et vers `PreEventRecordingBlock`, qui garde en mémoire les dernières secondes de vidéo et d'audio encodées. Le mouvement lance l'enregistrement, si bien que chaque fichier enregistré commence avant le mouvement. La vidéo montre aussi comment prolonger et arrêter un enregistrement, ainsi que les fichiers MPEG-TS qui restent lisibles après une coupure de courant.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/q351uIbeKEw?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+### La version courte
+
+Une application console en quelques lignes de C# : elle garde en mémoire la vidéo d'une caméra RTSP et, lorsque vous appuyez sur Entrée, enregistre dans un fichier MP4 jusqu'à 10 secondes précédant ce moment, à partir d'une image clé, et cinq secondes de vidéo en direct de plus.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/L_iDqBfU5fY?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Son code : [pre-event-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/pre-event-short-console) sur GitHub.
+
 ## Fonctionnalités principales
 
 - **Mise en tampon continue** : les images encodées sont stockées dans un tampon circulaire managé avec une durée configurable
-- **Sensibilité aux images-clés** : l'enregistrement démarre toujours à partir de la plus proche image-clé vidéo (I-frame) pour une lecture correcte
+- **Sensibilité aux images-clés** : l'enregistrement démarre toujours à partir de la plus ancienne image-clé vidéo (I-frame) du tampon pour une lecture correcte
 - **Sortie déclenchée par événement** : les fichiers ne sont créés que lorsqu'un événement survient — pas d'écritures disque continues
 - **Enregistrement post-événement automatique** : durée post-événement configurable avec arrêt automatique
 - **Extension sur nouveau déclenchement** : si déclenché à nouveau pendant l'enregistrement, le minuteur post-événement se réinitialise sans créer un nouveau fichier
@@ -456,7 +480,7 @@ pipeline.Connect(rtspSource.VideoOutput, preEventBlock.VideoInput);
 ## Considérations clés
 
 - **Utilisation mémoire** : 30 secondes de vidéo H.264 en tampon à 4 Mbps plus de l'audio AAC à 128 kbps utilisent environ 15,5 Mo de mémoire managée par caméra. Adaptez l'échelle lorsque vous surveillez plusieurs caméras.
-- **Alignement sur les images-clés** : la durée pré-événement réelle dans le fichier de sortie peut être légèrement inférieure à celle configurée, le tampon se vidant à partir de l'image-clé la plus proche. Avec un GOP typique de 2 secondes, la séquence pré-événement réelle commence dans les 2 secondes de la durée configurée.
+- **Alignement sur les images-clés** : la durée pré-événement réelle dans le fichier de sortie peut être légèrement inférieure à celle configurée, le tampon se vidant à partir de sa plus ancienne image-clé. Avec un GOP typique de 2 secondes, la séquence pré-événement réelle commence dans les 2 secondes de la durée configurée.
 - **Comportement de redéclenchement** : appeler `TriggerRecording()` pendant un enregistrement déjà en cours étend l'enregistrement actuel au lieu de créer un nouveau fichier. Appelez d'abord `StopRecording()` si vous avez besoin d'un nouveau fichier.
 - **Format de conteneur** : utilisez MP4 pour une compatibilité maximale. Utilisez MPEG-TS pour la résistance aux plantages dans les déploiements sans surveillance/headless où des coupures d'alimentation ou plantages peuvent survenir.
 - **Entrée encodée requise** : le `PreEventRecordingBlock` attend des images encodées. Lors de l'utilisation de sources qui produisent de la vidéo brute (comme `SystemVideoSourceBlock`), ajoutez des blocs d'encodage (H264, HEVC) entre la source et le bloc pré-événement.
