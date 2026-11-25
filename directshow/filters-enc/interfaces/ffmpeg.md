@@ -1038,6 +1038,7 @@ end;
 
 ---
 ## See Also
+- [FFMPEG Encoder Pin Settings (IFFmpegSinkPinSettings2)](ffmpeg-sink.md) - the newer VisioForge FFMPEG Encoder filter: codec options, decimation, audio filters
 - [H.264 Encoder Interface](h264.md)
 - [Video Codecs Reference](../codecs-reference.md)
 - [MP4 Muxer Interface](mp4-muxer.md)

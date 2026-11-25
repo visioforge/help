@@ -1039,6 +1039,7 @@ end;
 
 ---
 ## Voir aussi
+- [Réglages de broche de FFMPEG Encoder (IFFmpegSinkPinSettings2)](ffmpeg-sink.md) : le filtre VisioForge FFMPEG Encoder plus récent, avec options du codec, décimation et filtres audio
 - [Interface de l'encodeur H.264](h264.md)
 - [Référence des codecs vidéo](../codecs-reference.md)
 - [Interface du multiplexeur MP4](mp4-muxer.md)

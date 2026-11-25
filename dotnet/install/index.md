@@ -78,7 +78,7 @@ These packages hold the managed SDK only. The native engine comes in a separate 
 | X engines | iOS | `VisioForge.CrossPlatform.Core.iOS` |
 | X engines | Linux | `VisioForge.CrossPlatform.Core.Linux.x64` or `VisioForge.CrossPlatform.Core.Linux.arm64`, plus GStreamer 1.20+ from the distribution (1.22+ for some features) |
 | `VideoCaptureCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoCapture.x64` (`.x86` for 32-bit apps) |
-| `MediaPlayerCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.MediaPlayer.x64` and `VisioForge.DotNet.Core.Redist.LAV.x64`. LAV is the default `Source_Mode`, the GPU and Blu-ray modes use LAV too, and so does `GetFileThumbnail`: leave the LAV package out only when the app uses none of them. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64` when the app uses the FFMPEG mode, and `VisioForge.DotNet.Core.Redist.VLC.x64` for `File_VLC` or `HTTP_RTSP_VLC` (`.x86` of each package for 32-bit apps) |
+| `MediaPlayerCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.MediaPlayer.x64` and `VisioForge.DotNet.Core.Redist.LAV.x64`. LAV is the default `Source_Mode`, the GPU mode uses LAV too, and so does `GetFileThumbnail`: leave the LAV package out only when the app uses none of them. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64` when the app uses the FFMPEG or Blu-ray mode, and `VisioForge.DotNet.Core.Redist.VLC.x64` for `File_VLC` or `HTTP_RTSP_VLC` (`.x86` of each package for 32-bit apps) |
 | `VideoEditCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoEdit.x64` and `VisioForge.DotNet.Core.Redist.FFMPEG.x64` to open MP4, MKV and other input files (`.x86` for 32-bit apps) |
 
 For example, a Windows x64 app on the X engines adds:

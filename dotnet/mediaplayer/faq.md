@@ -93,6 +93,26 @@ await player.PlayAsync();
 
 `Rate_SetAsync` changes the tempo of karaoke files too. The [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) shows a complete karaoke player.
 
+### How do I play a Blu-ray disc?
+
+Set `Source_Mode` to `MediaPlayerSourceMode.BluRay` and open the disc's `BDMV\index.bdmv`. The player plays the largest `.m2ts` file in the disc's `BDMV\STREAM` folder, which is the main movie on most discs. It uses the same decoders as the FFMPEG mode, so the app needs the `VisioForge.DotNet.Core.Redist.FFMPEG.x64` package (`.x86` for 32-bit apps).
+
+```csharp
+player.Source_Mode = MediaPlayerSourceMode.BluRay;
+player.Playlist_Add(@"E:\BDMV\index.bdmv");
+await player.PlayAsync();
+```
+
+Not supported:
+
+- ISO images. Mount the image in Windows and open `BDMV\index.bdmv` on the new drive.
+- Playlist files (`.mpls`). Open `BDMV\index.bdmv` instead.
+- Titles split over several clips. Only the largest clip plays.
+- Disc menus.
+- Encrypted (AACS) discs, which includes most commercial movie discs.
+
+An ISO image, a playlist file, an encrypted disc, a disc without a `BDMV\STREAM` folder or a disc that cannot be read does not play: `PlayAsync` returns `false` and `OnError` names the reason.
+
 ## Hardware decoding
 
 ### Which hardware decoder should the FFMPEG source engine use?

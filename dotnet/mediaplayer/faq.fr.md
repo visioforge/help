@@ -93,6 +93,26 @@ await player.PlayAsync();
 
 `Rate_SetAsync` modifie aussi le tempo des fichiers karaoké. La [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) présente un lecteur karaoké complet.
 
+### Comment lire un disque Blu-ray ?
+
+Réglez `Source_Mode` sur `MediaPlayerSourceMode.BluRay` et ouvrez le fichier `BDMV\index.bdmv` du disque. Le lecteur lit le plus grand fichier `.m2ts` du dossier `BDMV\STREAM` du disque, qui est le film principal sur la plupart des disques. Il utilise les mêmes décodeurs que le mode FFMPEG : l'application a donc besoin du paquet `VisioForge.DotNet.Core.Redist.FFMPEG.x64` (`.x86` pour les applications 32 bits).
+
+```csharp
+player.Source_Mode = MediaPlayerSourceMode.BluRay;
+player.Playlist_Add(@"E:\BDMV\index.bdmv");
+await player.PlayAsync();
+```
+
+Non pris en charge :
+
+- Les images ISO. Montez l'image dans Windows et ouvrez `BDMV\index.bdmv` sur le nouveau lecteur.
+- Les fichiers de playlist (`.mpls`). Ouvrez plutôt `BDMV\index.bdmv`.
+- Les titres répartis sur plusieurs clips. Seul le plus grand clip est lu.
+- Les menus du disque.
+- Les disques chiffrés (AACS), ce qui inclut la plupart des disques de films du commerce.
+
+Une image ISO, un fichier de playlist, un disque chiffré, un disque sans dossier `BDMV\STREAM` ou un disque illisible n'est pas lu : `PlayAsync` renvoie `false` et `OnError` en indique la raison.
+
 ## Décodage matériel
 
 ### Quel décodeur matériel le moteur source FFMPEG doit-il utiliser ?

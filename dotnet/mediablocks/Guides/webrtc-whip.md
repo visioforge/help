@@ -37,7 +37,7 @@ primary_api_classes:
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Demo Samples"
-    The browser part of this guide follows the WebRTC Browser Streamer Demo (WPF): a camera and a microphone, a local preview, and a viewer page served by the application. The WHIP part follows the [WebRTC WHIP Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20WHIP%20Streamer%20Demo) and its [Avalonia version](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/WebRTC%20WHIP%20Streamer) for Windows, macOS and Linux.
+    The browser part of this guide follows the [WebRTC Browser Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20Browser%20Streamer%20Demo): a camera and a microphone, a local preview, and a viewer page served by the application. The WHIP part follows the [WebRTC WHIP Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20WHIP%20Streamer%20Demo) and its [Avalonia version](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/WebRTC%20WHIP%20Streamer) for Windows, macOS and Linux.
 
     The block reference is in [Sink blocks → WebRTC](../Sinks/index.md#webrtc) and [Sink blocks → WHIP](../Sinks/index.md#whip).
 

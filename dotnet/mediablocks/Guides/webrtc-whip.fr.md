@@ -37,7 +37,7 @@ primary_api_classes:
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
 !!! info "Exemples de démonstration"
-    La partie navigateur de ce guide suit le WebRTC Browser Streamer Demo (WPF) : une caméra et un micro, un aperçu local et une page de visionnage servie par l'application. La partie WHIP suit le [WebRTC WHIP Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20WHIP%20Streamer%20Demo) et sa [version Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/WebRTC%20WHIP%20Streamer) pour Windows, macOS et Linux.
+    La partie navigateur de ce guide suit le [WebRTC Browser Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20Browser%20Streamer%20Demo) : une caméra et un micro, un aperçu local et une page de visionnage servie par l'application. La partie WHIP suit le [WebRTC WHIP Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20WHIP%20Streamer%20Demo) et sa [version Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/WebRTC%20WHIP%20Streamer) pour Windows, macOS et Linux.
 
     La référence des blocs se trouve dans [Blocs sink → WebRTC](../Sinks/index.md#webrtc) et [Blocs sink → WHIP](../Sinks/index.md#whip).
 

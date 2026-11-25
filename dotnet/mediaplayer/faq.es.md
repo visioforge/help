@@ -93,6 +93,26 @@ await player.PlayAsync();
 
 `Rate_SetAsync` también cambia el tempo de los archivos de karaoke. La [Karaoke Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/WinForms/Karaoke%20Demo) muestra un reproductor de karaoke completo.
 
+### ¿Cómo reproduzco un disco Blu-ray?
+
+Establezca `Source_Mode` en `MediaPlayerSourceMode.BluRay` y abra el archivo `BDMV\index.bdmv` del disco. El reproductor reproduce el archivo `.m2ts` más grande de la carpeta `BDMV\STREAM` del disco, que en la mayoría de los discos es la película principal. Usa los mismos decodificadores que el modo FFMPEG, por lo que la aplicación necesita el paquete `VisioForge.DotNet.Core.Redist.FFMPEG.x64` (`.x86` para aplicaciones de 32 bits).
+
+```csharp
+player.Source_Mode = MediaPlayerSourceMode.BluRay;
+player.Playlist_Add(@"E:\BDMV\index.bdmv");
+await player.PlayAsync();
+```
+
+No se admiten:
+
+- Imágenes ISO. Monte la imagen en Windows y abra `BDMV\index.bdmv` en la nueva unidad.
+- Archivos de lista de reproducción (`.mpls`). Abra `BDMV\index.bdmv` en su lugar.
+- Títulos divididos en varios clips. Solo se reproduce el clip más grande.
+- Menús del disco.
+- Discos cifrados (AACS), lo que incluye la mayoría de los discos comerciales de películas.
+
+Una imagen ISO, un archivo de lista de reproducción, un disco cifrado, un disco sin carpeta `BDMV\STREAM` o un disco que no se puede leer no se reproduce: `PlayAsync` devuelve `false` y `OnError` indica el motivo.
+
 ## Decodificación por hardware
 
 ### ¿Qué decodificador por hardware debe usar el motor de origen FFMPEG?
