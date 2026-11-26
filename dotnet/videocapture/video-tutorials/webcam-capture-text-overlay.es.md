@@ -22,9 +22,9 @@ primary_api_classes:
   - MP4Output
   - VideoView
 video:
-  id: wgRV_RT-txg
-  upload_date: 2026-11-12T21:13:37Z
-  duration: PT13M6S
+  id: xGY6XZjxdLM
+  upload_date: 2026-11-26T12:29:59Z
+  duration: PT12M55S
 
 ---
 
@@ -48,7 +48,7 @@ Este tutorial usa el motor VideoCaptureCore, exclusivo de Windows: el motor Dire
 ## Video tutorial
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/wgRV_RT-txg?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/xGY6XZjxdLM?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 ## Repositorio de código fuente

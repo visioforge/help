@@ -171,6 +171,7 @@ Tutoriales adicionales de inicio:
 - [Etiquetas de Metadatos de Audio](Guides/audio-metadata-tags.md)
 - [Efectos de Video Personalizados y Shaders OpenGL](Guides/custom-video-effects-csharp.md)
 - [Subtítulos en vivo (Whisper)](Guides/live-subtitles-whisper-csharp.md)
+- [Zoom, linterna, enfoque y exposición de la cámara del teléfono (iOS, Android)](Guides/mobile-camera-controls-csharp.md)
 
 ## Recursos para Desarrolladores
 

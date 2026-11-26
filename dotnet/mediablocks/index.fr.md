@@ -171,6 +171,7 @@ Tutoriels supplémentaires de prise en main :
 - [Étiquettes de métadonnées audio](Guides/audio-metadata-tags.md)
 - [Effets vidéo personnalisés et shaders OpenGL](Guides/custom-video-effects-csharp.md)
 - [Sous-titres en direct (Whisper)](Guides/live-subtitles-whisper-csharp.md)
+- [Zoom, torche, mise au point et exposition de la caméra du téléphone (iOS, Android)](Guides/mobile-camera-controls-csharp.md)
 
 ## Ressources pour développeurs
 

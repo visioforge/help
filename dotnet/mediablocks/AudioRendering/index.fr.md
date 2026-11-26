@@ -165,7 +165,7 @@ L'`IOSAudioSinkBlock` est un bloc multimédia spécifique à la plateforme conç
 ### Fonctionnalités clés
 
 - Accès direct au puits audio GStreamer iOS
-- Contrôle fin du format audio, de la fréquence d'échantillonnage et du nombre de canaux
+- Contrôle du format audio et de la fréquence d'échantillonnage ; le nombre de canaux suit la sortie audio
 - Adapté aux applications audio spécialisées ou professionnelles sur iOS
 
 ### Paramètres : `AudioInfoX`
@@ -173,15 +173,15 @@ L'`IOSAudioSinkBlock` est un bloc multimédia spécifique à la plateforme conç
 L'`IOSAudioSinkBlock` nécessite un objet `AudioInfoX` pour spécifier le format audio. La classe `AudioInfoX` vous permet de définir :
 
 - `Format` : le format d'échantillon audio (par ex. `AudioFormatX.S16LE`, `AudioFormatX.F32LE`, etc.)
-- `SampleRate` : la fréquence d'échantillonnage en Hz (par ex. 44100, 48000)
-- `Channels` : le nombre de canaux audio (par ex. 1 pour mono, 2 pour stéréo)
+- `SampleRate` : la fréquence d'échantillonnage en Hz (par ex. 44100, 48000) ; 0 reprend celle de l'entrée
+- `Channels` : la sortie audio choisit le nombre de canaux : le haut-parleur intégré et les écouteurs en prennent 1 ou 2, une entrée multicanal est donc réduite. Au-delà de 2, le bloc demande ce nombre à une sortie qui en accepte davantage (HDMI, AirPlay, USB) ; cette préférence vaut pour toute l'application. 0 ne demande rien
 
 Exemple :
 
 ```csharp
 using VisioForge.Core.Types.X;
 
-// Définir le format audio : 16 bits signé little-endian, 44100 Hz, stéréo
+// Définir le format audio : 16 bits signé little-endian, 44100 Hz ; la stéréo ne demande rien à la sortie
 var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 44100, 2);
 
 // Créer le bloc puits audio iOS

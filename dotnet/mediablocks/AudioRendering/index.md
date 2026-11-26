@@ -165,7 +165,7 @@ The `IOSAudioSinkBlock` is a platform-specific media block designed for advanced
 ### Key Features
 
 - Direct access to the iOS GStreamer audio sink
-- Fine-grained control over audio format, sample rate, and channel count
+- Control over the audio format and sample rate; the channel count follows the audio route
 - Suitable for specialized or professional audio applications on iOS
 
 ### Settings: `AudioInfoX`
@@ -173,15 +173,15 @@ The `IOSAudioSinkBlock` is a platform-specific media block designed for advanced
 The `IOSAudioSinkBlock` requires an `AudioInfoX` object to specify the audio format. The `AudioInfoX` class allows you to define:
 
 - `Format`: The audio sample format (e.g., `AudioFormatX.S16LE`, `AudioFormatX.F32LE`, etc.)
-- `SampleRate`: The sample rate in Hz (e.g., 44100, 48000)
-- `Channels`: The number of audio channels (e.g., 1 for mono, 2 for stereo)
+- `SampleRate`: The sample rate in Hz (e.g., 44100, 48000); 0 takes the input's rate
+- `Channels`: the audio route picks the channel count: the built-in speaker and headphones take 1 or 2 channels, so multichannel input is downmixed. Above 2, the block asks a route that takes more channels (HDMI, AirPlay, USB) for that many; this is a preference for the whole app. 0 asks for nothing
 
 Example:
 
 ```csharp
 using VisioForge.Core.Types.X;
 
-// Define audio format: 16-bit signed little-endian, 44100 Hz, stereo
+// Define audio format: 16-bit signed little-endian, 44100 Hz; stereo asks the route for nothing
 var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 44100, 2);
 
 // Create the iOS audio sink block

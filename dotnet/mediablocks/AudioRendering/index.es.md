@@ -165,7 +165,7 @@ El `IOSAudioSinkBlock` es un bloque de medios específico de plataforma diseñad
 ### Características Principales
 
 - Acceso directo al sink de audio GStreamer de iOS
-- Control detallado sobre formato de audio, tasa de muestreo y cantidad de canales
+- Control del formato de audio y la tasa de muestreo; el número de canales sigue a la salida de audio
 - Adecuado para aplicaciones de audio especializadas o profesionales en iOS
 
 ### Configuraciones: `AudioInfoX`
@@ -173,15 +173,15 @@ El `IOSAudioSinkBlock` es un bloque de medios específico de plataforma diseñad
 El `IOSAudioSinkBlock` requiere un objeto `AudioInfoX` para especificar el formato de audio. La clase `AudioInfoX` le permite definir:
 
 - `Format`: El formato de muestra de audio (ej., `AudioFormatX.S16LE`, `AudioFormatX.F32LE`, etc.)
-- `SampleRate`: La tasa de muestreo en Hz (ej., 44100, 48000)
-- `Channels`: El número de canales de audio (ej., 1 para mono, 2 para estéreo)
+- `SampleRate`: La tasa de muestreo en Hz (ej., 44100, 48000); 0 toma la de la entrada
+- `Channels`: la salida de audio decide el número de canales: el altavoz integrado y los auriculares admiten 1 o 2, así que una entrada multicanal se reduce. Por encima de 2, el bloque pide ese número a una salida que admite más canales (HDMI, AirPlay, USB); es una preferencia para toda la aplicación. 0 no pide nada
 
 Ejemplo:
 
 ```csharp
 using VisioForge.Core.Types.X;
 
-// Definir formato de audio: 16-bit signed little-endian, 44100 Hz, estéreo
+// Definir formato de audio: 16-bit signed little-endian, 44100 Hz; el estéreo no pide nada a la salida
 var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 44100, 2);
 
 // Crear el bloque sink de audio de iOS
