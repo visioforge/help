@@ -121,6 +121,15 @@ You can specify an API to use during the device enumeration (refer to the `Video
 
 On Android this block enumerates cameras through Camera2, which sees a USB camera attached over OTG only on devices whose vendor ships the External Camera HAL - and many phones do not. To capture from a USB camera on Android, use the [USB (UVC) Camera Source Block](#usb-uvc-camera-source-block) instead.
 
+On Android 9 and later, many phones hide their ultra-wide and telephoto lenses behind one logical camera that switches lenses as the zoom changes. The device list then also contains each such lens as its own camera, after the cameras the phone lists itself: `LensType` tells them apart (`MultiCamera` for the logical camera, `Wide`, `UltraWide` or `Telephoto` for a lens, judged by its focal length against the main lens of its side, `Unknown` when the camera does not report what tells it; Android and iOS only), and `PhysicalCameraId` names the lens. Pick that camera like any other to capture through that one lens, with its own video sizes. It zooms by cropping that lens where the phone allows a crop per lens; otherwise `Camera2Capabilities.MaxDigitalZoom` is 1:
+
+```csharp
+var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var ultraWide = cameras.FirstOrDefault(c => c.LensType == VideoCaptureLensType.UltraWide);
+```
+
+On Android 10 and later, a phone that does not stream a lens on its own fails the start with an error that says so.
+
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
@@ -542,7 +551,7 @@ The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists ever
 
 #### Requirements
 
-- Windows: the `VisioForge.CrossPlatform.RealSense.Windows.x64` NuGet package (librealsense 2.58.1). No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
+- Windows: the `VisioForge.CrossPlatform.RealSense.Windows.x64` NuGet package for an x64 application, or `VisioForge.CrossPlatform.RealSense.Windows.arm64` for a native ARM64 one (librealsense 2.59.2). No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
 - Linux: librealsense 2.58 or a later 2.x, installed from the RealSense apt repository. The block loads `librealsense2.so`, which the `librealsense2-dev` package provides; the packages also install the udev rules that give a user access to the camera. The `librealsense2-dkms` kernel patches are not needed.
 
 ```bash

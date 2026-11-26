@@ -226,11 +226,11 @@ xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI
 Las aplicaciones MacCatalyst requieren configuración adicional para asegurar que las bibliotecas nativas se incluyan correctamente en el bundle de la aplicación. Agregue el siguiente objetivo de build personalizado a su archivo de proyecto:
 
 ```xml
-<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
+<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="BeforeCodeSign" Condition="$(TargetFramework.Contains('-maccatalyst'))">
     <Message Text="Iniciando objetivo CopyNativeLibrariesToMonoBundle..." Importance="High"/>
 
+    <Error Condition="'$(AppBundleDir)' == ''" Text="AppBundleDir is empty: the Mac Catalyst app bundle was not created; not copying the native libraries." />
     <PropertyGroup>
-        <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
         <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
     </PropertyGroup>
 

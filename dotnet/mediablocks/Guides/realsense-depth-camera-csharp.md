@@ -27,7 +27,7 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-This guide shows how to use an Intel RealSense depth camera (D400 series, such as the D435) from a C# application with the `RealSenseSourceBlock`: list the cameras and their modes, show color and depth side by side, read the distance at a pixel, and record the depth view to an MP4 file. The same pipeline code runs on Windows x64 and Linux x64.
+This guide shows how to use an Intel RealSense depth camera (D400 series, such as the D435) from a C# application with the `RealSenseSourceBlock`: list the cameras and their modes, show color and depth side by side, read the distance at a pixel, and record the depth view to an MP4 file. The same pipeline code runs on Windows x64, Windows ARM64 and Linux x64.
 
 A RealSense camera's color stream is ordinary UVC video, so any capture source can show it. The depth (16-bit distance per pixel) and infrared streams are not: Windows capture APIs mislabel or reject them. `RealSenseSourceBlock` opens the camera through librealsense instead and gives every stream its own output in a format the rest of the pipeline understands.
 
@@ -52,13 +52,15 @@ graph LR;
 
 ## Prerequisites
 
-### Windows x64
+### Windows
 
 Add the NuGet packages:
 
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer runtime for Windows x64
-- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.58.1 (`realsense2.dll`)
+- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.59.2 (`realsense2.dll`)
+
+For a native ARM64 app take [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64/) and [VisioForge.CrossPlatform.RealSense.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.arm64/) instead; the block loads `realsense2.dll` from the folder of the process architecture.
 
 No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
 
@@ -275,7 +277,7 @@ _pipeline.Connect(_source.InfraredOutput, new VideoRendererBlock(_pipeline, Vide
 
 | Message or symptom | Cause | What to do |
 |---|---|---|
-| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` | Windows: `realsense2.dll` is not next to the application. | Add the package to the application project. |
+| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` (an ARM64 process is told to add `...Windows.arm64`) | Windows: `realsense2.dll` is not next to the application. | Add the package of the application's architecture (x64 or ARM64) to the project. |
 | `... Install librealsense2-dev (librealsense2.so) from the RealSense apt repository.` | Linux: `librealsense2.so` is not installed. The runtime package alone ships only the versioned `librealsense2.so.2.x`. | `sudo apt-get install librealsense2-dev`. |
 | `... librealsense 2.5x.x was loaded. Install 2.58 or a later 2.x, ...` | An older librealsense comes first on the library search path. | Install 2.58 or later, and remove the older copy. |
 | `EnumerateDevicesAsync` returns no cameras | The camera is not connected, or (Linux) the user cannot open it. | Reconnect the camera. On Linux check that `librealsense2-udev-rules` is installed, then reconnect. |

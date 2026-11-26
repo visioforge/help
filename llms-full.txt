@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-26 09:28:01 UTC (128f37ec281)
+**Generated:** 2026-11-26 15:13:16 UTC (636d6e20354)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 470 help documentation pages + 74 website pages
+**Content Sources:** 471 help documentation pages + 74 website pages
 
 ---
 
@@ -10516,6 +10516,10 @@ namespace YourApp
 }
 ```
 
+### One VideoView per running pipeline
+
+A `VideoView` shows one running pipeline at a time. To show another source in the same view, await `StopAsync` on the pipeline (or the `MediaPlayerCoreX` / `VideoCaptureCoreX` engine) that uses it, then start the new one. A pipeline started while another one is playing or paused in the same view does not start: its start call returns `false` and reports an error saying that the VideoView is used by another running pipeline. To show two sources at once, use two views.
+
 ## Performance Considerations
 
 Use physical Android devices for testing whenever possible. Simulators may not accurately represent real-world performance, especially for hardware-accelerated video operations.
@@ -11503,11 +11507,11 @@ xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI
 MacCatalyst applications require additional configuration to ensure native libraries are properly included in the application bundle. Add the following custom build target to your project file:
 
 ```
-<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
+<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="BeforeCodeSign" Condition="$(TargetFramework.Contains('-maccatalyst'))">
     <Message Text="Starting CopyNativeLibrariesToMonoBundle target..." Importance="High"/>
 
+    <Error Condition="'$(AppBundleDir)' == ''" Text="AppBundleDir is empty: the Mac Catalyst app bundle was not created; not copying the native libraries." />
     <PropertyGroup>
-        <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
         <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
     </PropertyGroup>
 
@@ -27586,7 +27590,7 @@ On a Windows on Arm machine an x64 build of your app runs under emulation. Media
 | `VideoCaptureCoreX`, `VideoEditCoreX`, `MediaPlayerCoreX` | Yes. |
 | `VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore` (DirectShow) | Partly. `VisioForge.DotNet.Core.Redist.Base.arm64` carries the base filters, the video effects, the video and audio mixers, the WASAPI audio renderer and Desktop Duplication screen capture; `Redist.MP4.arm64` the MP4, MPEG-TS, MKV and HLS outputs with the Media Foundation H.264/H.265 encoders. The LAV filters and the legacy x64 DirectShow encoders and muxers have no ARM64 build: a DirectShow app that decodes files through LAV fails in an ARM64 process, so build it for x64 and let Windows run it under emulation. |
 
-NDI, ElevenLabs and the Basler, Allied Vision and Spinnaker camera SDKs have no ARM64 build, and their blocks report an error in an ARM64 process. GenICam cameras work natively through `VisioForge.CrossPlatform.GenICam.Windows.arm64`.
+NDI, ElevenLabs and the Basler, Allied Vision and Spinnaker camera SDKs have no ARM64 build, and their blocks report an error in an ARM64 process. GenICam and RealSense cameras work natively through `VisioForge.CrossPlatform.GenICam.Windows.arm64` and `VisioForge.CrossPlatform.RealSense.Windows.arm64`.
 
 ## Project settings
 
@@ -27616,6 +27620,8 @@ dotnet publish -c Release -r win-arm64
 ```
 
 The output folder holds the same `arm64` subfolder with the native runtime that the x64 build puts in `x64`, so no extra copy step is needed.
+
+That folder also carries the Microsoft Visual C++ runtime the ARM64 binaries need (`vcruntime140.dll`, `msvcp140.dll`, `concrt140.dll`), as the x64 packages do, so the target machine does not need the Visual C++ ARM64 Redistributable. Earlier ARM64 packages did not carry it, and on a machine without that redistributable GStreamer could fail to load. Update the ARM64 packages to the current release, or install the latest Microsoft Visual C++ Redistributable for ARM64.
 
 ## Known problems
 
@@ -38331,9 +38337,9 @@ The first time a process sends anything, the SDK writes one line naming what is 
 
 Apart from the debugging telemetry above, the VisioForge installers below send one report when they end, so that we can count the installations of each product and see which installers fail:
 
-- The Windows installers (the .NET SDK; FFMPEG Source, VLC Source, RTSP, Video Encryption SDK and the Encoding and Processing Filters Packs; the Delphi and ActiveX All-in-One SDKs) report whether the installation finished, failed or was cancelled, the product, its version, and whether it was a first install or an upgrade. To turn the report off, run the installer with `INSTALLREPORT=0` on the command line.
+- The Windows installers (the .NET SDK; FFMPEG Source, VLC Source, RTSP, Video Encryption SDK and the Encoding and Processing Filters Packs; the Delphi and ActiveX All-in-One SDKs) report whether the installation finished, failed or was cancelled, the product, its version, and whether it was a first install or an upgrade. Each of these installers shows the box "Send an anonymous installation report to VisioForge" on the page where you accept the license, ticked by default; clear it and nothing is sent. For an install without the setup wizard (silent, passive or basic UI), run the installer with `INSTALLREPORT=0` on the command line.
 - The macOS package reports a finished installation, the product and its version. To turn it off, create the file `/Users/Shared/VisioForge/no-install-report` before installing.
-- The Unity package reports, with the package version, the first time a project that contains it is opened in the Unity Editor: once per project folder for each user account. It sends nothing in batch mode (CI) or when the environment variable `VISIOFORGE_INSTALLREPORT` is `0`. Set the variable before the project is first opened, in the environment the Unity Editor or Unity Hub starts with - a user environment variable on Windows, `launchctl setenv VISIOFORGE_INSTALLREPORT 0` on macOS (lost at logout or restart, so set it again before opening a new project) - and restart Unity Hub. A project folder opened while the variable is `0` is never reported for that user account, even after the variable is gone.
+- The Unity package reports, with the package version, the first time a project that contains it is opened in the Unity Editor: once per project folder for each user account. It asks first, once, in a notice with Send and Don't send buttons; Don't send sends nothing. It sends nothing in batch mode (CI) or when the environment variable `VISIOFORGE_INSTALLREPORT` is `0`. Set the variable before the project is first opened, in the environment the Unity Editor or Unity Hub starts with - a user environment variable on Windows, `launchctl setenv VISIOFORGE_INSTALLREPORT 0` on macOS (lost at logout or restart, so set it again before opening a new project) - and restart Unity Hub. A project folder opened while the variable is `0` is never reported for that user account, even after the variable is gone.
 
 The report goes over HTTPS to `https://www.visioforge.com/api/installer-report` and carries nothing else: no name, user name, computer name, file path or other identifier. Like any web request, it reaches the server from your IP address, which is not stored with the report or passed on. The reports are counted in Google Analytics. If a report cannot be sent, the installation is not affected. NuGet packages and the redistributables you ship with your application never send one.
 
@@ -50055,10 +50061,10 @@ Add the following NuGet packages to your project based on target platform:
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 
-<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
+<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="BeforeCodeSign" Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <Message Text="Starting CopyNativeLibrariesToMonoBundle target..." Importance="High" />
+  <Error Condition="'$(AppBundleDir)' == ''" Text="AppBundleDir is empty: the Mac Catalyst app bundle was not created; not copying the native libraries." />
   <PropertyGroup>
-    <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
     <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
   </PropertyGroup>
   <Message Text="AppBundleDir: $(AppBundleDir)" Importance="High" />
@@ -75153,7 +75159,7 @@ The `IOSAudioSinkBlock` is a platform-specific media block designed for advanced
 ### Key Features
 
 - Direct access to the iOS GStreamer audio sink
-- Fine-grained control over audio format, sample rate, and channel count
+- Control over the audio format and sample rate; the channel count follows the audio route
 - Suitable for specialized or professional audio applications on iOS
 
 ### Settings: `AudioInfoX`
@@ -75161,15 +75167,15 @@ The `IOSAudioSinkBlock` is a platform-specific media block designed for advanced
 The `IOSAudioSinkBlock` requires an `AudioInfoX` object to specify the audio format. The `AudioInfoX` class allows you to define:
 
 - `Format`: The audio sample format (e.g., `AudioFormatX.S16LE`, `AudioFormatX.F32LE`, etc.)
-- `SampleRate`: The sample rate in Hz (e.g., 44100, 48000)
-- `Channels`: The number of audio channels (e.g., 1 for mono, 2 for stereo)
+- `SampleRate`: The sample rate in Hz (e.g., 44100, 48000); 0 takes the input's rate
+- `Channels`: the audio route picks the channel count: the built-in speaker and headphones take 1 or 2 channels, so multichannel input is downmixed. Above 2, the block asks a route that takes more channels (HDMI, AirPlay, USB) for that many; this is a preference for the whole app. 0 asks for nothing
 
 Example:
 
 ```
 using VisioForge.Core.Types.X;
 
-// Define audio format: 16-bit signed little-endian, 44100 Hz, stereo
+// Define audio format: 16-bit signed little-endian, 44100 Hz; stereo asks the route for nothing
 var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 44100, 2);
 
 // Create the iOS audio sink block
@@ -82470,6 +82476,139 @@ Each demo carries a **Real-time playback** switch that toggles between the two r
 ---END OF PAGE---
 
 
+## Phone Camera Zoom, Torch, Focus and Exposure in C#
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/mobile-camera-controls-csharp/
+**Description:** Control the iOS and Android camera from C# .NET - 0.5x ultra-wide zoom, torch, tap to focus and manual exposure with VisioForge Media Blocks SDK.
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Android, iOS, Capture, Webcam, C#, NuGet
+**API:** SystemVideoSourceBlock, ICamera2Controls, Camera2Capabilities, DeviceEnumerator
+
+# Camera Zoom, Torch, Focus and Exposure on iOS and Android
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+`SystemVideoSourceBlock` gives a running phone camera one control interface on both platforms: `Camera2Controls` (`ICamera2Controls`) changes zoom, torch, focus, exposure, white balance and stabilization while the pipeline runs, and `Capabilities` (`Camera2Capabilities`) says what the open camera supports. On Android the members drive the Camera2 API; on iOS they drive the `AVCaptureDevice` the source opened. The same MAUI or iOS/Android code runs on both.
+
+## Get the controls
+
+Read them after the pipeline has started the camera: before that `Camera2Controls` is `null`, and on iOS `Capabilities` too. On iOS each start creates new controls and puts the camera back in its opening state, as Android does - automatic focus, exposure and white balance at the centre of the frame, no compensation, zoom 1.0 on a multi-camera device and a single lens at its widest, the torch off - so read `Camera2Controls` and subscribe to its events again after every `StartAsync`.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.Sources.AndroidCamera2;
+
+var devices = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var device = devices[0];
+
+var format = device.GetHDVideoFormatAndFrameRate(out var frameRate);
+var settings = new VideoCaptureDeviceSourceSettings(device) { Format = format.ToFormat() };
+settings.Format.FrameRate = frameRate;
+
+var videoSource = new SystemVideoSourceBlock(settings);
+// ... connect the source to a renderer or an encoder, then:
+await pipeline.StartAsync();
+
+ICamera2Controls controls = videoSource.Camera2Controls;
+Camera2Capabilities caps = videoSource.Capabilities;
+```
+
+## Zoom and the 0.5x ultra-wide lens
+
+`SetZoom` takes the ratio on the scale the iPhone Camera app shows, from `MinZoom` to `MaxZoom`; a value outside is clamped.
+
+```
+controls.SetZoom(controls.MinZoom);   // the widest view the camera has
+controls.SetZoom(2.0f);               // 2x
+```
+
+- **Android:** `MinZoom` is the camera's own minimum: below 1.0 on Android 11 and later where the camera reaches its ultra-wide lens through the zoom ratio, otherwise 1.0. `MaxZoom` is the camera's maximum zoom.
+- **iOS:** on a multi-camera device with an ultra-wide lens - "Back Triple Camera" or "Back Dual Wide Camera" - `MinZoom` is 0.5: 0.5 is the ultra-wide lens, 1.0 the wide lens, and iOS switches to the telephoto lens on its own as the zoom passes it. On "Back Camera" and "Front Camera" it is 1.0, and a lens opened on its own reports where it sits on that scale, so read `MinZoom` rather than assuming 1.0. A multi-camera device opens on the wide lens, 1.0, as the Camera app does.
+
+On iOS, `VideoSourcesAsync` lists "Back Camera" and "Front Camera" first, as before, and then the other back cameras the phone has: the ultra-wide, the telephoto, and the multi-camera devices ("Back Dual Wide Camera", "Back Triple Camera", "Back Dual Camera"). Their names come from iOS and follow the phone's language, so let the user pick from the list rather than matching a name.
+
+## Torch
+
+```
+if (caps.HasFlashUnit)
+{
+    controls.SetTorchMode(true);
+}
+```
+
+## Focus
+
+```
+controls.SetAfMode(Camera2AfMode.ContinuousVideo);
+
+// Tap to focus: a region in the sensor frame, here 100 x 100 around a point
+// given as 0-1 fractions (fx, fy) of that frame.
+var sensor = caps.SensorInfo;
+var x = (int)(fx * sensor.ActiveWidth) - 50;
+var y = (int)(fy * sensor.ActiveHeight) - 50;
+controls.SetAfRegions(new[] { new Camera2MeteringRegion(x, y, 100, 100, 1000) });
+controls.TriggerAutoFocus();
+
+// Manual focus: 0 is the furthest distance, caps.LensInfo.MinimumFocusDistance the closest.
+controls.SetAfMode(Camera2AfMode.Off);
+controls.SetFocusDistance(caps.LensInfo.MinimumFocusDistance / 2);
+```
+
+The sensor frame is the camera's own landscape frame on both platforms, not the rotated preview: convert a tap on a portrait preview before you build the region. `FocusStateChanged` reports the scan. On iOS:
+
+- the centre of the first region is the focus point, and the weight is not used;
+- `SensorInfo.Orientation` is 0, and the sensor frame is the landscape frame with the Home button side on the right, whatever way the phone is held. A tap at (fx, fy), as 0-1 fractions of a portrait preview of the back camera that shows the whole frame (remove the crop of an aspect-fill preview first), is at (fy, 1 - fx) of the sensor frame; for a mirrored front-camera preview, mirror fx first;
+- `FocusStateChanged` says when a scan ends, not whether it found focus, so `IsFocused` is not a measurement there;
+- the focus distance is uncalibrated - it is in order, but not in metres;
+- `MinimumFocusDistance` is 0 when the camera cannot set its lens position.
+
+## Exposure
+
+```
+// One stop darker; a step is caps.ExposureCompensationStep stops (a third of a stop on iOS).
+controls.SetExposureCompensation((int)Math.Round(-1 / caps.ExposureCompensationStep));
+
+// Exposure point, the same region form as the focus.
+controls.SetAeRegions(new[] { new Camera2MeteringRegion(x, y, 100, 100, 1000) });
+
+// Manual exposure: 1/120 s at ISO 400, clamped to caps.SensorInfo's ranges; on iOS also to one frame
+// at the configured rate, so the frame rate stays.
+if (caps.ManualSensorSupported)
+{
+    controls.SetManualExposure(1_000_000_000L / 120, 400);
+}
+
+// Back to automatic exposure.
+controls.LockAutoExposure(false);
+```
+
+`ExposureStateChanged` reports when the exposure is searching, converged or locked. A locked or manual exposure stays locked on iOS, as on Android: `SetAeRegions` takes effect once the exposure is automatic again.
+
+## What iOS does not support
+
+The interface is the same on both platforms, and a call iOS has no control for is ignored. `Capabilities` reports it as unsupported, so check it rather than the platform.
+
+| Member | Android | iOS |
+| --- | --- | --- |
+| `SetAwbMode` | the Camera2 AWB modes, presets included | `Auto`, and `Off` to keep the current gains |
+| `SetAwbRegions` | yes | no (`MaxAwbRegions` is 0) |
+| `SetAeMode` | the Camera2 AE modes | `On`, and `Off` to keep the current exposure |
+| `SetFlashMode(Single)` | yes | no, video uses the torch |
+| `SetVideoStabilization` | `Off`, `On`, `PreviewStabilization` | `Off`, and `On` as the standard stabilization |
+| `SetNoiseReduction`, `SetEdgeEnhancement`, `SetOIS`, `SetFaceDetection` | yes | no |
+| `Capabilities.HardwareLevel` | the Camera2 hardware level | not used; check `ManualSensorSupported` |
+| `Capabilities` | once the block is built | once the camera is open |
+
+## See also
+
+- [Media Blocks SDK sources](../../Sources/)
+- [Device enumeration](../../GettingStarted/device-enum/)
+- [Code samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK)
+
+---END OF PAGE---
+
+
 ## MPEG-TS Analysis in C# .NET: VisioForge vs ffprobe
 **URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/mpeg-ts-analysis-vs-ffprobe/
 **Description:** In-process .NET MPEG-TS analysis with live ETSI TR 101 290 monitoring — how the Media Blocks SDK TS Analyzer compares to ffprobe and broadcast analyzers.
@@ -84486,7 +84625,7 @@ pipeline.Connect(rtspSource.VideoOutput, preEventBlock.VideoInput);
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
 
-This guide shows how to use an Intel RealSense depth camera (D400 series, such as the D435) from a C# application with the `RealSenseSourceBlock`: list the cameras and their modes, show color and depth side by side, read the distance at a pixel, and record the depth view to an MP4 file. The same pipeline code runs on Windows x64 and Linux x64.
+This guide shows how to use an Intel RealSense depth camera (D400 series, such as the D435) from a C# application with the `RealSenseSourceBlock`: list the cameras and their modes, show color and depth side by side, read the distance at a pixel, and record the depth view to an MP4 file. The same pipeline code runs on Windows x64, Windows ARM64 and Linux x64.
 
 A RealSense camera's color stream is ordinary UVC video, so any capture source can show it. The depth (16-bit distance per pixel) and infrared streams are not: Windows capture APIs mislabel or reject them. `RealSenseSourceBlock` opens the camera through librealsense instead and gives every stream its own output in a format the rest of the pipeline understands.
 
@@ -84511,13 +84650,15 @@ graph LR;
 
 ## Prerequisites
 
-### Windows x64
+### Windows
 
 Add the NuGet packages:
 
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — the SDK
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer runtime for Windows x64
-- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.58.1 (`realsense2.dll`)
+- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.59.2 (`realsense2.dll`)
+
+For a native ARM64 app take [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64/) and [VisioForge.CrossPlatform.RealSense.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.arm64/) instead; the block loads `realsense2.dll` from the folder of the process architecture.
 
 No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
 
@@ -84734,7 +84875,7 @@ _pipeline.Connect(_source.InfraredOutput, new VideoRendererBlock(_pipeline, Vide
 
 | Message or symptom | Cause | What to do |
 | --- | --- | --- |
-| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` | Windows: `realsense2.dll` is not next to the application. | Add the package to the application project. |
+| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` (an ARM64 process is told to add `...Windows.arm64`) | Windows: `realsense2.dll` is not next to the application. | Add the package of the application's architecture (x64 or ARM64) to the project. |
 | `... Install librealsense2-dev (librealsense2.so) from the RealSense apt repository.` | Linux: `librealsense2.so` is not installed. The runtime package alone ships only the versioned `librealsense2.so.2.x`. | `sudo apt-get install librealsense2-dev`. |
 | `... librealsense 2.5x.x was loaded. Install 2.58 or a later 2.x, ...` | An older librealsense comes first on the library search path. | Install 2.58 or later, and remove the older copy. |
 | `EnumerateDevicesAsync` returns no cameras | The camera is not connected, or (Linux) the user cannot open it. | Reconnect the camera. On Linux check that `librealsense2-udev-rules` is installed, then reconnect. |
@@ -87702,6 +87843,7 @@ Additional getting started tutorials:
 - [Audio Metadata Tags](Guides/audio-metadata-tags/)
 - [Custom Video Effects and OpenGL Shaders](Guides/custom-video-effects-csharp/)
 - [Live Subtitles (Whisper)](Guides/live-subtitles-whisper-csharp/)
+- [Phone Camera Zoom, Torch, Focus and Exposure (iOS, Android)](Guides/mobile-camera-controls-csharp/)
 
 ## Developer Resources
 
@@ -95295,6 +95437,15 @@ You can specify an API to use during the device enumeration (refer to the `Video
 
 On Android this block enumerates cameras through Camera2, which sees a USB camera attached over OTG only on devices whose vendor ships the External Camera HAL - and many phones do not. To capture from a USB camera on Android, use the [USB (UVC) Camera Source Block](#usb-uvc-camera-source-block) instead.
 
+On Android 9 and later, many phones hide their ultra-wide and telephoto lenses behind one logical camera that switches lenses as the zoom changes. The device list then also contains each such lens as its own camera, after the cameras the phone lists itself: `LensType` tells them apart (`MultiCamera` for the logical camera, `Wide`, `UltraWide` or `Telephoto` for a lens, judged by its focal length against the main lens of its side, `Unknown` when the camera does not report what tells it; Android and iOS only), and `PhysicalCameraId` names the lens. Pick that camera like any other to capture through that one lens, with its own video sizes. It zooms by cropping that lens where the phone allows a crop per lens; otherwise `Camera2Capabilities.MaxDigitalZoom` is 1:
+
+```
+var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var ultraWide = cameras.FirstOrDefault(c => c.LensType == VideoCaptureLensType.UltraWide);
+```
+
+On Android 10 and later, a phone that does not stream a lens on its own fails the start with an error that says so.
+
 #### Platforms
 
 Windows, macOS, Linux, iOS, Android.
@@ -95714,7 +95865,7 @@ The stream modes come from the camera: `RealSenseDeviceInfo.Profiles` lists ever
 
 #### Requirements
 
-- Windows: the `VisioForge.CrossPlatform.RealSense.Windows.x64` NuGet package (librealsense 2.58.1). No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
+- Windows: the `VisioForge.CrossPlatform.RealSense.Windows.x64` NuGet package for an x64 application, or `VisioForge.CrossPlatform.RealSense.Windows.arm64` for a native ARM64 one (librealsense 2.59.2). No RealSense driver is needed: Windows 10 and 11 open the camera with the built-in USB video driver.
 - Linux: librealsense 2.58 or a later 2.x, installed from the RealSense apt repository. The block loads `librealsense2.so`, which the `librealsense2-dev` package provides; the packages also install the udev rules that give a user access to the camera. The `librealsense2-dkms` kernel patches are not needed.
 
 ```
@@ -135212,7 +135363,7 @@ The SDK integrates seamlessly with any DirectShow application through a complete
 
 ## Video tutorial
 
-The video encrypts files with the Video Encryptor app, then builds the C# demos, walks through their filter graphs and plays the encrypted files back:
+The video builds the C# demos in Visual Studio, walks through their filter graphs, encrypts an MP4 file with AES-256 and plays it back with the same password:
 
 ---
 
@@ -154857,7 +155008,7 @@ This Agreement constitutes the entire agreement between you and Licensor regardi
 
 **14.2.** The report contains no name, user name, computer name, file path or other identifier. Like any web request, it reaches Licensor's server from your IP address; the address is not stored with the report or passed on. Licensor uses the reports only to count the installations of each product and to find installers that fail.
 
-**14.3.** You may turn the report off: run a Windows installer with `INSTALLREPORT=0` on the command line; on macOS, create the file `/Users/Shared/VisioForge/no-install-report` before installing; for the Unity package, set the environment variable `VISIOFORGE_INSTALLREPORT` to `0` before opening the project, in the environment the Unity Editor or Unity Hub starts with (restart Unity Hub after setting it); that project folder is then never reported for that user account, even if the variable is removed later. The installation does not depend on the report. NuGet packages and the redistributables you ship with your applications send no report.
+**14.3.** You may turn the report off: clear the box "Send an anonymous installation report to VisioForge" (ticked by default) on the page of a Windows installer where you accept the license, or run it with `INSTALLREPORT=0` on the command line; on macOS, create the file `/Users/Shared/VisioForge/no-install-report` before installing; for the Unity package, choose Don't send in the notice the Editor shows once, or set the environment variable `VISIOFORGE_INSTALLREPORT` to `0` before opening the project, in the environment the Unity Editor or Unity Hub starts with (restart Unity Hub after setting it); that project folder is then never reported for that user account, even if the variable is removed later. The installation does not depend on the report. NuGet packages and the redistributables you ship with your applications send no report.
 
 ## 15. CONTACT INFORMATION
 
@@ -165785,7 +165936,7 @@ We collect information when users interact with our services, for example, when 
 -   •**Contact Information**: Name, email address, and other contact details provided when purchasing our services, contacting our support, or subscribing to our emails
 -   •**Transaction Information**: We use Stripe as a payment processor and during transactions, it collects certain transaction details. Please note that Stripe operates as a separate controller and has its own privacy policy, which we recommend you review
 -   •**Telemetry Data**: Our SDKs report their own errors to us while a debugger is attached to your application, so that failures encountered during development reach us. Released applications you distribute report nothing. Reported data is redacted before it leaves your machine — credentials, file paths, host names, IP and MAC addresses, device identifiers, GUIDs and e-mail addresses are removed — and carries no identifier that survives a restart. Reporting can be switched off with the Debug\_Telemetry property
--   •**Installer Report**: When one of our installers ends, it sends our server one short report: the Windows installers of the .NET SDK, the DirectShow products FFMPEG Source, VLC Source, RTSP, Video Encryption SDK, Encoding Filters Pack, Processing Filters Pack and the Delphi and ActiveX SDKs when they finish, fail or are cancelled; the macOS package when it finishes; the Unity package the first time a project that contains it is opened in the Unity Editor, once per project folder for each user account and never in batch mode. The report says what happened, which product it was, its version and, from a Windows installer, whether it was a first install or an upgrade over an earlier version. We use these reports only to count the installations of each product and to find installers that fail, and we count them in Google Analytics. The report contains no name, user name, computer name, file path or other identifier; like any web request it reaches our server from your IP address, which is not stored with it or passed on. To turn the report off, run a Windows installer with INSTALLREPORT=0 on the command line; on macOS, create the file /Users/Shared/VisioForge/no-install-report before installing; for the Unity package, set the environment variable VISIOFORGE\_INSTALLREPORT=0 where the Unity Editor sees it (for example a user variable, before Unity Hub starts) before the project is first opened. NuGet packages, redistributables and the Virtual Camera installer send no report. If the report cannot be sent — no network, a proxy or a firewall — the installation is not affected
+-   •**Installer Report**: When one of our installers ends, it sends our server one short report: the Windows installers of the .NET SDK, the DirectShow products FFMPEG Source, VLC Source, RTSP, Video Encryption SDK, Encoding Filters Pack, Processing Filters Pack and the Delphi and ActiveX SDKs when they finish, fail or are cancelled; the macOS package when it finishes; the Unity package the first time a project that contains it is opened in the Unity Editor, once per project folder for each user account and never in batch mode. The report says what happened, which product it was, its version and, from a Windows installer, whether it was a first install or an upgrade over an earlier version. We use these reports only to count the installations of each product and to find installers that fail, and we count them in Google Analytics. The report contains no name, user name, computer name, file path or other identifier; like any web request it reaches our server from your IP address, which is not stored with it or passed on. A Windows installer shows the box “Send an anonymous installation report to VisioForge” on the page where you accept the license, ticked by default: clear it and nothing is sent; for an install without the setup wizard (silent, passive or basic UI), run the installer with INSTALLREPORT=0 on the command line. To turn the report off elsewhere: on macOS, create the file /Users/Shared/VisioForge/no-install-report before installing; for the Unity package, choose Don't send in the notice the Unity Editor shows once per project, or set the environment variable VISIOFORGE\_INSTALLREPORT=0 where the Unity Editor sees it (for example a user variable, before Unity Hub starts) before the project is first opened. NuGet packages, redistributables and the Virtual Camera installer send no report. If the report cannot be sent — no network, a proxy or a firewall — the installation is not affected
 
 ## How We Use Your Personal Data
 
@@ -165863,7 +166014,7 @@ If you have any questions or suggestions about our Privacy Policy, do not hesita
 
 By using our site or services, you consent to the terms outlined in this Privacy Policy.
 
-**Last updated: November 25, 2026**
+**Last updated: November 26, 2026**
 
 ---END OF PAGE---
 

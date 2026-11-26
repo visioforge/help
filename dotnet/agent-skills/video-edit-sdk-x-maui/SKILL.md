@@ -94,7 +94,7 @@ The full minimal csproj is in `references/Sample.csproj`. Highlights:
 </ItemGroup>
 ```
 
-The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`CopyNativeLibrariesToMonoBundle`) that copies `.dylib` / `.so` files into `.app/Contents/MonoBundle/`. It is in `references/Sample.csproj` verbatim. Without it the bundled `.app` cannot find the native runtime and crashes with a `dlopen` failure on first `VideoEditCoreX` construction.
+The Mac Catalyst target additionally needs an `AfterTargets="BeforeCodeSign"` step (`CopyNativeLibrariesToMonoBundle`, so the copy is sealed into the signature and the `.pkg`) that copies `.dylib` / `.so` files into `.app/Contents/MonoBundle/`. It is in `references/Sample.csproj` verbatim. Without it the bundled `.app` cannot find the native runtime and crashes with a `dlopen` failure on first `VideoEditCoreX` construction.
 
 ### Scene lifecycle and minimum OS versions (iOS 27 SDK)
 

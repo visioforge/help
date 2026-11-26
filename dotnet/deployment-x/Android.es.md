@@ -211,6 +211,10 @@ namespace TuApp
 }
 ```
 
+### Un VideoView por pipeline en ejecución
+
+Un `VideoView` muestra un solo pipeline en ejecución a la vez. Para mostrar otra fuente en la misma vista, espere a que termine `StopAsync` del pipeline (o del motor `MediaPlayerCoreX` / `VideoCaptureCoreX`) que la usa y luego inicie el nuevo. Un pipeline que se inicia mientras otro se reproduce o está en pausa en la misma vista no se inicia: su llamada de inicio devuelve `false` e informa de un error que indica que otro pipeline en ejecución usa el VideoView. Para mostrar dos fuentes a la vez, use dos vistas.
+
 ## Consideraciones de rendimiento
 
 Use dispositivos Android físicos para pruebas siempre que sea posible. Los simuladores pueden no representar con precisión el rendimiento del mundo real, especialmente para operaciones de video aceleradas por hardware.

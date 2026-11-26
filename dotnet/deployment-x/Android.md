@@ -211,6 +211,10 @@ namespace YourApp
 }
 ```
 
+### One VideoView per running pipeline
+
+A `VideoView` shows one running pipeline at a time. To show another source in the same view, await `StopAsync` on the pipeline (or the `MediaPlayerCoreX` / `VideoCaptureCoreX` engine) that uses it, then start the new one. A pipeline started while another one is playing or paused in the same view does not start: its start call returns `false` and reports an error saying that the VideoView is used by another running pipeline. To show two sources at once, use two views.
+
 ## Performance Considerations
 
 Use physical Android devices for testing whenever possible. Simulators may not accurately represent real-world performance, especially for hardware-accelerated video operations.

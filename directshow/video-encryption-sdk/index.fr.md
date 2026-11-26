@@ -12,9 +12,9 @@ primary_api_classes:
   - IVFCryptoConfig
   - IVFPasswordProvider
 video:
-  id: y6JMVHwyfrs
-  upload_date: 2026-11-18T07:33:05Z
-  duration: PT8M4S
+  id: N71nzfSry-g
+  upload_date: 2026-11-26T14:36:42Z
+  duration: PT6M6S
 
 ---
 
@@ -29,10 +29,10 @@ Le SDK s'intègre de manière transparente à toute application DirectShow via u
 
 ## Tutoriel vidéo
 
-La vidéo chiffre des fichiers avec l'application Video Encryptor, puis compile les démos C#, parcourt leurs graphes de filtres et relit les fichiers chiffrés :
+La vidéo compile les démos C# dans Visual Studio, parcourt leurs graphes de filtres, chiffre un fichier MP4 en AES-256 et le relit avec le même mot de passe :
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/y6JMVHwyfrs?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/N71nzfSry-g?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 ---

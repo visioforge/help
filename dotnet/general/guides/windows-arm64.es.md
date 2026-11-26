@@ -35,8 +35,8 @@ que referenciar y dónde están los dos problemas conocidos.
 | `VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore` (DirectShow) | En parte. `VisioForge.DotNet.Core.Redist.Base.arm64` contiene los filtros base, los efectos de video, los mezcladores de video y audio, el renderizador de audio WASAPI y la captura de pantalla por Desktop Duplication; `Redist.MP4.arm64` las salidas MP4, MPEG-TS, MKV y HLS con los codificadores H.264/H.265 de Media Foundation. Los filtros LAV y los codificadores y muxers DirectShow x64 heredados no tienen versión ARM64: una aplicación DirectShow que decodifica archivos con LAV falla en un proceso ARM64, así que compílela para x64 y deje que Windows la ejecute en emulación. |
 
 NDI, ElevenLabs y los SDK de cámaras Basler, Allied Vision y Spinnaker no tienen versión ARM64, y
-sus bloques informan de un error en un proceso ARM64. Las cámaras GenICam funcionan de forma nativa con
-`VisioForge.CrossPlatform.GenICam.Windows.arm64`.
+sus bloques informan de un error en un proceso ARM64. Las cámaras GenICam y RealSense funcionan de forma nativa con
+`VisioForge.CrossPlatform.GenICam.Windows.arm64` y `VisioForge.CrossPlatform.RealSense.Windows.arm64`.
 
 ## Ajustes del proyecto
 
@@ -73,6 +73,12 @@ dotnet publish -c Release -r win-arm64
 
 La carpeta de salida contiene la misma subcarpeta `arm64` con el runtime nativo que la compilación x64
 deja en `x64`, así que no hace falta ningún paso de copia adicional.
+
+Esa carpeta también contiene el runtime de Microsoft Visual C++ que necesitan los binarios ARM64
+(`vcruntime140.dll`, `msvcp140.dll`, `concrt140.dll`), igual que los paquetes x64, así que el equipo de
+destino no necesita el Visual C++ ARM64 Redistributable. Los paquetes ARM64 anteriores no lo incluían, y en
+un equipo sin ese redistribuible GStreamer podía no cargarse. Actualice los paquetes ARM64 a la versión
+actual o instale el Microsoft Visual C++ Redistributable para ARM64 más reciente.
 
 ## Problemas conocidos
 

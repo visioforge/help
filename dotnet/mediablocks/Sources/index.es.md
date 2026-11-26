@@ -121,6 +121,15 @@ Puede especificar una API para usar durante la enumeración de dispositivos (con
 
 En Android este bloque enumera las cámaras a través de Camera2, que solo ve una cámara USB conectada por OTG en los dispositivos cuyo fabricante incluye el External Camera HAL, y muchos teléfonos no lo hacen. Para capturar desde una cámara USB en Android, use en su lugar el [Bloque fuente de cámara USB (UVC)](#usb-uvc-camera-source-block).
 
+En Android 9 y posteriores, muchos teléfonos ocultan sus lentes ultra gran angular y teleobjetivo detrás de una cámara lógica que cambia de lente según el zoom. La lista de dispositivos contiene entonces también cada una de esas lentes como una cámara propia, después de las cámaras que el teléfono lista por sí mismo: `LensType` las distingue (`MultiCamera` para la cámara lógica, `Wide`, `UltraWide` o `Telephoto` para una lente, según su distancia focal frente a la lente principal de su lado, `Unknown` cuando la cámara no informa de lo que lo determina; solo Android e iOS), y `PhysicalCameraId` identifica la lente. Seleccione esa cámara como cualquier otra para capturar a través de esa única lente, con sus propios tamaños de video. El zoom recorta esa lente cuando el teléfono admite un recorte por lente; si no, `Camera2Capabilities.MaxDigitalZoom` es 1:
+
+```csharp
+var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
+var ultraWide = cameras.FirstOrDefault(c => c.LensType == VideoCaptureLensType.UltraWide);
+```
+
+En Android 10 y posteriores, si el teléfono no transmite una lente por separado, el inicio falla con un error que lo indica.
+
 #### Plataformas
 
 Windows, macOS, Linux, iOS, Android.
@@ -541,7 +550,7 @@ Los modos de los flujos provienen de la cámara: `RealSenseDeviceInfo.Profiles` 
 
 #### Requisitos
 
-- Windows: el paquete NuGet `VisioForge.CrossPlatform.RealSense.Windows.x64` (librealsense 2.58.1). No se necesita ningún controlador de RealSense: Windows 10 y 11 abren la cámara con el controlador de video USB integrado.
+- Windows: el paquete NuGet `VisioForge.CrossPlatform.RealSense.Windows.x64` para una aplicación x64, o `VisioForge.CrossPlatform.RealSense.Windows.arm64` para una ARM64 nativa (librealsense 2.59.2). No se necesita ningún controlador de RealSense: Windows 10 y 11 abren la cámara con el controlador de video USB integrado.
 - Linux: librealsense 2.58 o una versión 2.x posterior, instalado desde el repositorio apt de RealSense. El bloque carga `librealsense2.so`, que proporciona el paquete `librealsense2-dev`; los paquetes también instalan las reglas udev que dan a un usuario acceso a la cámara. Los parches del kernel `librealsense2-dkms` no son necesarios.
 
 ```bash

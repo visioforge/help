@@ -27,7 +27,7 @@ primary_api_classes:
 
 [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net){ .md-button .md-button--primary target="_blank" }
 
-Ce guide montre comment utiliser une caméra de profondeur Intel RealSense (série D400, comme la D435) depuis une application C# avec `RealSenseSourceBlock` : lister les caméras et leurs modes, afficher la couleur et la profondeur côte à côte, lire la distance d'un pixel et enregistrer la vue de profondeur dans un fichier MP4. Le même code de pipeline fonctionne sous Windows x64 et Linux x64.
+Ce guide montre comment utiliser une caméra de profondeur Intel RealSense (série D400, comme la D435) depuis une application C# avec `RealSenseSourceBlock` : lister les caméras et leurs modes, afficher la couleur et la profondeur côte à côte, lire la distance d'un pixel et enregistrer la vue de profondeur dans un fichier MP4. Le même code de pipeline fonctionne sous Windows x64, Windows ARM64 et Linux x64.
 
 Le flux couleur d'une caméra RealSense est une vidéo UVC ordinaire, que n'importe quelle source de capture peut afficher. Les flux de profondeur (une distance sur 16 bits par pixel) et infrarouge ne le sont pas : les API de capture de Windows les étiquettent mal ou les refusent. `RealSenseSourceBlock` ouvre la caméra via librealsense et donne à chaque flux sa propre sortie, dans un format que le reste du pipeline comprend.
 
@@ -52,13 +52,15 @@ graph LR;
 
 ## Prérequis
 
-### Windows x64
+### Windows
 
 Ajoutez les paquets NuGet :
 
 - [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/) — le SDK
 - [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — runtime GStreamer pour Windows x64
-- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.58.1 (`realsense2.dll`)
+- [VisioForge.CrossPlatform.RealSense.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.x64/) — librealsense 2.59.2 (`realsense2.dll`)
+
+Pour une application ARM64 native, utilisez plutôt [VisioForge.CrossPlatform.Core.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.arm64/) et [VisioForge.CrossPlatform.RealSense.Windows.arm64](https://www.nuget.org/packages/VisioForge.CrossPlatform.RealSense.Windows.arm64/) ; le bloc charge `realsense2.dll` depuis le dossier de l'architecture du processus.
 
 Aucun pilote RealSense n'est nécessaire : Windows 10 et 11 ouvrent la caméra avec le pilote vidéo USB intégré.
 
@@ -275,7 +277,7 @@ _pipeline.Connect(_source.InfraredOutput, new VideoRendererBlock(_pipeline, Vide
 
 | Message ou symptôme | Cause | Que faire |
 |---|---|---|
-| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` | Windows : `realsense2.dll` n'est pas à côté de l'application. | Ajoutez le paquet au projet de l'application. |
+| `librealsense (realsense2) 2.58 or a later 2.x is needed: ... Add the VisioForge.CrossPlatform.RealSense.Windows.x64 NuGet package.` (un processus ARM64 est invité à ajouter `...Windows.arm64`) | Windows : `realsense2.dll` n'est pas à côté de l'application. | Ajoutez au projet le paquet de l'architecture de l'application (x64 ou ARM64). |
 | `... Install librealsense2-dev (librealsense2.so) from the RealSense apt repository.` | Linux : `librealsense2.so` n'est pas installée. Le paquet d'exécution seul ne fournit que la `librealsense2.so.2.x` versionnée. | `sudo apt-get install librealsense2-dev`. |
 | `... librealsense 2.5x.x was loaded. Install 2.58 or a later 2.x, ...` | Une librealsense plus ancienne arrive en premier dans le chemin de recherche des bibliothèques. | Installez la 2.58 ou ultérieure et supprimez l'ancienne copie. |
 | `EnumerateDevicesAsync` ne renvoie aucune caméra | La caméra n'est pas connectée ou (Linux) l'utilisateur ne peut pas l'ouvrir. | Rebranchez la caméra. Sous Linux, vérifiez que `librealsense2-udev-rules` est installé, puis rebranchez-la. |

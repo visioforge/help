@@ -96,7 +96,7 @@ The conditional `<ItemGroup>` blocks pull in the right per-OS native packages:
 </ItemGroup>
 ```
 
-The Mac Catalyst target additionally needs an `AfterTargets="Build"` step (`CopyNativeLibrariesToMonoBundle`) that copies `.dylib` / `.so` files into the `.app/Contents/MonoBundle/` folder. This is included verbatim in `references/Sample.csproj`. Without it, the bundled `.app` cannot find the native runtime at launch and crashes with a `dlopen` failure on first `VideoCaptureCoreX` construction.
+The Mac Catalyst target additionally needs an `AfterTargets="BeforeCodeSign"` step (`CopyNativeLibrariesToMonoBundle`, so the copy is sealed into the signature and the `.pkg`) that copies `.dylib` / `.so` files into the `.app/Contents/MonoBundle/` folder. This is included verbatim in `references/Sample.csproj`. Without it, the bundled `.app` cannot find the native runtime at launch and crashes with a `dlopen` failure on first `VideoCaptureCoreX` construction.
 
 ### Scene lifecycle and minimum OS versions (iOS 27 SDK)
 

@@ -121,10 +121,10 @@ Ajoutez les paquets NuGet suivants à votre projet selon la plateforme cible :
   <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
 </ItemGroup>
 
-<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="Build" Condition="$(TargetFramework.Contains('-maccatalyst'))">
+<Target Name="CopyNativeLibrariesToMonoBundle" AfterTargets="BeforeCodeSign" Condition="$(TargetFramework.Contains('-maccatalyst'))">
   <Message Text="Starting CopyNativeLibrariesToMonoBundle target..." Importance="High" />
+  <Error Condition="'$(AppBundleDir)' == ''" Text="AppBundleDir is empty: the Mac Catalyst app bundle was not created; not copying the native libraries." />
   <PropertyGroup>
-    <AppBundleDir>$(OutputPath)$(AssemblyName).app</AppBundleDir>
     <MonoBundleDir>$(AppBundleDir)/Contents/MonoBundle</MonoBundleDir>
   </PropertyGroup>
   <Message Text="AppBundleDir: $(AppBundleDir)" Importance="High" />
