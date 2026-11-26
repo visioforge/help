@@ -78,11 +78,43 @@ Su código: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK
 
 ### La versión corta
 
-Una aplicación de consola en unas pocas líneas de C#: guarda el H.264 o H.265 de la cámara, y su sonido AAC cuando la cámara lo envía, en `camera.mp4` hasta que usted pulsa Enter, y `StopAsync` termina el archivo.
+Una aplicación de consola en unas pocas líneas de C#: guarda el H.264 o H.265 de la cámara, y su sonido AAC cuando la cámara lo envía, en `camera.mp4` hasta que usted pulsa Enter, y `StopAsync` termina el archivo. El usuario y la contraseña están escritos en su código: sustituya `login` y `password` por los de su cámara.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Q0n_tqsAu_g?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var rtsp = await RTSPRAWSourceSettings
+    .CreateAsync(new Uri(args[0]), "login",
+        "password", audioEnabled: true);
+rtsp.AllowedProtocols = RTSPSourceProtocol.TCP;
+var cam = new RTSPRAWSourceBlock(rtsp);
+var mp4 = new MP4SinkBlock(
+    new MP4SinkSettings("camera.mp4"));
+p.Connect(cam.VideoOutput, mp4.CreateNewInput(
+    MediaBlockPadMediaType.Video));
+// Solo el sonido AAC cabe en MP4 tal cual
+var aac = rtsp.GetInfo().AudioStreams
+    .FirstOrDefault()?.Codec is
+        "MPEG4-GENERIC" or "MP4A-LATM";
+if (aac)
+{
+    var audioIn = mp4.CreateNewInput(
+        MediaBlockPadMediaType.Audio);
+    p.Connect(cam.AudioOutput, audioIn);
+}
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
 
 Su código: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) en GitHub.
 

@@ -55,9 +55,26 @@ The following video builds the application step by step:
 
 The same recording as a console app in a few lines of C#, without the window and the live preview.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/9QAVaVWdbRQ?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+<!-- vf-compile -->
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cam = new VideoCaptureCoreX();
+cam.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+cam.Video_Source =
+    new VideoCaptureDeviceSourceSettings(cams[0]);
+cam.Outputs_Add(new MP4Output("webcam.mp4"));
+if (!await cam.StartAsync()) return;
+Console.ReadLine();
+await cam.StopAsync();
+```
 
 Its code: [webcam-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/webcam-mp4-short-console).
 

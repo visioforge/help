@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-26 19:29:42 UTC (a1c5232a5a3)
+**Generated:** 2026-11-26 20:22:09 UTC (f11559a0393)
 
 ## MCP Server (for AI coding agents)
 
@@ -196,7 +196,7 @@ The following products from the old price list are no longer sold:
 
 ### Notes
 
-- All licenses include **royalty-free distribution rights**
+- All paid licenses include **royalty-free distribution**: you may incorporate the SDK into your own commercial applications and distribute those applications without royalty payments; end users of your applications are not required to purchase separate licenses; applications built with the evaluation version may not be distributed
 - **Developer licenses** are assigned to **one named developer** and include minor and major updates plus email support for 12 months; automatic renewal can be cancelled anytime
 - **Workgroup licenses** cover three named developers in one organization at the price of two Developer licenses; updates, support and renewal work as for the Developer license
 - **Lifetime·Team licenses** cover all developers in the purchasing organization at one location in one city and include perpetual use, lifetime minor and major updates, and email support
@@ -208,7 +208,7 @@ The following products from the old price list are no longer sold:
 
 ---
 
-**Last Updated:** 2026-11-19
+**Last Updated:** 2026-11-26
 
 ## Website
 
@@ -364,7 +364,9 @@ The following products from the old price list are no longer sold:
 - [Video Recording Formats and Encoder Options in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/video-capture/): Record to MP4, AVI, WMV, WebM, and MKV with VisioForge Video Capture SDK. H.264, H.265, MJPEG encoders and GPU-accelerated encoding in .NET apps.
 - [Real-Time Video Effects - Resize, Crop, Overlay in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/video-processing/): Apply real-time resize, crop, rotation, text overlays, and color filters during video capture with VisioForge Video Capture SDK. C# API examples.
 - [Video Sources — Webcam, IP Camera, Screen in C# .NET](https://www.visioforge.com/help/docs/dotnet/videocapture/video-sources/): Configure webcam, IP camera, screen capture, Decklink, and industrial camera inputs with VisioForge Video Capture SDK. Device enumeration and C# examples.
+- [IP Camera Integration in C# .NET — RTSP/ONVIF Guides](https://www.visioforge.com/help/docs/dotnet/videocapture/video-sources/ip-cameras/): Connect IP cameras over RTSP and ONVIF in C# / .NET. Authentication, multi-stream, discovery, reconnect. Complete samples for all major brands.
 - [Video Capture C# Tutorials — Webcam, Screen, IP Camera](https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/): Step-by-step C# tutorials for VisioForge Video Capture SDK. Record webcam to MP4, capture screen, preview IP cameras with complete code examples.
+- [Record Webcam to MP4 in C# WPF with H.264 and AAC Audio](https://www.visioforge.com/help/docs/dotnet/videocapture/video-tutorials/video-capture-webcam-mp4-wpf/): Build a WPF window in XAML that previews a webcam and records it to MP4 with GPU H.264 and AAC, using VisioForge Video Capture SDK. C# code and video.
 
 ## Documentation - Media Player SDK
 
@@ -401,6 +403,7 @@ The following products from the old price list are no longer sold:
 - [ElevenLabs Text-to-Speech and Voice Cloning Blocks for .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/ElevenLabs/): Add ElevenLabs cloud text-to-speech and voice cloning from live audio to your C# .NET audio pipelines with the cross-platform Media Blocks SDK .NET.
 - [Media Blocks SDK .NET FAQ — Frames, Push Sources, RTSP](https://www.visioforge.com/help/docs/dotnet/mediablocks/faq/): Answers to common Media Blocks SDK .NET questions — pushing H.264 frames, getting bitmaps without a view, motion detection, RTSP latency and servers.
 - [Media Pipeline Quick Start - Install and Setup in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/GettingStarted/): Get started with VisioForge Media Blocks SDK — installation, pipeline architecture, block connections, and multimedia processing tutorials.
+- [RTSP Stream Viewer and IP Camera Player in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/rtsp-player-csharp/): Build an RTSP stream viewer and IP camera player in C# with VisioForge Media Blocks SDK — live preview, ONVIF discovery, and passthrough recording.
 - [Modular Multimedia Processing Pipeline API for C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/): Build custom multimedia pipelines in C# with VisioForge Media Blocks SDK. Connect source, processing, and output blocks for transcoding, capture, and streaming.
 - [Live Video Compositor for Real-Time Mixing in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/LiveVideoCompositor/): Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.
 - [NVIDIA CUDA GPU Video Processing Blocks in C# .NET](https://www.visioforge.com/help/docs/dotnet/mediablocks/Nvidia/): Accelerate video conversion, resizing, and data transfer with Nvidia CUDA GPU blocks in VisioForge Media Blocks SDK pipelines for .NET.

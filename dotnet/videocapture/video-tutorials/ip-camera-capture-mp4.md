@@ -54,9 +54,25 @@ The classic `VideoCaptureCore` engine records IP cameras as well: the [IP camera
 
 The same recording as a console app in a few lines of C#, without the preview and the sound. The login and password are written in its code: replace `admin` and `password` with your camera's.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/BRK8ukR9aFc?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+<!-- vf-compile -->
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cam = new VideoCaptureCoreX();
+cam.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+cam.Video_Source = await RTSPSourceSettings
+    .CreateAsync(new Uri(args[0]), "admin",
+        "password", audioEnabled: false);
+cam.Outputs_Add(new MP4Output("ipcam.mp4"));
+if (!await cam.StartAsync()) return;
+Console.ReadLine();
+await cam.StopAsync();
+```
 
 Its code: [ip-camera-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-mp4-short-console).
 

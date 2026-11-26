@@ -78,11 +78,44 @@ Its code: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s
 
 ### The short version
 
-A console app in a few lines of C#: it saves the camera's H.264 or H.265, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
+A console app in a few lines of C#: it saves the camera's H.264 or H.265, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file. The login and password are written in its code: replace `login` and `password` with your camera's.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Q0n_tqsAu_g?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+<!-- vf-compile -->
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var rtsp = await RTSPRAWSourceSettings
+    .CreateAsync(new Uri(args[0]), "login",
+        "password", audioEnabled: true);
+rtsp.AllowedProtocols = RTSPSourceProtocol.TCP;
+var cam = new RTSPRAWSourceBlock(rtsp);
+var mp4 = new MP4SinkBlock(
+    new MP4SinkSettings("camera.mp4"));
+p.Connect(cam.VideoOutput, mp4.CreateNewInput(
+    MediaBlockPadMediaType.Video));
+// Only AAC sound fits MP4 as it is
+var aac = rtsp.GetInfo().AudioStreams
+    .FirstOrDefault()?.Codec is
+        "MPEG4-GENERIC" or "MP4A-LATM";
+if (aac)
+{
+    var audioIn = mp4.CreateNewInput(
+        MediaBlockPadMediaType.Audio);
+    p.Connect(cam.AudioOutput, audioIn);
+}
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
 
 Its code: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) on GitHub.
 

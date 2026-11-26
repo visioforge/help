@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-26 19:29:45 UTC (a1c5232a5a3)
+**Generated:** 2026-11-26 20:22:12 UTC (f11559a0393)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 472 help documentation pages + 74 website pages
 
@@ -31034,6 +31034,62 @@ The tutorial builds a WPF app that sends a webcam and its microphone to the netw
 
 The same send and receive as two console apps in a few lines of C#: one plays a video file out over NDI, the other shows an NDI source by name in a window of its own.
 
+The sender:
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sources;
+using static VisioForge.Core.MediaBlocks.MediaBlockPadMediaType;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var file = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(
+        args[0]));
+var ndi = new NDISinkBlock("VisioForge NDI");
+p.Connect(file.VideoOutput,
+    ndi.CreateNewInput(Video));
+if (file.AudioOutput != null)
+    p.Connect(file.AudioOutput,
+        ndi.CreateNewInput(Audio));
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
+
+The receiver:
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioRendering;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var settings = await NDISourceSettings
+    .CreateAsync(p.GetContext(), args[0], null);
+if (settings == null) return;
+var ndi = new NDISourceBlock(settings);
+var video = new VideoRendererBlock(p, null);
+p.Connect(ndi.VideoOutput, video.Input);
+if (settings.GetInfo().AudioStreams.Count > 0)
+    p.Connect(ndi.AudioOutput,
+        new AudioRendererBlock().Input);
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
+
 Their code: [ndi-send-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-send-short-console) and [ndi-receive-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-receive-short-console) on GitHub.
 
 ### Send a webcam over NDI
@@ -58125,6 +58181,25 @@ The classic `VideoCaptureCore` engine records IP cameras as well: the [IP camera
 
 The same recording as a console app in a few lines of C#, without the preview and the sound. The login and password are written in its code: replace `admin` and `password` with your camera's.
 
+```
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cam = new VideoCaptureCoreX();
+cam.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+cam.Video_Source = await RTSPSourceSettings
+    .CreateAsync(new Uri(args[0]), "admin",
+        "password", audioEnabled: false);
+cam.Outputs_Add(new MP4Output("ipcam.mp4"));
+if (!await cam.StartAsync()) return;
+Console.ReadLine();
+await cam.StopAsync();
+```
+
 Its code: [ip-camera-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-mp4-short-console).
 
 ## Source Code Repository
@@ -58364,6 +58439,25 @@ This tutorial uses the Windows-only VideoCaptureCore engine, the SDK's DirectSho
 ### The short version
 
 The same preview in a few lines of C#: the engine on the `VideoView`, the camera's address with its login and password, and `IPPreview` mode. Its code is an excerpt of this tutorial's `Form1.cs`, without the Pixelate effect, the Stop button and the close handler; the full code is in [Implementation Example with C# Code](#implementation-example-with-c-code) below.
+
+```
+videoCapture1 = new VideoCaptureCore(
+    VideoView1 as IVideoView);
+
+videoCapture1.IP_Camera_Source =
+    new IPCameraSourceSettings
+    {
+        URL = url,
+        Login = edLogin.Text,
+        Password = edPassword.Text,
+        Type = IPSourceEngine.Auto_LAV
+    };
+
+videoCapture1.Mode =
+    VideoCaptureMode.IPPreview;
+
+await videoCapture1.StartAsync();
+```
 
 ## Source Code Repository
 
@@ -59146,6 +59240,28 @@ The classic `VideoCaptureCore` engine records the screen as well; its version of
 ### The short version
 
 The same recording as a console app in a few lines of C#, without the preview and the system sound.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cap = new VideoCaptureCoreX();
+cap.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+cap.Video_Source =
+    new ScreenCaptureD3D11SourceSettings
+    {
+        FrameRate = new VideoFrameRate(30)
+    };
+cap.Outputs_Add(new MP4Output("screen.mp4"));
+if (!await cap.StartAsync()) return;
+Console.ReadLine();
+await cap.StopAsync();
+```
 
 Its code: [screen-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-mp4-short-console).
 
@@ -60513,6 +60629,26 @@ The following video demonstrates the complete process of setting up a webcam cap
 
 The same recording as a console app in a few lines of C#, without the window and the live preview.
 
+```
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cam = new VideoCaptureCoreX();
+cam.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+cam.Video_Source =
+    new VideoCaptureDeviceSourceSettings(cams[0]);
+cam.Outputs_Add(new MP4Output("webcam.mp4"));
+if (!await cam.StartAsync()) return;
+Console.ReadLine();
+await cam.StopAsync();
+```
+
 Its code: [webcam-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/webcam-mp4-short-console).
 
 ## Source Code Repository
@@ -60805,6 +60941,26 @@ The following video builds the application step by step:
 ### The short version
 
 The same recording as a console app in a few lines of C#, without the window and the live preview.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cam = new VideoCaptureCoreX();
+cam.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+cam.Video_Source =
+    new VideoCaptureDeviceSourceSettings(cams[0]);
+cam.Outputs_Add(new MP4Output("webcam.mp4"));
+if (!await cam.StartAsync()) return;
+Console.ReadLine();
+await cam.StopAsync();
+```
 
 Its code: [webcam-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/webcam-mp4-short-console).
 
@@ -66498,6 +66654,72 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 
 The same player as a WPF app in a few lines of C#, without the timeline and the controls:
 
+`MainWindow.xaml`:
+
+```
+<Window x:Class="VideoPlayerShort.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+        Title="Video Player" Width="1600" Height="900"
+        Background="Black" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <vf:VideoView x:Name="VideoView1" />
+</Window>
+```
+
+`MainWindow.xaml.cs`:
+
+```
+using System.ComponentModel;
+using System.Windows;
+using VisioForge.Core;
+using VisioForge.Core.MediaPlayerX;
+
+namespace VideoPlayerShort;
+
+public partial class MainWindow : Window
+{
+    private MediaPlayerCoreX _player;
+
+    private bool _ready;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        await VisioForgeX.InitSDKAsync();
+
+        _player = new(VideoView1);
+        _player.OnError += (_, e) =>
+            Dispatcher.InvokeAsync(() =>
+                MessageBox.Show(e.Message));
+
+        var root = AppContext.BaseDirectory;
+        var file = $"{root}video.mp4";
+        if (await _player.OpenAsync(file))
+            await _player.PlayAsync();
+
+        _ready = true;
+    }
+
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+        if (!_ready)
+        {
+            e.Cancel = true; // still opening
+            return;
+        }
+
+        _player?.Dispose();
+        VisioForgeX.DestroySDK();
+    }
+}
+```
+
 Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/video-player-short-wpf).
 
 ## Required NuGet packages
@@ -69748,6 +69970,59 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 ### The short version
 
 The same task in a few lines of C#, with a crossfade between the images:
+
+```
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.Types.X.VideoEncoders;
+using VisioForge.Core.VideoEditX;
+
+// The folder of images, and the video to write.
+var pics = Directory.GetFiles(args[0], "*.jpg").Order().ToArray();
+
+await VisioForgeX.InitSDKAsync();
+using var edit = new VideoEditCoreX();
+var done = new TaskCompletionSource<bool>();
+edit.OnError += (_, e) => Console.WriteLine(e.Message);
+edit.OnStop += (_, e) => done.TrySetResult(e.Successful);
+
+// Each image stays for 3 seconds, and the next one
+// starts 1 second before it ends.
+var show = TimeSpan.FromSeconds(3);
+var cross = TimeSpan.FromSeconds(1);
+var step = show - cross;
+
+for (var n = 0; n < pics.Length; n++)
+{
+    var at = step * n;
+    edit.Input_AddImageFile(pics[n], show, at);
+
+    // The crossfade fills the second the two images share.
+    if (n > 0)
+        edit.Video_Transitions.Add(
+            new VideoTransition(
+                VideoTransitionType.Crossfade, at, at + cross));
+}
+
+var end = step * (pics.Length - 1) + show;
+edit.Video_Transition_Add_FadeIn(TimeSpan.Zero, cross);
+edit.Video_Transition_Add_FadeOut(end - cross, end);
+
+edit.Output_VideoSize = new Size(1920, 1080);
+edit.Output_VideoFrameRate = new VideoFrameRate(30);
+// The default encoder is small: 3 Mbit/s at 1080p,
+// which shows as blocks in a sky or a gradient.
+var enc = new OpenH264EncoderSettings(VideoQuality.VeryHigh);
+edit.Output_Format = new MP4Output(args[1], enc);
+
+// Start returns false when the render cannot begin;
+// OnStop fires when the file is finished.
+var saved = edit.Start() && await done.Task;
+Console.WriteLine(saved ? $"Saved: {args[1]}" : "Not saved.");
+```
 
 Its code: [images-to-video-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-short-console).
 
@@ -75047,10 +75322,11 @@ Key methods:
 - `GetParameters()` -- returns a `VST3ParameterInfo` for each parameter: `ID`, `Title`, `Units`, `StepCount`, `DefaultValue`, `Flags`, `Value` and `Text`.
 - `GetParameter(uint id)` and `SetParameter(uint id, double value)` -- read and set one normalized value, also during playback (on the UI thread while the editor is open). `GetParameter` returns -1.0 and `SetParameter` returns `false` for an ID the plug-in does not have, or when the plug-in does not load.
 - `GetState()` and `SetState(byte[] preset)` -- save and restore the plug-in's whole state in the `.vstpreset` format.
-- `ShowEditor(IntPtr owner = default)` and `CloseEditor()` -- open and close the plug-in's editor window (Windows). Call `ShowEditor` on the UI thread; `owner` is a window handle the editor stays above. It returns `false` when the plug-in has no editor, or when called off the UI thread (a thread that is single-threaded but runs no message loop is not detected). Disposing the block closes the window. While the editor is open, call `GetParameter` and `SetParameter` on the UI thread too. Closing or disposing from another thread waits until the UI thread has closed the window, so never block the UI thread on that call.
+- `ShowEditor(IntPtr owner = default)` and `CloseEditor()` -- open and close the plug-in's editor window (Windows). Call `ShowEditor` on the UI thread; `owner` is a window handle the editor stays above. It returns `false` when the plug-in has no editor, while the plug-in reloads itself (try again after `ParametersChanged`), or when called off the UI thread (a thread that is single-threaded but runs no message loop is not detected). Disposing the block closes the window. While the editor is open, call `GetParameter` and `SetParameter` on the UI thread too. Closing or disposing from another thread waits until the UI thread has closed the window, so never block the UI thread on that call.
 - `VST3AudioBlock.IsAvailable()` -- whether the VST 3 host is present on this platform.
+- `ParametersChanged` event -- raised when the plug-in changes its parameters by itself: a preset loaded in its editor, parameters renamed, added or renumbered, or the plug-in reloading itself (an open editor then closes and opens again); many plug-ins also raise it after `SetState`. Read `GetParameters()` again. It is raised on a thread-pool thread, so switch to the UI thread before touching controls.
 
-A bundle that cannot be loaded fails the pipeline start with an error naming the bundle and the cause.
+A bundle that cannot be loaded fails the pipeline start with an error naming the bundle and the cause. A plug-in that switches during playback to a channel layout the stream cannot carry stops the pipeline with an error naming the cause.
 
 **GStreamer Element**: `vfvst3filter`
 
@@ -84383,7 +84659,54 @@ The tutorial walks through the Pre-Event Recording WPF demo: an RTSP IP camera g
 
 ### The short version
 
-A console app in a few lines of C#: it buffers the video of an RTSP camera in memory and, when you press Enter, saves up to 10 seconds from before that moment, starting at a key frame, and five more seconds of live video to an MP4 file.
+A console app in a few lines of C#: it buffers the video of an RTSP camera in memory and, when you press Enter, saves up to 10 seconds from before that moment, starting at a key frame, and five more seconds of live video to an MP4 file. The login and password are written in its code: replace `admin` and `password` with your camera's.
+
+```
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.PreEventRecording;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cam = new RTSPSourceBlock(
+    await RTSPSourceSettings.CreateAsync(
+        new Uri(args[0]), "admin", "password",
+        audioEnabled: false));
+var h264 = new H264EncoderBlock();
+var settings = new PreEventRecordingSettings
+{
+    PreEventDuration = TimeSpan.FromSeconds(10),
+    PostEventDuration = TimeSpan.FromSeconds(5)
+};
+var pre = new PreEventRecordingBlock(settings)
+    { AudioEnabled = false };
+var saved = new TaskCompletionSource<string>(
+    TaskCreationOptions
+        .RunContinuationsAsynchronously);
+pre.OnRecordingStopped += (_, e) =>
+    saved.TrySetResult(e.Filename);
+p.Connect(cam.VideoOutput, h264.Input);
+p.Connect(h264.Output, pre.VideoInput);
+if (!await p.StartAsync()) return;
+var file = Path.GetFullPath("event.mp4");
+do
+{
+    Console.WriteLine("Enter: the event");
+    if (Console.ReadLine() is null) return;
+    pre.TriggerRecording(file);
+}
+while (pre.State ==
+    PreEventRecordingState.Buffering);
+Console.WriteLine(await saved.Task);
+await p.StopAsync();
+```
 
 Its code: [pre-event-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/pre-event-short-console) on GitHub.
 
@@ -86053,7 +86376,43 @@ Its code: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s
 
 ### The short version
 
-A console app in a few lines of C#: it saves the camera's H.264 or H.265, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
+A console app in a few lines of C#: it saves the camera's H.264 or H.265, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file. The login and password are written in its code: replace `login` and `password` with your camera's.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var rtsp = await RTSPRAWSourceSettings
+    .CreateAsync(new Uri(args[0]), "login",
+        "password", audioEnabled: true);
+rtsp.AllowedProtocols = RTSPSourceProtocol.TCP;
+var cam = new RTSPRAWSourceBlock(rtsp);
+var mp4 = new MP4SinkBlock(
+    new MP4SinkSettings("camera.mp4"));
+p.Connect(cam.VideoOutput, mp4.CreateNewInput(
+    MediaBlockPadMediaType.Video));
+// Only AAC sound fits MP4 as it is
+var aac = rtsp.GetInfo().AudioStreams
+    .FirstOrDefault()?.Codec is
+        "MPEG4-GENERIC" or "MP4A-LATM";
+if (aac)
+{
+    var audioIn = mp4.CreateNewInput(
+        MediaBlockPadMediaType.Audio);
+    p.Connect(cam.AudioOutput, audioIn);
+}
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
 
 Its code: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) on GitHub.
 
@@ -158678,7 +159037,7 @@ Buy Lifetime·Team License
 
 Free for one-developer projects that earn no revenue, with the trial watermark and the VisioForge logo on the video. [Request a community license](/community-license)
 
-All licenses include royalty-free distribution rights.
+All paid licenses include royalty-free distribution rights.
 
 ## 💰 Save More with Bundle Packages
 
@@ -161623,7 +161982,7 @@ Annual licenses (Developer and Workgroup) run for one year. Bought as a subscrip
 
 ## Pricing Options
 
-Choose the license that best fits your needs. All licenses include royalty-free distribution rights and commercial use.
+Choose the license that best fits your needs. All paid licenses include royalty-free distribution rights and commercial use.
 
 [Bundles from €750/year](https://www.visioforge.com/encoding-filters-pack#bundles)
 
@@ -163599,7 +163958,7 @@ Purchase Options
 
 [Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-All licenses include royalty-free distribution rights.
+All paid licenses include royalty-free distribution rights.
 
 Prices exclude VAT. Where VAT applies, it is added at checkout; EU businesses with a valid VAT ID are handled under the reverse-charge rule where it applies.
 
@@ -166084,7 +166443,7 @@ Official licensing policy
 
 This page is the source of truth for VisioForge trial, license scope, updates, activation, support, and refund terms.
 
-Last updated: November 19, 2026
+Last updated: November 26, 2026
 
 ## 30-day trial
 
@@ -166178,6 +166537,10 @@ Yes. Lifetime·Team includes minor and major SDK updates and email support for t
 ### How are .NET licenses applied?
 
 Create each SDK engine or pipeline instance, load the appropriate Developer or Release .vflicense file as bytes, and await SetLicenseCertificateAsync(byte\[\]) on that same instance before Open, Start, or Build.
+
+### Do I pay royalties to distribute applications built with the SDK?
+
+No. With a paid license you may incorporate the SDK into your own commercial applications and distribute those applications without royalty payments. End users of your applications are not required to purchase separate licenses. Applications built with the evaluation version may not be distributed.
 
 [View SDK pricing](/buy)[Contact support](mailto:support@visioforge.com)
 
@@ -167515,7 +167878,7 @@ Capture, playback, editing, streaming, and encoding in one vendor. No need to in
 
 ### Production-Ready Licensing
 
-All licenses include royalty-free distribution rights. A Developer license covers one named developer with 12 months of updates; a Lifetime·Team license covers every developer at one location with lifetime updates.
+All paid licenses include royalty-free distribution rights. A Developer license covers one named developer with 12 months of updates; a Lifetime·Team license covers every developer at one location with lifetime updates.
 
 ## Ready to choose an SDK?
 

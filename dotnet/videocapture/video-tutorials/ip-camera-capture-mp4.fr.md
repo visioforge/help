@@ -54,9 +54,24 @@ Le moteur classique `VideoCaptureCore` enregistre aussi les caméras IP : le [tu
 
 Le même enregistrement sous forme d'application console en quelques lignes de C#, sans l'aperçu ni le son. L'identifiant et le mot de passe sont écrits dans son code : remplacez `admin` et `password` par ceux de votre caméra.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/BRK8ukR9aFc?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cam = new VideoCaptureCoreX();
+cam.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+cam.Video_Source = await RTSPSourceSettings
+    .CreateAsync(new Uri(args[0]), "admin",
+        "password", audioEnabled: false);
+cam.Outputs_Add(new MP4Output("ipcam.mp4"));
+if (!await cam.StartAsync()) return;
+Console.ReadLine();
+await cam.StopAsync();
+```
 
 Son code : [ip-camera-mp4-short-console sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/ip-camera-mp4-short-console).
 

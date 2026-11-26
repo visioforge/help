@@ -57,9 +57,58 @@ La vidéo crée le projet sous .NET 10, qui nécessite Visual Studio 2026 ; dans
 
 La même tâche en quelques lignes de C#, avec un fondu enchaîné entre les images :
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/_jgqREj_xdo?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+```csharp
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.Types.X.VideoEncoders;
+using VisioForge.Core.VideoEditX;
+
+// Le dossier d'images et la vidéo à écrire.
+var pics = Directory.GetFiles(args[0], "*.jpg").Order().ToArray();
+
+await VisioForgeX.InitSDKAsync();
+using var edit = new VideoEditCoreX();
+var done = new TaskCompletionSource<bool>();
+edit.OnError += (_, e) => Console.WriteLine(e.Message);
+edit.OnStop += (_, e) => done.TrySetResult(e.Successful);
+
+// Chaque image reste 3 secondes, et la suivante
+// commence 1 seconde avant sa fin.
+var show = TimeSpan.FromSeconds(3);
+var cross = TimeSpan.FromSeconds(1);
+var step = show - cross;
+
+for (var n = 0; n < pics.Length; n++)
+{
+    var at = step * n;
+    edit.Input_AddImageFile(pics[n], show, at);
+
+    // Le fondu enchaîné remplit la seconde que partagent les deux images.
+    if (n > 0)
+        edit.Video_Transitions.Add(
+            new VideoTransition(
+                VideoTransitionType.Crossfade, at, at + cross));
+}
+
+var end = step * (pics.Length - 1) + show;
+edit.Video_Transition_Add_FadeIn(TimeSpan.Zero, cross);
+edit.Video_Transition_Add_FadeOut(end - cross, end);
+
+edit.Output_VideoSize = new Size(1920, 1080);
+edit.Output_VideoFrameRate = new VideoFrameRate(30);
+// L'encodeur par défaut est petit : 3 Mbit/s en 1080p,
+// ce qui se voit en blocs dans un ciel ou un dégradé.
+var enc = new OpenH264EncoderSettings(VideoQuality.VeryHigh);
+edit.Output_Format = new MP4Output(args[1], enc);
+
+// Start renvoie false quand le rendu ne peut pas commencer ;
+// OnStop se déclenche quand le fichier est terminé.
+var saved = edit.Start() && await done.Task;
+Console.WriteLine(saved ? $"Saved: {args[1]}" : "Not saved.");
+```
 
 Son code : [images-to-video-short-console sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-short-console).
 

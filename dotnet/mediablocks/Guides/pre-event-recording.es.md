@@ -70,11 +70,54 @@ El tutorial recorre la demo WPF Pre-Event Recording: una cámara IP RTSP pasa po
 
 ### La versión corta
 
-Una aplicación de consola en pocas líneas de C#: mantiene en memoria el video de una cámara RTSP y, cuando usted pulsa Enter, guarda en un archivo MP4 hasta 10 segundos anteriores a ese momento, a partir de un fotograma clave, y cinco segundos más de video en vivo.
+Una aplicación de consola en pocas líneas de C#: mantiene en memoria el video de una cámara RTSP y, cuando usted pulsa Enter, guarda en un archivo MP4 hasta 10 segundos anteriores a ese momento, a partir de un fotograma clave, y cinco segundos más de video en vivo. El usuario y la contraseña están escritos en su código: sustituya `admin` y `password` por los de su cámara.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/L_iDqBfU5fY?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+```csharp
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.PreEventRecording;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cam = new RTSPSourceBlock(
+    await RTSPSourceSettings.CreateAsync(
+        new Uri(args[0]), "admin", "password",
+        audioEnabled: false));
+var h264 = new H264EncoderBlock();
+var settings = new PreEventRecordingSettings
+{
+    PreEventDuration = TimeSpan.FromSeconds(10),
+    PostEventDuration = TimeSpan.FromSeconds(5)
+};
+var pre = new PreEventRecordingBlock(settings)
+    { AudioEnabled = false };
+var saved = new TaskCompletionSource<string>(
+    TaskCreationOptions
+        .RunContinuationsAsynchronously);
+pre.OnRecordingStopped += (_, e) =>
+    saved.TrySetResult(e.Filename);
+p.Connect(cam.VideoOutput, h264.Input);
+p.Connect(h264.Output, pre.VideoInput);
+if (!await p.StartAsync()) return;
+var file = Path.GetFullPath("event.mp4");
+do
+{
+    Console.WriteLine("Enter: the event");
+    if (Console.ReadLine() is null) return;
+    pre.TriggerRecording(file);
+}
+while (pre.State ==
+    PreEventRecordingState.Buffering);
+Console.WriteLine(await saved.Task);
+await p.StopAsync();
+```
 
 Su código: [pre-event-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/pre-event-short-console) en GitHub.
 

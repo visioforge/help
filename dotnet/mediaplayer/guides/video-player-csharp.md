@@ -78,9 +78,71 @@ The video creates the project on .NET 10, which needs Visual Studio 2026; in Vis
 
 The same player as a WPF app in a few lines of C#, without the timeline and the controls:
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Raq4u6aTfzg?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+`MainWindow.xaml`:
+
+```xml
+<Window x:Class="VideoPlayerShort.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+        Title="Video Player" Width="1600" Height="900"
+        Background="Black" WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <vf:VideoView x:Name="VideoView1" />
+</Window>
+```
+
+`MainWindow.xaml.cs`:
+
+```csharp
+using System.ComponentModel;
+using System.Windows;
+using VisioForge.Core;
+using VisioForge.Core.MediaPlayerX;
+
+namespace VideoPlayerShort;
+
+public partial class MainWindow : Window
+{
+    private MediaPlayerCoreX _player;
+
+    private bool _ready;
+
+    public MainWindow()
+    {
+        InitializeComponent();
+    }
+
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        await VisioForgeX.InitSDKAsync();
+
+        _player = new(VideoView1);
+        _player.OnError += (_, e) =>
+            Dispatcher.InvokeAsync(() =>
+                MessageBox.Show(e.Message));
+
+        var root = AppContext.BaseDirectory;
+        var file = $"{root}video.mp4";
+        if (await _player.OpenAsync(file))
+            await _player.PlayAsync();
+
+        _ready = true;
+    }
+
+    private void Window_Closing(object sender, CancelEventArgs e)
+    {
+        if (!_ready)
+        {
+            e.Cancel = true; // still opening
+            return;
+        }
+
+        _player?.Dispose();
+        VisioForgeX.DestroySDK();
+    }
+}
+```
 
 Its code: [video-player-short-wpf on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/_VideoTutorials/video-player-short-wpf).
 

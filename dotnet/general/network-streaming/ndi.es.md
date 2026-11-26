@@ -76,9 +76,61 @@ El tutorial crea una aplicación WPF que envía una webcam y su micrófono a la 
 
 El mismo envío y recepción como dos aplicaciones de consola en unas pocas líneas de C#: una emite un archivo de vídeo por NDI y la otra muestra una fuente NDI por su nombre en una ventana propia.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/76pKYRA9hs0?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+El emisor:
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sources;
+using static VisioForge.Core.MediaBlocks.MediaBlockPadMediaType;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var file = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(
+        args[0]));
+var ndi = new NDISinkBlock("VisioForge NDI");
+p.Connect(file.VideoOutput,
+    ndi.CreateNewInput(Video));
+if (file.AudioOutput != null)
+    p.Connect(file.AudioOutput,
+        ndi.CreateNewInput(Audio));
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
+
+El receptor:
+
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioRendering;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var settings = await NDISourceSettings
+    .CreateAsync(p.GetContext(), args[0], null);
+if (settings == null) return;
+var ndi = new NDISourceBlock(settings);
+var video = new VideoRendererBlock(p, null);
+p.Connect(ndi.VideoOutput, video.Input);
+if (settings.GetInfo().AudioStreams.Count > 0)
+    p.Connect(ndi.AudioOutput,
+        new AudioRendererBlock().Input);
+if (!await p.StartAsync()) return;
+Console.ReadLine();
+await p.StopAsync();
+```
 
 Su código: [ndi-send-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-send-short-console) y [ndi-receive-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/ndi-receive-short-console) en GitHub.
 

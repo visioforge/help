@@ -58,9 +58,28 @@ The classic `VideoCaptureCore` engine records the screen as well; its version of
 
 The same recording as a console app in a few lines of C#, without the preview and the system sound.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/rvWmsuifpRE?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+<!-- vf-compile -->
+```csharp
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+await VisioForgeX.InitSDKAsync();
+await using var cap = new VideoCaptureCoreX();
+cap.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+cap.Video_Source =
+    new ScreenCaptureD3D11SourceSettings
+    {
+        FrameRate = new VideoFrameRate(30)
+    };
+cap.Outputs_Add(new MP4Output("screen.mp4"));
+if (!await cap.StartAsync()) return;
+Console.ReadLine();
+await cap.StopAsync();
+```
 
 Its code: [screen-mp4-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/_VideoTutorials/screen-mp4-short-console).
 

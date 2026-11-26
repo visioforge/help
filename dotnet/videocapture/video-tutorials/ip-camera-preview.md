@@ -55,9 +55,24 @@ This tutorial uses the Windows-only VideoCaptureCore engine, the SDK's DirectSho
 
 The same preview in a few lines of C#: the engine on the `VideoView`, the camera's address with its login and password, and `IPPreview` mode. Its code is an excerpt of this tutorial's `Form1.cs`, without the Pixelate effect, the Stop button and the close handler; the full code is in [Implementation Example with C# Code](#implementation-example-with-c-code) below.
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/eAllqdrphwg?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+```csharp
+videoCapture1 = new VideoCaptureCore(
+    VideoView1 as IVideoView);
+
+videoCapture1.IP_Camera_Source =
+    new IPCameraSourceSettings
+    {
+        URL = url,
+        Login = edLogin.Text,
+        Password = edPassword.Text,
+        Type = IPSourceEngine.Auto_LAV
+    };
+
+videoCapture1.Mode =
+    VideoCaptureMode.IPPreview;
+
+await videoCapture1.StartAsync();
+```
 
 ## Source Code Repository
 

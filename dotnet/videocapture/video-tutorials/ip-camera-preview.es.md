@@ -55,9 +55,24 @@ Este tutorial usa el motor VideoCaptureCore, exclusivo de Windows: el motor Dire
 
 La misma vista previa en unas pocas líneas de C#: el motor sobre el `VideoView`, la dirección de la cámara con su usuario y su contraseña, y el modo `IPPreview`. Su código es un extracto del `Form1.cs` de este tutorial, sin el efecto Pixelate, el botón Stop ni el controlador de cierre; el código completo está más abajo, en [Ejemplo de implementación con código C#](#ejemplo-de-implementacion-con-codigo-c).
 
-<div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/eAllqdrphwg?controls=1" frameborder="0" allowfullscreen></iframe>
-</div>
+```csharp
+videoCapture1 = new VideoCaptureCore(
+    VideoView1 as IVideoView);
+
+videoCapture1.IP_Camera_Source =
+    new IPCameraSourceSettings
+    {
+        URL = url,
+        Login = edLogin.Text,
+        Password = edPassword.Text,
+        Type = IPSourceEngine.Auto_LAV
+    };
+
+videoCapture1.Mode =
+    VideoCaptureMode.IPPreview;
+
+await videoCapture1.StartAsync();
+```
 
 ## Repositorio de código fuente
 
