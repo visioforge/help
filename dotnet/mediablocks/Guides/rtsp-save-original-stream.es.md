@@ -29,6 +29,11 @@ primary_api_classes:
   - RTSPRAWSourceSettings
   - AACEncoderBlock
 
+video:
+  id: ryZ2yeB_oB0
+  upload_date: 2026-11-26T16:30:32Z
+  duration: PT6M33S
+
 ---
 
 # Cómo Guardar Stream RTSP a Archivo: Grabar Video de Cámara IP sin Re-codificación
@@ -45,6 +50,7 @@ primary_api_classes:
 - [Cómo Guardar Stream RTSP a Archivo: Grabar Video de Cámara IP sin Re-codificación](#como-guardar-stream-rtsp-a-archivo-grabar-video-de-camara-ip-sin-re-codificacion)
   - [Tabla de Contenidos](#tabla-de-contenidos)
   - [Resumen](#resumen)
+  - [Tutorial en video: guardar una cámara RTSP en MP4 en C# WinForms](#tutorial-en-video-guardar-una-camara-rtsp-en-mp4-en-c-winforms)
   - [Características Principales](#caracteristicas-principales)
   - [Concepto Principal](#concepto-principal)
   - [Prerrequisitos](#prerrequisitos)
@@ -59,6 +65,26 @@ primary_api_classes:
 ## Resumen
 
 Esta guía demuestra cómo guardar un stream RTSP a un archivo MP4 capturando el stream de video original desde una cámara RTSP IP sin re-codificar el video. Este enfoque es altamente beneficioso para preservar la calidad de video original de las cámaras y minimizar el uso de CPU cuando necesita grabar metraje. El stream de audio puede pasarse a través o, opcionalmente, re-codificarse para mejor compatibilidad, permitiendo guardar los datos completos del streaming. Herramientas como FFmpeg y VLC ofrecen métodos de línea de comandos o UI para grabar un stream RTSP; sin embargo, esta guía se enfoca en un enfoque programático usando Media Blocks SDK .NET, para desarrolladores que necesitan crear aplicaciones que se conecten y graben video desde cámaras RTSP.
+
+## Tutorial en video: guardar una cámara RTSP en MP4 en C# WinForms
+
+El tutorial crea una aplicación WinForms que guarda una cámara IP RTSP en MP4 exactamente como la cámara la envía: `RTSPRAWSourceBlock` pasa el H.264 de la cámara directamente a `MP4SinkBlock`, sin decodificador ni codificador. El sonido AAC entra tal cual, y G.711 o cualquier otro códec de audio se codifica a AAC. El video compara la carga de CPU con una grabación que decodifica y vuelve a codificar, comprueba con ffprobe que el archivo tiene los códecs de la cámara y muestra por qué la fuente se configura en TCP.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/ryZ2yeB_oB0?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-winforms) en GitHub.
+
+### La versión corta
+
+Una aplicación de consola en unas pocas líneas de C#: guarda el H.264 de la cámara, y su sonido AAC cuando la cámara lo envía, en `camera.mp4` hasta que usted pulsa Enter, y `StopAsync` termina el archivo.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/gdNtyyz3aN8?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Su código: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) en GitHub.
 
 ## Características Principales
 

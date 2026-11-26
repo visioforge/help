@@ -29,6 +29,11 @@ primary_api_classes:
   - RTSPRAWSourceSettings
   - AACEncoderBlock
 
+video:
+  id: ryZ2yeB_oB0
+  upload_date: 2026-11-26T16:30:32Z
+  duration: PT6M33S
+
 ---
 
 # Enregistrer un flux RTSP dans un fichier : capturer la vidéo de caméra IP sans réencodage
@@ -45,6 +50,7 @@ primary_api_classes:
 - [Enregistrer un flux RTSP dans un fichier : capturer la vidéo de caméra IP sans réencodage](#enregistrer-un-flux-rtsp-dans-un-fichier-capturer-la-video-de-camera-ip-sans-reencodage)
   - [Table des matières](#table-des-matieres)
   - [Vue d'ensemble](#vue-densemble)
+  - [Tutoriel vidéo : enregistrer une caméra RTSP en MP4 en C# WinForms](#tutoriel-video-enregistrer-une-camera-rtsp-en-mp4-en-c-winforms)
   - [Fonctionnalités principales](#fonctionnalites-principales)
   - [Concept central](#concept-central)
   - [Prérequis](#prerequis)
@@ -59,6 +65,26 @@ primary_api_classes:
 ## Vue d'ensemble
 
 Ce guide montre comment enregistrer un flux RTSP dans un fichier MP4 en capturant le flux vidéo d'origine d'une caméra IP RTSP sans réencodage de la vidéo. Cette approche est très avantageuse pour préserver la qualité vidéo d'origine des caméras et minimiser la consommation CPU lorsque vous devez enregistrer des séquences. Le flux audio peut être transmis ou, en option, réencodé pour une meilleure compatibilité, permettant de sauvegarder toutes les données du streaming. Des outils comme FFmpeg et VLC offrent des méthodes en ligne de commande ou avec interface graphique pour enregistrer un flux RTSP ; toutefois, ce guide se concentre sur une approche programmatique avec le VisioForge Media Blocks SDK pour les développeurs .NET qui doivent créer des applications se connectant à des caméras RTSP et enregistrant leur vidéo.
+
+## Tutoriel vidéo : enregistrer une caméra RTSP en MP4 en C# WinForms
+
+Le tutoriel crée une application WinForms qui enregistre une caméra IP RTSP en MP4 exactement comme la caméra l'envoie : `RTSPRAWSourceBlock` transmet le H.264 de la caméra directement à `MP4SinkBlock`, sans décodeur ni encodeur. Le son AAC entre tel quel, et le G.711 ou tout autre codec audio est encodé en AAC. La vidéo compare la charge CPU avec un enregistrement qui décode puis réencode, vérifie avec ffprobe que le fichier contient les codecs de la caméra et montre pourquoi la source est réglée sur TCP.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/ryZ2yeB_oB0?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Son code : [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-winforms) sur GitHub.
+
+### La version courte
+
+Une application console en quelques lignes de C# : elle enregistre le H.264 de la caméra, et son son AAC quand la caméra l'envoie, dans `camera.mp4` jusqu'à ce que vous appuyiez sur Entrée, et `StopAsync` termine le fichier.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/gdNtyyz3aN8?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Son code : [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) sur GitHub.
 
 ## Fonctionnalités principales
 

@@ -29,6 +29,11 @@ primary_api_classes:
   - RTSPRAWSourceSettings
   - AACEncoderBlock
 
+video:
+  id: ryZ2yeB_oB0
+  upload_date: 2026-11-26T16:30:32Z
+  duration: PT6M33S
+
 ---
 
 # How to Save RTSP Stream to File: Record IP Camera Video without Re-encoding
@@ -45,6 +50,7 @@ primary_api_classes:
 - [How to Save RTSP Stream to File: Record IP Camera Video without Re-encoding](#how-to-save-rtsp-stream-to-file-record-ip-camera-video-without-re-encoding)
   - [Table of Contents](#table-of-contents)
   - [Overview](#overview)
+  - [Video Tutorial: Save an RTSP Camera to MP4 in C# WinForms](#video-tutorial-save-an-rtsp-camera-to-mp4-in-c-winforms)
   - [Core Features](#core-features)
   - [Core Concept](#core-concept)
   - [Prerequisites](#prerequisites)
@@ -59,6 +65,26 @@ primary_api_classes:
 ## Overview
 
 This guide demonstrates how to save an RTSP stream to an MP4 file by capturing the original video stream from an RTSP IP camera without re-encoding the video. This approach is highly beneficial for preserving the original video quality from cameras and minimizing CPU usage when you need to record footage. The audio stream can be passed through or, optionally, re-encoded for better compatibility, allowing you to save the complete streaming data. Tools like FFmpeg and VLC offer command-line or UI-based methods to record an RTSP stream; however, this guide focuses on a programmatic approach using the VisioForge Media Blocks SDK for .NET developers who need to create applications that connect to and record video from RTSP cameras.
+
+## Video Tutorial: Save an RTSP Camera to MP4 in C# WinForms
+
+The tutorial builds a WinForms app that saves an RTSP IP camera to MP4 exactly as the camera sends it: `RTSPRAWSourceBlock` passes the camera's H.264 straight to `MP4SinkBlock`, with no decoder and no encoder. AAC sound goes in as it is, and G.711 or any other audio codec is encoded to AAC. The video compares the CPU load with a recording that decodes and encodes again, checks with ffprobe that the file has the camera's codecs, and shows why the source is set to TCP.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/ryZ2yeB_oB0?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-winforms) on GitHub.
+
+### The short version
+
+A console app in a few lines of C#: it saves the camera's H.264, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/gdNtyyz3aN8?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) on GitHub.
 
 ## Core Features
 
