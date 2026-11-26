@@ -26,7 +26,7 @@ For an engine's errors all three conditions are required, and all are checked ev
 - `VisioForgeX.Debug_Telemetry` is `true` (the default) - the process-wide switch, see below.
 - `System.Diagnostics.Debugger.IsAttached` is `true`.
 
-An application you build and ship to your users runs without a debugger, so **a released application sends nothing**. Detaching the debugger stops reporting immediately; attaching one mid-session starts it.
+An application you build and ship to your users runs without a debugger, so **a released application sends nothing** of this - only an application whose licence does not cover what it uses (or that has none) sends the two [trial events](#trial-events). Detaching the debugger stops reporting immediately; attaching one mid-session starts it.
 
 ## Switching it off
 
@@ -91,6 +91,25 @@ Reports are sent over HTTPS to `https://telemetry.visioforge.org`, a server oper
 Feature names go over HTTPS to `https://analytics.visioforge.org`, a separate analytics server operated by VisioForge, from a background task that never delays the caller. A send that fails is not retried in the background; its names go out again on the engine's next start. That server keeps no IP address: it derives an anonymous daily hash from the connection, and the salt behind that hash is deleted after two days.
 
 The first time a process sends anything, the SDK writes one line naming what is sent, where, and how to turn it off - both to the log and to the debug output.
+
+## Trial events
+
+While the SDK runs as a trial - no licence certificate set, or one that does not cover what the engine is asked to do - it sends two anonymous events, with or without a debugger, so that we can count trials:
+
+- `trial_started`, once, when the 30-day trial starts for a user account on a computer.
+- `trial_expired`, once per user account, the first time an engine refuses to start because the trial is over.
+
+Each carries the event name, the engine that checked the trial (for example `VideoCaptureCoreX`), the SDK version (only a release build of the SDK sends them), the OS family (Windows, macOS, Linux, Android, iOS, macCatalyst) and architecture, and the .NET runtime. Nothing else: no computer name, user name, path, application name or licence data, and no identifier - each event has a random one of its own. On Android, iOS and in a sandboxed macOS or Mac Catalyst app the trial, and so each event, belongs to the app rather than the device.
+
+They go over HTTPS to `https://analytics.visioforge.org`, the server that receives the feature names, from a background task: the trial check does not wait for it, and a failed send is not retried, so a process that exits at once may never send it. An application whose licence covers what it uses never sends them, on your computer or your users'.
+
+To turn them off, set the process-wide switch before the first engine starts:
+
+```csharp
+VisioForgeX.Debug_Telemetry = false;
+```
+
+Or, for a process whose code you do not change - a build server running your tests, say - set the environment variable `VISIOFORGE_TRIALREPORT` to `0`.
 
 ## Install reports
 

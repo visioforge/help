@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-26 18:11:13 UTC (22e1188d075)
+**Generated:** 2026-11-26 18:28:02 UTC (0a29a03917b)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 472 help documentation pages + 74 website pages
 
@@ -38357,7 +38357,7 @@ For an engine's errors all three conditions are required, and all are checked ev
 - `VisioForgeX.Debug_Telemetry` is `true` (the default) - the process-wide switch, see below.
 - `System.Diagnostics.Debugger.IsAttached` is `true`.
 
-An application you build and ship to your users runs without a debugger, so **a released application sends nothing**. Detaching the debugger stops reporting immediately; attaching one mid-session starts it.
+An application you build and ship to your users runs without a debugger, so **a released application sends nothing** of this - only an application whose licence does not cover what it uses (or that has none) sends the two [trial events](#trial-events). Detaching the debugger stops reporting immediately; attaching one mid-session starts it.
 
 ## Switching it off
 
@@ -38422,6 +38422,25 @@ Reports are sent over HTTPS to `https://telemetry.visioforge.org`, a server oper
 Feature names go over HTTPS to `https://analytics.visioforge.org`, a separate analytics server operated by VisioForge, from a background task that never delays the caller. A send that fails is not retried in the background; its names go out again on the engine's next start. That server keeps no IP address: it derives an anonymous daily hash from the connection, and the salt behind that hash is deleted after two days.
 
 The first time a process sends anything, the SDK writes one line naming what is sent, where, and how to turn it off - both to the log and to the debug output.
+
+## Trial events
+
+While the SDK runs as a trial - no licence certificate set, or one that does not cover what the engine is asked to do - it sends two anonymous events, with or without a debugger, so that we can count trials:
+
+- `trial_started`, once, when the 30-day trial starts for a user account on a computer.
+- `trial_expired`, once per user account, the first time an engine refuses to start because the trial is over.
+
+Each carries the event name, the engine that checked the trial (for example `VideoCaptureCoreX`), the SDK version (only a release build of the SDK sends them), the OS family (Windows, macOS, Linux, Android, iOS, macCatalyst) and architecture, and the .NET runtime. Nothing else: no computer name, user name, path, application name or licence data, and no identifier - each event has a random one of its own. On Android, iOS and in a sandboxed macOS or Mac Catalyst app the trial, and so each event, belongs to the app rather than the device.
+
+They go over HTTPS to `https://analytics.visioforge.org`, the server that receives the feature names, from a background task: the trial check does not wait for it, and a failed send is not retried, so a process that exits at once may never send it. An application whose licence covers what it uses never sends them, on your computer or your users'.
+
+To turn them off, set the process-wide switch before the first engine starts:
+
+```
+VisioForgeX.Debug_Telemetry = false;
+```
+
+Or, for a process whose code you do not change - a build server running your tests, say - set the environment variable `VISIOFORGE_TRIALREPORT` to `0`.
 
 ## Install reports
 
@@ -156349,7 +156368,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
 
 -   [Supported input devices and other sources](/help/docs/dotnet/videocapture/video-sources/)• Web cameras• TV tuners (Windows only) and capture cards• DV and MPEG camcorders (Windows only)• Screen capture• HTTP/UDP/TCP network streams
 -   [Video Preview](/help/docs/dotnet/videocapture/video-tutorials/camera-video-preview/)
@@ -156370,7 +156389,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
 
 -   [Supported input devices and other sources](/help/docs/dotnet/videocapture/video-sources/)+• RTSP/ONVIF IP cameras• RTMP and other network streams
 -   [Video Preview](/help/docs/dotnet/videocapture/video-tutorials/camera-video-preview/)
@@ -156395,7 +156414,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
 
 -   [Supported input devices and other sources](/help/docs/dotnet/videocapture/video-sources/)+• Blackmagic Decklink• DVB-T/DVB-C/DVB-S/ATSC devices (BETA)
 -   [Video Preview](/help/docs/dotnet/videocapture/video-tutorials/camera-video-preview/)
@@ -156447,7 +156466,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=standard&period=lifetime)
 
  |
 
@@ -156455,7 +156474,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=professional&period=lifetime)
 
  |
 
@@ -156463,7 +156482,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -157209,7 +157228,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
 
 -   Video files playback
 -   Audio files playback
@@ -157231,7 +157250,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
 
 -   Video files playback
 -   Audio files playback
@@ -157260,7 +157279,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
 
 -   Video files playback
 -   Audio files playback
@@ -157312,7 +157331,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=standard&period=lifetime)
 
  |
 
@@ -157320,7 +157339,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=professional&period=lifetime)
 
  |
 
@@ -157328,7 +157347,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -157921,7 +157940,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -157938,7 +157957,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -157961,7 +157980,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -158001,7 +158020,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=standard&period=lifetime)
 
  |
 
@@ -158009,7 +158028,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=professional&period=lifetime)
 
  |
 
@@ -158017,7 +158036,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -158600,7 +158619,7 @@ Annual license for one named developer
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
 
 -   Free minor and major upgrades for one year
 -   SDK continues functioning after subscription ends
@@ -158616,7 +158635,7 @@ Annual license for three named developers
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual3)
+[💳Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual3)
 
 -   Free minor and major upgrades for one year
 -   SDK continues functioning after subscription ends
@@ -158632,7 +158651,7 @@ BEST VALUE
 
 Buy Lifetime·Team License
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=lifetime)
 
 -   Minor and major updates for the product lifetime
 -   Email support
@@ -159251,7 +159270,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -159268,7 +159287,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -159289,7 +159308,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
 
 -   Timeline
 -   Frame grabber
@@ -159327,7 +159346,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=standard&period=lifetime)
 
  |
 
@@ -159335,7 +159354,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=professional&period=lifetime)
 
  |
 
@@ -159343,7 +159362,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=lifetime)
 
  |
 | Features
@@ -159820,9 +159839,9 @@ Flexible licensing options for businesses and developers. Start with our free tr
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
 
@@ -159841,9 +159860,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual3)
 
@@ -159862,7 +159881,7 @@ Minor and major updates for the product lifetime with Lifetime·Team
 -   Lifetime·Team license included
 -   Best value for long-term
 
-[Buy Now](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=lifetime)
 
 ### Source Code License
 
@@ -159878,7 +159897,7 @@ Full source code access
 -   Modify & extend the source
 -   Custom builds for your own applications
 
-[Buy Now](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=sourceCode&period=lifetime)
+[Buy Now](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=sourceCode&period=lifetime)
 
 Need a license for educational, research, or non-profit projects? [Contact us](mailto:sales@visioforge.com) for special non-commercial licensing options.
 
@@ -159920,7 +159939,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ## C# Code Example
 
@@ -160350,9 +160369,9 @@ Annual license
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
 
@@ -160374,9 +160393,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual3)
 
@@ -160398,7 +160417,7 @@ One-time payment with minor and major updates for the product lifetime
 -   One-time payment
 -   Commercial use allowed
 
-[Buy Now](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=lifetime)
 
 Need custom encryption algorithms or special features? [Contact us](mailto:sales@visioforge.com) for tailored solutions.
 
@@ -160406,7 +160425,7 @@ Need custom encryption algorithms or special features? [Contact us](mailto:sales
 
 The source code license costs €4,000, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ### [Online Help](/help/)
 
@@ -160721,9 +160740,9 @@ Annual license
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
 
@@ -160744,9 +160763,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual3)
 
@@ -160767,7 +160786,7 @@ One-time payment with minor and major updates for the product lifetime
 -   Royalty-free distribution
 -   One-time payment
 
-[Buy Now](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=lifetime)
 
 ### Runtime License
 
@@ -160786,9 +160805,9 @@ Per server core annual license
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=runtime&period=annual)
 
@@ -160798,7 +160817,7 @@ Need custom features or special requirements? [Contact us](mailto:sales@visiofor
 
 The source code license costs €4,000, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## System Requirements
 
@@ -161148,7 +161167,7 @@ Developer1 developerWorkgroupup to 3 developersLifetime·Team LicenseBest Valueu
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
 
 -   Supported input devices and sources• Webcams and USB cameras• TV tuners (Windows only)• DV/MPEG camcorders (Windows only)• Screen capture
 -   Video preview
@@ -161169,7 +161188,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
 
 -   Supported input devices and sources+• IP cameras (RTSP/HTTP/MMS)• Network streams
 -   Video preview
@@ -161194,7 +161213,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
 
 -   Supported input devices and sources+• Additional engines for network streams
 -   Video preview
@@ -161236,7 +161255,7 @@ Premium
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=standard&period=lifetime)
 
  |
 
@@ -161244,7 +161263,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=professional&period=lifetime)
 
  |
 
@@ -161252,7 +161271,7 @@ Buy Now
 
 Buy Now
 
-[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
+[💳Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=lifetime)
 
  |
 | Features
@@ -161610,9 +161629,9 @@ Annual license - 1 year of updates and support
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
 
@@ -161635,9 +161654,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual3)
 
@@ -161660,7 +161679,7 @@ One-time payment with minor and major updates for the product lifetime
 -   Commercial use allowed
 -   No watermark or nag-screen
 
-[Buy Lifetime·Team License](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=lifetime)
+[Buy Lifetime·Team License](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=lifetime)
 
 Need custom builds or special features? [Contact us](mailto:sales@visioforge.com) for tailored solutions.
 
@@ -161668,7 +161687,7 @@ Need custom builds or special features? [Contact us](mailto:sales@visioforge.com
 
 The source code license costs €1,500, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## 💰 Save More with Bundle Packages
 
@@ -161708,7 +161727,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ### [Online Help](/help/)
 
@@ -162034,9 +162053,9 @@ Professional licensing for commercial applications with comprehensive codec supp
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
 
@@ -162057,9 +162076,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual3)
 
@@ -162080,7 +162099,7 @@ One-time purchase with minor and major updates for the product lifetime
 -   Free minor and major upgrades
 -   Commercial use allowed
 
-[Buy Now](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=lifetime)
 
 Need custom builds or enterprise licensing? [Contact us](mailto:sales@visioforge.com) for tailored solutions.
 
@@ -162088,7 +162107,7 @@ Need custom builds or enterprise licensing? [Contact us](mailto:sales@visioforge
 
 The source code license costs €1,500, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## 💰 Save More with Bundle Packages
 
@@ -162128,7 +162147,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ## Purchase Benefits
 
@@ -162409,9 +162428,9 @@ Annual license for one named developer
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
 
@@ -162432,9 +162451,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual3)
 
@@ -162455,7 +162474,7 @@ One-time payment with minor and major updates for the product lifetime
 -   Never expires
 -   Commercial use allowed
 
-[Buy Now](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=lifetime)
+[Buy Now](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=lifetime)
 
 Not sure which license you need? Contact our sales team for guidance on the best option for your project.
 
@@ -162463,7 +162482,7 @@ Not sure which license you need? Contact our sales team for guidance on the best
 
 The source code license costs €1,500, paid once by one company, and includes the Lifetime·Team license. It comes with 1 year of source updates, then 30% a year to renew. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
-[Buy Source Code License](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
+[Buy Source Code License](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=sourceCode&period=lifetime)[sales@visioforge.com](mailto:sales@visioforge.com)
 
 ## 💰 Save More with Bundle Packages
 
@@ -162503,7 +162522,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ### [Online Help](/help/)
 
@@ -162732,9 +162751,9 @@ Most Popular
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
 
@@ -162755,9 +162774,9 @@ Annual license for three named developers
 
 Purchase Options
 
-[Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43?prefilled_promo_code=BLACKFRIDAY2026)
+[Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
-[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44?prefilled_promo_code=BLACKFRIDAY2026)
+[One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual3)
 
@@ -162776,7 +162795,7 @@ Lifetime license for teams
 -   Source code samples
 -   Custom configuration
 
-[Buy Lifetime](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=lifetime)
+[Buy Lifetime](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=lifetime)
 
 ### Source Code License
 
@@ -162793,7 +162812,7 @@ Full C++ source code access
 -   Custom builds for your own applications
 -   Technical documentation
 
-[Buy Source Code](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b?prefilled_promo_code=BLACKFRIDAY2026)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=sourceCode&period=lifetime)
+[Buy Source Code](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=sourceCode&period=lifetime)
 
 ## 💰 Save More with Bundle Packages
 
@@ -162833,7 +162852,7 @@ Includes:
 
 [View Bundle Details](/buy#bundles)[All DirectShow Filters](/directshow-filters)
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 ## Quick Start Guide
 
@@ -163194,23 +163213,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-capture-sdk-net&edition=premium&period=annual)
 
--   [Video Capture SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR69AFdZ42Ga2Dm9AA?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o0056wC6Wq4Lug0G?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/00weVegFx5bN5hLcGEg7e2r?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZueVe9d5gUvdOheOMg7e2s?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUcMRcV0cgKem4bIJ?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gw6ot5sy5Sm6TCdSA?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/4gM3cw3SL6fR4dHbCAg7e2u?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gM4gA9d5aw7h0t5ecg7e2v?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm3cw0GzeMneSlcGEg7e2x?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIaEY60T8nZ7pT220g7e2y?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Capture SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Capture SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR69AFdZ42Ga2Dm9AA?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o0056wC6Wq4Lug0G?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/00weVegFx5bN5hLcGEg7e2r?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZueVe9d5gUvdOheOMg7e2s?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/7sYfZi4WP7jV4dHaywg7e2t?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUcMRcV0cgKem4bIJ?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gw6ot5sy5Sm6TCdSA?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/4gM3cw3SL6fR4dHbCAg7e2u?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/4gM4gA9d5aw7h0t5ecg7e2v?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/6oU8wQcph9s3dOhfSQg7e2w?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR628dg7c80ucdW4gi?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wMcMR6wCfsW5PydSz?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm3cw0GzeMneSlcGEg7e2x?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIaEY60T8nZ7pT220g7e2y?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Capture SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQ9AU1KDaw74dH6igg7e2z?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Media Player SDK .NET](/media-player-sdk-net#pricing)
 
@@ -163220,23 +163239,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-player-sdk-net&edition=premium&period=annual)
 
--   [Media Player SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/7sI9AF08efsWcdW7sE?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/14k1492gm6Wq0ve8yj?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQbldeMn39D7mkg7e2A?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x26oIexp33FbG9fSQg7e2B?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEU5kpf380y20ve5kx?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY28d1ci1C61zi8yk?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQ9AUgFx1ZBfWp5ecg7e2D?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ14o4WP7jV7pT4a8g7e2E?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sYfZi1KDgUv25zgWUg7e2G?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bJe8wQfBtdIjdOh0XWg7e2H?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Player SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Player SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/7sI9AF08efsWcdW7sE?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/14k1492gm6Wq0ve8yj?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQbldeMn39D7mkg7e2A?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x26oIexp33FbG9fSQg7e2B?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm8wQ4WPfQrbG9dKIg7e2C?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/aEU5kpf380y20ve5kx?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY28d1ci1C61zi8yk?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQ9AUgFx1ZBfWp5ecg7e2D?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ14o4WP7jV7pT4a8g7e2E?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMdRa74X8nZbG95ecg7e2F?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/5kQ14o1KD6fRdOhfSQg7e3F?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x25kEah9dIj9y16igg7e2l?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sYfZi1KDgUv25zgWUg7e2G?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bJe8wQfBtdIjdOh0XWg7e2H?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Player SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2bldbAbdOh8qog7e2I?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Video Edit SDK .NET](/video-edit-sdk-net#pricing)
 
@@ -163246,23 +163265,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-net&edition=premium&period=annual)
 
--   [Video Edit SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR66ot08e94yem49AG?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00gfZ33kq1C67XG01L?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sY9AU4WP7jVh0tdKIg7e2J?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B67sM8918nZeSl6igg7e2K?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEaEJ08ecgK7XGdQX?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sI4gl3kqdkO7XG29U?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/28EdRaexp6fRbG90XWg7e2M?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq5kE8910Vx6lPdKIg7e2N?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJefZi74Xaw75hL7mkg7e2P?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIcN69d5bAb39Daywg7e2Q?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/dR66ot08e94yem49AG?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00gfZ33kq1C67XG01L?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/7sY9AU4WP7jVh0tdKIg7e2J?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B67sM8918nZeSl6igg7e2K?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe8wQfBt0Vx25z6igg7e2L?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEaEJ08ecgK7XGdQX?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sI4gl3kqdkO7XG29U?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/28EdRaexp6fRbG90XWg7e2M?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq5kE8910Vx6lPdKIg7e2N?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gM8wQcph9s3cKd364g7e2O?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/eVaaEJ08e5Smdi0eV2?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZeaEJdZ40y2di015h?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJefZi74Xaw75hL7mkg7e2P?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cIcN69d5bAb39Daywg7e2Q?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28EeVegFxeMnbG96igg7e2R?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Video Edit SDK FFmpeg .NET](/video-edit-sdk-ffmpeg-net#pricing)
 
@@ -163272,23 +163291,23 @@ StandardDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €900 lifet
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-edit-sdk-ffmpeg-net&edition=premium&period=annual)
 
--   [Video Edit SDK FFmpeg .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEbIN1cigx091KaFm?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe8wBg7ccgK1zi6qd?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqdRa2OHaw74dH220g7e2S?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dRm14o1KDcEf4dH364g7e2T?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/00gcMRaMS80u1zi5l4?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY149aMS0y2a5O7ui?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq6oIexp0VxaC55ecg7e2V?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNibJ2fBteMn5hL5ecg7e2W?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/14A00k2OH1ZB39DfSQg7e2Y?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EfZidtl9s3eSl6igg7e2Z?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Edit SDK FFmpeg .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Edit SDK FFmpeg .NET — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/6oEbIN1cigx091KaFm?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe8wBg7ccgK1zi6qd?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqdRa2OHaw74dH220g7e2S?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Standard, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dRm14o1KDcEf4dH364g7e2T?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/00w3cwcph8nZ25z5ecg7e2U?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/00gcMRaMS80u1zi5l4?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/bIY149aMS0y2a5O7ui?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq6oIexp0VxaC55ecg7e2V?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNibJ2fBteMn5hL5ecg7e2W?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZu3cwfBtcEfeSl6igg7e2X?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/dR64glcV0fsWem48xi?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kA7sx4ou94y1zi3e3?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/14A00k2OH1ZB39DfSQg7e2Y?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EfZidtl9s3eSl6igg7e2Z?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Edit SDK FFmpeg .NET — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E5kE74XfQrh0t364g7e30?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Media Blocks SDK .NET](/media-blocks-sdk-net#pricing)
 
@@ -163298,13 +163317,13 @@ LicenseDeveloper: €500 yearWorkgroup: €1,000 yearLifetime·Team: €1,800 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=media-blocks-sdk-net&edition=license&period=annual)
 
--   [Media Blocks SDK .NET — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Blocks SDK .NET — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Blocks SDK .NET — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Blocks SDK .NET — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32?prefilled_promo_code=BLACKFRIDAY2026)
--   [Media Blocks SDK .NET — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Media Blocks SDK .NET — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kaEJ6wCa8C1zi9BK?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Blocks SDK .NET — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cseUZ5sy6Wq5Py5mc?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Blocks SDK .NET — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/aFafZi891fQrbG9cGEg7e31?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Blocks SDK .NET — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU7sMfBtfQr39DeOMg7e32?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Media Blocks SDK .NET — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A7sM2OH33F39DeOMg7e33?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [All-in-One Media Framework](/all-in-one-media-framework#pricing)
 
@@ -163314,21 +163333,21 @@ StandardDeveloper: €350 yearLifetime·Team: €800 lifetimeProfessionalDevelop
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=all-in-one-media-framework&edition=premium&period=annual)
 
--   [All-in-One Media Framework — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/8wMdQV7AG6Wq7XG4hO?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dR6dQV4ou94ycdW9CA?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/fZebIN9IOfsW6TC3dJ?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM9AF3kq1C60ve2aa?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQexp6fReSl7mkg7e3e?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w7sM891bAb39D8qog7e3f?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJe4gAfBtaw77pT9usg7e3h?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oUcN674X5bNbG98qog7e3i?prefilled_promo_code=BLACKFRIDAY2026)
--   [All-in-One Media Framework — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026)
+-   [All-in-One Media Framework — Standard, Developer: Subscription — renews yearly](https://buy.stripe.com/8wMdQV7AG6Wq7XG4hO?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Standard, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/dR6dQV4ou94ycdW9CA?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Standard, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe5kEgFx0Vx4dH364g7e3d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Professional, Developer: Subscription — renews yearly](https://buy.stripe.com/fZebIN9IOfsW6TC3dJ?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Professional, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM9AF3kq1C60ve2aa?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Professional, Workgroup: Subscription — renews yearly](https://buy.stripe.com/3cI8wQexp6fReSl7mkg7e3e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Professional, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w7sM891bAb39D8qog7e3f?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Professional, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14AfZicph0Vx6lP9usg7e3g?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Premium, Developer: Subscription — renews yearly](https://buy.stripe.com/9AQcMR7AG2Gab9SdSm?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Premium, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVaeUZ2gm6Wq5Py2a9?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Premium, Workgroup: Subscription — renews yearly](https://buy.stripe.com/bJe4gAfBtaw77pT9usg7e3h?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Premium, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oUcN674X5bNbG98qog7e3i?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [All-in-One Media Framework — Premium, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x25kE60TcEf8tXaywg7e3j?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Virtual Camera SDK](/virtual-camera-sdk#pricing)
 
@@ -163338,14 +163357,14 @@ LicenseDeveloper: €500 yearWorkgroup: €1,000 yearLifetime·Team: €1,800 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=virtual-camera-sdk&edition=license&period=annual)
 
--   [Virtual Camera SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026)
--   [Virtual Camera SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026)
--   [Virtual Camera SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k?prefilled_promo_code=BLACKFRIDAY2026)
--   [Virtual Camera SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l?prefilled_promo_code=BLACKFRIDAY2026)
--   [Virtual Camera SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m?prefilled_promo_code=BLACKFRIDAY2026)
--   [Virtual Camera SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Virtual Camera SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/00g149cV00y2b9SeVq?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Virtual Camera SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/fZe28d8EKeoS5Py3e6?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Virtual Camera SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/9B6bJ2expgUvh0tgWUg7e3k?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Virtual Camera SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B69AU60Taw74dHcGEg7e3l?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Virtual Camera SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/5kQeVe8916fReSlfSQg7e3m?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Virtual Camera SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/14A28sdtleMn7pTeOMg7e3P?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Video Encryption SDK](/video-encryption-sdk#pricing)
 
@@ -163355,14 +163374,14 @@ LicenseDeveloper: €500 yearWorkgroup: €1,000 yearLifetime·Team: €1,800 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-encryption-sdk&edition=license&period=annual)
 
--   [Video Encryption SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Encryption SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Encryption SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Encryption SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Encryption SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Encryption SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Encryption SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/8wM28d3kq5Smguc28M?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Encryption SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28o7sx3kq6Wqfq85mj?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Encryption SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm9AUbldeMndOhcGEg7e3n?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Encryption SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi9AUbld9s38tX5ecg7e3o?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Encryption SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6bld7jVaC58qog7e3p?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Encryption SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2fZiexpcEfdOhgWUg7e3R?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [Video Fingerprinting SDK](/video-fingerprinting-sdk#pricing)
 
@@ -163372,16 +163391,16 @@ LicenseDeveloper: €900 yearWorkgroup: €1,800 yearLifetime·Team: €2,400 li
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=video-fingerprinting-sdk&edition=license&period=annual)
 
--   [Video Fingerprinting SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — Runtime, per server core, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE?prefilled_promo_code=BLACKFRIDAY2026)
--   [Video Fingerprinting SDK — Runtime, per server core, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12?prefilled_promo_code=BLACKFRIDAY2026)
+-   [Video Fingerprinting SDK — License, Developer: Subscription — renews yearly](https://buy.stripe.com/14kfZ3aMS6WqcdWaFy?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cs4gl5sy6Wq1zi7uv?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/6oU5kEexp9s3fWpgWUg7e3q?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVq14ogFx6fReSl8qog7e3r?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJe28s60TbAbeSl7mkg7e3s?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/4gMcN62OHcEf11v4a8g7e3S?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — Runtime, per server core, Developer: Subscription — renews yearly](https://buy.stripe.com/aEUaEJ3kq0y2em4bJE?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [Video Fingerprinting SDK — Runtime, per server core, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8wM6ot2gm6Wq5Pyg12?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [FFmpeg Source DirectShow Filter](/ffmpeg-source-directshow-filter#pricing)
 
@@ -163391,14 +163410,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=ffmpeg-source-directshow-filter&edition=license&period=annual)
 
--   [FFmpeg Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026)
--   [FFmpeg Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026)
--   [FFmpeg Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y?prefilled_promo_code=BLACKFRIDAY2026)
--   [FFmpeg Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z?prefilled_promo_code=BLACKFRIDAY2026)
--   [FFmpeg Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40?prefilled_promo_code=BLACKFRIDAY2026)
--   [FFmpeg Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a?prefilled_promo_code=BLACKFRIDAY2026)
+-   [FFmpeg Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/eVq3cwcphdIjbG9gWUg7e41?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [FFmpeg Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/7sY3cw1KDeMn39DeOMg7e42?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [FFmpeg Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/8x2eVe2OH33FfWp6igg7e3Y?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [FFmpeg Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00wdRa1KDaw75hL220g7e3Z?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [FFmpeg Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY9d5gUv39D0XWg7e40?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [FFmpeg Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/3cI28s9d533F7pT0XWg7f0a?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [VLC Source DirectShow Filter](/vlc-source-directshow-filter#pricing)
 
@@ -163408,14 +163427,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=vlc-source-directshow-filter&edition=license&period=annual)
 
--   [VLC Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026)
--   [VLC Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026)
--   [VLC Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43?prefilled_promo_code=BLACKFRIDAY2026)
--   [VLC Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44?prefilled_promo_code=BLACKFRIDAY2026)
--   [VLC Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45?prefilled_promo_code=BLACKFRIDAY2026)
--   [VLC Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b?prefilled_promo_code=BLACKFRIDAY2026)
+-   [VLC Source DirectShow Filter — License, Developer: Subscription — renews yearly](https://buy.stripe.com/4gM8wQ4WP1ZB9y18qog7e46?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [VLC Source DirectShow Filter — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/28EaEYfBt8nZh0t8qog7e47?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [VLC Source DirectShow Filter — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/cNi7sMbldbAbdOh6igg7e43?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [VLC Source DirectShow Filter — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/00w6oIah95bN39D7mkg7e44?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [VLC Source DirectShow Filter — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/9B600kdtl0Vx8tXaywg7e45?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [VLC Source DirectShow Filter — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZucN6cphfQraC5cGEg7f0b?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [DirectShow Processing Filters Pack](/processing-filters-pack#pricing)
 
@@ -163425,14 +163444,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=processing-filters-pack&edition=license&period=annual)
 
--   [DirectShow Processing Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Processing Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Processing Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Processing Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Processing Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Processing Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Processing Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/9B67sMcph5bN8tXeOMg7f03?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Processing Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/6oU6oI3SLeMn25z6igg7f04?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Processing Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/dRm4gA891gUvcKd5ecg7f00?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Processing Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/5kQ00kbld8nZcKd9usg7f01?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Processing Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x2bJ2bld1ZBcKdaywg7f02?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Processing Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/bJeaEY1KD33F4dH4a8g7f0c?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 [DirectShow Encoding Filters Pack](/encoding-filters-pack#pricing)
 
@@ -163442,14 +163461,14 @@ LicenseDeveloper: €250 yearWorkgroup: €500 yearLifetime·Team: €750 lifeti
 
 Buy Now
 
-[💳Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=encoding-filters-pack&edition=license&period=annual)
 
--   [DirectShow Encoding Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Encoding Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Encoding Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Encoding Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Encoding Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow Encoding Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow Encoding Filters Pack — License, Developer: Subscription — renews yearly](https://buy.stripe.com/dRmeVe0Gz7jV6lPcGEg7f08?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Encoding Filters Pack — License, Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x2cN64WP0Vx4dH220g7f09?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Encoding Filters Pack — License, Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVqbJ274XbAbfWp9usg7f05?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Encoding Filters Pack — License, Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/9B66oI891cEf6lP9usg7f06?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Encoding Filters Pack — License, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/8x228sfBt8nZ4dHcGEg7f07?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow Encoding Filters Pack — Source code, Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/dRm9AUdtlcEf11vaywg7f0d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 ## Save with Bundle Deals
 
@@ -163467,13 +163486,13 @@ vs €1,900 / year buying the 5 products separately
 
 Purchase Options
 
-[💳Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-professional&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-professional&edition=license&period=annual)
 
--   [.NET Bundle Professional — Developer: Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Professional — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Professional — Workgroup: Subscription — renews yearly](https://buy.stripe.com/28E14odtl47JbG9eOMg7e34?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Professional — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x29AU4WP0Vx39DfSQg7e35?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Professional — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2expcEf11v8qog7e36?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Professional — Developer: Subscription — renews yearly](https://buy.stripe.com/eVacMR6wCa8CcdW5li?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Professional — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFa5kE60TgUv11vfSQg7e2d?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Professional — Workgroup: Subscription — renews yearly](https://buy.stripe.com/28E14odtl47JbG9eOMg7e34?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Professional — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/8x29AU4WP0Vx39DfSQg7e35?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Professional — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/fZubJ2expcEf11v8qog7e36?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 #### What's Included:
 
@@ -163503,13 +163522,13 @@ vs €2,500 / year buying the 5 products separately
 
 Purchase Options
 
-[💳Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-premium&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=dotnet-premium&edition=license&period=annual)
 
--   [.NET Bundle Premium — Developer: Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Premium — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Premium — Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq00k74X0Vx4dH6igg7e37?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Premium — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVqeVedtl47JeSlaywg7e38?prefilled_promo_code=BLACKFRIDAY2026)
--   [.NET Bundle Premium — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/eVq7sM3SLdIjcKdgWUg7e39?prefilled_promo_code=BLACKFRIDAY2026)
+-   [.NET Bundle Premium — Developer: Subscription — renews yearly](https://buy.stripe.com/28ofZ3bQW6Wqb9S5lk?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Premium — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/cNi14oah9aw725z220g7e2e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Premium — Workgroup: Subscription — renews yearly](https://buy.stripe.com/eVq00k74X0Vx4dH6igg7e37?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Premium — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/eVqeVedtl47JeSlaywg7e38?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [.NET Bundle Premium — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/eVq7sM3SLdIjcKdgWUg7e39?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 #### What's Included:
 
@@ -163537,13 +163556,13 @@ vs €1,500 / year buying the 5 products separately
 
 Purchase Options
 
-[💳Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W?prefilled_promo_code=BLACKFRIDAY2026)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X?prefilled_promo_code=BLACKFRIDAY2026)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=directshow-allinone&edition=license&period=annual)
+[💳Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[💶One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)[🧾Invoice / PO / Bank transfer](/buy/invoice-request#product=directshow-allinone&edition=license&period=annual)
 
--   [DirectShow All-In-One Bundle — Developer: Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow All-In-One Bundle — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow All-In-One Bundle — Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQeVeexp47J9y17mkg7e3T?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow All-In-One Bundle — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFabJ2bld5bNcKdaywg7e3U?prefilled_promo_code=BLACKFRIDAY2026)
--   [DirectShow All-In-One Bundle — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E00kfBtcEf4dHaywg7e3V?prefilled_promo_code=BLACKFRIDAY2026)
+-   [DirectShow All-In-One Bundle — Developer: Subscription — renews yearly](https://buy.stripe.com/cNifZi8917jVbG9364g7e3W?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow All-In-One Bundle — Developer: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/3cI6oI9d5fQraC5220g7e3X?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow All-In-One Bundle — Workgroup: Subscription — renews yearly](https://buy.stripe.com/5kQeVeexp47J9y17mkg7e3T?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow All-In-One Bundle — Workgroup: One-time payment — 1 year, no auto-renewal](https://buy.stripe.com/aFabJ2bld5bNcKdaywg7e3U?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
+-   [DirectShow All-In-One Bundle — Lifetime·Team: Pay online (card, SEPA Debit, iDEAL, Klarna…)](https://buy.stripe.com/28E00kfBtcEf4dHaywg7e3V?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md)
 
 #### What's Included:
 
@@ -163561,7 +163580,7 @@ Purchase Options
 -   Email support
 -   1 year of updates
 
-[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
+[Source code of all five products: €4,000](https://buy.stripe.com/cNi9AU1KDcEf25zaywg7f0e?prefilled_promo_code=BLACKFRIDAY2026&client_reference_id=src_md) One-time, for one company. Includes the Lifetime·Team license of all five products and 1 year of source updates, then 30% a year. Only VisioForge code is included. The source itself may not be shared outside your company, and builds of it ship only inside your own applications, never as a standalone filter, SDK or component for other developers.
 
 All licenses include royalty-free distribution rights.
 
@@ -163617,7 +163636,7 @@ Private channel, a first response within 1 business day on every question, and 5
 
 €750/ year
 
-[Subscribe](https://buy.stripe.com/9B65kE0Gz9s325zcGEg7f0g)
+[Subscribe](https://buy.stripe.com/9B65kE0Gz9s325zcGEg7f0g?client_reference_id=src_md)
 
 #### Engineering Hours
 
@@ -163625,7 +163644,7 @@ Integration help, custom code and samples written for your project, over AnyDesk
 
 €75/ hour
 
-[2 hours · €150](https://buy.stripe.com/00w4gA9d58nZ9y14a8g7e3H)[5 hours · €375](https://buy.stripe.com/eVqbJ2gFx5bN39DbCAg7e3I)[10 hours · €700](https://buy.stripe.com/14AbJ22OH1ZB4dHcGEg7e3J)[25 hours · €1,500](https://buy.stripe.com/14A7sM9d5gUvh0taywg7e3K)
+[2 hours · €150](https://buy.stripe.com/00w4gA9d58nZ9y14a8g7e3H?client_reference_id=src_md)[5 hours · €375](https://buy.stripe.com/eVqbJ2gFx5bN39DbCAg7e3I?client_reference_id=src_md)[10 hours · €700](https://buy.stripe.com/14AbJ22OH1ZB4dHcGEg7e3J?client_reference_id=src_md)[25 hours · €1,500](https://buy.stripe.com/14A7sM9d5gUvh0taywg7e3K?client_reference_id=src_md)
 
 One-time payment. Larger packs are discounted. Hours don't expire. Diagnosing a defect of the SDK itself is free and never consumes hours.
 
@@ -166143,7 +166162,7 @@ Email support covers bug reports, how-to and integration questions about the lic
 
 Priority Support is an annual subscription at €750 per year: a private channel, a first response within 1 business day on every question, and 5 engineering hours a year. The included hours cover the same work as Engineering Hours (integration help, custom code and samples for your project) and can be spent in writing, in an AnyDesk session or in a Teams or Telegram call, by appointment; time is rounded up to the next 15-minute step. On renewal, up to 5 unused hours carry over once into the next subscription year; carried-over hours are used first, and any still unused at the end of that year lapse. If you do not renew, your hours stay usable until the end of the paid year. Hours in Engineering Hours packs never expire; extra hours are bought as packs at the list price.
 
-[Subscribe to Priority Support](https://buy.stripe.com/9B65kE0Gz9s325zcGEg7f0g)
+[Subscribe to Priority Support](https://buy.stripe.com/9B65kE0Gz9s325zcGEg7f0g?client_reference_id=src_md)
 
 ### Engineering Hours
 
@@ -166151,7 +166170,7 @@ Engineering Hours cover integration help, custom code and samples written for yo
 
 Diagnosing a defect of the SDK itself is free and never consumes hours, purchased or included.
 
-[2 hours · €150](https://buy.stripe.com/00w4gA9d58nZ9y14a8g7e3H)[5 hours · €375](https://buy.stripe.com/eVqbJ2gFx5bN39DbCAg7e3I)[10 hours · €700](https://buy.stripe.com/14AbJ22OH1ZB4dHcGEg7e3J)[25 hours · €1,500](https://buy.stripe.com/14A7sM9d5gUvh0taywg7e3K)
+[2 hours · €150](https://buy.stripe.com/00w4gA9d58nZ9y14a8g7e3H?client_reference_id=src_md)[5 hours · €375](https://buy.stripe.com/eVqbJ2gFx5bN39DbCAg7e3I?client_reference_id=src_md)[10 hours · €700](https://buy.stripe.com/14AbJ22OH1ZB4dHcGEg7e3J?client_reference_id=src_md)[25 hours · €1,500](https://buy.stripe.com/14A7sM9d5gUvh0taywg7e3K?client_reference_id=src_md)
 
 ## Refund eligibility
 

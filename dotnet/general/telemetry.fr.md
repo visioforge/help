@@ -26,7 +26,7 @@ Pour les erreurs d'un moteur, les trois conditions sont requises, et toutes sont
 - `VisioForgeX.Debug_Telemetry` vaut `true` (la valeur par défaut) - l'interrupteur global, voir ci-dessous.
 - `System.Diagnostics.Debugger.IsAttached` vaut `true`.
 
-Une application que vous compilez et distribuez à vos utilisateurs s'exécute sans débogueur : **une application publiée n'envoie donc rien**. Détacher le débogueur arrête le signalement immédiatement ; en attacher un en cours de session le démarre.
+Une application que vous compilez et distribuez à vos utilisateurs s'exécute sans débogueur : **une application publiée n'envoie donc rien** de tout cela ; seule une application sans licence, ou dont la licence ne couvre pas ce qu'elle utilise, envoie les deux [événements d'essai](#evenements-de-la-version-dessai). Détacher le débogueur arrête le signalement immédiatement ; en attacher un en cours de session le démarre.
 
 ## Comment la désactiver
 
@@ -91,6 +91,25 @@ Les rapports sont envoyés en HTTPS à `https://telemetry.visioforge.org`, un se
 Les noms de fonctionnalités sont envoyés en HTTPS à `https://analytics.visioforge.org`, un serveur d'analyse distinct exploité par VisioForge, depuis une tâche d'arrière-plan qui ne retarde jamais l'appelant. Un envoi qui échoue n'est pas réessayé en arrière-plan ; ses noms sont renvoyés au prochain démarrage du moteur. Ce serveur ne conserve aucune adresse IP : il dérive de la connexion un hachage quotidien anonyme, et le sel de ce hachage est supprimé au bout de deux jours.
 
 La première fois qu'un processus envoie quelque chose, le SDK écrit une ligne indiquant ce qui est envoyé, où, et comment le désactiver, à la fois dans le journal et dans la sortie de débogage.
+
+## Événements de la version d'essai
+
+Tant que le SDK fonctionne en version d'essai (aucun certificat de licence, ou un certificat qui ne couvre pas ce que l'on demande au moteur), il envoie deux événements anonymes, avec ou sans débogueur, afin que nous puissions compter les essais :
+
+- `trial_started`, une fois, quand l'essai de 30 jours commence pour un compte utilisateur sur un ordinateur.
+- `trial_expired`, une fois par compte utilisateur, la première fois qu'un moteur refuse de démarrer parce que l'essai est terminé.
+
+Chacun porte le nom de l'événement, le moteur qui a vérifié l'essai (par exemple `VideoCaptureCoreX`), la version du SDK (seule une build de publication du SDK les envoie), la famille du système d'exploitation (Windows, macOS, Linux, Android, iOS, macCatalyst) et l'architecture, ainsi que le runtime .NET. Rien d'autre : ni nom d'ordinateur, ni nom d'utilisateur, ni chemin, ni nom d'application, ni données de licence, et aucun identifiant : chaque événement en porte un aléatoire qui lui est propre. Sur Android, iOS et dans une application macOS ou Mac Catalyst en bac à sable, l'essai, et donc chaque événement, appartient à l'application et non à l'appareil.
+
+Ils partent en HTTPS vers `https://analytics.visioforge.org`, le serveur qui reçoit les noms des fonctionnalités, depuis une tâche en arrière-plan : la vérification de l'essai ne l'attend pas et un envoi échoué n'est pas retenté : un processus qui se termine aussitôt peut donc ne jamais l'envoyer. Une application dont la licence couvre ce qu'elle utilise ne les envoie jamais, ni sur votre ordinateur ni sur ceux de vos utilisateurs.
+
+Pour les désactiver, définissez l'interrupteur global avant le démarrage du premier moteur :
+
+```csharp
+VisioForgeX.Debug_Telemetry = false;
+```
+
+Ou bien, pour un processus dont vous ne modifiez pas le code (un serveur de build qui exécute vos tests, par exemple), donnez la valeur `0` à la variable d'environnement `VISIOFORGE_TRIALREPORT`.
 
 ## Rapports d'installation
 

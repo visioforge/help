@@ -26,7 +26,7 @@ Para los errores de un motor, las tres condiciones son necesarias, y todas se co
 - `VisioForgeX.Debug_Telemetry` es `true` (el valor predeterminado) - el interruptor global, véase más abajo.
 - `System.Diagnostics.Debugger.IsAttached` es `true`.
 
-Una aplicación que usted compila y distribuye a sus usuarios se ejecuta sin depurador, así que **una aplicación publicada no envía nada**. Desconectar el depurador detiene el envío de inmediato; adjuntar uno a mitad de sesión lo inicia.
+Una aplicación que usted compila y distribuye a sus usuarios se ejecuta sin depurador, así que **una aplicación publicada no envía nada** de esto; solo una aplicación sin licencia, o cuya licencia no cubre lo que usa, envía los dos [eventos de prueba](#eventos-de-la-version-de-prueba). Desconectar el depurador detiene el envío de inmediato; adjuntar uno a mitad de sesión lo inicia.
 
 ## Cómo desactivarlo
 
@@ -91,6 +91,25 @@ Los informes se envían por HTTPS a `https://telemetry.visioforge.org`, un servi
 Los nombres de funciones se envían por HTTPS a `https://analytics.visioforge.org`, un servidor de análisis independiente operado por VisioForge, desde una tarea en segundo plano que nunca retrasa al llamador. Un envío que falla no se reintenta en segundo plano; sus nombres se envían de nuevo en el siguiente inicio del motor. Ese servidor no conserva ninguna dirección IP: deriva de la conexión un hash diario anónimo, y la sal de ese hash se elimina a los dos días.
 
 La primera vez que un proceso envía algo, el SDK escribe una línea que indica qué se envía, adónde y cómo desactivarlo, tanto en el registro como en la salida de depuración.
+
+## Eventos de la versión de prueba
+
+Mientras el SDK funciona como versión de prueba (sin certificado de licencia, o con uno que no cubre lo que se pide al motor), envía dos eventos anónimos, con o sin depurador, para que podamos contar las pruebas:
+
+- `trial_started`, una vez, cuando empieza la prueba de 30 días para una cuenta de usuario en un equipo.
+- `trial_expired`, una vez por cuenta de usuario, la primera vez que un motor se niega a iniciarse porque la prueba ha terminado.
+
+Cada uno lleva el nombre del evento, el motor que comprobó la prueba (por ejemplo `VideoCaptureCoreX`), la versión del SDK (solo una compilación de publicación del SDK los envía), la familia del sistema operativo (Windows, macOS, Linux, Android, iOS, macCatalyst) y la arquitectura, y el runtime de .NET. Nada más: ni nombre del equipo, ni nombre de usuario, ni rutas, ni nombre de la aplicación, ni datos de licencia, y ningún identificador: cada evento lleva uno aleatorio propio. En Android, iOS y en una aplicación macOS o Mac Catalyst aislada (sandbox) la prueba, y por tanto cada evento, pertenece a la aplicación y no al dispositivo.
+
+Se envían por HTTPS a `https://analytics.visioforge.org`, el servidor que recibe los nombres de las funciones, desde una tarea en segundo plano: la comprobación de la prueba no la espera y un envío fallido no se reintenta, así que un proceso que termina enseguida puede no enviarlo nunca. Una aplicación cuya licencia cubre lo que usa nunca los envía, ni en su equipo ni en los de sus usuarios.
+
+Para desactivarlos, establezca el interruptor global antes de que se inicie el primer motor:
+
+```csharp
+VisioForgeX.Debug_Telemetry = false;
+```
+
+O bien, para un proceso cuyo código no modifica (por ejemplo, un servidor de compilación que ejecuta sus pruebas), establezca la variable de entorno `VISIOFORGE_TRIALREPORT` en `0`.
 
 ## Informes de instalación
 
