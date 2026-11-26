@@ -150,7 +150,7 @@ La page ouvre un `RTCPeerConnection` par session et oriente chaque message `peer
 ## Sourdine et caméra coupée
 
 - **Sourdine** : placez un `VolumeBlock` avant l'annuleur d'écho et définissez `Mute = true`. L'appel garde sa piste audio ; l'appelant entend du silence.
-- **Caméra coupée** : placez un `VideoBalanceBlock` après la caméra et définissez `Settings.Contrast = 0` et `Settings.Brightness = -1`. L'appelant voit une image noire et la piste vidéo reste, donc rallumer la caméra ne demande aucune nouvelle négociation.
+- **Caméra coupée** : placez un `VideoBalanceBlock` après la caméra et définissez `Settings.Contrast = 0`, `Settings.Saturation = 0` et `Settings.Brightness = -1`. L'appelant voit une image noire et la piste vidéo reste, donc rallumer la caméra ne demande aucune nouvelle négociation.
 
 Les deux agissent pendant l'appel. Dans le navigateur, `track.enabled = false` fait de même du côté de l'appelant.
 

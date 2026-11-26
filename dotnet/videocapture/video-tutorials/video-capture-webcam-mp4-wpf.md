@@ -83,6 +83,8 @@ For a 32-bit (x86) application, use the x86 packages instead: `VisioForge.DotNet
 
 `VisioForge.DotNet.VideoCapture`, the package in the Try it block at the top of this page, works as well: it installs the same `VisioForge.DotNet.Core`. The redist packages are needed either way.
 
+The code on this page was checked against SDK release 2026.11.25 on nuget.org.
+
 ## The Window in XAML
 
 The `vf` prefix maps the `VisioForge.Core.UI.WPF` namespace of the `VisioForge.Core` assembly. The left column holds the lists and the buttons, the right column the `VideoView` where the live preview is drawn. Every handler named here is written in `MainWindow.xaml.cs` below.
@@ -267,6 +269,8 @@ public partial class MainWindow : Window
     }
 }
 ```
+
+[Download the free trial](https://www.visioforge.com/video-capture-sdk-net#download){ .md-button .md-button--primary target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'tutorial-webcam-mp4-wpf:trial'});" } [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'tutorial-webcam-mp4-wpf:product'});" } [Full demo on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_VideoTutorials/webcam-mp4-wpf){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'tutorial-webcam-mp4-wpf:demo'});" }
 
 ## Key Implementation Features
 

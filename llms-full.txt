@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-26 18:42:28 UTC (99942641774)
+**Generated:** 2026-11-26 19:29:45 UTC (a1c5232a5a3)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 472 help documentation pages + 74 website pages
 
@@ -60830,6 +60830,8 @@ For a 32-bit (x86) application, use the x86 packages instead: `VisioForge.DotNet
 
 `VisioForge.DotNet.VideoCapture`, the package in the Try it block at the top of this page, works as well: it installs the same `VisioForge.DotNet.Core`. The redist packages are needed either way.
 
+The code on this page was checked against SDK release 2026.11.25 on nuget.org.
+
 ## The Window in XAML
 
 The `vf` prefix maps the `VisioForge.Core.UI.WPF` namespace of the `VisioForge.Core` assembly. The left column holds the lists and the buttons, the right column the `VideoView` where the live preview is drawn. Every handler named here is written in `MainWindow.xaml.cs` below.
@@ -61014,6 +61016,8 @@ public partial class MainWindow : Window
     }
 }
 ```
+
+[Download the free trial](https://www.visioforge.com/video-capture-sdk-net#download) [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Full demo on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/_VideoTutorials/webcam-mp4-wpf)
 
 ## Key Implementation Features
 
@@ -86043,13 +86047,13 @@ This guide demonstrates how to save an RTSP stream to an MP4 file by capturing t
 
 ## Video Tutorial: Save an RTSP Camera to MP4 in C# WinForms
 
-The tutorial builds a WinForms app that saves an RTSP IP camera to MP4 exactly as the camera sends it: `RTSPRAWSourceBlock` passes the camera's H.264 straight to `MP4SinkBlock`, with no decoder and no encoder. AAC sound goes in as it is, and G.711 or any other audio codec is encoded to AAC. The video compares the CPU load with a recording that decodes and encodes again, checks with ffprobe that the file has the camera's codecs, and shows why the source is set to TCP.
+The tutorial builds a WinForms app that saves an RTSP IP camera to MP4 exactly as the camera sends it: `RTSPRAWSourceBlock` passes the camera's H.264 or H.265 straight to `MP4SinkBlock`, with no decoder and no encoder. AAC sound goes in as it is, and G.711 or any other audio codec is encoded to AAC. The video compares the CPU load with a recording that decodes and encodes again, checks with ffprobe that the file has the camera's codecs, and shows why the source is set to TCP.
 
 Its code: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-winforms) on GitHub.
 
 ### The short version
 
-A console app in a few lines of C#: it saves the camera's H.264, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
+A console app in a few lines of C#: it saves the camera's H.264 or H.265, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
 
 Its code: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) on GitHub.
 
@@ -87124,7 +87128,7 @@ The page opens one `RTCPeerConnection` for each session and routes every `peer` 
 ## Mute and Camera Off
 
 - **Mute**: put a `VolumeBlock` before the echo canceller and set `Mute = true`. The call keeps its audio track; the caller hears silence.
-- **Camera off**: put a `VideoBalanceBlock` after the camera and set `Settings.Contrast = 0` and `Settings.Brightness = -1`. The caller sees a black picture, and the video track stays, so turning the camera back on needs no new negotiation.
+- **Camera off**: put a `VideoBalanceBlock` after the camera and set `Settings.Contrast = 0`, `Settings.Saturation = 0` and `Settings.Brightness = -1`. The caller sees a black picture, and the video track stays, so turning the camera back on needs no new negotiation.
 
 Both take effect while the call runs. In the browser, `track.enabled = false` does the same on the caller's side.
 
@@ -163721,8 +163725,6 @@ Read QR codes and 1D barcodes in C# from a webcam, an IP camera, the screen or a
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [Buy a license](/buy)
 
 ## A barcode scanner for video, not for scanned documents
@@ -163860,15 +163862,11 @@ Download the fully functional 30-day trial and run the barcode samples. Dependin
 
 Pipeline SDK: BarcodeDetectorBlock and DataMatrixDecoderBlock next to sources, encoders and sinks. One edition with every block.
 
-From €500/year · Lifetime from €1,800
-
 Learn more →
 
 ### [Video Capture SDK .NET](/video-capture-sdk-net)
 
 Capture SDK: Barcode\_Reader\_Enabled on VideoCaptureCoreX and VideoCaptureCore. The barcode reader is in every edition; IP cameras need Professional or Premium.
-
-From €250/year · Lifetime from €900
 
 Learn more →
 
@@ -163877,8 +163875,6 @@ Prices are in euros; VAT is added at checkout where it applies. One license cove
 [Buy a license](/buy)
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 [Read the barcode guide](/help/docs/dotnet/mediablocks/Guides/barcode-qr-reader-guide/)
 
@@ -163893,8 +163889,6 @@ From €500/year · Lifetime from €1,800
 Build professional live streaming and broadcasting applications with VisioForge SDKs. Stream to YouTube, Facebook, and custom RTMP servers. HLS adaptive streaming, SRT low-latency transport, NDI network video, DeckLink hardware output — all from C# and .NET.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## Broadcasting Development Challenges
 
@@ -164021,8 +164015,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [View Documentation](/help/docs/dotnet/mediablocks/)
 
 ---END OF PAGE---
@@ -164036,8 +164028,6 @@ From €500/year · Lifetime from €1,800
 Media Blocks SDK .NET is a commercial .NET SDK built on GStreamer. You build pipelines in C# from typed blocks — sources, encoders, effects and sinks — instead of string pipelines and raw elements, and you can still wrap any GStreamer element as a block when you need one.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## Is there a commercial GStreamer SDK for .NET?
 
@@ -164193,8 +164183,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [Read the Media Blocks guide](/help/docs/dotnet/mediablocks/)
 
 ---END OF PAGE---
@@ -164208,8 +164196,6 @@ From €500/year · Lifetime from €1,800
 Read KLV telemetry out of MPEG-TS, decode MISB ST 0601 elements, and record or restream live MISB feeds with the metadata kept — from C# and .NET.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## What KLV and MISB are
 
@@ -164291,8 +164277,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [Read the KLV guide](/help/docs/dotnet/mediablocks/Guides/klv-metadata-mpegts-csharp/)
 
 ---END OF PAGE---
@@ -164306,8 +164290,6 @@ From €500/year · Lifetime from €1,800
 Read vehicle license plates from IP cameras, webcams and video files in C#. LicensePlateRecognizerBlock finds each plate, reads it and reports the text with a timestamp — on the device, in the same pipeline that previews, records and streams the video.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## A plate reader is not general OCR pointed at a car
 
@@ -164458,8 +164440,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [Read the ANPR guide](/help/docs/dotnet/general/ai/license-plate-recognition/)
 
 ---END OF PAGE---
@@ -164473,8 +164453,6 @@ From €500/year · Lifetime from €1,800
 Build a screen recorder in C# with one API for Windows, macOS, Linux, Android and iOS: the full screen, a window or a region, with sound, the cursor and click highlights, to MP4 or a live stream. Video Capture SDK .NET and Media Blocks SDK .NET use the native capture API of each platform.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/video-capture-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €250/year · Lifetime from €900
 
 ## A screenshot loop is not a screen recorder
 
@@ -164640,8 +164618,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/video-capture-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €250/year · Lifetime from €900
-
 [Read the screen capture guide](/help/docs/dotnet/videocapture/video-sources/screen/)
 
 ---END OF PAGE---
@@ -164655,8 +164631,6 @@ From €250/year · Lifetime from €900
 Build professional IP camera surveillance and security systems with VisioForge SDKs. RTSP/ONVIF camera support, multi-camera recording, motion detection, face detection, and cross-platform deployment — all from C# and .NET.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## Surveillance Development Challenges
 
@@ -164784,8 +164758,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [View Documentation](/help/docs/dotnet/mediablocks/)
 
 ---END OF PAGE---
@@ -164799,8 +164771,6 @@ From €500/year · Lifetime from €1,800
 Build professional video editing and post-production applications with VisioForge SDKs. Video joining, multi-layer compositing with chroma key, GPU-accelerated effects, LUT color grading, audio track replacement — all from C# and .NET.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## Video Editing Development Challenges
 
@@ -164919,8 +164889,6 @@ Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
 
-From €500/year · Lifetime from €1,800
-
 [View Documentation](/help/docs/dotnet/mediablocks/)
 
 ---END OF PAGE---
@@ -164934,8 +164902,6 @@ From €500/year · Lifetime from €1,800
 Recognize text in RTSP camera streams, webcams and video files from C#. OCR runs as a block of the Media Blocks SDK .NET pipeline — on the device, next to preview, recording and streaming.
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 ## Video OCR is not image OCR in a loop
 
@@ -165087,8 +165053,6 @@ Player SDK: add OcrBlock to MediaPlayerCoreX and read text from the files and st
 Learn more →
 
 [Download 30-Day Free Trial](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe)[View Pricing](/media-blocks-sdk-net#pricing)[NuGet](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks/)[Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
-
-From €500/year · Lifetime from €1,800
 
 [Read the OCR guide](/help/docs/dotnet/general/ai/ocr/)
 

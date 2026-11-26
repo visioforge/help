@@ -2,7 +2,7 @@
 
 > VisioForge provides enterprise-grade .NET SDKs for comprehensive video/audio processing, built on proven native libraries (FFmpeg, GStreamer) with managed wrappers. Cross-platform support for Windows, macOS, Linux, iOS, and Android.
 
-**Generated:** 2026-11-26 18:42:25 UTC (99942641774)
+**Generated:** 2026-11-26 19:29:42 UTC (a1c5232a5a3)
 
 ## MCP Server (for AI coding agents)
 

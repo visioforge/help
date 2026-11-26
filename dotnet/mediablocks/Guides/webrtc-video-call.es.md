@@ -150,7 +150,7 @@ La página abre un `RTCPeerConnection` por sesión y dirige cada mensaje `peer` 
 ## Silencio y cámara apagada
 
 - **Silencio**: ponga un `VolumeBlock` antes del cancelador de eco y asigne `Mute = true`. La llamada conserva su pista de audio; quien llama oye silencio.
-- **Cámara apagada**: ponga un `VideoBalanceBlock` después de la cámara y asigne `Settings.Contrast = 0` y `Settings.Brightness = -1`. Quien llama ve una imagen negra y la pista de video se mantiene, así que volver a encender la cámara no requiere una nueva negociación.
+- **Cámara apagada**: ponga un `VideoBalanceBlock` después de la cámara y asigne `Settings.Contrast = 0`, `Settings.Saturation = 0` y `Settings.Brightness = -1`. Quien llama ve una imagen negra y la pista de video se mantiene, así que volver a encender la cámara no requiere una nueva negociación.
 
 Ambos surten efecto durante la llamada. En el navegador, `track.enabled = false` hace lo mismo del lado de quien llama.
 

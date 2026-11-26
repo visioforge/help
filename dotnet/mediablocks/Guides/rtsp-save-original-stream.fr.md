@@ -68,7 +68,7 @@ Ce guide montre comment enregistrer un flux RTSP dans un fichier MP4 en capturan
 
 ## Tutoriel vidéo : enregistrer une caméra RTSP en MP4 en C# WinForms
 
-Le tutoriel crée une application WinForms qui enregistre une caméra IP RTSP en MP4 exactement comme la caméra l'envoie : `RTSPRAWSourceBlock` transmet le H.264 de la caméra directement à `MP4SinkBlock`, sans décodeur ni encodeur. Le son AAC entre tel quel, et le G.711 ou tout autre codec audio est encodé en AAC. La vidéo compare la charge CPU avec un enregistrement qui décode puis réencode, vérifie avec ffprobe que le fichier contient les codecs de la caméra et montre pourquoi la source est réglée sur TCP.
+Le tutoriel crée une application WinForms qui enregistre une caméra IP RTSP en MP4 exactement comme la caméra l'envoie : `RTSPRAWSourceBlock` transmet le H.264 ou H.265 de la caméra directement à `MP4SinkBlock`, sans décodeur ni encodeur. Le son AAC entre tel quel, et le G.711 ou tout autre codec audio est encodé en AAC. La vidéo compare la charge CPU avec un enregistrement qui décode puis réencode, vérifie avec ffprobe que le fichier contient les codecs de la caméra et montre pourquoi la source est réglée sur TCP.
 
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/ryZ2yeB_oB0?controls=1" frameborder="0" allowfullscreen></iframe>
@@ -78,10 +78,10 @@ Son code : [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-
 
 ### La version courte
 
-Une application console en quelques lignes de C# : elle enregistre le H.264 de la caméra, et son son AAC quand la caméra l'envoie, dans `camera.mp4` jusqu'à ce que vous appuyiez sur Entrée, et `StopAsync` termine le fichier.
+Une application console en quelques lignes de C# : elle enregistre le H.264 ou H.265 de la caméra, et son son AAC quand la caméra l'envoie, dans `camera.mp4` jusqu'à ce que vous appuyiez sur Entrée, et `StopAsync` termine le fichier.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/gdNtyyz3aN8?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/Q0n_tqsAu_g?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 Son code : [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) sur GitHub.

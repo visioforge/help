@@ -150,7 +150,7 @@ The page opens one `RTCPeerConnection` for each session and routes every `peer` 
 ## Mute and Camera Off
 
 - **Mute**: put a `VolumeBlock` before the echo canceller and set `Mute = true`. The call keeps its audio track; the caller hears silence.
-- **Camera off**: put a `VideoBalanceBlock` after the camera and set `Settings.Contrast = 0` and `Settings.Brightness = -1`. The caller sees a black picture, and the video track stays, so turning the camera back on needs no new negotiation.
+- **Camera off**: put a `VideoBalanceBlock` after the camera and set `Settings.Contrast = 0`, `Settings.Saturation = 0` and `Settings.Brightness = -1`. The caller sees a black picture, and the video track stays, so turning the camera back on needs no new negotiation.
 
 Both take effect while the call runs. In the browser, `track.enabled = false` does the same on the caller's side.
 

@@ -68,7 +68,7 @@ This guide demonstrates how to save an RTSP stream to an MP4 file by capturing t
 
 ## Video Tutorial: Save an RTSP Camera to MP4 in C# WinForms
 
-The tutorial builds a WinForms app that saves an RTSP IP camera to MP4 exactly as the camera sends it: `RTSPRAWSourceBlock` passes the camera's H.264 straight to `MP4SinkBlock`, with no decoder and no encoder. AAC sound goes in as it is, and G.711 or any other audio codec is encoded to AAC. The video compares the CPU load with a recording that decodes and encodes again, checks with ffprobe that the file has the camera's codecs, and shows why the source is set to TCP.
+The tutorial builds a WinForms app that saves an RTSP IP camera to MP4 exactly as the camera sends it: `RTSPRAWSourceBlock` passes the camera's H.264 or H.265 straight to `MP4SinkBlock`, with no decoder and no encoder. AAC sound goes in as it is, and G.711 or any other audio codec is encoded to AAC. The video compares the CPU load with a recording that decodes and encodes again, checks with ffprobe that the file has the camera's codecs, and shows why the source is set to TCP.
 
 <div class="video-wrapper">
   <iframe src="https://www.youtube.com/embed/ryZ2yeB_oB0?controls=1" frameborder="0" allowfullscreen></iframe>
@@ -78,10 +78,10 @@ Its code: [rtsp-save-original-winforms](https://github.com/visioforge/.Net-SDK-s
 
 ### The short version
 
-A console app in a few lines of C#: it saves the camera's H.264, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
+A console app in a few lines of C#: it saves the camera's H.264 or H.265, and its AAC sound when the camera sends it, to `camera.mp4` until you press Enter, and `StopAsync` finishes the file.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/gdNtyyz3aN8?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/Q0n_tqsAu_g?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 Its code: [rtsp-save-original-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-save-original-short-console) on GitHub.
