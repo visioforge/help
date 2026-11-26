@@ -2,7 +2,7 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-25 19:42:10 UTC (be3a57270d0)
+**Generated:** 2026-11-26 09:28:01 UTC (128f37ec281)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
 **Content Sources:** 470 help documentation pages + 74 website pages
 
