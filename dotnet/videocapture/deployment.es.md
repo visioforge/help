@@ -114,7 +114,7 @@ Para control completo sobre el proceso de despliegue o en entornos con requisito
 - Filtros Base: VisioForge_BaseFilters.ax / VisioForge_BaseFilters_x64.ax
 - Efectos de Video: VisioForge_Video_Effects_Pro.ax / VisioForge_Video_Effects_Pro_x64.ax
 - Procesamiento de Audio: VisioForge_MP3_Splitter.ax / VisioForge_MP3_Splitter_x64.ax, VisioForge_Audio_Mixer.ax / VisioForge_Audio_Mixer_x64.ax
-- Puente de Audio y Video (fuentes de cámara IP VLC y FFmpeg con `ForcedFramerate`, salida MP4 con `UseSpecialSyncMode`, captura separada con `SeparateCapture_GMFMode` desactivado): VisioForge_Bridge_Audio.ax / VisioForge_Bridge_Audio_x64.ax, VisioForge_Bridge_Video.ax / VisioForge_Bridge_Video_x64.ax; en Windows ARM64, donde solo la fuente VLC y la captura separada los usan, VisioForge_Bridge_Audio_arm64.ax, VisioForge_Bridge_Video_arm64.ax en la carpeta `arm64` de la aplicación. El puente de video también necesita la DLL `VisioForge_MFPX` de su arquitectura y, en x64, `vcomp140.dll` de la carpeta `Redist\Filters`
+- Puente de Audio y Video (fuentes de cámara IP VLC y FFmpeg con `ForcedFramerate`, salida MP4 con `UseSpecialSyncMode`, captura separada con `SeparateCapture_GMFMode` desactivado): VisioForge_Bridge_Audio.ax / VisioForge_Bridge_Audio_x64.ax, VisioForge_Bridge_Video.ax / VisioForge_Bridge_Video_x64.ax; en Windows ARM64, donde las fuentes VLC y FFmpeg y la captura separada los usan, VisioForge_Bridge_Audio_arm64.ax, VisioForge_Bridge_Video_arm64.ax en la carpeta `arm64` de la aplicación. El puente de video también necesita la DLL `VisioForge_MFPX` de su arquitectura y, en x64, `vcomp140.dll` de la carpeta `Redist\Filters`
 
 #### Componentes Específicos por Formato
 
@@ -153,8 +153,8 @@ Para control completo sobre el proceso de despliegue o en entornos con requisito
 
 **Integración FFMPEG:**
 
-- VisioForge_FFMPEG_Source.ax / VisioForge_FFMPEG_Source_x64.ax
-- Requiere todos los archivos de la carpeta Redist\FFMPEG y actualizaciones de la variable PATH
+- VisioForge_FFMPEG_Source.ax / VisioForge_FFMPEG_Source_x64.ax; en Windows ARM64, VisioForge_FFMPEG_Source_ARM64.ax en la carpeta `arm64` de la aplicación
+- Requiere todos los archivos de la carpeta Redist\FFMPEG (Redist\FFMPEG\arm64 para ARM64) y actualizaciones de la variable PATH
 
 #### Componentes Especializados
 

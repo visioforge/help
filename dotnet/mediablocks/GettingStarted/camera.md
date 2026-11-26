@@ -138,6 +138,8 @@ videoSourceSettings.Orientation = IOSVideoSourceOrientation.Portrait;
 #endif
 ```
 
+An external USB camera on an iPad ignores `Orientation` and `AutoUpdateOrientation`: its picture keeps the camera's own orientation.
+
 ### Creating the Video Source Block
 
 Now create the system video source block with your configured settings:

@@ -345,6 +345,7 @@ Configurez via `AudioMixerSettings` :
 |----------|------|---------|-------------|
 | `Format` | `AudioInfoX` | `S16LE, 48000 Hz, 2 canaux` | Format audio de sortie (format d'échantillon, fréquence d'échantillonnage, nombre de canaux) |
 | `Latency` | `TimeSpan` | `100 ms` | Durée pendant laquelle le mélangeur attend une entrée en retard dans un pipeline en direct avant de mixer sans elle ; une valeur trop faible s'entend comme des clics et des coupures sur les sources en direct. `TimeSpan.Zero` n'attend que la latence annoncée par les entrées. Appliqué au démarrage du pipeline |
+| `IgnoreInactivePads` | `bool` | `false` | Continue de mixer lorsqu'une entrée se termine ou n'a pas encore fourni d'audio, pour des entrées en direct qui apparaissent et disparaissent indépendamment. Laissez-le désactivé avec une seule entrée. Activé, le mélangeur démarre en outre au premier tampon fourni par une entrée et l'attend sans délai maximal : le premier tampon de sortie porte l'horodatage de cette entrée au lieu de zéro, et un mélangeur dont les entrées ne fournissent jamais rien attend au lieu de terminer le flux |
 
 **Méthodes à l'exécution :**
 
@@ -1438,6 +1439,67 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+### Annulation d'écho
+
+Le `EchoCancellationBlock` supprime l'écho acoustique dans les appels : la voix de l'interlocuteur que vos haut-parleurs diffusent et que votre microphone capte à nouveau. Il utilise la bibliothèque de traitement audio de WebRTC (les éléments GStreamer `webrtcdsp` et `webrtcechoprobe`) et peut aussi supprimer le bruit de fond constant et régler automatiquement le niveau du microphone.
+
+Le bloc a deux chemins. Le microphone passe par `Input` et `Output`, et le signal nettoyé part vers l'interlocuteur. L'audio de l'interlocuteur passe par `PlaybackInput` et `PlaybackOutput` en route vers le moteur de rendu audio : le bloc l'écoute pour savoir quoi supprimer. Connectez les deux chemins ; si `PlaybackInput` n'est pas connecté, rien n'est annulé, et `PlaybackOutput` doit aller jusqu'au moteur de rendu dès que `PlaybackInput` est connecté.
+
+Les deux sorties sont à 48 kHz, la fréquence que le traitement audio de WebRTC exige des deux côtés, en échantillons S16LE entrelacés ou F32LE non entrelacés ; le nombre de canaux reste celui négocié. Placez un `AudioConverterBlock` après une sortie dont le bloc suivant n'accepte aucun des deux formats.
+
+#### Informations sur le bloc
+
+Nom : EchoCancellationBlock.
+
+Direction du pin | Type de média | Nombre de pins
+--- | :---: | :---:
+Input (microphone) | Audio non compressé | 1
+Output (microphone traité) | Audio non compressé | 1
+PlaybackInput (interlocuteur) | Audio non compressé | 1
+PlaybackOutput (interlocuteur, vers le moteur de rendu) | Audio non compressé | 1
+
+#### Paramètres
+
+| Propriété | Type | Par défaut | Description |
+|----------|------|---------|-------------|
+| `EchoCancel` | `bool` | `true` | Supprimer la voix de l'interlocuteur du signal du microphone |
+| `NoiseSuppression` | `bool` | `true` | Supprimer le bruit de fond constant (ventilateurs, ronflement) |
+| `GainControl` | `bool` | `true` | Régler automatiquement le niveau du microphone |
+
+Les paramètres sont lus à la construction du bloc.
+
+**Éléments GStreamer** : `webrtcdsp`, `webrtcechoprobe`
+
+#### Le pipeline d'exemple
+
+```mermaid
+graph LR;
+    SystemAudioSourceBlock-->EchoCancellationBlock;
+    EchoCancellationBlock-- Output -->WebRTCSinkBlock;
+    WebRTCSourceBlock-- PlaybackInput -->EchoCancellationBlock;
+    EchoCancellationBlock-- PlaybackOutput -->AudioRendererBlock;
+```
+
+#### Code d'exemple
+
+```csharp
+var echoCancellation = new EchoCancellationBlock(new EchoCancellationSettings());
+
+// Chemin du microphone : vers l'interlocuteur.
+pipeline.Connect(microphone.Output, echoCancellation.Input);
+pipeline.Connect(echoCancellation.Output, webrtcSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+// Chemin de lecture : la voix de l'interlocuteur, en route vers les haut-parleurs.
+pipeline.Connect(webrtcSource.AudioOutput, echoCancellation.PlaybackInput);
+pipeline.Connect(echoCancellation.PlaybackOutput, new AudioRendererBlock().Input);
+```
+
+Vérifiez `EchoCancellationBlock.IsAvailable()` avant de construire le pipeline : sous Windows, les éléments sont fournis dans le paquet `VisioForge.CrossPlatform.Core.Windows.Adds.x64`. Pour l'appel complet, voir [Appel vidéo WebRTC bidirectionnel avec un navigateur](../Guides/webrtc-video-call.md).
+
+#### Plateformes
+
+Windows (testé), macOS (`VisioForge.CrossPlatform.Core.macOS.Adds`). Sous Linux, les éléments viennent avec le paquet `gstreamer1.0-plugins-bad` de la distribution ; vérifiez `IsAvailable()`.
+
 ### Suppression de silence
 
 Le bloc RemoveSilence détecte et supprime automatiquement les portions silencieuses des flux audio, utile pour les podcasts, les enregistrements vocaux et le montage audio.
@@ -1874,7 +1936,7 @@ Le `VST3AudioBlock` exécute un plug-in d'effet audio VST® 3 (un bundle `.vst3`
 
 Aucun plug-in n'est fourni avec le SDK : indiquez au bloc un plug-in installé sur la machine. Les dossiers habituels sont `C:\Program Files\Common Files\VST3` sous Windows, `/Library/Audio/Plug-Ins/VST3` sous macOS et `~/.vst3` ou `/usr/lib/vst3` sous Linux.
 
-Le plug-in se charge au premier appel qui en a besoin, ou au démarrage du pipeline : ses paramètres et ses presets peuvent donc être lus et définis avant la lecture. Les valeurs des paramètres sont normalisées, de 0.0 à 1.0 ; `VST3ParameterInfo.Text` et `Units` donnent la valeur telle que le plug-in l'affiche. La fenêtre d'édition du plug-in n'est pas affichée : contrôlez-le par ses paramètres.
+Le plug-in se charge au premier appel qui en a besoin, ou au démarrage du pipeline : ses paramètres et ses presets peuvent donc être lus et définis avant la lecture. Les valeurs des paramètres sont normalisées, de 0.0 à 1.0 ; `VST3ParameterInfo.Text` et `Units` donnent la valeur telle que le plug-in l'affiche. Sous Windows, `ShowEditor()` affiche la fenêtre d'édition du plug-in ; ce que l'utilisateur y modifie atteint l'audio, et `GetParameter` le relit. Sous macOS et Linux, contrôlez le plug-in par ses paramètres.
 
 #### Informations sur le bloc
 
@@ -1894,12 +1956,14 @@ Sortie | Audio non compressé | 1
 | `Bypass` | `bool` | Laisse passer l'audio sans traitement ; modifiable pendant la lecture |
 | `Latency` | `int` | La latence annoncée par le plug-in, en échantillons ; 0 tant qu'il n'a pas traité d'audio |
 | `ClassName` | `string` | Le nom de l'effet chargé ; `null` avant le chargement du plug-in |
+| `IsEditorOpen` | `bool` | Indique si la fenêtre d'édition du plug-in est ouverte ; l'utilisateur peut la fermer à tout moment |
 
 Méthodes principales :
 
 - `GetParameters()` -- renvoie un `VST3ParameterInfo` par paramètre : `ID`, `Title`, `Units`, `StepCount`, `DefaultValue`, `Flags`, `Value` et `Text`.
-- `GetParameter(uint id)` et `SetParameter(uint id, double value)` -- lisent et définissent une valeur normalisée, y compris pendant la lecture. `GetParameter` renvoie -1.0 et `SetParameter` renvoie `false` pour un ID que le plug-in ne possède pas, ou quand le plug-in ne se charge pas.
+- `GetParameter(uint id)` et `SetParameter(uint id, double value)` -- lisent et définissent une valeur normalisée, y compris pendant la lecture (sur le thread de l'interface utilisateur tant que l'éditeur est ouvert). `GetParameter` renvoie -1.0 et `SetParameter` renvoie `false` pour un ID que le plug-in ne possède pas, ou quand le plug-in ne se charge pas.
 - `GetState()` et `SetState(byte[] preset)` -- enregistrent et restaurent l'état complet du plug-in au format `.vstpreset`.
+- `ShowEditor(IntPtr owner = default)` et `CloseEditor()` -- ouvrent et ferment la fenêtre d'édition du plug-in (Windows). Appelez `ShowEditor` sur le thread de l'interface utilisateur ; `owner` est le handle d'une fenêtre au-dessus de laquelle l'éditeur reste. Elle renvoie `false` quand le plug-in n'a pas d'éditeur, ou quand elle est appelée hors du thread de l'interface utilisateur (un thread STA qui n'exécute pas de boucle de messages n'est pas détecté). La libération du bloc ferme la fenêtre. Tant que l'éditeur est ouvert, appelez aussi `GetParameter` et `SetParameter` sur le thread de l'interface utilisateur. Fermer ou libérer depuis un autre thread attend que le thread de l'interface utilisateur ait fermé la fenêtre : ne bloquez donc jamais ce thread sur cet appel.
 - `VST3AudioBlock.IsAvailable()` -- indique si l'hôte VST 3 est présent sur cette plateforme.
 
 Un bundle qui ne peut pas être chargé fait échouer le démarrage du pipeline avec une erreur qui nomme le bundle et la cause.
@@ -1947,6 +2011,12 @@ if (preset != null)
 {
     File.WriteAllBytes("room.vstpreset", preset);
 }
+```
+
+Sous Windows, `ShowEditor()` ouvre la fenêtre d'édition du plug-in. Appelez-la sur le thread de l'interface utilisateur, par exemple depuis le gestionnaire d'un bouton WPF, et passez le handle de la fenêtre pour que l'éditeur reste au-dessus :
+
+```csharp
+reverb.ShowEditor(new WindowInteropHelper(this).Handle);
 ```
 
 #### Plateformes

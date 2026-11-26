@@ -2597,6 +2597,8 @@ var mixerSettings = new VideoMixerSettings(outputWidth, outputHeight, outputFram
 var videoMixer = new VideoMixerBlock(mixerSettings);
 ```
 
+Set `IgnoreInactivePads = true` on `VideoMixerSettings` when live inputs come and go independently, so the mixer keeps composing the remaining inputs after one ends. The mixer then also starts at the first frame an input delivers and waits for it without a timeout: the first output frame carries that input's timestamp instead of zero, and a mixer whose inputs never deliver a frame waits instead of ending the stream. Only the CPU mixer supports this setting.
+
 #### 2. Direct3D 11 Video Compositor (D3D11VideoCompositorSettings)
 
 For Windows applications, the `D3D11VideoCompositorSettings` provides hardware-accelerated video mixing using Direct3D 11. This can offer significant performance improvements, especially with high-resolution video or a large number of streams.

@@ -67,7 +67,7 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
 * **Paquet Media Player SDK** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x64/)
-  * ARM64 : pas encore disponible
+  * ARM64 : pas encore disponible. Une application ARM64 lit en `MediaPlayerSourceMode.FFMPEG` avec le paquet de base ARM64 et [`VisioForge.DotNet.Core.Redist.FFMPEG.arm64`](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.arm64/) à la place
 
 #### Paquets propres aux fonctionnalités (ajouter selon les besoins)
 
@@ -76,6 +76,7 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
 * **Paquet FFMPEG** (pour la lecture de fichiers en mode source FFMPEG) :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
+  * [Version ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.arm64/)
 * **Paquet de sortie MP4** :
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
@@ -102,7 +103,7 @@ Les paquets NuGet fournissent la méthode de déploiement la plus simple, géran
   * [Version x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
   * [Version x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
-> **Windows ARM64 :** les filtres LAV existent uniquement en x86 et x64. Il n'en existe aucune version ARM64 en amont, le SDK ne fournit donc pas de paquet LAV ARM64. `LAV` est la valeur par défaut de `Source_Mode` dans `MediaPlayerCore` : une application `MediaPlayerCore` exécutée en tant que processus ARM64 ne peut donc pas lire de fichier. Les applications AnyCPU s'y exécutent généralement aussi en ARM64. Sous Windows ARM64, définissez `Source_Mode` sur `MediaPlayerSourceMode.File_VLC` et ajoutez le paquet VLC ARM64 (la lecture fonctionne, mais les filtres VisioForge qui n'ont pas encore de version ARM64, comme YUV2RGB, déclenchent encore `OnError`), utilisez `MediaPlayerCoreX` ou Media Blocks SDK .NET, ou compilez l'application pour x64 (`PlatformTarget` défini sur `x64` ; elle s'exécute alors en émulation).
+> **Windows ARM64 :** les filtres LAV existent uniquement en x86 et x64. Il n'en existe aucune version ARM64 en amont, le SDK ne fournit donc pas de paquet LAV ARM64. `LAV` est la valeur par défaut de `Source_Mode` dans `MediaPlayerCore` : une application `MediaPlayerCore` exécutée en tant que processus ARM64 ne peut donc pas lire de fichier. Les applications AnyCPU s'y exécutent généralement aussi en ARM64. Sous Windows ARM64, définissez `Source_Mode` sur `MediaPlayerSourceMode.FFMPEG` et ajoutez le paquet FFMPEG ARM64 (lecture native), définissez-le sur `MediaPlayerSourceMode.File_VLC` et ajoutez le paquet VLC ARM64 (la lecture fonctionne, mais les filtres VisioForge qui n'ont pas encore de version ARM64, comme YUV2RGB, déclenchent encore `OnError`), utilisez `MediaPlayerCoreX` ou Media Blocks SDK .NET, ou compilez l'application pour x64 (`PlatformTarget` défini sur `x64` ; elle s'exécute alors en émulation).
 
 ## Programmes d'installation silencieux automatiques
 
@@ -205,8 +206,8 @@ Le SDK utilise divers filtres DirectShow pour des fonctionnalités spécifiques.
 
 #### Source FFMPEG
 
-* VisioForge_FFMPEG_Source.ax
-* Dossier complet Redist\FFMPEG, ajouté à la variable PATH de Windows
+* VisioForge_FFMPEG_Source.ax (x86), VisioForge_FFMPEG_Source_x64.ax (x64) ou VisioForge_FFMPEG_Source_ARM64.ax (ARM64)
+* Dossier complet Redist\FFMPEG de cette architecture (Redist\FFMPEG\arm64 pour ARM64), ajouté à la variable PATH de Windows
 
 #### Source mémoire
 

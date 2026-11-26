@@ -121,7 +121,7 @@ Puede especificar una API para usar durante la enumeración de dispositivos (con
 
 En Android este bloque enumera las cámaras a través de Camera2, que solo ve una cámara USB conectada por OTG en los dispositivos cuyo fabricante incluye el External Camera HAL, y muchos teléfonos no lo hacen. Para capturar desde una cámara USB en Android, use en su lugar el [Bloque fuente de cámara USB (UVC)](#usb-uvc-camera-source-block).
 
-En Android 9 y posteriores, muchos teléfonos ocultan sus lentes ultra gran angular y teleobjetivo detrás de una cámara lógica que cambia de lente según el zoom. La lista de dispositivos contiene entonces también cada una de esas lentes como una cámara propia, después de las cámaras que el teléfono lista por sí mismo: `LensType` las distingue (`MultiCamera` para la cámara lógica, `Wide`, `UltraWide` o `Telephoto` para una lente, según su distancia focal frente a la lente principal de su lado, `Unknown` cuando la cámara no informa de lo que lo determina; solo Android e iOS), y `PhysicalCameraId` identifica la lente. Seleccione esa cámara como cualquier otra para capturar a través de esa única lente, con sus propios tamaños de video. El zoom recorta esa lente cuando el teléfono admite un recorte por lente; si no, `Camera2Capabilities.MaxDigitalZoom` es 1:
+En Android 9 y posteriores, muchos teléfonos ocultan sus lentes ultra gran angular y teleobjetivo detrás de una cámara lógica que cambia de lente según el zoom. La lista de dispositivos contiene entonces también cada una de esas lentes como una cámara propia, después de las cámaras que el teléfono lista por sí mismo: `LensType` las distingue (`MultiCamera` para la cámara lógica, `Wide`, `UltraWide` o `Telephoto` para una lente, según su distancia focal frente a la lente principal de su lado, `Unknown` cuando la cámara no informa de lo que lo determina o es una cámara USB externa; solo Android e iOS), y `PhysicalCameraId` identifica la lente. Seleccione esa cámara como cualquier otra para capturar a través de esa única lente, con sus propios tamaños de video. El zoom recorta esa lente cuando el teléfono admite un recorte por lente; si no, `Camera2Capabilities.MaxDigitalZoom` es 1:
 
 ```csharp
 var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
@@ -129,6 +129,8 @@ var ultraWide = cameras.FirstOrDefault(c => c.LensType == VideoCaptureLensType.U
 ```
 
 En Android 10 y posteriores, si el teléfono no transmite una lente por separado, el inicio falla con un error que lo indica.
+
+En iOS la lista de dispositivos contiene también las cámaras traseras ultra gran angular, teleobjetivo y multicámara, después de las cámaras gran angular trasera y delantera. `LensType` es el tipo de la propia cámara: `Wide`, `UltraWide`, `Telephoto`, `MultiCamera` para una cámara doble o triple, `Unknown` para una cámara externa en un iPad. El mismo código elige la lente ultra gran angular en ambas plataformas.
 
 #### Plataformas
 
@@ -1903,6 +1905,74 @@ Para una guía paso a paso que construye este reproductor en WPF y mide su laten
 #### Plataformas
 
 Windows, macOS, Linux, iOS.
+
+### Bloque Fuente WebRTC
+
+El `WebRTCSourceBlock` recibe video y audio de un productor WebRTC en un servidor de señalización WebRTC de GStreamer: el servidor que ejecuta un `WebRTCSinkBlock` o un `gst-webrtc-signalling-server` independiente. Junto con el `WebRTCSinkBlock` permite una llamada bidireccional entre una aplicación .NET y un navegador web, sin servidor de medios. Para flujos de un servidor de medios WebRTC (MediaMTX, Janus, Cloudflare), utilice el `WHEPSourceBlock`.
+
+El bloque entrega video y audio decodificados. Sus formatos son los que resultan de decodificar los flujos del productor: el tamaño de imagen, la velocidad de fotogramas, la frecuencia de muestreo y el número de canales provienen de la sesión negociada, no del bloque.
+
+#### Información del bloque
+
+Nombre: WebRTCSourceBlock.
+
+| Dirección del pin | Tipo de medio | Cantidad de pines |
+| --- | :---: | :---: |
+| Salida de video | Sin comprimir | 0 o 1 |
+| Salida de audio | Sin comprimir | 0 o 1 |
+
+#### Ajustes
+
+El `WebRTCSourceBlock` se configura mediante `WebRTCSourceSettings`:
+
+- `SignallingServer` (string): El servidor de señalización, `ws://host:puerto` o `wss://host:puerto`. Valor predeterminado `ws://127.0.0.1:8443`, el servidor de un `WebRTCSinkBlock` con los ajustes predeterminados en el mismo equipo. La fuente no comprueba el certificado de un servidor `wss://`: a su propio `WebRTCSinkBlock` con un certificado para el nombre de host de su sitio se llega en `wss://127.0.0.1:puerto`, y la conexión con un servidor de otro equipo va cifrada pero sin autenticar, así que use uno en una red de confianza.
+- `ProducerPeerId` (string): El ID de par del productor del que se recibe.
+- `ConnectToFirstProducer` (bool): Recibir del primer productor que lista el servidor, cuando `ProducerPeerId` no está definido. Valor predeterminado `false`. Déjelo desactivado cuando su propio `WebRTCSinkBlock` ejecuta el servidor: allí también es un productor.
+- `StunServer` (string): Un servidor STUN, `stun://host:puerto`. Si no se define, se usa `stun://stun.l.google.com:19302`.
+- `TurnServers` (string[]): Servidores TURN, `turn(s)://usuario:contraseña@host:puerto`.
+- `VideoEnabled` (bool): Crear el pin `VideoOutput`. Valor predeterminado `true`.
+- `AudioEnabled` (bool): Crear el pin `AudioOutput`. Valor predeterminado `true`. Al menos uno de los dos debe estar activado: de lo contrario, el constructor lanza `ArgumentException`.
+
+El productor se elige en este orden: `ProducerPeerId` si está definido; si no, el primer productor cuando `ConnectToFirstProducer` está activado; si no, el bloque **espera a que un productor lo llame**. Este último modo es el que usa una página del navegador para unirse a una llamada: la página se registra como productor e inicia una sesión con el bloque que espera. En ese modo, cuando el productor se va, el bloque acepta la siguiente llamada por las mismas salidas.
+
+Un `SignallingServer` que no es una dirección `ws://` o `wss://`, o una entrada vacía en `TurnServers`, hace fallar la construcción con un error a través de `OnError`.
+
+#### El pipeline de ejemplo
+
+```mermaid
+graph LR;
+    WebRTCSourceBlock-->VideoRendererBlock;
+    WebRTCSourceBlock-->AudioRendererBlock;
+```
+
+#### Código de ejemplo
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Recibir de un productor conocido en un servidor de señalización.
+var source = new WebRTCSourceBlock(new WebRTCSourceSettings
+{
+    SignallingServer = "ws://192.168.1.10:8443",
+    ProducerPeerId = producerPeerId,
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+var audioRenderer = new AudioRendererBlock();
+
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+Cuando el servidor es su propio `WebRTCSinkBlock`, añada la fuente con `AddBlockLive` después de `StartAsync`: el servidor del sink solo escucha cuando el pipeline está en marcha. La [guía de videollamada](../Guides/webrtc-video-call.md) muestra la llamada completa, con la página del navegador y la cancelación de eco.
+
+Compruebe `WebRTCSourceBlock.IsAvailable()` antes de construir el pipeline: indica si están presentes el plugin `rswebrtc` de GStreamer (`webrtcsrc`, de gst-plugins-rs) y `webrtcbin`. En Windows se incluyen en el paquete `VisioForge.CrossPlatform.Core.Windows.Adds.x64`.
+
+#### Plataformas
+
+Windows (probado). El plugin también se distribuye para macOS, Linux e iOS, como para `WHEPSourceBlock`; compruebe `IsAvailable()` allí.
 
 ## Otros Bloques Fuente
 

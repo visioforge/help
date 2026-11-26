@@ -59,6 +59,36 @@ rtsp://[USERNAME]:[PASSWORD]@[IP]:554/cam/realmonitor?channel=1&subtype=0
 | `subtype` | 0 | Main stream (highest resolution) |
 | `subtype` | 1 | Sub stream (lower resolution, less bandwidth) |
 
+!!! example "Record your Imou camera to MP4 in C# — ready code"
+    Paste into a .NET 8+ console app, put your camera's IP and password in, run. Live preview, H.265 cameras, motion detection and multi-camera grids use the same pipeline.
+
+    <!-- vf-compile -->
+    ```csharp
+    // NuGet: VisioForge.DotNet.MediaBlocks + VisioForge.CrossPlatform.Core.Windows.x64 + VisioForge.CrossPlatform.Libav.Windows.x64
+    using VisioForge.Core.MediaBlocks;
+    using VisioForge.Core.MediaBlocks.Sinks;
+    using VisioForge.Core.MediaBlocks.Sources;
+    using VisioForge.Core.Types.X.Sources;
+
+    await using var pipeline = new MediaBlocksPipeline();
+    pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
+    var settings = await RTSPSourceSettings.CreateAsync(
+        new Uri("rtsp://192.168.1.90:554/cam/realmonitor?channel=1&subtype=0"), "admin", "YourPassword", audioEnabled: true);
+    var camera = new RTSPSourceBlock(settings);
+    var mp4 = new MP4OutputBlock("imou.mp4");
+    pipeline.Connect(camera.VideoOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+    if (camera.AudioOutput != null)
+        pipeline.Connect(camera.AudioOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Audio));
+    if (!await pipeline.StartAsync())
+        return;
+    Console.ReadLine();   // recording until Enter
+    await pipeline.StopAsync();
+    ```
+
+    RTSP may need to be enabled in the Imou Life app first (Settings > Advanced Settings > RTSP).
+
+    [Download the free trial](https://www.visioforge.com/media-blocks-sdk-net?from=camera-imou#download){ .md-button .md-button--primary target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-imou:trial'});" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net?from=camera-imou){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-imou:product'});" } [Full demo on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Capture%20Original){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-imou:demo'});" }
+
 ### Camera Models
 
 | Model | Type | Main Stream URL | Audio |

@@ -2,9 +2,9 @@
 
 **Author:** VisioForge
 **License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
-**Generated:** 2026-11-26 15:13:16 UTC (636d6e20354)
+**Generated:** 2026-11-26 18:11:13 UTC (22e1188d075)
 **MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
-**Content Sources:** 471 help documentation pages + 74 website pages
+**Content Sources:** 472 help documentation pages + 74 website pages
 
 ---
 
@@ -2504,6 +2504,36 @@ rtsp://[USERNAME]:[PASSWORD]@[IP]:554/cam/realmonitor?channel=1&subtype=1
 | `subtype` | 0 | Main stream (highest resolution) |
 | `subtype` | 1 | Sub stream (lower resolution, less bandwidth) |
 
+Record your CP Plus camera to MP4 in C# — ready code
+
+Paste into a .NET 8+ console app, put your camera's IP and password in, run. Live preview, H.265 cameras, motion detection and multi-camera grids use the same pipeline.
+
+```
+// NuGet: VisioForge.DotNet.MediaBlocks + VisioForge.CrossPlatform.Core.Windows.x64 + VisioForge.CrossPlatform.Libav.Windows.x64
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sources;
+
+await using var pipeline = new MediaBlocksPipeline();
+pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
+var settings = await RTSPSourceSettings.CreateAsync(
+    new Uri("rtsp://192.168.1.108:554/cam/realmonitor?channel=1&subtype=0"), "admin", "YourPassword", audioEnabled: true);
+var camera = new RTSPSourceBlock(settings);
+var mp4 = new MP4OutputBlock("cp-plus.mp4");
+pipeline.Connect(camera.VideoOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+if (camera.AudioOutput != null)
+    pipeline.Connect(camera.AudioOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Audio));
+if (!await pipeline.StartAsync())
+    return;
+Console.ReadLine();   // recording until Enter
+await pipeline.StopAsync();
+```
+
+Use subtype=1 for the sub stream if bandwidth is tight.
+
+[Download the free trial](https://www.visioforge.com/media-blocks-sdk-net?from=camera-cp-plus#download) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net?from=camera-cp-plus) [Full demo on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Capture%20Original)
+
 ### Camera Models
 
 | Model | Type | Main Stream URL | Notes |
@@ -3512,6 +3542,36 @@ Some EZVIZ models support additional URL patterns:
 | `rtsp://IP:554/Streaming/Channels/101` | Hikvision-style (some models) |
 | `rtsp://IP:554/Streaming/Channels/102` | Hikvision-style sub stream |
 | `rtsp://IP:554/live` | Simple path (older models) |
+
+Record your EZVIZ camera to MP4 in C# — ready code
+
+Paste into a .NET 8+ console app, put your camera's IP and password in, run. Live preview, H.265 cameras, motion detection and multi-camera grids use the same pipeline.
+
+```
+// NuGet: VisioForge.DotNet.MediaBlocks + VisioForge.CrossPlatform.Core.Windows.x64 + VisioForge.CrossPlatform.Libav.Windows.x64
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sources;
+
+await using var pipeline = new MediaBlocksPipeline();
+pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
+var settings = await RTSPSourceSettings.CreateAsync(
+    new Uri("rtsp://192.168.1.64:554/h264/ch1/main/av_stream"), "admin", "VERIFICATION_CODE", audioEnabled: true);
+var camera = new RTSPSourceBlock(settings);
+var mp4 = new MP4OutputBlock("ezviz.mp4");
+pipeline.Connect(camera.VideoOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+if (camera.AudioOutput != null)
+    pipeline.Connect(camera.AudioOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Audio));
+if (!await pipeline.StartAsync())
+    return;
+Console.ReadLine();   // recording until Enter
+await pipeline.StopAsync();
+```
+
+The password is the verification code on the camera label, not the EZVIZ account password.
+
+[Download the free trial](https://www.visioforge.com/media-blocks-sdk-net?from=camera-ezviz#download) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net?from=camera-ezviz) [Full demo on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Capture%20Original)
 
 ### Camera Models
 
@@ -4778,6 +4838,36 @@ rtsp://[USERNAME]:[PASSWORD]@[IP]:554/cam/realmonitor?channel=1&subtype=0
 | `channel` | 1 | Camera channel (always 1 for standalone cameras) |
 | `subtype` | 0 | Main stream (highest resolution) |
 | `subtype` | 1 | Sub stream (lower resolution, less bandwidth) |
+
+Record your Imou camera to MP4 in C# — ready code
+
+Paste into a .NET 8+ console app, put your camera's IP and password in, run. Live preview, H.265 cameras, motion detection and multi-camera grids use the same pipeline.
+
+```
+// NuGet: VisioForge.DotNet.MediaBlocks + VisioForge.CrossPlatform.Core.Windows.x64 + VisioForge.CrossPlatform.Libav.Windows.x64
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sources;
+
+await using var pipeline = new MediaBlocksPipeline();
+pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
+var settings = await RTSPSourceSettings.CreateAsync(
+    new Uri("rtsp://192.168.1.90:554/cam/realmonitor?channel=1&subtype=0"), "admin", "YourPassword", audioEnabled: true);
+var camera = new RTSPSourceBlock(settings);
+var mp4 = new MP4OutputBlock("imou.mp4");
+pipeline.Connect(camera.VideoOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+if (camera.AudioOutput != null)
+    pipeline.Connect(camera.AudioOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Audio));
+if (!await pipeline.StartAsync())
+    return;
+Console.ReadLine();   // recording until Enter
+await pipeline.StopAsync();
+```
+
+RTSP may need to be enabled in the Imou Life app first (Settings > Advanced Settings > RTSP).
+
+[Download the free trial](https://www.visioforge.com/media-blocks-sdk-net?from=camera-imou#download) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net?from=camera-imou) [Full demo on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Capture%20Original)
 
 ### Camera Models
 
@@ -27588,9 +27678,9 @@ On a Windows on Arm machine an x64 build of your app runs under emulation. Media
 | --- | --- |
 | Media Blocks SDK .NET (`MediaBlocksPipeline`) | Yes. GStreamer, the codec plugins, the video renderer and the file decoders are ARM64. |
 | `VideoCaptureCoreX`, `VideoEditCoreX`, `MediaPlayerCoreX` | Yes. |
-| `VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore` (DirectShow) | Partly. `VisioForge.DotNet.Core.Redist.Base.arm64` carries the base filters, the video effects, the video and audio mixers, the WASAPI audio renderer and Desktop Duplication screen capture; `Redist.MP4.arm64` the MP4, MPEG-TS, MKV and HLS outputs with the Media Foundation H.264/H.265 encoders. The LAV filters and the legacy x64 DirectShow encoders and muxers have no ARM64 build: a DirectShow app that decodes files through LAV fails in an ARM64 process, so build it for x64 and let Windows run it under emulation. |
+| `VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore` (DirectShow) | Partly. `VisioForge.DotNet.Core.Redist.Base.arm64` carries the base filters, the video effects, the video and audio mixers, the WASAPI audio renderer and Desktop Duplication screen capture; `Redist.MP4.arm64` the MP4, MPEG-TS, MKV and HLS outputs with the Media Foundation H.264/H.265 encoders; `Redist.FFMPEG.arm64` the FFMPEG Source filter and the FFMPEG video and audio decoders, so `MediaPlayerCore` plays files natively with `MediaPlayerSourceMode.FFMPEG`. The LAV filters and the legacy x64 DirectShow encoders and muxers have no ARM64 build: a DirectShow app that decodes files through LAV fails in an ARM64 process, so switch it to the FFMPEG source mode or build it for x64 and let Windows run it under emulation. |
 
-NDI, ElevenLabs and the Basler, Allied Vision and Spinnaker camera SDKs have no ARM64 build, and their blocks report an error in an ARM64 process. GenICam and RealSense cameras work natively through `VisioForge.CrossPlatform.GenICam.Windows.arm64` and `VisioForge.CrossPlatform.RealSense.Windows.arm64`.
+NDI and the Basler, Allied Vision and Spinnaker camera SDKs have no ARM64 build, and their blocks report an error in an ARM64 process. GenICam and RealSense cameras and the ElevenLabs blocks work natively through `VisioForge.CrossPlatform.GenICam.Windows.arm64`, `VisioForge.CrossPlatform.RealSense.Windows.arm64` and `VisioForge.CrossPlatform.ElevenLabs.Windows.arm64`.
 
 ## Project settings
 
@@ -44127,7 +44217,7 @@ These packages hold the managed SDK only. The native engine comes in a separate 
 | X engines | iOS | `VisioForge.CrossPlatform.Core.iOS` |
 | X engines | Linux | `VisioForge.CrossPlatform.Core.Linux.x64` or `VisioForge.CrossPlatform.Core.Linux.arm64`, plus GStreamer 1.20+ from the distribution (1.22+ for some features) |
 | `VideoCaptureCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoCapture.x64` (`.x86` for 32-bit apps) |
-| `MediaPlayerCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.MediaPlayer.x64` and `VisioForge.DotNet.Core.Redist.LAV.x64`. LAV is the default `Source_Mode`, the GPU mode uses LAV too, and so does `GetFileThumbnail`: leave the LAV package out only when the app uses none of them. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64` when the app uses the FFMPEG or Blu-ray mode, and `VisioForge.DotNet.Core.Redist.VLC.x64` for `File_VLC` or `HTTP_RTSP_VLC` (`.x86` of each package for 32-bit apps) |
+| `MediaPlayerCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.MediaPlayer.x64` and `VisioForge.DotNet.Core.Redist.LAV.x64`. LAV is the default `Source_Mode`, the GPU mode uses LAV too, and so does `GetFileThumbnail`: leave the LAV package out only when the app uses none of them. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64` when the app uses the FFMPEG or Blu-ray mode, and `VisioForge.DotNet.Core.Redist.VLC.x64` for `File_VLC` or `HTTP_RTSP_VLC` (`.x86` of each package for 32-bit apps). An ARM64 app takes `VisioForge.DotNet.Core.Redist.Base.arm64` and `VisioForge.DotNet.Core.Redist.FFMPEG.arm64` with `MediaPlayerSourceMode.FFMPEG` (no MediaPlayer or LAV package, so no GPU mode and no `GetFileThumbnail`) |
 | `VideoEditCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoEdit.x64` and `VisioForge.DotNet.Core.Redist.FFMPEG.x64` to open MP4, MKV and other input files (`.x86` for 32-bit apps) |
 
 For example, a Windows x64 app on the X engines adds:
@@ -44137,7 +44227,7 @@ Install-Package VisioForge.CrossPlatform.Core.Windows.x64
 Install-Package VisioForge.CrossPlatform.Libav.Windows.x64   # recommended: FFmpeg (libav) decoders and encoders
 ```
 
-Some platforms need a step beyond the package: Android also takes the Java bindings project ([Android deployment](../deployment-x/Android/)), and Mac Catalyst a build target that copies the native libraries into the app bundle ([macOS deployment](../deployment-x/macOS/)). With the Windows-only engines, an AnyCPU app deploys both the x86 and the x64 packages. Their engine packages, LAV and FFMPEG have no ARM64 build, so on Windows on Arm, where an AnyCPU app usually runs as ARM64, build the app as x64 or use the X engines. The optional packages are listed in the [deployment guide](../deployment-x/) for the X engines and on the deployment pages of [Video Capture SDK .NET](../videocapture/deployment/), [Media Player SDK .NET](../mediaplayer/deployment/) and [Video Edit SDK .NET](../videoedit/deployment/) for the Windows-only engines.
+Some platforms need a step beyond the package: Android also takes the Java bindings project ([Android deployment](../deployment-x/Android/)), and Mac Catalyst a build target that copies the native libraries into the app bundle ([macOS deployment](../deployment-x/macOS/)). With the Windows-only engines, an AnyCPU app deploys both the x86 and the x64 packages. Their engine packages and LAV have no ARM64 build, so on Windows on Arm, where an AnyCPU app usually runs as ARM64, build the app as x64 or use the X engines. For native ARM64 file playback, `MediaPlayerCore` plays with `MediaPlayerSourceMode.FFMPEG` and the ARM64 packages in its row ([Windows ARM64](../general/guides/windows-arm64/)). The optional packages are listed in the [deployment guide](../deployment-x/) for the X engines and on the deployment pages of [Video Capture SDK .NET](../videocapture/deployment/), [Media Player SDK .NET](../mediaplayer/deployment/) and [Video Edit SDK .NET](../videoedit/deployment/) for the Windows-only engines.
 
 Additional UI-specific packages may be required depending on your target platform:
 
@@ -47624,7 +47714,7 @@ For complete control over the deployment process or in environments with specifi
 - Base Filters: VisioForge\_BaseFilters.ax / VisioForge\_BaseFilters\_x64.ax
 - Video Effects: VisioForge\_Video\_Effects\_Pro.ax / VisioForge\_Video\_Effects\_Pro\_x64.ax
 - Audio Processing: VisioForge\_MP3\_Splitter.ax / VisioForge\_MP3\_Splitter\_x64.ax, VisioForge\_Audio\_Mixer.ax / VisioForge\_Audio\_Mixer\_x64.ax
-- Audio and Video Bridge (VLC and FFmpeg IP camera sources with `ForcedFramerate`, MP4 output with `UseSpecialSyncMode`, separate capture with `SeparateCapture_GMFMode` off): VisioForge\_Bridge\_Audio.ax / VisioForge\_Bridge\_Audio\_x64.ax, VisioForge\_Bridge\_Video.ax / VisioForge\_Bridge\_Video\_x64.ax; on Windows ARM64, where only the VLC source and separate capture use them, VisioForge\_Bridge\_Audio\_arm64.ax, VisioForge\_Bridge\_Video\_arm64.ax in the `arm64` folder of the application. The video bridge also needs the `VisioForge_MFPX` DLL of its architecture and, on x64, `vcomp140.dll` from the `Redist\Filters` folder
+- Audio and Video Bridge (VLC and FFmpeg IP camera sources with `ForcedFramerate`, MP4 output with `UseSpecialSyncMode`, separate capture with `SeparateCapture_GMFMode` off): VisioForge\_Bridge\_Audio.ax / VisioForge\_Bridge\_Audio\_x64.ax, VisioForge\_Bridge\_Video.ax / VisioForge\_Bridge\_Video\_x64.ax; on Windows ARM64, where the VLC and FFmpeg sources and separate capture use them, VisioForge\_Bridge\_Audio\_arm64.ax, VisioForge\_Bridge\_Video\_arm64.ax in the `arm64` folder of the application. The video bridge also needs the `VisioForge_MFPX` DLL of its architecture and, on x64, `vcomp140.dll` from the `Redist\Filters` folder
 
 **Legacy Audio Effects:**
 
@@ -47667,8 +47757,8 @@ For complete control over the deployment process or in environments with specifi
 
 **FFMPEG Integration:**
 
-- VisioForge\_FFMPEG\_Source.ax / VisioForge\_FFMPEG\_Source\_x64.ax
-- Requires all files from Redist\FFMPEG folder and PATH variable updates
+- VisioForge\_FFMPEG\_Source.ax / VisioForge\_FFMPEG\_Source\_x64.ax; on Windows ARM64, VisioForge\_FFMPEG\_Source\_ARM64.ax in the app's `arm64` folder
+- Requires all files from Redist\FFMPEG folder (Redist\FFMPEG\arm64 for ARM64) and PATH variable updates
 
 **RTSP/RTMP/HTTP Source Support:**
 
@@ -63753,7 +63843,7 @@ NuGet packages provide the simplest deployment method, automatically handling th
 - **Media Player SDK Package**:
 - [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x86/)
 - [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MediaPlayer.x64/)
-- ARM64: not available yet
+- ARM64: not available yet. An ARM64 app plays in `MediaPlayerSourceMode.FFMPEG` with the Base ARM64 package and [`VisioForge.DotNet.Core.Redist.FFMPEG.arm64`](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.arm64/) instead
 
 #### Feature-Specific Packages (Add as Needed)
 
@@ -63762,6 +63852,7 @@ NuGet packages provide the simplest deployment method, automatically handling th
 - **FFMPEG Package** (for file playback using FFMPEG source mode):
 - [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
 - [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
+- [ARM64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.arm64/)
 - **MP4 Output Package**:
 - [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/)
 - [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/)
@@ -63788,7 +63879,7 @@ NuGet packages provide the simplest deployment method, automatically handling th
 - [x86 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/)
 - [x64 Version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
 
-> **Windows ARM64:** LAV Filters exist for x86 and x64 only. There is no upstream ARM64 build, so the SDK has no ARM64 LAV package. `LAV` is the default `Source_Mode` of `MediaPlayerCore`, so a `MediaPlayerCore` app running as an ARM64 process fails to play. AnyCPU apps usually run as ARM64 there too. On Windows ARM64, set `Source_Mode` to `MediaPlayerSourceMode.File_VLC` and add the VLC ARM64 package (playback works, but VisioForge filters that have no ARM64 build yet, such as YUV2RGB, still raise `OnError`), use `MediaPlayerCoreX` or Media Blocks SDK .NET, or build the app for x64 (`PlatformTarget` set to `x64`; it runs under emulation).
+> **Windows ARM64:** LAV Filters exist for x86 and x64 only. There is no upstream ARM64 build, so the SDK has no ARM64 LAV package. `LAV` is the default `Source_Mode` of `MediaPlayerCore`, so a `MediaPlayerCore` app running as an ARM64 process fails to play. AnyCPU apps usually run as ARM64 there too. On Windows ARM64, set `Source_Mode` to `MediaPlayerSourceMode.FFMPEG` and add the FFMPEG ARM64 package (native playback), set it to `MediaPlayerSourceMode.File_VLC` and add the VLC ARM64 package (playback works, but VisioForge filters that have no ARM64 build yet, such as YUV2RGB, still raise `OnError`), use `MediaPlayerCoreX` or Media Blocks SDK .NET, or build the app for x64 (`PlatformTarget` set to `x64`; it runs under emulation).
 
 ## Automatic Silent Installers
 
@@ -63891,8 +63982,8 @@ The SDK uses various DirectShow filters for specific functionality. Below is a c
 
 #### FFMPEG Source
 
-- VisioForge\_FFMPEG\_Source.ax
-- Complete Redist\FFMPEG folder, added to the Windows PATH variable
+- VisioForge\_FFMPEG\_Source.ax (x86), VisioForge\_FFMPEG\_Source\_x64.ax (x64) or VisioForge\_FFMPEG\_Source\_ARM64.ax (ARM64)
+- Complete Redist\FFMPEG folder of that architecture (Redist\FFMPEG\arm64 for ARM64), added to the Windows PATH variable
 
 #### Memory Source
 
@@ -73324,6 +73415,7 @@ Configure via `AudioMixerSettings`:
 | --- | --- | --- | --- |
 | `Format` | `AudioInfoX` | `S16LE, 48000 Hz, 2 ch` | Output audio format (sample format, sample rate, channel count) |
 | `Latency` | `TimeSpan` | `100 ms` | How long the mixer waits for late input on a live pipeline before mixing without it; too low a value is heard as clicks and dropouts on live sources. `TimeSpan.Zero` waits only for the latency the inputs report. Applied when the pipeline starts |
+| `IgnoreInactivePads` | `bool` | `false` | Keep mixing when an input ends or has not delivered audio yet, for live inputs that come and go independently. Leave it off for a single input. When on, the mixer also starts at the first buffer an input delivers and waits for it without a timeout: the first output buffer carries that input's timestamp instead of zero, and a mixer whose inputs never deliver anything waits instead of ending the stream |
 
 **Runtime methods:**
 
@@ -74416,6 +74508,67 @@ await pipeline.StartAsync();
 
 Windows, macOS, Linux, iOS, Android.
 
+### Echo Cancellation
+
+The `EchoCancellationBlock` removes acoustic echo in calls: the far end's voice that your speakers play and your microphone picks up again. It runs the WebRTC audio processing library (the GStreamer `webrtcdsp` and `webrtcechoprobe` elements) and can also suppress steady background noise and level the microphone automatically.
+
+The block has two paths. The microphone goes through `Input` and `Output`, and the cleaned signal goes on to the far end. The far end's audio goes through `PlaybackInput` and `PlaybackOutput` on its way to the audio renderer: the block listens to it to know what to remove. Connect both paths; with `PlaybackInput` unconnected nothing is cancelled, and `PlaybackOutput` must go on to the renderer whenever `PlaybackInput` is connected.
+
+Both outputs are 48 kHz, the rate the WebRTC audio processing needs on both sides, in S16LE interleaved or F32LE non-interleaved samples; the channel count stays as negotiated. Put an `AudioConverterBlock` after an output whose next block takes neither format.
+
+#### Block info
+
+Name: EchoCancellationBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input (microphone) | Uncompressed audio | 1 |
+| Output (processed microphone) | Uncompressed audio | 1 |
+| PlaybackInput (far end) | Uncompressed audio | 1 |
+| PlaybackOutput (far end, to the renderer) | Uncompressed audio | 1 |
+
+#### Settings
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `EchoCancel` | `bool` | `true` | Remove the far end's voice from the microphone signal |
+| `NoiseSuppression` | `bool` | `true` | Suppress steady background noise (fans, hum) |
+| `GainControl` | `bool` | `true` | Adjust the microphone level automatically |
+
+The settings are read when the block is built.
+
+**GStreamer Elements**: `webrtcdsp`, `webrtcechoprobe`
+
+#### The sample pipeline
+
+```
+graph LR;
+    SystemAudioSourceBlock-->EchoCancellationBlock;
+    EchoCancellationBlock-- Output -->WebRTCSinkBlock;
+    WebRTCSourceBlock-- PlaybackInput -->EchoCancellationBlock;
+    EchoCancellationBlock-- PlaybackOutput -->AudioRendererBlock;
+```
+
+#### Sample code
+
+```
+var echoCancellation = new EchoCancellationBlock(new EchoCancellationSettings());
+
+// Microphone path: to the far end.
+pipeline.Connect(microphone.Output, echoCancellation.Input);
+pipeline.Connect(echoCancellation.Output, webrtcSink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+// Playback path: the far end's voice, on its way to the speakers.
+pipeline.Connect(webrtcSource.AudioOutput, echoCancellation.PlaybackInput);
+pipeline.Connect(echoCancellation.PlaybackOutput, new AudioRendererBlock().Input);
+```
+
+Check `EchoCancellationBlock.IsAvailable()` before you build the pipeline: on Windows the elements ship in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package. For the whole call see [Two-Way WebRTC Video Call with a Browser](../Guides/webrtc-video-call/).
+
+#### Platforms
+
+Windows (tested), macOS (`VisioForge.CrossPlatform.Core.macOS.Adds`). On Linux the elements come with the distribution's `gstreamer1.0-plugins-bad`; check `IsAvailable()`.
+
 ### Remove Silence
 
 The RemoveSilence block automatically detects and removes silent portions from audio streams, useful for podcasts, voice recordings, and audio editing.
@@ -74844,7 +74997,7 @@ The `VST3AudioBlock` runs a VST® 3 audio effect plug-in (a `.vst3` bundle) in t
 
 No plug-in comes with the SDK: point the block at one installed on the machine. The usual folders are `C:\Program Files\Common Files\VST3` on Windows, `/Library/Audio/Plug-Ins/VST3` on macOS and `~/.vst3` or `/usr/lib/vst3` on Linux.
 
-The plug-in loads on the first call that needs it, or when the pipeline starts, so its parameters and presets can be read and set before playback. Parameter values are normalized, 0.0 to 1.0; `VST3ParameterInfo.Text` and `Units` give the value as the plug-in shows it. The plug-in's own editor window is not shown: control it through its parameters.
+The plug-in loads on the first call that needs it, or when the pipeline starts, so its parameters and presets can be read and set before playback. Parameter values are normalized, 0.0 to 1.0; `VST3ParameterInfo.Text` and `Units` give the value as the plug-in shows it. On Windows the plug-in's own editor window can be shown with `ShowEditor()`; what the user changes there reaches the audio, and `GetParameter` reads it back. On macOS and Linux, control the plug-in through its parameters.
 
 #### Block info
 
@@ -74864,12 +75017,14 @@ Name: VST3AudioBlock.
 | `Bypass` | `bool` | Passes the audio through unprocessed; can be changed during playback |
 | `Latency` | `int` | The latency the plug-in reports, in samples; 0 until it has processed audio |
 | `ClassName` | `string` | The name of the loaded effect; `null` before the plug-in is loaded |
+| `IsEditorOpen` | `bool` | Whether the plug-in's editor window is open; the user can close it at any time |
 
 Key methods:
 
 - `GetParameters()` -- returns a `VST3ParameterInfo` for each parameter: `ID`, `Title`, `Units`, `StepCount`, `DefaultValue`, `Flags`, `Value` and `Text`.
-- `GetParameter(uint id)` and `SetParameter(uint id, double value)` -- read and set one normalized value, also during playback. `GetParameter` returns -1.0 and `SetParameter` returns `false` for an ID the plug-in does not have, or when the plug-in does not load.
+- `GetParameter(uint id)` and `SetParameter(uint id, double value)` -- read and set one normalized value, also during playback (on the UI thread while the editor is open). `GetParameter` returns -1.0 and `SetParameter` returns `false` for an ID the plug-in does not have, or when the plug-in does not load.
 - `GetState()` and `SetState(byte[] preset)` -- save and restore the plug-in's whole state in the `.vstpreset` format.
+- `ShowEditor(IntPtr owner = default)` and `CloseEditor()` -- open and close the plug-in's editor window (Windows). Call `ShowEditor` on the UI thread; `owner` is a window handle the editor stays above. It returns `false` when the plug-in has no editor, or when called off the UI thread (a thread that is single-threaded but runs no message loop is not detected). Disposing the block closes the window. While the editor is open, call `GetParameter` and `SetParameter` on the UI thread too. Closing or disposing from another thread waits until the UI thread has closed the window, so never block the UI thread on that call.
 - `VST3AudioBlock.IsAvailable()` -- whether the VST 3 host is present on this platform.
 
 A bundle that cannot be loaded fails the pipeline start with an error naming the bundle and the cause.
@@ -74917,6 +75072,12 @@ if (preset != null)
 {
     File.WriteAllBytes("room.vstpreset", preset);
 }
+```
+
+On Windows, `ShowEditor()` opens the plug-in's own editor window. Call it on the UI thread, for example from a WPF button handler, and pass the window handle so the editor stays above it:
+
+```
+reverb.ShowEditor(new WindowInteropHelper(this).Handle);
 ```
 
 #### Platforms
@@ -77993,6 +78154,8 @@ videoSourceSettings.Position = IOSVideoSourcePosition.Back;
 videoSourceSettings.Orientation = IOSVideoSourceOrientation.Portrait;
 #endif
 ```
+
+An external USB camera on an iPad ignores `Orientation` and `AutoUpdateOrientation`: its picture keeps the camera's own orientation.
 
 ### Creating the Video Source Block
 
@@ -85409,7 +85572,7 @@ The block's build fails, with a message through the pipeline's `OnError` event, 
 
 ### Platforms
 
-Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`, iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
+Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`, iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later. Not on Android: the Android runtime, `VisioForge.CrossPlatform.Core.Android`, does not include the `rswebrtc` plugin, so `IsAvailable()` returns `false` there. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
 
 ## Troubleshooting
 
@@ -86793,6 +86956,182 @@ Yes. The encoded video and audio packets are copied byte-for-byte into the MP4 c
 - [Capture Video to MPEG-TS](../../../general/guides/video-capture-to-mpegts/) — produce MPEG-TS output from a capture pipeline
 - [Media Blocks Source Blocks](../../Sources/) — all available sources, including network and device inputs
 - [Getting Started with Media Blocks](../../GettingStarted/) — pipeline fundamentals and the block model
+
+---END OF PAGE---
+
+
+## Two-Way WebRTC Video Call with a Browser in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Guides/webrtc-video-call/
+**Description:** Build a 1:1 video call between a C# app and a web browser over WebRTC, with echo cancellation, mute and camera off, and no media server.
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, Streaming, Webcam, WebRTC, VP8, Opus, C#, JavaScript, NuGet
+**API:** WebRTCSourceBlock, WebRTCSourceSettings, WebRTCSinkBlock, WebRTCSinkSettings, EchoCancellationBlock, MediaBlocksPipeline
+
+# Two-Way WebRTC Video Call Between a C# App and a Browser
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+Demo Sample
+
+This guide follows the [WebRTC Video Call Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20Video%20Call%20Demo): a camera and a microphone with echo cancellation, mute and camera off, the caller's video and voice, and a call page served by the application.
+
+The block reference is in [Source blocks → WebRTC Source](../../Sources/#webrtc-source-block), [Sink blocks → WebRTC](../../Sinks/#webrtc) and [Audio processing → Echo Cancellation](../../AudioProcessing/#echo-cancellation).
+
+## What You Will Build
+
+A video call between a .NET desktop application and a person in a web browser — a help desk agent and a customer, a kiosk and an operator, a lab instrument and a remote expert. Both sides see and hear each other with sub-second latency, and nothing runs between them: no media server, no cloud service, no browser plug-in.
+
+```
+graph LR;
+    subgraph app ["Your .NET application"]
+        cam["Camera + microphone"] --> EchoCancellationBlock;
+        EchoCancellationBlock --> WebRTCSinkBlock;
+        WebRTCSourceBlock --> renderers["VideoView + speakers"];
+    end
+    WebRTCSinkBlock -- "WebRTC: your video and voice" --> browser["Browser<br/>call page"];
+    browser -- "WebRTC: the caller's video and voice" --> WebRTCSourceBlock;
+```
+
+Three blocks do the work:
+
+| Block | Role in the call |
+| --- | --- |
+| `WebRTCSinkBlock` | Sends your camera and microphone to the browser. Runs the signalling server and serves the call page. |
+| `WebRTCSourceBlock` | Receives the browser's camera and microphone, decoded, for a `VideoRendererBlock` and the speakers. |
+| `EchoCancellationBlock` | Removes the caller's voice that your speakers play and your microphone picks up again, so the caller does not hear an echo. Also suppresses noise and levels the microphone. |
+
+## When to Use It
+
+- **One application, one caller at a time**, on the same network or across the internet with a TURN server.
+- You want the call inside your own application — next to your controls, recordings or measurements — and the caller to need nothing but a link.
+- You do not want to run or pay for a media server.
+
+For one stream to many viewers use `WebRTCSinkBlock` alone ([Screen and Camera to Browsers](../webrtc-whip/)), and to publish through a media server use WHIP and WHEP ([WebRTC Player (WHEP)](../webrtc-whep-player/)).
+
+## Prerequisites
+
+- Windows x64 (the platform the demo and the tests run on), .NET 10.
+- Media Blocks SDK .NET 2026.11.26 or later, with the `VisioForge.CrossPlatform.Core.Windows.x64` and `VisioForge.CrossPlatform.Core.Windows.Adds.x64` packages. The `.Adds` package carries the WebRTC and echo cancellation plugins.
+- A camera and a microphone, and Chrome, Edge, Firefox or Safari for the caller.
+
+Check `WebRTCSinkBlock.IsAvailable()`, `WebRTCSourceBlock.IsAvailable()` and `EchoCancellationBlock.IsAvailable()` before you build the pipeline: each returns `false` when the `.Adds` package is missing.
+
+## How the Two Sides Find Each Other
+
+The browser and the application meet on the signalling server that `WebRTCSinkBlock` runs (WebSocket, port 8443 by default):
+
+1. `WebRTCSinkBlock` registers as a **producer**: anyone on the server can ask for its stream.
+2. `WebRTCSourceBlock`, with neither `ProducerPeerId` nor `ConnectToFirstProducer` set, registers as a consumer that **waits to be called**.
+3. The call page registers as a producer and a listener. It asks for the application's stream (one WebRTC session) and calls the waiting `WebRTCSourceBlock` with its own camera and microphone (a second session).
+
+Each direction is its own WebRTC session, so the two can use different codecs and bitrates, and the sink adapts its bitrate to the caller's network.
+
+## The Pipeline
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Your side: camera and microphone to the browser. The sink serves the call page from wwwroot.
+var sink = new WebRTCSinkBlock(new WebRTCSinkSettings
+{
+    SignallingServerHost = "127.0.0.1",
+    SignallingServerPort = 8443,
+    WebServerDirectory = Path.Combine(AppContext.BaseDirectory, "wwwroot"),
+    WebServerAddress = "http://127.0.0.1:8080/",
+});
+
+var camera = new SystemVideoSourceBlock(new VideoCaptureDeviceSourceSettings(videoDevice));
+var microphone = new SystemAudioSourceBlock(audioDevice.CreateSourceSettings());
+var echoCancellation = new EchoCancellationBlock(new EchoCancellationSettings());
+
+pipeline.Connect(camera.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+pipeline.Connect(microphone.Output, echoCancellation.Input);
+pipeline.Connect(echoCancellation.Output, sink.CreateNewInput(MediaBlockPadMediaType.Audio));
+
+// The caller's side: the renderers wait for the call. The caller's voice passes the echo canceller
+// on its way to the speakers, so the canceller knows what to remove from the microphone.
+var remoteVideo = new VideoRendererBlock(pipeline, RemoteView) { IsSync = false };
+pipeline.AddBlock(remoteVideo);
+pipeline.Connect(echoCancellation.PlaybackOutput, new AudioRendererBlock().Input);
+
+await pipeline.StartAsync();
+
+// The source joins the sink's signalling server once it runs, and waits for the call page to call it.
+var source = new WebRTCSourceBlock(new WebRTCSourceSettings { SignallingServer = "ws://127.0.0.1:8443" });
+source.VideoOutput.OnDemandConnect = true;
+source.AudioOutput.OnDemandConnect = true;
+
+pipeline.AddBlockLive(source);
+pipeline.ConnectLive(source.VideoOutput, remoteVideo.Input);
+pipeline.ConnectLive(source.AudioOutput, echoCancellation.PlaybackInput);
+pipeline.SyncBlockStateLive(source);
+```
+
+Why the source is added after `StartAsync`: its signalling client connects as soon as the source starts, and the sink's server is listening only once the pipeline runs. `OnDemandConnect = true` keeps the source's outputs open for `ConnectLive`.
+
+`WebRTCSinkBlock.ConsumerAdded` and `ConsumerRemoved` tell you when the caller joins and leaves. When the caller hangs up and calls again, the same `WebRTCSourceBlock` takes the new call through the same outputs; nothing needs to be rebuilt.
+
+## The Call Page
+
+The demo's `wwwroot/index.html` is a single file of plain JavaScript, no libraries. The parts that matter:
+
+```
+// Register as a producer (to call the application) and a listener (to see it arrive).
+// callPage marks call pages: the 'list' and 'peerStatusChanged' handlers skip producers whose
+// meta has it, so two open pages never take each other for the application.
+send({ type: 'setPeerStatus', roles: ['producer', 'listener'], meta: { callPage: true } });
+send({ type: 'list' });          // the application's sink: receive its stream
+send({ type: 'listConsumers' }); // the application's waiting source: call it
+
+// list → startSession with the sink's peer ID: the sink sends an offer, the page answers.
+// listConsumers → startSession with the source's peer ID: the server replies with
+// startSession, and the page offers its camera and microphone.
+```
+
+The page opens one `RTCPeerConnection` for each session and routes every `peer` message by its `sessionId`. Copy the file as is, or use it as a reference for your own page.
+
+## Mute and Camera Off
+
+- **Mute**: put a `VolumeBlock` before the echo canceller and set `Mute = true`. The call keeps its audio track; the caller hears silence.
+- **Camera off**: put a `VideoBalanceBlock` after the camera and set `Settings.Contrast = 0` and `Settings.Brightness = -1`. The caller sees a black picture, and the video track stays, so turning the camera back on needs no new negotiation.
+
+Both take effect while the call runs. In the browser, `track.enabled = false` does the same on the caller's side.
+
+## Limits
+
+- **HTTPS outside localhost.** Browsers give a page the camera and microphone only on `https://` or on `localhost`/`127.0.0.1`, and the sink's built-in web server is `http://` only. For a caller on another computer, host the call page on your own `https://` site, leave `WebServerDirectory` empty, and give the sink `SignallingServerCertificate` and `SignallingServerKey` so the page reaches the signalling server over `wss://`. Set `SignallingServerHost` to `0.0.0.0` so the page can connect at all, and, since the server then takes `wss://` only, set `WebRTCSourceSettings.SignallingServer` to `wss://127.0.0.1:<port>` (the source does not check the server's certificate, so the site's host name in it does not matter here).
+- **TURN across the internet.** On one local network the two sides connect directly. Behind NAT or a firewall, run a TURN server (for example coturn) and set it in `WebRTCSinkSettings.TurnServers` and `WebRTCSourceSettings.TurnServers` (`turn://user:password@host:3478`) and in the page's `iceServers` (`{ urls: 'turn:host:3478', username, credential }`). STUN alone (`StunServer`, Google's server by default) is not enough for symmetric NAT.
+- **One caller at a time.** `WebRTCSourceBlock` takes one call at a time: a 1:1 call, not a conference. A second caller who calls during a call receives your picture but is not shown, even after the first caller hangs up.
+- **Echo cancellation needs both paths.** With `PlaybackInput` left unconnected the canceller has nothing to compare against and removes nothing. Both paths run at 48 kHz; the canceller resamples.
+- **Windows is the tested platform.** The same plugins ship in `VisioForge.CrossPlatform.Core.macOS.Adds`; on other platforms check `IsAvailable()`.
+
+## Frequently Asked Questions
+
+### Do I need a media server or a cloud service for a WebRTC call from .NET?
+
+No. `WebRTCSinkBlock` runs the signalling server inside your application and serves the call page, and the media flows directly between the application and the browser. Only a TURN server is needed when the two sides cannot reach each other directly.
+
+### How does the browser call the .NET application?
+
+The call page registers on the application's signalling server as a producer and starts a session with the waiting `WebRTCSourceBlock`. The server tells the page to send its offer, and the source answers. A second session in the other direction carries the application's camera and microphone.
+
+### Why does the caller hear an echo, and how is it removed?
+
+The caller's voice comes out of your speakers and goes back into your microphone. `EchoCancellationBlock` listens to what the speakers play (its playback path) and subtracts it from the microphone (its main path). Connect both paths; headphones avoid the echo altogether.
+
+### Which codecs are used?
+
+The browser and the blocks negotiate them per session: VP8, H.264, VP9, H.265 or AV1 for video, whichever both sides support, and Opus for audio. The video the source outputs is decoded, in the size and frame rate the browser sends.
+
+### Can the call run across the internet?
+
+Yes, with the call page on an `https://` site, the signalling server on `wss://`, and a TURN server for callers behind NAT. See [Limits](#limits).
+
+## See Also
+
+- [Screen and Camera to Browsers (WebRTC, WHIP)](../webrtc-whip/) — one stream to many browsers
+- [WebRTC Player (WHEP)](../webrtc-whep-player/) — play a stream from a WebRTC media server
+- [Source blocks → WebRTC Source](../../Sources/#webrtc-source-block)
+- [Audio processing → Echo Cancellation](../../AudioProcessing/#echo-cancellation)
 
 ---END OF PAGE---
 
@@ -95437,7 +95776,7 @@ You can specify an API to use during the device enumeration (refer to the `Video
 
 On Android this block enumerates cameras through Camera2, which sees a USB camera attached over OTG only on devices whose vendor ships the External Camera HAL - and many phones do not. To capture from a USB camera on Android, use the [USB (UVC) Camera Source Block](#usb-uvc-camera-source-block) instead.
 
-On Android 9 and later, many phones hide their ultra-wide and telephoto lenses behind one logical camera that switches lenses as the zoom changes. The device list then also contains each such lens as its own camera, after the cameras the phone lists itself: `LensType` tells them apart (`MultiCamera` for the logical camera, `Wide`, `UltraWide` or `Telephoto` for a lens, judged by its focal length against the main lens of its side, `Unknown` when the camera does not report what tells it; Android and iOS only), and `PhysicalCameraId` names the lens. Pick that camera like any other to capture through that one lens, with its own video sizes. It zooms by cropping that lens where the phone allows a crop per lens; otherwise `Camera2Capabilities.MaxDigitalZoom` is 1:
+On Android 9 and later, many phones hide their ultra-wide and telephoto lenses behind one logical camera that switches lenses as the zoom changes. The device list then also contains each such lens as its own camera, after the cameras the phone lists itself: `LensType` tells them apart (`MultiCamera` for the logical camera, `Wide`, `UltraWide` or `Telephoto` for a lens, judged by its focal length against the main lens of its side, `Unknown` when the camera does not report what tells it or is an external USB camera; Android and iOS only), and `PhysicalCameraId` names the lens. Pick that camera like any other to capture through that one lens, with its own video sizes. It zooms by cropping that lens where the phone allows a crop per lens; otherwise `Camera2Capabilities.MaxDigitalZoom` is 1:
 
 ```
 var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
@@ -95445,6 +95784,8 @@ var ultraWide = cameras.FirstOrDefault(c => c.LensType == VideoCaptureLensType.U
 ```
 
 On Android 10 and later, a phone that does not stream a lens on its own fails the start with an error that says so.
+
+On iOS the device list contains the ultra-wide, telephoto and multi-camera back devices too, after the back and front wide-angle cameras. `LensType` is the camera's own device type: `Wide`, `UltraWide`, `Telephoto`, `MultiCamera` for a dual or triple camera, `Unknown` for an external camera on an iPad. The same code picks the ultra-wide lens on both platforms.
 
 #### Platforms
 
@@ -97203,6 +97544,74 @@ For a step-by-step guide that builds this player in WPF and measures its latency
 #### Platforms
 
 Windows, macOS, Linux, iOS.
+
+### WebRTC Source Block
+
+The `WebRTCSourceBlock` receives video and audio from a WebRTC producer on a GStreamer WebRTC signalling server — the server a `WebRTCSinkBlock` runs, or a standalone `gst-webrtc-signalling-server`. Together with `WebRTCSinkBlock` it makes a two-way call between a .NET application and a web browser, with no media server. For streams from a WebRTC media server (MediaMTX, Janus, Cloudflare) use the `WHEPSourceBlock`.
+
+The block outputs decoded video and audio. Their formats are the ones the producer's streams decode to: frame size, frame rate, sample rate and channel count come from the negotiated session, not from the block.
+
+#### Block info
+
+Name: WebRTCSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Output video | Uncompressed | 0 or 1 |
+| Output audio | Uncompressed | 0 or 1 |
+
+#### Settings
+
+The `WebRTCSourceBlock` is configured using `WebRTCSourceSettings`:
+
+- `SignallingServer` (string): The signalling server, `ws://host:port` or `wss://host:port`. Default `ws://127.0.0.1:8443`, the server of a `WebRTCSinkBlock` with default settings on the same computer. The source does not check a `wss://` server's certificate: your own `WebRTCSinkBlock` with a certificate for your site's host name is reached at `wss://127.0.0.1:port`, and a server on another computer is encrypted but not authenticated, so use one on a network you trust.
+- `ProducerPeerId` (string): The peer ID of the producer to receive from.
+- `ConnectToFirstProducer` (bool): Receive from the first producer the server lists, when `ProducerPeerId` is not set. Default `false`. Leave it off when your own `WebRTCSinkBlock` runs the server: it is a producer there too.
+- `StunServer` (string): A STUN server, `stun://host:port`. When not set, `stun://stun.l.google.com:19302` is used.
+- `TurnServers` (string[]): TURN servers, `turn(s)://username:password@host:port`.
+- `VideoEnabled` (bool): Create the `VideoOutput` pad. Default `true`.
+- `AudioEnabled` (bool): Create the `AudioOutput` pad. Default `true`. At least one of the two must be on: the constructor throws `ArgumentException` otherwise.
+
+The producer is chosen in this order: `ProducerPeerId` when set, otherwise the first producer when `ConnectToFirstProducer` is on, otherwise the block **waits for a producer to call it**. That last mode is how a browser page joins a call: the page registers as a producer and starts a session with the waiting block. In that mode, when the producer leaves, the block takes the next call through the same outputs.
+
+A `SignallingServer` that is not a `ws://` or `wss://` address, or an empty `TurnServers` entry, fails the build with an error through `OnError`.
+
+#### The sample pipeline
+
+```
+graph LR;
+    WebRTCSourceBlock-->VideoRendererBlock;
+    WebRTCSourceBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Receive from a known producer on a signalling server.
+var source = new WebRTCSourceBlock(new WebRTCSourceSettings
+{
+    SignallingServer = "ws://192.168.1.10:8443",
+    ProducerPeerId = producerPeerId,
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+var audioRenderer = new AudioRendererBlock();
+
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+When the server is your own `WebRTCSinkBlock`, add the source with `AddBlockLive` after `StartAsync`: the sink's server is listening only once the pipeline runs. The [video call guide](../Guides/webrtc-video-call/) shows the whole call, with the browser page and echo cancellation.
+
+Check `WebRTCSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`webrtcsrc`, from gst-plugins-rs) and `webrtcbin` are present. On Windows they ship in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+
+#### Platforms
+
+Windows (tested). The plugin also ships for macOS, Linux and iOS, as for `WHEPSourceBlock`; check `IsAvailable()` there.
 
 ## Other Source Blocks
 
@@ -106242,6 +106651,8 @@ var mixerSettings = new VideoMixerSettings(outputWidth, outputHeight, outputFram
 
 var videoMixer = new VideoMixerBlock(mixerSettings);
 ```
+
+Set `IgnoreInactivePads = true` on `VideoMixerSettings` when live inputs come and go independently, so the mixer keeps composing the remaining inputs after one ends. The mixer then also starts at the first frame an input delivers and waits for it without a timeout: the first output frame carries that input's timestamp instead of zero, and a mixer whose inputs never deliver a frame waits instead of ending the stream. Only the CPU mixer supports this setting.
 
 #### 2. Direct3D 11 Video Compositor (D3D11VideoCompositorSettings)
 

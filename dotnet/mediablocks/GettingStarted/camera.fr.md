@@ -138,6 +138,8 @@ videoSourceSettings.Orientation = IOSVideoSourceOrientation.Portrait;
 #endif
 ```
 
+Une caméra USB externe sur un iPad ignore `Orientation` et `AutoUpdateOrientation` : son image garde l'orientation de la caméra elle-même.
+
 ### Création du bloc de source vidéo
 
 Créez maintenant le bloc de source vidéo système avec vos paramètres configurés :

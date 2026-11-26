@@ -32,11 +32,12 @@ quels paquets référencer, et où se trouvent les deux problèmes connus.
 |---|---|
 | Media Blocks SDK .NET (`MediaBlocksPipeline`) | Oui. GStreamer, les plugins de codecs, le moteur de rendu vidéo et les décodeurs de fichiers sont ARM64. |
 | `VideoCaptureCoreX`, `VideoEditCoreX`, `MediaPlayerCoreX` | Oui. |
-| `VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore` (DirectShow) | En partie. `VisioForge.DotNet.Core.Redist.Base.arm64` contient les filtres de base, les effets vidéo, les mélangeurs vidéo et audio, le moteur de rendu audio WASAPI et la capture d'écran Desktop Duplication ; `Redist.MP4.arm64` les sorties MP4, MPEG-TS, MKV et HLS avec les encodeurs H.264/H.265 de Media Foundation. Les filtres LAV et les encodeurs et muxers DirectShow x64 hérités n'ont pas de version ARM64 : une application DirectShow qui décode des fichiers via LAV échoue dans un processus ARM64, compilez-la donc en x64 et laissez Windows l'exécuter en émulation. |
+| `VideoCaptureCore`, `VideoEditCore`, `MediaPlayerCore` (DirectShow) | En partie. `VisioForge.DotNet.Core.Redist.Base.arm64` contient les filtres de base, les effets vidéo, les mélangeurs vidéo et audio, le moteur de rendu audio WASAPI et la capture d'écran Desktop Duplication ; `Redist.MP4.arm64` les sorties MP4, MPEG-TS, MKV et HLS avec les encodeurs H.264/H.265 de Media Foundation ; `Redist.FFMPEG.arm64` le filtre FFMPEG Source et les décodeurs vidéo et audio FFMPEG, si bien que `MediaPlayerCore` lit les fichiers en natif avec `MediaPlayerSourceMode.FFMPEG`. Les filtres LAV et les encodeurs et muxers DirectShow x64 hérités n'ont pas de version ARM64 : une application DirectShow qui décode des fichiers via LAV échoue dans un processus ARM64 : passez-la au mode source FFMPEG, ou compilez-la en x64 et laissez Windows l'exécuter en émulation. |
 
-NDI, ElevenLabs et les SDK de caméras Basler, Allied Vision et Spinnaker n'ont pas de version ARM64,
-et leurs blocs signalent une erreur dans un processus ARM64. Les caméras GenICam et RealSense fonctionnent nativement
-avec `VisioForge.CrossPlatform.GenICam.Windows.arm64` et `VisioForge.CrossPlatform.RealSense.Windows.arm64`.
+NDI et les SDK de caméras Basler, Allied Vision et Spinnaker n'ont pas de version ARM64, et leurs
+blocs signalent une erreur dans un processus ARM64. Les caméras GenICam et RealSense et les blocs
+ElevenLabs fonctionnent nativement avec `VisioForge.CrossPlatform.GenICam.Windows.arm64`,
+`VisioForge.CrossPlatform.RealSense.Windows.arm64` et `VisioForge.CrossPlatform.ElevenLabs.Windows.arm64`.
 
 ## Réglages du projet
 

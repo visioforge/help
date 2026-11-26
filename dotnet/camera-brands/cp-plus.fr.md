@@ -58,6 +58,35 @@ rtsp://[USERNAME]:[PASSWORD]@[IP]:554/cam/realmonitor?channel=1&subtype=1
 | `subtype` | 0 | Flux principal (résolution la plus élevée) |
 | `subtype` | 1 | Sous-flux (résolution inférieure, moins de bande passante) |
 
+!!! example "Enregistrez votre caméra CP Plus en MP4 en C# : code prêt à l'emploi"
+    Collez-le dans une application console .NET 8+, indiquez l'IP et le mot de passe de votre caméra, puis lancez-le. L'aperçu en direct, les caméras H.265, la détection de mouvement et les mosaïques multicaméras utilisent le même pipeline.
+
+    ```csharp
+    // NuGet: VisioForge.DotNet.MediaBlocks + VisioForge.CrossPlatform.Core.Windows.x64 + VisioForge.CrossPlatform.Libav.Windows.x64
+    using VisioForge.Core.MediaBlocks;
+    using VisioForge.Core.MediaBlocks.Sinks;
+    using VisioForge.Core.MediaBlocks.Sources;
+    using VisioForge.Core.Types.X.Sources;
+
+    await using var pipeline = new MediaBlocksPipeline();
+    pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
+    var settings = await RTSPSourceSettings.CreateAsync(
+        new Uri("rtsp://192.168.1.108:554/cam/realmonitor?channel=1&subtype=0"), "admin", "YourPassword", audioEnabled: true);
+    var camera = new RTSPSourceBlock(settings);
+    var mp4 = new MP4OutputBlock("cp-plus.mp4");
+    pipeline.Connect(camera.VideoOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+    if (camera.AudioOutput != null)
+        pipeline.Connect(camera.AudioOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Audio));
+    if (!await pipeline.StartAsync())
+        return;
+    Console.ReadLine();   // enregistre jusqu'à l'appui sur Entrée
+    await pipeline.StopAsync();
+    ```
+
+    Utilisez subtype=1 pour le sous-flux si la bande passante est limitée.
+
+    [Téléchargez l'essai gratuit](https://www.visioforge.com/media-blocks-sdk-net?from=camera-cp-plus#download){ .md-button .md-button--primary target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-cp-plus:trial'});" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net?from=camera-cp-plus){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-cp-plus:product'});" } [Démo complète sur GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Capture%20Original){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-cp-plus:demo'});" }
+
 ### Modèles de caméras
 
 | Modèle | Type | URL du flux principal | Notes |

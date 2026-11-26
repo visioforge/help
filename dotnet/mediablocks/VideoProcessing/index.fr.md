@@ -2597,6 +2597,8 @@ var mixerSettings = new VideoMixerSettings(outputWidth, outputHeight, outputFram
 var videoMixer = new VideoMixerBlock(mixerSettings);
 ```
 
+Définissez `IgnoreInactivePads = true` dans `VideoMixerSettings` lorsque des entrées en direct apparaissent et disparaissent indépendamment, afin que le mélangeur continue de composer les entrées restantes après la fin de l'une d'elles. Le mélangeur démarre alors en outre à la première image fournie par une entrée et l'attend sans délai maximal : la première image de sortie porte l'horodatage de cette entrée au lieu de zéro, et un mélangeur dont les entrées ne fournissent jamais d'image attend au lieu de terminer le flux. Seul le mélangeur CPU prend en charge ce réglage.
+
 #### 2. Compositeur vidéo Direct3D 11 (D3D11VideoCompositorSettings)
 
 Pour les applications Windows, `D3D11VideoCompositorSettings` fournit un mélange vidéo accéléré matériellement via Direct3D 11. Cela peut apporter des gains de performance significatifs, en particulier pour la vidéo haute résolution ou un grand nombre de flux.

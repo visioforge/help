@@ -82,6 +82,35 @@ Algunos modelos EZVIZ soportan patrones de URL adicionales:
 | `rtsp://IP:554/Streaming/Channels/102` | Subflujo estilo Hikvision |
 | `rtsp://IP:554/live` | Ruta simple (modelos antiguos) |
 
+!!! example "Grabe su cámara EZVIZ en MP4 con C#: código listo"
+    Péguelo en una aplicación de consola .NET 8+, ponga la IP y la contraseña de su cámara y ejecútelo. La vista previa en vivo, las cámaras H.265, la detección de movimiento y las cuadrículas multicámara usan el mismo pipeline.
+
+    ```csharp
+    // NuGet: VisioForge.DotNet.MediaBlocks + VisioForge.CrossPlatform.Core.Windows.x64 + VisioForge.CrossPlatform.Libav.Windows.x64
+    using VisioForge.Core.MediaBlocks;
+    using VisioForge.Core.MediaBlocks.Sinks;
+    using VisioForge.Core.MediaBlocks.Sources;
+    using VisioForge.Core.Types.X.Sources;
+
+    await using var pipeline = new MediaBlocksPipeline();
+    pipeline.OnError += (s, e) => Console.WriteLine(e.Message);
+    var settings = await RTSPSourceSettings.CreateAsync(
+        new Uri("rtsp://192.168.1.64:554/h264/ch1/main/av_stream"), "admin", "VERIFICATION_CODE", audioEnabled: true);
+    var camera = new RTSPSourceBlock(settings);
+    var mp4 = new MP4OutputBlock("ezviz.mp4");
+    pipeline.Connect(camera.VideoOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+    if (camera.AudioOutput != null)
+        pipeline.Connect(camera.AudioOutput, mp4.CreateNewInput(MediaBlockPadMediaType.Audio));
+    if (!await pipeline.StartAsync())
+        return;
+    Console.ReadLine();   // graba hasta que se pulse Enter
+    await pipeline.StopAsync();
+    ```
+
+    La contraseña es el código de verificación de la etiqueta de la cámara, no la contraseña de la cuenta EZVIZ.
+
+    [Descargue la prueba gratuita](https://www.visioforge.com/media-blocks-sdk-net?from=camera-ezviz#download){ .md-button .md-button--primary target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-ezviz:trial'});" } [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net?from=camera-ezviz){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-ezviz:product'});" } [Demo completa en GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Capture%20Original){ .md-button target="_blank" rel="noopener" onclick="if(window.gtag)gtag('event','try_it_click',{event_category:'engagement',event_label:'camera-ezviz:demo'});" }
+
 ### Modelos de Cámaras
 
 | Modelo | Tipo | Soporte RTSP | URL de Flujo Principal |

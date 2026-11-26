@@ -121,7 +121,7 @@ You can specify an API to use during the device enumeration (refer to the `Video
 
 On Android this block enumerates cameras through Camera2, which sees a USB camera attached over OTG only on devices whose vendor ships the External Camera HAL - and many phones do not. To capture from a USB camera on Android, use the [USB (UVC) Camera Source Block](#usb-uvc-camera-source-block) instead.
 
-On Android 9 and later, many phones hide their ultra-wide and telephoto lenses behind one logical camera that switches lenses as the zoom changes. The device list then also contains each such lens as its own camera, after the cameras the phone lists itself: `LensType` tells them apart (`MultiCamera` for the logical camera, `Wide`, `UltraWide` or `Telephoto` for a lens, judged by its focal length against the main lens of its side, `Unknown` when the camera does not report what tells it; Android and iOS only), and `PhysicalCameraId` names the lens. Pick that camera like any other to capture through that one lens, with its own video sizes. It zooms by cropping that lens where the phone allows a crop per lens; otherwise `Camera2Capabilities.MaxDigitalZoom` is 1:
+On Android 9 and later, many phones hide their ultra-wide and telephoto lenses behind one logical camera that switches lenses as the zoom changes. The device list then also contains each such lens as its own camera, after the cameras the phone lists itself: `LensType` tells them apart (`MultiCamera` for the logical camera, `Wide`, `UltraWide` or `Telephoto` for a lens, judged by its focal length against the main lens of its side, `Unknown` when the camera does not report what tells it or is an external USB camera; Android and iOS only), and `PhysicalCameraId` names the lens. Pick that camera like any other to capture through that one lens, with its own video sizes. It zooms by cropping that lens where the phone allows a crop per lens; otherwise `Camera2Capabilities.MaxDigitalZoom` is 1:
 
 ```csharp
 var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
@@ -129,6 +129,8 @@ var ultraWide = cameras.FirstOrDefault(c => c.LensType == VideoCaptureLensType.U
 ```
 
 On Android 10 and later, a phone that does not stream a lens on its own fails the start with an error that says so.
+
+On iOS the device list contains the ultra-wide, telephoto and multi-camera back devices too, after the back and front wide-angle cameras. `LensType` is the camera's own device type: `Wide`, `UltraWide`, `Telephoto`, `MultiCamera` for a dual or triple camera, `Unknown` for an external camera on an iPad. The same code picks the ultra-wide lens on both platforms.
 
 #### Platforms
 
@@ -1907,6 +1909,74 @@ For a step-by-step guide that builds this player in WPF and measures its latency
 #### Platforms
 
 Windows, macOS, Linux, iOS.
+
+### WebRTC Source Block
+
+The `WebRTCSourceBlock` receives video and audio from a WebRTC producer on a GStreamer WebRTC signalling server — the server a `WebRTCSinkBlock` runs, or a standalone `gst-webrtc-signalling-server`. Together with `WebRTCSinkBlock` it makes a two-way call between a .NET application and a web browser, with no media server. For streams from a WebRTC media server (MediaMTX, Janus, Cloudflare) use the `WHEPSourceBlock`.
+
+The block outputs decoded video and audio. Their formats are the ones the producer's streams decode to: frame size, frame rate, sample rate and channel count come from the negotiated session, not from the block.
+
+#### Block info
+
+Name: WebRTCSourceBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | :---: | :---: |
+| Output video | Uncompressed | 0 or 1 |
+| Output audio | Uncompressed | 0 or 1 |
+
+#### Settings
+
+The `WebRTCSourceBlock` is configured using `WebRTCSourceSettings`:
+
+- `SignallingServer` (string): The signalling server, `ws://host:port` or `wss://host:port`. Default `ws://127.0.0.1:8443`, the server of a `WebRTCSinkBlock` with default settings on the same computer. The source does not check a `wss://` server's certificate: your own `WebRTCSinkBlock` with a certificate for your site's host name is reached at `wss://127.0.0.1:port`, and a server on another computer is encrypted but not authenticated, so use one on a network you trust.
+- `ProducerPeerId` (string): The peer ID of the producer to receive from.
+- `ConnectToFirstProducer` (bool): Receive from the first producer the server lists, when `ProducerPeerId` is not set. Default `false`. Leave it off when your own `WebRTCSinkBlock` runs the server: it is a producer there too.
+- `StunServer` (string): A STUN server, `stun://host:port`. When not set, `stun://stun.l.google.com:19302` is used.
+- `TurnServers` (string[]): TURN servers, `turn(s)://username:password@host:port`.
+- `VideoEnabled` (bool): Create the `VideoOutput` pad. Default `true`.
+- `AudioEnabled` (bool): Create the `AudioOutput` pad. Default `true`. At least one of the two must be on: the constructor throws `ArgumentException` otherwise.
+
+The producer is chosen in this order: `ProducerPeerId` when set, otherwise the first producer when `ConnectToFirstProducer` is on, otherwise the block **waits for a producer to call it**. That last mode is how a browser page joins a call: the page registers as a producer and starts a session with the waiting block. In that mode, when the producer leaves, the block takes the next call through the same outputs.
+
+A `SignallingServer` that is not a `ws://` or `wss://` address, or an empty `TurnServers` entry, fails the build with an error through `OnError`.
+
+#### The sample pipeline
+
+```mermaid
+graph LR;
+    WebRTCSourceBlock-->VideoRendererBlock;
+    WebRTCSourceBlock-->AudioRendererBlock;
+```
+
+#### Sample code
+
+```csharp
+var pipeline = new MediaBlocksPipeline();
+
+// Receive from a known producer on a signalling server.
+var source = new WebRTCSourceBlock(new WebRTCSourceSettings
+{
+    SignallingServer = "ws://192.168.1.10:8443",
+    ProducerPeerId = producerPeerId,
+});
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1) { IsSync = false };
+var audioRenderer = new AudioRendererBlock();
+
+pipeline.Connect(source.VideoOutput, videoRenderer.Input);
+pipeline.Connect(source.AudioOutput, audioRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+When the server is your own `WebRTCSinkBlock`, add the source with `AddBlockLive` after `StartAsync`: the sink's server is listening only once the pipeline runs. The [video call guide](../Guides/webrtc-video-call.md) shows the whole call, with the browser page and echo cancellation.
+
+Check `WebRTCSourceBlock.IsAvailable()` before you build the pipeline: it reports whether the GStreamer `rswebrtc` plugin (`webrtcsrc`, from gst-plugins-rs) and `webrtcbin` are present. On Windows they ship in the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package.
+
+#### Platforms
+
+Windows (tested). The plugin also ships for macOS, Linux and iOS, as for `WHEPSourceBlock`; check `IsAvailable()` there.
 
 ## Other Source Blocks
 

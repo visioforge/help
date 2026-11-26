@@ -540,7 +540,7 @@ The block's build fails, with a message through the pipeline's `OnError` event, 
 
 ### Platforms
 
-Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`, iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
+Windows x64 with `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS with `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 with `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` and the distribution's `gstreamer1.0-plugins-bad` and `gstreamer1.0-nice`, iOS with `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 or later. Not on Android: the Android runtime, `VisioForge.CrossPlatform.Core.Android`, does not include the `rswebrtc` plugin, so `IsAvailable()` returns `false` there. Check `WHEPServerSinkBlock.IsAvailable()` at startup, as the demo does.
 
 ## Troubleshooting
 

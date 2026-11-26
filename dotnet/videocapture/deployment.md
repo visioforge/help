@@ -114,7 +114,7 @@ For complete control over the deployment process or in environments with specifi
 - Base Filters: VisioForge_BaseFilters.ax / VisioForge_BaseFilters_x64.ax
 - Video Effects: VisioForge_Video_Effects_Pro.ax / VisioForge_Video_Effects_Pro_x64.ax
 - Audio Processing: VisioForge_MP3_Splitter.ax / VisioForge_MP3_Splitter_x64.ax, VisioForge_Audio_Mixer.ax / VisioForge_Audio_Mixer_x64.ax
-- Audio and Video Bridge (VLC and FFmpeg IP camera sources with `ForcedFramerate`, MP4 output with `UseSpecialSyncMode`, separate capture with `SeparateCapture_GMFMode` off): VisioForge_Bridge_Audio.ax / VisioForge_Bridge_Audio_x64.ax, VisioForge_Bridge_Video.ax / VisioForge_Bridge_Video_x64.ax; on Windows ARM64, where only the VLC source and separate capture use them, VisioForge_Bridge_Audio_arm64.ax, VisioForge_Bridge_Video_arm64.ax in the `arm64` folder of the application. The video bridge also needs the `VisioForge_MFPX` DLL of its architecture and, on x64, `vcomp140.dll` from the `Redist\Filters` folder
+- Audio and Video Bridge (VLC and FFmpeg IP camera sources with `ForcedFramerate`, MP4 output with `UseSpecialSyncMode`, separate capture with `SeparateCapture_GMFMode` off): VisioForge_Bridge_Audio.ax / VisioForge_Bridge_Audio_x64.ax, VisioForge_Bridge_Video.ax / VisioForge_Bridge_Video_x64.ax; on Windows ARM64, where the VLC and FFmpeg sources and separate capture use them, VisioForge_Bridge_Audio_arm64.ax, VisioForge_Bridge_Video_arm64.ax in the `arm64` folder of the application. The video bridge also needs the `VisioForge_MFPX` DLL of its architecture and, on x64, `vcomp140.dll` from the `Redist\Filters` folder
 
 **Legacy Audio Effects:**
 
@@ -157,8 +157,8 @@ For complete control over the deployment process or in environments with specifi
 
 **FFMPEG Integration:**
 
-- VisioForge_FFMPEG_Source.ax / VisioForge_FFMPEG_Source_x64.ax
-- Requires all files from Redist\FFMPEG folder and PATH variable updates
+- VisioForge_FFMPEG_Source.ax / VisioForge_FFMPEG_Source_x64.ax; on Windows ARM64, VisioForge_FFMPEG_Source_ARM64.ax in the app's `arm64` folder
+- Requires all files from Redist\FFMPEG folder (Redist\FFMPEG\arm64 for ARM64) and PATH variable updates
 
 **RTSP/RTMP/HTTP Source Support:**
 

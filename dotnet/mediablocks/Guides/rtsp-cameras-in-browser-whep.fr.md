@@ -540,7 +540,7 @@ La construction du bloc échoue, avec un message via l'événement `OnError` du 
 
 ### Plateformes
 
-Windows x64 avec `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS avec `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 avec `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` et les paquets `gstreamer1.0-plugins-bad` et `gstreamer1.0-nice` de la distribution, iOS avec `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 ou ultérieure. Vérifiez `WHEPServerSinkBlock.IsAvailable()` au démarrage, comme le fait la démo.
+Windows x64 avec `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, macOS avec `VisioForge.CrossPlatform.Core.macOS.Adds`, Linux x64/arm64 avec `VisioForge.CrossPlatform.Core.Linux.Adds.x64`/`.arm64` et les paquets `gstreamer1.0-plugins-bad` et `gstreamer1.0-nice` de la distribution, iOS avec `VisioForge.CrossPlatform.Core.iOS` 2026.11.23 ou ultérieure. Pas sous Android : le runtime Android, `VisioForge.CrossPlatform.Core.Android`, n'inclut pas le plugin `rswebrtc`, donc `IsAvailable()` y renvoie `false`. Vérifiez `WHEPServerSinkBlock.IsAvailable()` au démarrage, comme le fait la démo.
 
 ## Dépannage
 
