@@ -7,7 +7,7 @@ description: Integrate VisioForge Video Capture SDK .NET into a Windows WPF appl
 
 This skill helps you add **VisioForge Video Capture SDK .NET** to a Windows WPF application. It covers webcam, IP camera, screen, and DV-camera capture with preview, recording, and snapshot. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform capture (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills instead.
 
-Pinned NuGet version: **`2026.11.25`** (matches the [official Simple Video Capture sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Simple%20Video%20Capture)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.11.27`** (matches the [official Simple Video Capture sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK/WPF/CSharp/Simple%20Video%20Capture)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,10 +35,10 @@ Video Capture SDK .NET 2026.x supports `net472`, `netcoreapp3.1`, `net5.0-window
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.x64" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.VideoCapture" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VideoCapture.x64" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MP4.x64" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.27]"/>
 </ItemGroup>
 ```
 

@@ -261,13 +261,6 @@ foreach (var device in genicamCameras)
 The SDK also supports monitoring device connections and disconnections:
 
 ```csharp
-// Start monitoring for video device changes
-await DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
-
-// Start monitoring for audio device changes
-await DeviceEnumerator.Shared.StartAudioSourceMonitorAsync();
-await DeviceEnumerator.Shared.StartAudioSinkMonitorAsync();
-
 // Subscribe to device change events
 DeviceEnumerator.Shared.OnVideoSourceAdded += (sender, device) => 
 {
@@ -278,7 +271,16 @@ DeviceEnumerator.Shared.OnVideoSourceRemoved += (sender, device) =>
 {
     Debug.WriteLine($"Video device disconnected: {device.Name}");
 };
+
+// Start monitoring for video device changes
+await DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
+
+// Start monitoring for audio device changes
+await DeviceEnumerator.Shared.StartAudioSourceMonitorAsync();
+await DeviceEnumerator.Shared.StartAudioSinkMonitorAsync();
 ```
+
+Starting the video source monitor lists the cameras again and raises `OnVideoSourceAdded` for every camera currently connected, including the ones an earlier `VideoSourcesAsync` call returned. A camera list built from the events should start empty, or be cleared before the monitor starts.
 
 ### Knowing when the first enumeration finished
 
@@ -296,6 +298,8 @@ DeviceEnumerator.Shared.OnDeviceEnumerationCompleted += (sender, e) =>
 // Not awaited: the list fills through OnVideoSourceAdded while the UI stays responsive.
 _ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
 ```
+
+While a monitor start is still listing, `VideoSourcesAsync` returns the list as far as it has got, which can be empty or partial. Read the full list after `OnDeviceEnumerationCompleted`.
 
 On macOS this matters on the first run of an application: the camera and microphone permission
 dialogs are answered by the user, and the enumeration completes only once they have been.

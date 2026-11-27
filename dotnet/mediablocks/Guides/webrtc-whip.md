@@ -29,6 +29,10 @@ primary_api_classes:
   - ScreenSourceBlock
   - SystemVideoSourceBlock
   - MediaBlocksPipeline
+video:
+  id: Zeltyn_FSMI
+  upload_date: 2026-11-26T21:33:48Z
+  duration: PT6M11S
 
 ---
 
@@ -40,6 +44,56 @@ primary_api_classes:
     The browser part of this guide follows the [WebRTC Browser Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20Browser%20Streamer%20Demo): a camera and a microphone, a local preview, and a viewer page served by the application. The WHIP part follows the [WebRTC WHIP Streamer Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20WHIP%20Streamer%20Demo) and its [Avalonia version](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/WebRTC%20WHIP%20Streamer) for Windows, macOS and Linux.
 
     The block reference is in [Sink blocks → WebRTC](../Sinks/index.md#webrtc) and [Sink blocks → WHIP](../Sinks/index.md#whip).
+
+## Video Tutorial: Camera to Browsers over WebRTC, and WHIP, in C# WinForms
+
+The tutorial builds a WinForms app that sends a camera to browsers with `WebRTCSinkBlock` (the app serves the viewer page and runs the signalling, with no media server) and counts the viewers as they connect and leave. With a WHIP address, a `TeeBlock` also sends the camera, encoded once to H.264, to MediaMTX with `WHIPSinkBlock`, and the run shows both players at the camera's 30 frames a second.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/Zeltyn_FSMI?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
+
+Its code: [webrtc-whip-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/webrtc-whip-winforms) on GitHub.
+
+### The short version
+
+A console app in a few lines of C#: it sends the first webcam to a browser over WebRTC. `WebRTCSinkBlock` serves the viewer page from the `wwwroot` folder that comes with the sample, on port 8090, and runs the signalling itself. Run it, open `http://localhost:8090/?signalling=8443` in a browser on the same PC, and press Enter to stop it. Besides Media Blocks, it needs the `VisioForge.CrossPlatform.Core.Windows.Adds.x64` package, which brings the WebRTC plugin.
+
+<!-- vf-compile -->
+```csharp
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var cams = await DeviceEnumerator.Shared
+    .VideoSourcesAsync();
+var cam = new SystemVideoSourceBlock(
+    new VideoCaptureDeviceSourceSettings(
+        cams[0]));
+// Serves the page and the signalling itself
+var webrtc = new WebRTCSinkBlock(new()
+{
+    WebServerAddress = "http://127.0.0.1:8090/",
+    WebServerDirectory = Path.Combine(
+        AppContext.BaseDirectory, "wwwroot")
+});
+p.Connect(cam.Output, webrtc.CreateNewInput(
+    MediaBlockPadMediaType.Video));
+if (!await p.StartAsync()) return;
+// http://localhost:8090/?signalling=8443
+Console.ReadLine();
+await p.StopAsync();
+```
+
+Its code: [webrtc-browser-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/webrtc-browser-short-console) on GitHub.
 
 ## What You Will Build
 

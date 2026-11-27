@@ -92,12 +92,12 @@ Le modèle Uno utilise la gestion centralisée des paquets : NuGet écrit donc l
 
 ```xml
 <ItemGroup>
-  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.25" />
-  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.25" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.25" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.11.25" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.25" />
-  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.23" />
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.27" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.27" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.26" />
 </ItemGroup>
 ```
 

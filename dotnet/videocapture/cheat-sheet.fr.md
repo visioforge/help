@@ -73,12 +73,12 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 
 ```xml
 <!-- Windows x64 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.26]"/>
 
 <!-- Windows x86 -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.25]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x86" Version="[2026.11.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x86" Version="[2026.11.26]"/>
 
 <!-- macOS / macCatalyst -->
 <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
@@ -87,8 +87,8 @@ Runtimes natifs spécifiques à chaque plateforme — ajoutez ceux que vous cibl
 <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="[2026.10.26]"/>
 
 <!-- Android / iOS -->
-<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.23]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.26]"/>
 ```
 
 Sous Linux ARM64, `VisioForge.CrossPlatform.Core.Linux.arm64` remplace le paquet `.Linux.x64` ; voir le [déploiement sous Ubuntu](../deployment-x/Ubuntu.md) pour un fragment de projet qui choisit l'un ou l'autre selon l'identifiant de runtime.

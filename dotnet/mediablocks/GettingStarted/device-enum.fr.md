@@ -261,13 +261,6 @@ foreach (var device in genicamCameras)
 Le SDK prend également en charge la surveillance des connexions et déconnexions de périphériques :
 
 ```csharp
-// Démarrer la surveillance des changements de périphériques vidéo
-await DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
-
-// Démarrer la surveillance des changements de périphériques audio
-await DeviceEnumerator.Shared.StartAudioSourceMonitorAsync();
-await DeviceEnumerator.Shared.StartAudioSinkMonitorAsync();
-
 // S'abonner aux événements de changement de périphériques
 DeviceEnumerator.Shared.OnVideoSourceAdded += (sender, device) => 
 {
@@ -278,7 +271,16 @@ DeviceEnumerator.Shared.OnVideoSourceRemoved += (sender, device) =>
 {
     Debug.WriteLine($"Périphérique vidéo déconnecté : {device.Name}");
 };
+
+// Démarrer la surveillance des changements de périphériques vidéo
+await DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
+
+// Démarrer la surveillance des changements de périphériques audio
+await DeviceEnumerator.Shared.StartAudioSourceMonitorAsync();
+await DeviceEnumerator.Shared.StartAudioSinkMonitorAsync();
 ```
+
+Le démarrage de la surveillance des sources vidéo énumère de nouveau les caméras et déclenche `OnVideoSourceAdded` pour chaque caméra actuellement connectée, y compris celles déjà renvoyées par un appel précédent à `VideoSourcesAsync`. Une liste de caméras construite à partir des événements doit partir vide, ou être vidée avant de démarrer la surveillance.
 
 ### Savoir quand la première énumération est terminée
 
@@ -296,6 +298,8 @@ DeviceEnumerator.Shared.OnDeviceEnumerationCompleted += (sender, e) =>
 // Sans await : la liste se remplit via OnVideoSourceAdded pendant que l'interface reste réactive.
 _ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
 ```
+
+Tant qu'un démarrage de la surveillance énumère encore les périphériques, `VideoSourcesAsync` renvoie la liste telle qu'elle est à ce moment-là, éventuellement vide ou incomplète. Lisez la liste complète après `OnDeviceEnumerationCompleted`.
 
 Sur macOS, cela compte au premier lancement d'une application : les boîtes de dialogue d'autorisation
 de la caméra et du microphone sont validées par l'utilisateur, et l'énumération ne se termine qu'ensuite.

@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Player SDK .NET (file/stream playback) i
 
 This skill helps you add **VisioForge Media Player SDK .NET** to a Windows Forms application. It covers playing local video/audio files and network streams (HTTP, RTSP, UDP, HLS, MMS) with frame-accurate seek, variable playback speed, looping, multi-output volume/balance, and frame-step navigation. The SDK is Windows-only (DirectShow / Media Foundation under the hood) — for cross-platform playback (macOS, iOS, Android, Linux), use one of the `media-blocks-sdk-net-{maui,avalonia,uno}` skills instead.
 
-Pinned NuGet version: **`2026.11.25`** (matches the [official Simple Video Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinForms/CSharp/Simple%20Video%20Player)). Newer 2026.x.x patch versions are drop-in compatible.
+Pinned NuGet version: **`2026.11.27`** (matches the [official Simple Video Player sample](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK/WinForms/CSharp/Simple%20Video%20Player)). Newer 2026.x.x patch versions are drop-in compatible.
 
 ## When to use this skill
 
@@ -35,11 +35,11 @@ Media Player SDK .NET 2026.x supports `net472`, `netcoreapp3.1`, `net5.0-windows
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.DotNet.Core.Redist.VLC.x64" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.DotNet.Core.Redist.VLC.x64" Version="[2026.11.27]"/>
 </ItemGroup>
 ```
 

@@ -154,9 +154,9 @@ Su código: [video-player-short-wpf en GitHub](https://github.com/visioforge/.Ne
 - [VisioForge.CrossPlatform.Libav.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Libav.Windows.x64/) — los códecs FFmpeg (libav) con los que se decodifican muchos formatos
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.27]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.26]"/>
 ```
 
 Son los paquetes x64, por lo que el proyecto define `<PlatformTarget>x64</PlatformTarget>`; una aplicación de 32 bits usa los paquetes `.x86`. Consulte [Despliegue en Windows](../../deployment-x/Windows.md) para la lista completa.

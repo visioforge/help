@@ -52,8 +52,8 @@ El video de un minuto escribe y ejecuta esta aplicación de consola: 30 segundos
 - [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — la herramienta FFmpeg que ejecutan los métodos `FastEdit_`; para una aplicación x86, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.27]" />
 ```
 
 El redist es x64, así que establezca `PlatformTarget` en `x64` en el archivo del proyecto:

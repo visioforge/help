@@ -261,13 +261,6 @@ foreach (var device in genicamCameras)
 El SDK también soporta monitoreo de conexiones y desconexiones de dispositivos:
 
 ```csharp
-// Iniciar monitoreo de cambios en dispositivos de video
-await DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
-
-// Iniciar monitoreo de cambios en dispositivos de audio
-await DeviceEnumerator.Shared.StartAudioSourceMonitorAsync();
-await DeviceEnumerator.Shared.StartAudioSinkMonitorAsync();
-
 // Suscribirse a eventos de cambio de dispositivos
 DeviceEnumerator.Shared.OnVideoSourceAdded += (sender, device) => 
 {
@@ -278,7 +271,16 @@ DeviceEnumerator.Shared.OnVideoSourceRemoved += (sender, device) =>
 {
     Debug.WriteLine($"Dispositivo de video desconectado: {device.Name}");
 };
+
+// Iniciar monitoreo de cambios en dispositivos de video
+await DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
+
+// Iniciar monitoreo de cambios en dispositivos de audio
+await DeviceEnumerator.Shared.StartAudioSourceMonitorAsync();
+await DeviceEnumerator.Shared.StartAudioSinkMonitorAsync();
 ```
+
+Al iniciar el monitoreo de fuentes de video, las cámaras se enumeran de nuevo y se genera `OnVideoSourceAdded` para cada cámara conectada en ese momento, incluidas las que ya devolvió una llamada anterior a `VideoSourcesAsync`. Una lista de cámaras construida a partir de los eventos debe empezar vacía, o vaciarse antes de iniciar el monitoreo.
 
 ### Saber cuándo terminó la primera enumeración
 
@@ -296,6 +298,8 @@ DeviceEnumerator.Shared.OnDeviceEnumerationCompleted += (sender, e) =>
 // Sin await: la lista se llena mediante OnVideoSourceAdded mientras la interfaz sigue respondiendo.
 _ = DeviceEnumerator.Shared.StartVideoSourceMonitorAsync();
 ```
+
+Mientras un inicio del monitoreo sigue enumerando, `VideoSourcesAsync` devuelve la lista tal como está en ese momento, que puede estar vacía o incompleta. Lea la lista completa después de `OnDeviceEnumerationCompleted`.
 
 En macOS esto importa en la primera ejecución de una aplicación: los diálogos de permiso de la cámara
 y del micrófono los responde el usuario, y la enumeración solo termina cuando lo han hecho.

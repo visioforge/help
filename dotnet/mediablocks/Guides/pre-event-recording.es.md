@@ -171,14 +171,14 @@ graph TD;
 Necesitará el Media Blocks SDK .NET. Agréguelo a su proyecto .NET vía NuGet:
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.27]"/>
 ```
 
 Dependiendo de su plataforma objetivo, agregue el paquete runtime nativo correspondiente. Para Windows x64:
 
 ```xml
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]"/>
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.25]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]"/>
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="[2026.11.26]"/>
 ```
 
 Para dependencias específicas de plataforma detalladas, vea la [Guía de Despliegue](../../deployment-x/index.md).

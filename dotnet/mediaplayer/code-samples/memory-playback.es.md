@@ -60,9 +60,9 @@ El video crea el proyecto con .NET 10, que requiere Visual Studio 2026; en Visua
 - [VisioForge.DotNet.Core.Redist.LAV.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/) — el divisor y los decodificadores LAV, que encuentran las pistas de video y audio en el stream y las decodifican
 
 ```xml
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.27]" />
 ```
 
 Son los paquetes x64, por lo que el proyecto establece `<PlatformTarget>x64</PlatformTarget>`; una aplicación de 32 bits usa los paquetes `.x86`. Consulte la [guía de despliegue](../deployment.md) para ver la lista completa.

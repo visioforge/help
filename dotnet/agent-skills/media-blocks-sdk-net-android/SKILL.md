@@ -7,7 +7,7 @@ description: Integrate VisioForge Media Blocks SDK into a native .NET for Androi
 
 This skill helps you add **VisioForge Media Blocks SDK .NET** to a **native .NET for Android** application (TFM `net10.0-android`, Activity-based, NOT MAUI and NOT classic Xamarin.Android). Media Blocks is a graph-based pipeline SDK (think GStreamer-style filter chains) — you compose a pipeline by instantiating individual blocks (`SystemVideoSourceBlock`, `H264EncoderBlock`, `MP4SinkBlock`, `VideoRendererBlock`, `TeeBlock`, …), wiring their pads with `pipeline.Connect(output, input)`, then calling `await pipeline.StartAsync()`. The same C# block code runs unchanged on WPF / MAUI / Avalonia / Uno / iOS / macOS — only the UI host swaps (`VideoViewGL` here, `<my:VideoView />` on MAUI, etc.) and the per-OS native redist NuGet.
 
-Pinned NuGet versions: wrapper **`2026.11.25`**, Android redist at the version shown in the csproj below (the [official Simple Video Capture Android sample for Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Android/Simple%20Video%20Capture) is the reference for the project layout, not for the version to pin — it can lag a release). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
+Pinned NuGet versions: wrapper **`2026.11.27`**, Android redist at the version shown in the csproj below (the [official Simple Video Capture Android sample for Media Blocks](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Android/Simple%20Video%20Capture) is the reference for the project layout, not for the version to pin — it can lag a release). Keep the wrapper pinned to one version and pin each redist to the newest version published for that package at or before your wrapper's release - the redists are built on their own cadence, so check nuget.org rather than assuming the wrapper's number exists for them, and never let a redist run ahead of the wrapper.
 
 ## When to use this skill
 
@@ -28,7 +28,7 @@ Pinned NuGet versions: wrapper **`2026.11.25`**, Android redist at the version s
 
 ### Target framework
 
-Media Blocks SDK releases after 2026.11.25 support `net10.0-android` and `net11.0-android` for the native Android host; 2026.11.6 ships `net9.0-android` and `net10.0-android`, with no `net11.0-android` target. The upstream Simple Video Capture sample pins **`net10.0-android`** with `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` (Android 9.0 / API level 28 minimum) — match these unless you have a reason not to. The SDK itself needs Android 7.0 (API level 24): its native GStreamer libraries are built for API 24, so 24 is the lowest `SupportedOSPlatformVersion` that works, and the sample pins 28 by its own choice. Two features need more: USB (UVC) camera capture needs API 28, and audio playback capture needs API 29.
+Media Blocks SDK releases after 2026.11.27 support `net10.0-android` and `net11.0-android` for the native Android host; 2026.11.6 ships `net9.0-android` and `net10.0-android`, with no `net11.0-android` target. The upstream Simple Video Capture sample pins **`net10.0-android`** with `<SupportedOSPlatformVersion>28.0</SupportedOSPlatformVersion>` (Android 9.0 / API level 28 minimum) — match these unless you have a reason not to. The SDK itself needs Android 7.0 (API level 24): its native GStreamer libraries are built for API 24, so 24 is the lowest `SupportedOSPlatformVersion` that works, and the sample pins 28 by its own choice. Two features need more: USB (UVC) camera capture needs API 28, and audio playback capture needs API 29.
 
 ### NuGet packages + AndroidDependency
 
@@ -36,8 +36,8 @@ A native Android Media Blocks project needs **two NuGet packages plus one Projec
 
 ```xml
 <ItemGroup>
-  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.25]"/>
-  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.25]"/>
+  <PackageReference Include="VisioForge.DotNet.MediaBlocks" Version="[2026.11.27]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.26]"/>
   <PackageReference Include="Xamarin.Essentials" Version="1.8.1" />
 </ItemGroup>
 <ItemGroup>

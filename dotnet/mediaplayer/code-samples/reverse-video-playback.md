@@ -287,14 +287,14 @@ For a Windows x64 app:
 
 ```xml
 <!-- MediaPlayerCoreX; for Media Blocks use VisioForge.DotNet.MediaBlocks instead -->
-<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]" />
+<PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.26]" />
 
 <!-- MediaPlayerCore -->
-<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.25]" />
-<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.25]" />
+<PackageReference Include="VisioForge.DotNet.Core" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.MediaPlayer.x64" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.LAV.x64" Version="[2026.11.27]" />
 ```
 
 Other platforms take their own redistributables: see [Cross-platform deployment](../../deployment-x/index.md) and [Media Player SDK deployment](../deployment.md).
