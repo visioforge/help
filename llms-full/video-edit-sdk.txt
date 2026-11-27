@@ -1,0 +1,3586 @@
+# VisioForge — Video Edit SDK
+
+> Full text of 20 pages. All parts: https://www.visioforge.com/llms-full.txt; index: https://www.visioforge.com/llms.txt.
+
+**Author:** VisioForge
+**License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
+**Generated:** 2026-11-27 20:41:07 UTC (c5e129a2023)
+**MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
+
+---
+
+## VisioForge Video Edit SDK in C# .NET — Cheat Sheet
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/cheat-sheet/
+**Description:** One-page Video Edit SDK reference with NuGet packages, VideoEditCoreX APIs, a timeline example, platform support, and pitfalls.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, VideoEditCore, Windows, macOS, Linux, Android, iOS, Avalonia, MAUI, WPF, WinForms, GStreamer, DirectShow, Editing, Encoding, Effects, Mixing, MP4, H.264, H.265, AAC, C#, NuGet
+**API:** VideoEditCoreX, VideoEditCore, MP4Output, VideoSource, VideoFileSource
+
+# VisioForge Video Edit SDK .NET — Cheat Sheet
+
+Video Edit SDK assembles timelines, applies transitions/effects/overlays, and exports to MP4/MKV/WebM. `VideoEditCoreX` is the cross-platform engine (GStreamer); `VideoEditCore` is the Windows-only DirectShow legacy engine. Choose `VideoEditCoreX` for new projects.
+
+AI coding agents: use the VisioForge MCP server
+
+Building this with **Claude Code**, **Cursor**, or another AI coding agent? Connect to the public [VisioForge MCP server](../../general/mcp-server-usage/) at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable code samples, and deployment guides — more accurate than grepping `llms.txt`. No authentication required.
+
+Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Platform support
+
+- `VideoEditCoreX` (cross-platform, GStreamer): Windows, macOS (Intel + Apple Silicon), Linux (x64, ARM64; Ubuntu 22.04+, Debian 12+ or another distribution with the system GStreamer 1.20+), Android (via [MAUI](../maui/video-editing-maui/)), iOS (via [MAUI](../maui/video-editing-maui/)).
+- `VideoEditCore` (legacy, DirectShow): Windows x64 only.
+- UI frameworks: WinForms, WPF, MAUI, Avalonia, Uno, Console.
+- Full engine × platform × UI matrix: [platform-matrix.md](../../platform-matrix/).
+
+## NuGet packages
+
+One package ships both engines — `VideoEditCoreX` and the legacy `VideoEditCore` live side by side in it, so the engine is a code-level choice, not a packaging one:
+
+```
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.27]"/>
+```
+
+It pulls in `VisioForge.DotNet.Core` as a dependency; you do not need to reference `Core` separately.
+
+UI integration (pick the framework you target):
+
+```
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="*" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Avalonia" Version="*" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.WinUI" Version="*" />
+<PackageReference Include="VisioForge.DotNet.Core.UI.Uno" Version="*" />
+```
+
+Platform-specific native redistributables follow the same pattern as other VisioForge SDKs (the Windows, macOS, Android and iOS redist packages bring the GStreamer natives; on Linux, `VisioForge.CrossPlatform.Core.Linux.x64` or `.Linux.arm64` adds only the SDK's own native libraries, and GStreamer 1.20+ comes from the distribution). See the [installation guide](../../install/) for the full list.
+
+## Primary API classes
+
+| Class | Role | See also |
+| --- | --- | --- |
+| `VideoEditCoreX` | Cross-platform timeline engine (GStreamer-backed) | [getting-started.md](../getting-started/) |
+| `VideoEditCore` | Legacy Windows-only engine (DirectShow) — keep existing apps running | [getting-started.md](../getting-started/) |
+| `MP4Output` | Encoded MP4 output configuration (H.264/H.265 + AAC) | [getting-started.md](../getting-started/) |
+| `GIFOutput` | Animated GIF output (video-only, no audio, 256-color palette) — `gifenc` writes the file directly with no container | [getting-started.md](../getting-started/#rendering-to-animated-gif) |
+| `VideoSource` / `VideoFileSource` | Per-segment video input descriptor (`VideoSource` for `VideoEditCore`, `VideoFileSource` for `VideoEditCoreX`) | [code-samples/several-segments.md](../code-samples/several-segments/) |
+| `AudioFileSource` | File-backed audio input for mixing into the timeline | [code-samples/volume-for-track.md](../code-samples/volume-for-track/) |
+
+## Canonical minimum example
+
+Two-clip timeline merge, H.264 MP4 output, cross-platform `VideoEditCoreX`:
+
+```
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.VideoEditX;
+
+// 1. Initialize SDK (cross-platform engines require this).
+await VisioForgeX.InitSDKAsync();
+
+// 2. Create editor. Pass an IVideoView for preview, or null for headless/console.
+var editor = new VideoEditCoreX(videoView as IVideoView);
+
+// 3. Wire up events.
+editor.OnError    += (s, e) => Console.WriteLine($"Error: {e.Message}");
+editor.OnProgress += (s, e) => Console.WriteLine($"Progress: {e.Progress}%");
+editor.OnStop     += (s, e) => Console.WriteLine("Editing completed");
+
+// 4. Set timeline output parameters BEFORE adding sources.
+editor.Output_VideoSize      = new Size(1920, 1080);
+editor.Output_VideoFrameRate = new VideoFrameRate(30);
+
+// 5. Add sources to the timeline (audio + video in one call).
+editor.Input_AddAudioVideoFile("/abs/path/intro.mp4", null, null, null);
+editor.Input_AddAudioVideoFile("/abs/path/main.mp4",  null, null, null);
+
+// 6. Configure MP4 output.
+editor.Output_Format = new MP4Output("/abs/path/output.mp4");
+
+// 7. Start processing. OnStop fires when rendering finishes.
+editor.Start();
+
+// ... inside your OnStop handler, or after awaiting a completion signal:
+editor.Stop();
+editor.Dispose();
+VisioForgeX.DestroySDK(); // sync only — no async variant
+```
+
+For trimming, use `Input_AddVideoFile` with a `VideoFileSource(filename, startTime, stopTime, streamNumber, rate)` instead — the `startTime`/`stopTime` clip the input range.
+
+## Typical workflow
+
+1. Init SDK: `await VisioForgeX.InitSDKAsync()` (cross-platform engine only — `VideoEditCore` legacy skips this).
+2. Instantiate `VideoEditCoreX` (or `VideoEditCore` for Windows-legacy), passing an `IVideoView` or `null` for headless.
+3. Set output resolution, framerate, encoder (`Output_VideoSize`, `Output_VideoFrameRate`).
+4. Add input sources (files, segments, images, audio) — **before** `Start`.
+5. Set output file via `MP4Output` (or `MKVOutput` / `WebMOutput` / `GIFOutput` for animated GIF) on `Output_Format`.
+6. `Start()` (CoreX) or `await StartAsync()` (legacy) → wait for `OnStop` → `Dispose()` + `DestroySDK()`.
+
+## Common pitfalls
+
+- **Set timeline output resolution / framerate before adding sources.** Changing `Output_VideoSize` or `Output_VideoFrameRate` after `Input_Add*` can silently reconfigure the pipeline or drift sync.
+- **Don't mix engine APIs.** `VideoEditCore` uses `VideoSource` + `Input_AddVideoFileAsync`; `VideoEditCoreX` uses `VideoFileSource` + `Input_AddVideoFile` (synchronous). The type namespaces also differ (`Types.VideoEdit` vs `Types.X.VideoEdit`).
+- **Init only applies to the X engine.** `VideoEditCoreX` requires `VisioForgeX.InitSDKAsync()` / `DestroySDK()`. `VideoEditCore` (legacy) does not — calling InitSDK for legacy-only apps is unnecessary.
+- **Use absolute file paths.** Relative paths resolve against the process CWD and behave inconsistently across platforms (especially MAUI/iOS/Android where CWD is not your project folder).
+- **`Start` is non-blocking; wait on `OnStop`.** Don't assume rendering is complete when `Start()` returns. Use `OnStop` (or `await`-wrap it) to trigger post-processing, then `Dispose()` and `DestroySDK()`.
+- **First input added on an STA thread with no synchronization context: dispose on that thread.** The thread that matters is the one that made the first input call after construction or `Input_Clear_List`, a synchronous `Input_Add*` method or `Input_Timeline_Load`, where `SynchronizationContext.Current` is null, such as an `[STAThread]` console `Main` or a dedicated STA thread. The DirectShow objects then belong to that thread's apartment. An edit whose first input was added with an `*Async` method is not affected: that call runs on the thread pool. Called from another thread, `Dispose()` and `DisposeAsync()` wait for that thread: they complete while it waits in a managed wait (`WaitOne`, `Thread.Join`, `Task.Wait`) or after it has exited, and not while it is blocked in native code (a P/Invoke wait, `Console.ReadLine`). A later dispose call does nothing, so to dispose from a handler such as `OnStop`, signal that thread instead, wait for the signal there with a managed wait, and call `Dispose()` there.
+
+## See also
+
+- **Getting started**
+  - [Getting Started Guide](../getting-started/) — full walkthrough for both engines.
+  - [Code Samples index](../code-samples/) — overlays, transitions, audio, composition.
+- **Specific tasks**
+  - Merge / concatenate clips → [getting-started.md](../getting-started/)
+  - Video from one file + audio from another, no re-encoding → [output-file-from-multiple-sources.md](../code-samples/output-file-from-multiple-sources/)
+  - Cut a part of a file, no re-encoding → [cut-video-without-reencoding.md](../code-samples/cut-video-without-reencoding/)
+  - Trim / multi-segment from one file → [several-segments.md](../code-samples/several-segments/)
+  - Transitions between clips → [transition-video.md](../code-samples/transition-video/), [transitions reference](../transitions/)
+  - Text overlay → [add-text-overlay.md](../code-samples/add-text-overlay/)
+  - Image / logo overlay → [add-image-overlay.md](../code-samples/add-image-overlay/)
+  - Picture-in-picture → [picture-in-picture.md](../code-samples/picture-in-picture/)
+  - Slideshow from images → [video-images-console.md](../code-samples/video-images-console/)
+  - Audio mixing / volume envelope → [audio-envelope.md](../code-samples/audio-envelope/), [volume-for-track.md](../code-samples/volume-for-track/)
+  - iOS editor app → [ios-video-editor.md](../code-samples/ios-video-editor/)
+  - MAUI editor app (Android / iOS / macCatalyst / Windows) → [video-editing-maui.md](../maui/video-editing-maui/)
+- **Deployment** — [Windows / macOS / Ubuntu / Android / iOS](../../deployment-x/)
+- **Install & matrix** — [Installation guide](../../install/) · [Platform matrix](../../platform-matrix/)
+
+## FAQ
+
+### `VideoEditCoreX` vs `VideoEditCore` — which do I use?
+
+Use `VideoEditCoreX` for new projects. It runs on Windows, macOS, Linux, Android, and iOS on a GStreamer backend. Use `VideoEditCore` only to keep existing Windows DirectShow apps running.
+
+### Can I add transitions between clips?
+
+Yes. `VideoEditCoreX` supports 100+ SMPTE wipe transitions between consecutive segments — see [transition-video.md](../code-samples/transition-video/) and the [transitions reference](../transitions/).
+
+### Does it run on macOS / Linux?
+
+Yes — `VideoEditCoreX` runs on macOS (Intel + Apple Silicon) via the bundled GStreamer natives, and on Linux (Ubuntu 22.04+, Debian 12+) with the system GStreamer 1.20+ from the distribution packages (see [Ubuntu deployment](../../deployment-x/Ubuntu/)). `VideoEditCore` is Windows-only.
+
+### How do I trim a file without re-adding it multiple times?
+
+Pass a `FileSegment[]` array to the `VideoFileSource` constructor — each segment becomes a clipped range from the same source on the output timeline.
+
+---END OF PAGE---
+
+
+
+## Add Image Overlay with Positioning and Timing in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/add-image-overlay/
+**Description:** Implement image overlays in videos with VisioForge Video Edit SDK .NET. Step-by-step guide for positioning, transparency, and timing control.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Editing, Effects, C#
+**API:** ImageOverlayVideoEffect, VideoEffectImageLogo
+
+# Adding Image Overlays to Videos in .NET
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCoreX](#)
+
+## Introduction to Image Overlays
+
+Our .NET SDK provides powerful functionality for adding image overlays to your video projects. With this feature, developers can seamlessly integrate logos, watermarks, graphics, and other visual elements into video content. The SDK offers extensive customization options including precise positioning, transparency adjustment, and timing control.
+
+## Supported Image File Formats
+
+The SDK is compatible with all standard image formats used in professional video production:
+
+- BMP (Bitmap)
+- GIF (Graphics Interchange Format)
+- JPEG/JPG (Joint Photographic Experts Group)
+- PNG (Portable Network Graphics)
+- TIFF (Tagged Image File Format)
+
+## Implementation Guide
+
+Below you'll find detailed code examples demonstrating how to implement image overlays in your video processing applications using our SDK.
+
+### Using the VideoEditCoreX Engine
+
+The following code sample demonstrates how to add an image overlay with custom positioning, transparency, and timing using the VideoEditCoreX engine:
+
+```
+// add an image overlay to a video source effects from PNG file
+var imageOverlay = new ImageOverlayVideoEffect("logo.png");
+
+// set position
+imageOverlay.X = 50;
+imageOverlay.Y = 50;
+
+// set alpha
+imageOverlay.Alpha = 0.5;
+
+// set start time and stop time
+imageOverlay.StartTime = TimeSpan.FromSeconds(0);
+imageOverlay.StopTime = TimeSpan.FromSeconds(5);
+
+// add video source to timeline
+VideoEdit1.Video_Effects.Add(imageOverlay);
+```
+
+### Using the VideoEditCore Engine
+
+For developers working with the VideoEditCore engine, here's how to achieve the same functionality:
+
+```
+var effect = new VideoEffectImageLogo(true, "Logo1");
+
+// point to the image file (or assign effect.MemoryBitmap for in-memory image data)
+effect.Filename = "logo.png";
+
+// set position
+effect.Left = 50;
+effect.Top = 50;
+
+// set global transparency level (0 = fully opaque, 255 = fully transparent)
+effect.TransparencyLevel = 127;
+
+// set start time and stop time
+effect.StartTime = TimeSpan.FromSeconds(5);
+effect.StopTime = TimeSpan.FromSeconds(15);
+
+VideoEdit1.Video_Effects_Add(effect);
+```
+
+## Advanced Configuration Options
+
+When implementing image overlays, consider these additional configuration options:
+
+- **Positioning**: Adjust X/Y or Left/Top values to place your overlay precisely
+- **Transparency**: Configure Alpha or TransparencyLevel to control overlay opacity
+- **Timing**: Set StartTime and StopTime to determine when the overlay appears and disappears
+- **Size**: You can resize overlays to fit your specific requirements
+
+## Additional Resources
+
+For more code examples and implementation guidance, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+---END OF PAGE---
+
+
+
+## Add Dynamic Text Overlay with Font Styling in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/add-text-overlay/
+**Description:** Implement dynamic text overlays with VisioForge Video Edit SDK .NET. Control font, color, position, timing, and animations with C# code examples.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Editing, C#
+**API:** VideoEditCoreX, TextOverlay
+
+# Implementing Text Overlays in Video Projects
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCoreX](#)
+
+## Introduction to Text Overlays
+
+Text overlays are essential components in professional video editing. They allow you to add titles, subtitles, watermarks, captions, and other important text elements to your videos. With the Video Edit SDK for .NET, you can create sophisticated text overlays with precise control over appearance, positioning, and timing.
+
+## Key Features and Capabilities
+
+The SDK provides extensive customization options for text overlays, including:
+
+- Custom font selection from system-installed fonts
+- Complete control over font size, weight, and style
+- Flexible color options for both text and background
+- Precise positioning with multiple alignment options
+- Timing control to set when text appears and disappears
+- Transparency and opacity settings
+
+## Implementation Example
+
+The following code demonstrates how to create and configure a text overlay in your .NET application:
+
+```
+// Initialize the VideoEditCoreX object (assumed to be already created)
+// var videoEdit = new VideoEditCoreX();
+
+// Create a new text overlay object with your desired text
+var textOverlay = new VisioForge.Core.Types.X.VideoEdit.TextOverlay("Hello world!");
+
+// Set when the text should appear and for how long
+// This example: text appears 2 seconds into the video and stays for 5 seconds
+textOverlay.Start = TimeSpan.FromMilliseconds(2000);
+textOverlay.Duration = TimeSpan.FromMilliseconds(5000);
+
+// Define the position of the text on the video frame
+// X and Y coordinates are measured in pixels from the top-left corner
+textOverlay.X = 50;
+textOverlay.Y = 50;
+
+// Configure font properties for the text
+textOverlay.FontFamily = "Arial";  // Set the font family
+textOverlay.FontSize = 40;         // Set the font size in points
+textOverlay.FontWidth = SkiaSharp.SKFontStyleWidth.Normal;   // Normal width characters
+textOverlay.FontSlant = SkiaSharp.SKFontStyleSlant.Italic;   // Apply italic style
+textOverlay.FontWeight = SkiaSharp.SKFontStyleWeight.Bold;   // Apply bold weight
+
+// Set the text color to red
+textOverlay.Color = SkiaSharp.SKColors.Red;
+
+// Set a transparent background behind the text
+// You could use any color with alpha channel for semi-transparency
+textOverlay.BackgroundColor = SkiaSharp.SKColors.Transparent;
+
+// Add the configured text overlay to your video project
+videoEdit.Video_TextOverlays.Add(textOverlay);
+```
+
+## Positioning Options
+
+The SDK uses the X and Y coordinates for absolute positioning. X and Y represent pixel coordinates from the top-left corner of the video frame:
+
+```
+// Position text at specific coordinates (in pixels)
+textOverlay.X = 50;   // Horizontal position from left edge
+textOverlay.Y = 50;   // Vertical position from top edge
+
+// You can also position text in other areas:
+// Bottom-right corner (assuming 1920x1080 video):
+// textOverlay.X = 1820;  // 1920 - 100 for some margin
+// textOverlay.Y = 980;   // 1080 - 100 for some margin
+
+// Centered (assuming 1920x1080 video and measuring text size):
+// textOverlay.X = 960;   // Half of video width
+// textOverlay.Y = 540;   // Half of video height
+```
+
+## Working with Fonts
+
+The SDK leverages the SkiaSharp library for powerful text rendering capabilities. This provides access to all system fonts and advanced typography features.
+
+### Retrieving Available Font Families
+
+You can dynamically retrieve the list of fonts available on the current system:
+
+```
+// Get all available fonts on the current system
+// This is useful for creating font selection dropdowns in your UI
+var availableFonts = videoEdit.Fonts;
+
+// You can now iterate through the fonts or bind them to a UI control
+foreach (var font in availableFonts)
+{
+    // Use the font information as needed
+    Console.WriteLine(font);
+}
+```
+
+## Advanced Styling Techniques
+
+For more sophisticated text effects, consider combining text overlays with other SDK features:
+
+- Apply animation effects to make text move across the screen
+- Use multiple text overlays with different timing for sequential display
+- Combine with shape overlays to create text boxes with custom backgrounds
+- Integrate with video transitions for dynamic text entry and exit effects
+
+## Development Resources
+
+For more code examples and advanced implementation techniques, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) containing comprehensive .NET SDK samples.
+
+---END OF PAGE---
+
+
+
+## Handle Multi-Track Audio in Video Files in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/adding-video-file-with-multiple-audio-streams/
+**Description:** Process video files with multiple audio streams using VisioForge Video Edit SDK .NET. Select, mix, and manage multi-language tracks in C#.
+**Tags:** Video Edit SDK, .NET, DirectShow, VideoEditCore, Windows, Editing, AVI, NuGet
+
+# Working with Multiple Audio Streams in Video Files
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+## Introduction to Multiple Audio Streams
+
+Video files commonly contain multiple audio streams to support different languages, commentary tracks, or audio qualities. For developers building video editing or processing applications, properly handling these multiple streams is essential for creating professional-grade software. This guide explores the technical challenges and solutions for working with multi-audio stream video files in .NET applications.
+
+Multiple audio streams serve several important purposes in video applications:
+
+- **Multilingual support**: Providing audio tracks in different languages
+- **Commentary tracks**: Including director's commentary or alternative narration
+- **Audio quality variations**: Offering different bitrates or formats (stereo/surround)
+- **Special audio channels**: Supporting descriptive audio for accessibility
+
+## Technical Background on Audio Stream Handling
+
+### Understanding DirectShow Architecture
+
+When working with video files containing multiple audio streams, it's crucial to understand how the underlying DirectShow architecture processes these streams. DirectShow uses a filter graph architecture where each component (filter) processes specific aspects of media data.
+
+The Video Edit SDK leverages DirectShow Editing Services (DES) engine for media processing, which comes with specific limitations and capabilities regarding multiple audio stream handling. These limitations stem from how DES interacts with different types of splitter filters.
+
+### Splitter Filter Types and Limitations
+
+Splitter filters parse source files and extract various streams (video, audio, subtitles) for processing. There are two primary mechanisms through which splitters expose multiple audio streams:
+
+1. **Multiple output pins**: Some splitters create separate output pins for each audio stream
+2. **IAMStreamSelect interface**: Others use this interface to allow selection from multiple streams through a single output pin
+
+The DirectShow Editing Services engine has specific limitations when working with the first type of splitter. If you need to access any audio stream other than the first one, you may encounter restrictions with certain splitter types.
+
+## Format-Specific Considerations
+
+### AVI Format Support
+
+The AVI splitter provides excellent support for multiple audio streams. When working with AVI files, you can typically access and manipulate all available audio streams without significant issues.
+
+This is demonstrated in the filter graph visualization below:
+
+As visible in the diagram, the AVI splitter creates separate pathways for each audio stream, making them independently accessible through the SDK's API.
+
+### Challenges with Modern Container Formats
+
+Modern container formats like MP4, MKV, and MOV often use more sophisticated splitters such as LAV Splitter. While these splitters support a wide range of formats and codecs, they can present challenges when attempting to access multiple audio streams simultaneously.
+
+The filter graph for LAV Splitter demonstrates this limitation:
+
+LAV Splitter, though excellent for format support, does not expose multiple audio streams in a way that allows direct access to secondary streams through the DES engine. This limitation necessitates alternative approaches.
+
+## Recommended Approaches
+
+### External Audio File Method
+
+The most reliable approach for handling multiple audio streams is to extract and work with audio tracks as separate external files. This method completely bypasses the limitations of splitter filters and provides maximum flexibility.
+
+Steps for implementing this approach:
+
+1. Extract the desired audio streams from the source video file
+2. Process each audio stream independently
+3. Combine the processed audio with the video during final output
+
+This method ensures compatibility across all format types and splitter configurations.
+
+### Splitter Selection and Configuration
+
+In scenarios where external audio files are not feasible, you can control which splitter filter is used to parse your source files. By selectively allowing only certain splitters, you can ensure that your application uses splitters that properly expose multiple audio streams.
+
+Use the `DirectShow_Filters_Blacklist_Add` method to exclude incompatible splitters:
+
+```
+// Example: Exclude LAV Splitter to force the use of native splitters
+videoEdit.DirectShow_Filters_Blacklist_Add("LAV Splitter Source");
+videoEdit.DirectShow_Filters_Blacklist_Add("LAV Splitter");
+```
+
+For more detailed implementation examples, refer to the [merge video and audio without re-encoding](../output-file-from-multiple-sources/) tutorial.
+
+## Performance Considerations
+
+Working with multiple audio streams can impact performance, especially with high-resolution video or complex processing requirements. Consider these optimization strategies:
+
+- Pre-extract audio streams for complex editing projects
+- Use hardware acceleration when available
+- Implement buffering mechanisms for smoother playback
+- Consider temporary downsampling during preview operations
+
+## Required Components and Dependencies
+
+To implement the techniques described in this guide, you'll need to include the following dependencies:
+
+- Video Edit SDK redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+For information on deploying these dependencies to end-user systems, refer to the [deployment documentation](../../deployment/).
+
+## Conclusion
+
+Effectively handling multiple audio streams in video files requires understanding the underlying architecture and limitations of DirectShow components. By using the appropriate techniques—whether external audio files, splitter selection, or specialized API methods—developers can create robust video applications that properly support multilingual content, commentary tracks, and other multi-audio scenarios.
+
+For advanced implementation scenarios and additional code examples, check out our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.
+
+---END OF PAGE---
+
+
+
+## Audio Volume Envelope Effects for .NET Video Editing
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/audio-envelope/
+**Description:** Implement audio volume envelope effects with VisioForge Video Edit SDK .NET. Fade in, fade out, and keyframe-based volume control in your timeline.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, Effects, C#, NuGet
+**API:** AudioVolumeEnvelopeEffect, AudioSource, AudioTrackEffect
+
+# Implementing Audio Volume Envelope Effects in .NET
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+Audio volume envelopes are essential tools for professional video production, allowing developers to precisely control audio levels throughout a timeline. This tutorial demonstrates how to implement these effects in your .NET applications.
+
+## What is an Audio Volume Envelope?
+
+An audio volume envelope lets you adjust the volume levels of your audio track. Rather than manually adjusting volume throughout the editing process, envelopes provide a programmatic way to set consistent volume levels. This is particularly useful when working with multiple audio tracks that need to maintain specific volume relationships.
+
+## Implementation Overview
+
+The implementation process involves three key steps:
+
+1. Creating an audio source from your file
+2. Creating the volume envelope effect with your desired level
+3. Adding the audio with the effect to your timeline
+
+Each step requires specific code components that we'll explore in detail below.
+
+## Understanding the AudioVolumeEnvelopeEffect Class
+
+The `AudioVolumeEnvelopeEffect` class is the core component for implementing volume control:
+
+```
+public class AudioVolumeEnvelopeEffect : AudioTrackEffect
+{
+    /// <summary>
+    /// Gets or sets level (in percents), range is [0-100].
+    /// </summary>
+    public int Level { get; set; }
+
+    /// <summary>
+    /// Initializes a new instance of the AudioVolumeEnvelopeEffect class.
+    /// </summary>
+    /// <param name="level">
+    /// Level (in percents), range is [0-100].
+    /// </param>
+    public AudioVolumeEnvelopeEffect(int level)
+    {
+        Level = level;
+    }
+}
+```
+
+As you can see, this class:
+
+- Inherits from `AudioTrackEffect`
+- Has a `Level` property that accepts values from 0-100 (representing volume percentage)
+- Provides a constructor for setting the initial level
+
+## Detailed Implementation Steps
+
+### 1. Creating Your Audio Source
+
+The first step involves initializing an audio source object that references your audio file. This object serves as the foundation for applying effects.
+
+```
+var audioFile = new AudioSource(file, segments, null);
+```
+
+In this code:
+
+- `file` is the path to your audio file
+- `segments` defines time segments if you're only using portions of the audio
+- The final parameter can contain additional options (null in this basic example)
+
+### 2. Configuring the Volume Envelope Effect
+
+Next, create and configure the volume envelope effect by specifying your desired volume level:
+
+```
+var envelope = new AudioVolumeEnvelopeEffect(70);
+```
+
+This creates a volume envelope effect set to 70%. The parameter accepts values from 0 to 100:
+
+- 0 = completely silent
+- 50 = half volume
+- 100 = full volume
+
+You can also adjust the level after creation:
+
+```
+var envelope = new AudioVolumeEnvelopeEffect(50);
+envelope.Level = 75; // Changed to 75% volume
+```
+
+### 3. Adding Audio with Envelope Effect to Timeline
+
+The final step is to add your audio source with the envelope effect applied to your project timeline:
+
+```
+VideoEdit1.Input_AddAudioFile(
+    audioFile,                        // Your configured audio source
+    TimeSpan.FromMilliseconds(0),     // Starting position on timeline
+    0,                                // Track index
+    new []{ envelope }                // Array of effects to apply
+);
+```
+
+This positions your audio at the beginning of the timeline (0ms) and applies the envelope effect we configured earlier.
+
+## Common Use Cases
+
+### Normalizing Audio Levels
+
+When working with audio from different sources, normalization ensures consistent volume levels:
+
+```
+// Main interview audio at full volume
+// AudioSource ctor #1: (filename, startTime?, stopTime?, fileToSync?, streamNumber, rate)
+var interviewAudio = new AudioSource("interview.mp3", (TimeSpan?)null, (TimeSpan?)null);
+VideoEdit1.Input_AddAudioFile(interviewAudio, TimeSpan.Zero, 0, null);
+
+// Background music at 30% volume to avoid overpowering speech
+var backgroundMusic = new AudioSource("background.mp3", (TimeSpan?)null, (TimeSpan?)null);
+var musicEnvelope = new AudioVolumeEnvelopeEffect(30);
+VideoEdit1.Input_AddAudioFile(backgroundMusic, TimeSpan.Zero, 1, new[] { musicEnvelope });
+```
+
+### Muting Specific Sections
+
+If you need to mute sections of audio in your timeline, you can create and apply different envelope effects:
+
+```
+// Create audio sources for different segments using AudioSource(filename, FileSegment[], fileToSync, streamNumber, rate)
+var segment1 = new AudioSource("audio.mp3",
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(0),     TimeSpan.FromMilliseconds(10000)) }, null); // 0-10s
+var segment2 = new AudioSource("audio.mp3",
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(15000)) }, null); // 10-15s
+var segment3 = new AudioSource("audio.mp3",
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(30000)) }, null); // 15-30s
+
+// Apply different volume levels
+VideoEdit1.Input_AddAudioFile(segment1, TimeSpan.Zero, 0, new[] { new AudioVolumeEnvelopeEffect(100) });
+// Mute middle segment
+VideoEdit1.Input_AddAudioFile(segment2, TimeSpan.FromMilliseconds(10000), 0, new[] { new AudioVolumeEnvelopeEffect(0) });
+VideoEdit1.Input_AddAudioFile(segment3, TimeSpan.FromMilliseconds(15000), 0, new[] { new AudioVolumeEnvelopeEffect(100) });
+```
+
+## Required Dependencies
+
+To implement audio envelope effects, you'll need:
+
+- Video Edit SDK .NET redistributable packages:
+- [x86 version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
+- [x64 version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+You can install these packages via NuGet Package Manager:
+
+```
+Install-Package VisioForge.DotNet.Core.Redist.VideoEdit.x64
+```
+
+For more information on deploying these dependencies to your users' systems, refer to our [deployment documentation](../../deployment/).
+
+## Performance Considerations
+
+When implementing audio volume effects, consider these performance tips:
+
+- Apply envelope effects during the editing/rendering phase rather than at runtime
+- When working with multiple tracks, consider the cumulative effect of all audio processing
+- Test on your target hardware to ensure smooth playback
+
+## Troubleshooting Common Issues
+
+If you encounter problems with your audio envelope implementation:
+
+- Verify audio file paths and formats are supported
+- Check that volume percentages are within the 0-100 range
+- Ensure the audio effect is correctly added to the effects array
+- Verify timeline positioning doesn't create conflicts between audio segments
+
+## Conclusion
+
+Audio volume envelope effects provide essential control over your application's audio experience. By following this guide, you've learned how to implement volume control in your .NET video editing projects, balancing different audio sources for professional results.
+
+---
+
+For more code samples and advanced techniques, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+---END OF PAGE---
+
+
+
+## Cut a Video Without Re-encoding in a Few Lines of C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/cut-video-without-reencoding/
+**Description:** Copy a part of a video file into a new file without re-encoding, in a few lines of C# with Video Edit SDK .NET and VideoEditCore.FastEdit_CutFileAsync.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, MP4, C#, NuGet
+**API:** VideoEditCore, FastEditSeekMode
+
+# Cut a Video Without Re-encoding in C#
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+This page cuts a part of a video file into a new file with [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) and its `VideoEditCore` engine, in a C# console app. `FastEdit_CutFileAsync` copies the compressed streams as they are, so nothing is re-encoded: the codecs, resolution, frame rate and bit rate stay the same, there is no quality loss, and 30 seconds of a 720p movie are saved in about half a second.
+
+`VideoEditCore` is the SDK's Windows engine; its `FastEdit_` methods run the FFmpeg tool that comes in the FFmpeg redist package.
+
+AI coding agents: use the VisioForge MCP server
+
+Building this with **Claude Code**, **Cursor**, or another AI coding agent? Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage/) at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable code samples, and deployment guides — more accurate than grepping `llms.txt`. No authentication required.
+
+Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## Video tutorial
+
+The one-minute video writes and runs this console app: 30 seconds of a 720p movie cut in about half a second.
+
+## Required NuGet packages
+
+- [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit/) — the SDK with `VideoEditCore`
+- [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — the FFmpeg tool the `FastEdit_` methods run; for an x86 app, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
+
+```
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.27]" />
+```
+
+The redist is x64, so set `PlatformTarget` to `x64` in the project file:
+
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <TargetFramework>net10.0-windows</TargetFramework>
+  <PlatformTarget>x64</PlatformTarget>
+  <ImplicitUsings>enable</ImplicitUsings>
+</PropertyGroup>
+```
+
+## The code
+
+The whole console app: it copies 1:00 to 1:30 of `movie.mp4` into `cut.mp4`.
+
+```
+using System;
+using VisioForge.Core.VideoEdit;
+
+await using var core = new VideoEditCore();
+core.OnError += (s, e) =>
+    Console.WriteLine(e.Message);
+var ok = await core.FastEdit_CutFileAsync(
+    "movie.mp4",
+    TimeSpan.FromSeconds(60),
+    TimeSpan.FromSeconds(90),
+    "cut.mp4");
+Console.WriteLine(ok ? "Done" : "Failed");
+```
+
+The full project is [cut-video-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/_VideoTutorials/cut-video-short-console). File names are relative to the working directory, so put `movie.mp4` in the folder you start the app from.
+
+## How it works
+
+1. **The engine** — `VideoEditCore` needs no video view for a cut. `await using` disposes it when the app ends.
+2. **Errors** — `OnError` reports why a cut failed, for example a missing input file or a missing FFmpeg redist; the app prints it before `Failed`.
+3. **The cut** — `FastEdit_CutFileAsync(input, start, stop, output)` copies the part from `start` to `stop` into the output file without re-encoding, and returns `true` when the file is saved. A `stop` of `TimeSpan.Zero` cuts to the end of the file.
+4. **Keyframes** — the cut starts on the keyframe at or before `start`. The frames between that keyframe and `start` are copied too. In an MP4 or MOV output they are marked to be skipped, so a player starts at `start`; in other containers, and for an MPEG-TS input, the cut plays from that keyframe and is that much longer.
+
+The output on a 10-minute Big Buck Bunny (1280x720 H.264 at 24 fps, AAC), checked with ffprobe: 30.0 seconds, the source's H.264 High profile and AAC. The first video packet of the cut is the source's keyframe at 57.75 s, byte for byte the same size; the frames before 1:00 carry the discard flag. [Big Buck Bunny](https://peach.blender.org/) (c) Blender Foundation, under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+```
+ffprobe -v error -of compact cut.mp4 -show_entries format=duration:stream=codec_name,profile,width,height
+stream|codec_name=h264|profile=High|width=1280|height=720
+stream|codec_name=aac|profile=LC
+format|duration=30.000544
+```
+
+## Notes
+
+- **Seek mode** — the overload with `FastEditSeekMode` chooses where FFmpeg seeks. `FastEditSeekMode.Input` (the default) starts on the keyframe at or before the start position. `FastEditSeekMode.Output` drops the video up to the first keyframe after it, so a cut shorter than one keyframe interval can come out without video, and a `stop` of `TimeSpan.Zero` copies the whole file.
+- **Frame accuracy** — a cut without re-encoding cannot start between keyframes. For a cut on an exact frame, re-encode with the timeline of `VideoEditCore` or `VideoEditCoreX`.
+- **The container** — the output gets the source's codecs, so keep a container that holds them: an MP4 for H.264 or H.265 with AAC, an MKV for others.
+- **The FFmpeg redist** — without the FFmpeg redist package, the `FastEdit_` methods have no tool to run. Deploy it with your app; see the [deployment guide](../../deployment/).
+
+## Sample Applications
+
+- [Cut video short console (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/_VideoTutorials/cut-video-short-console) — the code of this page
+- [Cut Video File (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/WPF/CSharp/Cut%20Video%20File) — the same call behind a WPF window with a progress bar
+
+## Frequently Asked Questions
+
+### How do I cut a video without re-encoding in C#?
+
+Create `VideoEditCore` and call `FastEdit_CutFileAsync(inputFile, start, stop, outputFile)`. The streams are copied as they are, so the cut takes about as long as copying that part of the file.
+
+### Why does my cut start a little before the start time?
+
+A cut without re-encoding starts on a keyframe. With the default seek mode the frames from the keyframe before the start time are copied but marked to be skipped, so in an MP4 or MOV file players start at the start time; some editors show them anyway. Other containers, and an MPEG-TS input, play from the keyframe.
+
+### Can I cut to the end of the file?
+
+Yes: pass `TimeSpan.Zero` as the stop time.
+
+### Is the quality the same as the source?
+
+Yes. Nothing is decoded or encoded, so every copied frame is the source's frame.
+
+## See Also
+
+- [Merge video and audio without re-encoding](../output-file-from-multiple-sources/) — the video of one file and the audio of another, copied into one MP4
+- [Several segments](../several-segments/) — join parts of files into one video, re-encoded
+- [Deployment](../../deployment/) — the redists `VideoEditCore` needs on the user's PC
+- [Video Edit SDK .NET Product Page](https://www.visioforge.com/video-edit-sdk-net)
+
+---END OF PAGE---
+
+
+
+## Video Editing Code Examples for C# and .NET Developers
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/
+**Description:** Ready-to-use C# code examples for VisioForge Video Edit SDK .NET. Overlays, transitions, trimming, merging, and audio control with detailed tutorials.
+**Tags:** Video Edit SDK, .NET
+
+# .NET Video Editing Code Examples — Join, Merge, Overlay
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+This page collects ready-to-use C# recipes for the most common editing scenarios using the Video Edit SDK .NET. Every snippet is verified against the SDK source and demos under [`Video Edit SDK`](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK). The recipes below use the Windows-only `VideoEditCore` engine. Cross-platform code based on `VideoEditCoreX` follows a similar shape with engine-specific source and effect types.
+
+## Available Recipes
+
+### Visual Effects & Overlays
+
+- [**Adding Image Overlays to Video**](add-image-overlay/) — Learn how to superimpose images on your video content
+- [**Text Overlay Implementation**](add-text-overlay/) — Techniques for adding and formatting text overlays on videos
+- [**Picture-In-Picture Effects**](picture-in-picture/) — Create professional PiP effects in your video applications
+
+### Audio Manipulation
+
+- [**Audio Volume Envelope Effects**](audio-envelope/) — Control audio volume changes over time
+- [**Multiple Audio Streams in AVI Files**](multiple-audio-streams-avi/) — Working with multiple audio tracks
+- [**Custom Volume Control for Audio Tracks**](volume-for-track/) — Precise audio level management techniques
+
+### Video Composition
+
+- [**Cut a Video Without Re-encoding**](cut-video-without-reencoding/) — A part of a file copied into a new file, in a few lines of C#
+- [**Merge Video and Audio Without Re-encoding**](output-file-from-multiple-sources/) — The video of one file and the audio of another, copied into one MP4
+- [**Working with Video Segments**](several-segments/) — Extract and use multiple segments from the same source file
+- [**Transition Effects Between Video Fragments**](transition-video/) — Implementing smooth transitions between clips
+- [**Generating Videos from Image Sequences**](video-images-console/) — Console application example for image-to-video conversion
+- [**Multi-Audio Stream Video Integration**](adding-video-file-with-multiple-audio-streams/) — Working with complex audio-video combinations
+
+## iOS
+
+- [iOS Video Editor](ios-video-editor/) — Building video editing apps for iPhone and iPad
+
+## Recipe — Join, Merge or Concatenate Video Files into One MP4
+
+`VideoSource` accepts a filename plus optional start/stop times. To trim a section from a source, pass the start and stop offsets; to use the whole file, pass `null`. Each call to `Input_AddVideoFile` appends to the timeline.
+
+```
+using System;
+using System.Threading.Tasks;
+using VisioForge.Core.Types.VideoEdit;
+using VisioForge.Core.VideoEdit;
+using VisioForge.Core.Types.Output;
+
+public async Task JoinClipsAsync(string output)
+{
+    var videoEdit = new VideoEditCore();
+
+    // Output container.
+    videoEdit.Output_Filename = output;
+    videoEdit.Output_Format = new MP4Output();
+
+    // First clip — first 10 seconds.
+    var clip1 = new VideoSource(
+        @"intro.mp4",
+        TimeSpan.Zero,
+        TimeSpan.FromSeconds(10),
+        VideoEditStretchMode.Letterbox);
+    await videoEdit.Input_AddVideoFileAsync(clip1);
+
+    // Second clip — the whole file appended to the timeline.
+    var clip2 = new VideoSource(
+        @"content.mp4",
+        null,
+        null,
+        VideoEditStretchMode.Letterbox);
+    await videoEdit.Input_AddVideoFileAsync(clip2);
+
+    // Third clip — the whole file appended.
+    var clip3 = new VideoSource(
+        @"outro.mp4",
+        null,
+        null,
+        VideoEditStretchMode.Letterbox);
+    await videoEdit.Input_AddVideoFileAsync(clip3);
+
+    // Run the engine.
+    await videoEdit.StartAsync();
+}
+```
+
+## Recipe — Add an Image Logo Overlay
+
+`VideoEffectImageLogo` is the legacy image-overlay effect. Create it with a unique effect name (the second constructor argument), assign the image file via `Filename`, and add it to the engine. Position is controlled by `Left`/`Top` (in pixels) when no automatic alignment is used.
+
+```
+using VisioForge.Core.Types.VideoEdit;
+using VisioForge.Core.VideoEdit;
+using VisioForge.Core.Types.Output;
+using VisioForge.Core.Types.VideoEffects;
+
+public async Task AddLogoAsync(string source, string output)
+{
+    var videoEdit = new VideoEditCore();
+
+    videoEdit.Output_Filename = output;
+    videoEdit.Output_Format = new MP4Output();
+
+    var video = new VideoSource(source, null, null, VideoEditStretchMode.Letterbox);
+    await videoEdit.Input_AddVideoFileAsync(video);
+
+    // Image logo overlay (PNG with alpha is recommended for transparent logos).
+    var logo = new VideoEffectImageLogo(enabled: true, name: "logo1")
+    {
+        Filename = "logo.png",
+        Left = 10,
+        Top = 10
+    };
+    videoEdit.Video_Effects_Add(logo);
+
+    await videoEdit.StartAsync();
+}
+```
+
+## Recipe — Replace the Source Audio With a Music Track
+
+Add the video file as a video-only source (via `targetStreamIndex`-aware overloads of `Input_AddVideoFile` if needed), then add a separate `AudioSource` for the music track. The `AudioSource` constructor accepts a filename plus optional start/stop offsets.
+
+```
+using VisioForge.Core.Types.VideoEdit;
+using VisioForge.Core.VideoEdit;
+using VisioForge.Core.Types.Output;
+
+public async Task ReplaceAudioAsync(string source, string music, string output)
+{
+    var videoEdit = new VideoEditCore();
+
+    videoEdit.Output_Filename = output;
+    videoEdit.Output_Format = new MP4Output();
+
+    // Source video (original audio is ignored by the engine when a separate
+    // AudioSource is added; see Input_AddAudioFile overloads to control mixing).
+    var video = new VideoSource(source, null, null, VideoEditStretchMode.Letterbox);
+    await videoEdit.Input_AddVideoFileAsync(video);
+
+    // Background music — full file.
+    var music_src = new AudioSource(music);
+    await videoEdit.Input_AddAudioFileAsync(music_src);
+
+    await videoEdit.StartAsync();
+}
+```
+
+## Additional Resources
+
+Find more extensive code samples and resources on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples), where we regularly update our collection with new examples and implementation techniques for .NET developers.
+
+---END OF PAGE---
+
+
+
+## iOS Video Editor in C# .NET — Trimming and Effects
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/ios-video-editor/
+**Description:** Integrate professional video editing into iOS apps with VisioForge Video Edit SDK .NET. Trimming, filters, transitions, and effects on iPhone and iPad.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Editing, Effects, MP4, C#
+**API:** VideoEditCoreX, IVideoView, VideoBalanceVideoEffect, MP4Output, ProgressEventArgs
+
+# iOS Video Editor for Seamless In-App Video Editing
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCoreX](#)
+
+## Introduction to iOS Video Editing
+
+Building a professional video editing app for iPhone and iPad requires a robust SDK that delivers native performance with customizable features. The VisioForge Video Edit SDK provides tools to create stunning editing apps that rival Adobe Premiere or DaVinci Resolve on Apple devices.
+
+Our iOS video edit SDK integrates advanced video editing capabilities into your iOS app efficiently. Build a photo video app, content creation tools, or a video editor pro application with features users expect from modern editing apps.
+
+## Key Features
+
+The SDK provides comprehensive video editing features for iOS app development:
+
+- **Trimming**: Frame-accurate video trimming with touch-friendly controls
+- **Timeline**: Edit multiple video and audio tracks simultaneously
+- **Transitions**: Smooth effects including fades and wipes between clips
+- **Video Effects**: Apply filters and color correction to your videos
+- **Audio Mixing**: Control volume and mix multiple audio sources
+- **Text Overlays**: Add customizable titles and watermarks
+
+While optimized for iOS, our framework supports Android through .NET MAUI, allowing you to create cross-platform editing solutions.
+
+## Getting Started with VideoEditCoreX
+
+### SDK Initialization
+
+Initialize the video editing engine in your iOS app:
+
+```
+using System.Drawing;                              // Size
+using VisioForge.Core;                             // VisioForgeX
+using VisioForge.Core.Types;                       // IVideoView, VideoFrameRate
+using VisioForge.Core.Types.X.VideoEdit;           // VideoTransition, VideoTransitionType
+using VisioForge.Core.VideoEditX;                  // VideoEditCoreX
+
+await VisioForgeX.InitSDKAsync();
+
+var videoEdit = new VideoEditCoreX(VideoView1 as IVideoView);
+videoEdit.OnError += VideoEdit_OnError;
+videoEdit.OnProgress += VideoEdit_OnProgress;
+videoEdit.OnStop += VideoEdit_OnStop;
+```
+
+### Adding Video Content
+
+Add video files to your timeline:
+
+```
+// Add full video file
+videoEdit.Input_AddVideoFile("input.mp4", null);
+
+// Or add video with specific start and stop times
+videoEdit.Input_AddAudioVideoFile(
+    "input.mp4",
+    TimeSpan.FromMilliseconds(0),
+    TimeSpan.FromMilliseconds(10000),
+    insertTime: null);
+```
+
+### Applying Effects
+
+Enhance videos with effects that users choose for their content:
+
+```
+using VisioForge.Core.Types.X.VideoEffects;
+
+var balance = new VideoBalanceVideoEffect();
+balance.Brightness = 0.1;
+balance.Contrast = 1.0;
+videoEdit.Video_Effects.Add(balance);
+```
+
+### Configuring Output
+
+Export videos optimized for YouTube or App Store policy compliance:
+
+```
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+
+videoEdit.Output_VideoSize = new Size(1920, 1080);
+videoEdit.Output_VideoFrameRate = new VideoFrameRate(30);
+
+var mp4Output = new MP4Output("output.mp4");
+videoEdit.Output_Format = mp4Output;
+videoEdit.Start();
+```
+
+### Event Handling
+
+Monitor editing progress:
+
+```
+private void VideoEdit_OnProgress(object sender, ProgressEventArgs e)
+{
+    Console.WriteLine($"Progress: {e.Progress}%");
+}
+
+private void VideoEdit_OnStop(object sender, StopEventArgs e)
+{
+    Console.WriteLine(e.Successful ? "Completed" : "Error");
+}
+```
+
+## Advanced Options
+
+### Text Overlay API
+
+Add text overlays using the native rendering API:
+
+```
+using VisioForge.Core.Types.X.VideoEdit;
+
+var textOverlay = new TextOverlay("Your Title");
+videoEdit.Video_TextOverlays.Add(textOverlay);
+```
+
+### Video Transitions
+
+Create smooth transitions between clips:
+
+```
+var transition = new VideoTransition(
+    VideoTransitionType.Crossfade,
+    TimeSpan.FromMilliseconds(1000),
+    TimeSpan.FromMilliseconds(2000));
+videoEdit.Video_Transitions.Add(transition);
+```
+
+## iOS Deployment
+
+For detailed iOS deployment instructions, including NuGet packages, permissions, and best practices, see our [iOS Deployment Guide](../../../deployment-x/iOS/).
+
+## Why Choose VisioForge
+
+- **Professional API**: Complete control over video editing
+- **Customizable UI**: Build your own interface
+- **Native Performance**: GPU-accelerated encoding on Apple devices
+
+---
+
+Explore iOS video editing samples on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) or contact [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for resources.
+
+---END OF PAGE---
+
+
+
+## Embed Multiple Audio Language Tracks into AVI in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/multiple-audio-streams-avi/
+**Description:** Embed multiple audio tracks into AVI files with VisioForge Video Edit SDK .NET. Multi-language and commentary support with C# code examples.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, AVI, C#, NuGet
+**API:** AudioSource, VideoSource
+
+# Adding Multiple Audio Streams to AVI Files in .NET
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+## Introduction
+
+Multiple audio streams allow you to include different language tracks, commentary, or music options within a single video file. This functionality is essential for creating multilingual content or providing alternative audio experiences for viewers.
+
+## Implementation Details
+
+When creating multiple audio streams in an AVI file, you need to add each audio source to the timeline using specific targeting parameters. This approach ensures each audio stream is properly indexed and accessible during playback.
+
+## Code Example
+
+The following C# sample demonstrates how to add two different audio streams to an AVI file:
+
+```
+var videoSource = new VideoSource("video1.avi");
+var audioSource1 = new AudioSource("video1.avi");
+var audioSource2 = new AudioSource("audio2.mp3");
+
+VideoEdit1.Input_Clear_List();
+VideoEdit1.Input_AddVideoFile(videoSource);
+VideoEdit1.Input_AddAudioFile(audioSource1, targetStreamIndex: 0);
+VideoEdit1.Input_AddAudioFile(audioSource2, targetStreamIndex: 1);
+```
+
+## Key Parameters Explained
+
+- `targetStreamIndex`: Defines which audio stream index the source will be assigned to
+- First audio stream uses index 0, second uses index 1, and so on
+- You can add as many audio streams as needed using incremental index values
+
+## Required Dependencies
+
+To implement this functionality, you'll need:
+
+- Video Edit SDK redistributables:
+- [x86 version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
+- [x64 version](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+## Deployment Information
+
+For details on installing or deploying the required dependencies to end-user systems, refer to our [deployment guide](../../deployment/).
+
+---
+
+Find additional code examples and implementation details on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+---END OF PAGE---
+
+
+
+## Merge Video and Audio Without Re-encoding in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/output-file-from-multiple-sources/
+**Description:** Take the video from one file and the audio from another and copy them into one MP4 without re-encoding, in a C# WinForms app with Video Edit SDK .NET.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, MP4, C#, NuGet
+**API:** VideoEditCore, FFMPEGStream
+
+# Merge Video and Audio Without Re-encoding in C#
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+This tutorial builds a C# WinForms app that takes the video stream from one file and the audio stream from another, and copies both into one MP4 with [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) and its `VideoEditCore` engine. `FastEdit_MuxStreamsAsync` copies the compressed streams as they are, so nothing is re-encoded: the codec, resolution, frame rate and bit rate stay the same, there is no quality loss, and a 27-second clip is saved in a couple of seconds. The same call puts a new soundtrack under a video, replaces its audio, or adds a second audio track.
+
+`VideoEditCore` is the SDK's Windows engine; its `FastEdit_` methods run the FFmpeg tool that comes in the FFmpeg redist package.
+
+AI coding agents: use the VisioForge MCP server
+
+Building this with **Claude Code**, **Cursor**, or another AI coding agent? Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage/) at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable code samples, and deployment guides — more accurate than grepping `llms.txt`. No authentication required.
+
+Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## YouTube tutorial
+
+[Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/_VideoTutorials/mux-streams-winforms)
+
+The video in the tutorial is a clip of [Big Buck Bunny](https://peach.blender.org/) (c) Blender Foundation, under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+The video creates the project on .NET 10, which needs Visual Studio 2026; in Visual Studio 2022, choose .NET 8 or .NET 9. On .NET Framework 4.7.2, `Form1.cs` builds unchanged in an SDK-style project (create it from the Windows Forms App template and set `TargetFramework` to `net472`) with `<LangVersion>10</LangVersion>` and `<ImplicitUsings>enable</ImplicitUsings>`; in `Program.cs`, replace `ApplicationConfiguration.Initialize()` with `Application.EnableVisualStyles()` and `Application.SetCompatibleTextRenderingDefault(false)`.
+
+## Required NuGet packages
+
+- [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit/) — the SDK with `VideoEditCore`
+- [VisioForge.DotNet.Core.Redist.FFMPEG.x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/) — the FFmpeg tool the `FastEdit_` methods run; for an x86 app, [VisioForge.DotNet.Core.Redist.FFMPEG.x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/)
+
+```
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.DotNet.Core.Redist.FFMPEG.x64" Version="[2026.11.27]" />
+```
+
+The redist is x64, so set `PlatformTarget` to `x64` in the project file:
+
+```
+<PropertyGroup>
+  <OutputType>WinExe</OutputType>
+  <TargetFramework>net10.0-windows</TargetFramework>
+  <PlatformTarget>x64</PlatformTarget>
+  <UseWindowsForms>true</UseWindowsForms>
+  <ImplicitUsings>enable</ImplicitUsings>
+</PropertyGroup>
+```
+
+## The form
+
+`Form1` holds a text box and a `...` button for the video file (`edVideo`, `btVideo`), the same for the audio file (`edAudio`, `btAudio`), a text box for the output file (`edOutput`), a check box `cbShortest` ("Stop at the end of the shortest stream", checked), the `btStart` button and an `OpenFileDialog`. The form's `Load` and `FormClosing` events and the three buttons' `Click` events have handlers.
+
+## The code
+
+`Form1.cs`:
+
+```
+using VisioForge.Core.Types.VideoEdit;
+using VisioForge.Core.VideoEdit;
+
+namespace MuxStreams;
+
+public partial class Form1 : Form
+{
+    private VideoEditCore videoEdit1;
+
+    public Form1()
+    {
+        InitializeComponent();
+    }
+
+    private void Form1_Load(object sender, EventArgs e)
+    {
+        videoEdit1 = new VideoEditCore();
+
+        // Show SDK errors in the title bar
+        videoEdit1.OnError += (_, args) => BeginInvoke(() => Text = args.Message);
+
+        edOutput.Text = Path.Combine(
+            Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "output.mp4");
+    }
+
+    private void btVideo_Click(object sender, EventArgs e)
+    {
+        if (openFileDialog1.ShowDialog() == DialogResult.OK) edVideo.Text = openFileDialog1.FileName;
+    }
+
+    private void btAudio_Click(object sender, EventArgs e)
+    {
+        if (openFileDialog1.ShowDialog() == DialogResult.OK) edAudio.Text = openFileDialog1.FileName;
+    }
+
+    private async void btStart_Click(object sender, EventArgs e)
+    {
+        // The first video stream of one file and the first audio stream of another
+        var streams = new List<FFMPEGStream>
+        {
+            new FFMPEGStream { Filename = edVideo.Text, ID = "v:0" },
+            new FFMPEGStream { Filename = edAudio.Text, ID = "a:0" },
+        };
+
+        btStart.Enabled = false;
+        Text = "Saving...";
+        try
+        {
+            // Copies the streams into one file as they are, without re-encoding
+            var saved = await videoEdit1.FastEdit_MuxStreamsAsync(streams, cbShortest.Checked, edOutput.Text);
+            if (saved) Text = "Saved: " + edOutput.Text; // on failure the title keeps the error
+        }
+        finally
+        {
+            btStart.Enabled = true;
+        }
+    }
+
+    private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        // Let the file be finished before the window goes away
+        if (!btStart.Enabled)
+        {
+            e.Cancel = true;
+            return;
+        }
+
+        videoEdit1.Dispose();
+    }
+}
+```
+
+## How it works
+
+1. **The engine** — `Form1_Load` creates `VideoEditCore`. `OnError` reports engine errors; they can arrive on a worker thread, so `BeginInvoke` puts them into the title bar on the UI thread. The output file is `output.mp4` in `Videos` by default.
+2. **The streams** — each `FFMPEGStream` names a file (`Filename`) and a stream in it (`ID`). The IDs are FFmpeg stream specifiers: `"v:0"` is the first video stream of the file, `"a:0"` the first audio stream, `"a:1"` the second. A bare `"v"` or `"a"` takes every stream of that type.
+3. **The copy** — `FastEdit_MuxStreamsAsync(streams, shortest, outputFile)` copies the listed streams, in that order, into the output file without re-encoding, and returns `true` when the file is saved.
+4. **The shortest stream** — with `shortest` set to `true`, the file ends with the shorter stream. With `false`, it runs as long as the longest one: in the video, 108 seconds of music under a 27-second clip.
+5. **Closing the window** — while a save runs, `Start` is disabled, and `Form1_FormClosing` cancels the close so the file is finished first. Otherwise it disposes the engine.
+
+The output of the video, checked with ffprobe: the H.264 stream of the source, 1920x1080 at the same bit rate, and the AAC music track. An MD5 of the video stream is the same in the source and in the output: the stream is copied byte for byte.
+
+```
+ffprobe -v error -of compact output.mp4 -show_entries format=duration,size:stream=codec_name,width,height,bit_rate,sample_rate
+stream|codec_name=h264|width=1920|height=1080|bit_rate=2783582
+stream|codec_name=aac|sample_rate=48000|bit_rate=192448
+format|duration=27.466667|size=10225512
+```
+
+## Notes
+
+- **The container must accept the codecs** — nothing is re-encoded, so the output format has to hold the source codecs as they are. H.264 or H.265 with AAC or MP3 go into MP4; for other codecs, write an MKV file.
+- **The video file's own audio** — `"v:0"` takes only the video of that file, so its soundtrack is left out. To keep it as a second track, add `new FFMPEGStream { Filename = edVideo.Text, ID = "a:0" }` to the list.
+- **More audio tracks** — every `FFMPEGStream` with an audio ID becomes one more audio track in the output, for example a second language.
+- **The FFmpeg redist** — without the FFmpeg redist package, the `FastEdit_` methods have no tool to run. Deploy it with your app; see the [deployment guide](../../deployment/).
+
+## Sample Applications
+
+- [Mux streams tutorial WinForms (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK/_VideoTutorials/mux-streams-winforms) — the code of this page and the video
+
+## Frequently Asked Questions
+
+### How do I add an audio track to a video without re-encoding in C#?
+
+Create `VideoEditCore`, list the video stream (`ID = "v:0"`) and the audio stream (`ID = "a:0"`) as `FFMPEGStream` items, and call `FastEdit_MuxStreamsAsync(streams, true, outputFile)`. The code above does that with two files picked in a dialog.
+
+### How do I replace the audio of an MP4 file?
+
+Take only the video of the MP4 with `"v:0"` and the new audio from the other file with `"a:0"`. The MP4's own soundtrack is not in the list, so it is not in the output.
+
+### What does the shortest parameter do?
+
+With `true`, the output ends where the shorter stream ends. With `false`, the output is as long as the longest stream, and the shorter one simply stops.
+
+### Is the quality the same as the source?
+
+Yes. The streams are copied, not decoded and encoded again, so the codec, resolution, frame rate and bit rate are those of the source files.
+
+## Video Transcript
+
+### What we build
+
+Let's take the video from one file and the audio from another, and put them into one MP4 without re-encoding, in a C# WinForms app with the VisioForge Video Edit SDK. Here's what we build. A WinForms app that merges two files into one. It takes the video stream from one file and the audio stream from another. Both are copied as they are, with no re-encoding and no quality loss. And a check box stops the file at the end of the shorter stream. This is the finished app. It has just put a new music track under a clip of Big Buck Bunny.
+
+### Copy, not re-encode
+
+Why copy instead of re-encode? Re-encoding decodes every frame and compresses it again. That costs time, and each pass loses a little quality. A stream copy moves the compressed data into a new file, so the codec, the resolution, the frame rate and the bit rate stay exactly as they were. There's no quality loss, and it takes seconds instead of minutes. The one rule: the output container must accept both codecs. H.264 or H.265 with AAC or MP3 go into MP4. For anything else, use MKV.
+
+### Prerequisites
+
+You need Windows 10 or 11, and Visual Studio 2022 or 2026 with the .NET desktop development workload. The project can target .NET 8 or later, or .NET Framework 4.7.2. And you need a video file and an audio file. VideoEditCore is the SDK's Windows engine, and its FastEdit methods run the FFmpeg tool that comes with the SDK.
+
+### Create a WinForms project
+
+In Visual Studio, create a new project. Search for Windows Forms, and pick Windows Forms App for C#. Name the project MuxStreams. Choose .NET 10 and click Create. Visual Studio opens the empty form in the designer.
+
+### Add the NuGet packages
+
+Now add two NuGet packages: the Video Edit SDK itself, and the FFmpeg redist. The redist carries the FFmpeg tool that the FastEdit methods run. In Visual Studio, that's Manage NuGet Packages. Browse for VisioForge.DotNet.VideoEdit and install it. Then install the FFmpeg redist for x64. The redist is the x64 one, so set PlatformTarget to x64 in the project file.
+
+### Design the WinForms form
+
+From the Toolbox, add a label, a text box and a small button for the video file, and give each control a clear name in the Properties window. Add the same row for the audio file, then a label and a text box for the output file. Add a check box to stop at the end of the shortest stream, checked by default, and the Start button. Then an OpenFileDialog. It goes into the tray under the form. Its filter lists the media files. Double-click the form and the three buttons. Visual Studio adds an empty handler for each one.
+
+### Create the editing engine
+
+At the top of Form1.cs, add these usings. In the form's Load handler, create the VideoEditCore engine. Engine errors arrive in the OnError event. Here they go to the title bar. The output file goes into the Videos folder by default.
+
+### Pick the files
+
+The two small buttons open the same dialog, and put the picked file into their text box.
+
+### Merge the streams
+
+The Start handler lists the streams to copy. Each FFMPEGStream names a file and a stream in it. v:0 is the first video stream of the video file, and a:0 is the first audio stream of the audio file. The IDs follow FFmpeg's stream specifiers. v:0 is the first video stream, a:0 the first audio stream, and a:1 the second. A plain "v" or "a" takes every stream of that type in the file. So the clip's own soundtrack is left out here: we only ask for its video. Then it disables Start and calls FastEdit\_MuxStreamsAsync with the streams, the check box, and the output file. The call copies the streams into one file, and returns true when the file is saved. The second argument is the check box. Checked, the file ends with the shorter stream: here, twenty-seven seconds of video and twenty-seven seconds of music. Unchecked, the file runs as long as the longer stream: here, a hundred and eight seconds, most of it music without a picture.
+
+### Close the window
+
+Closing the window while it saves would leave the file unfinished. In the Properties window, on the Events tab, double-click FormClosing to add this handler. While a save runs, it cancels the close. Otherwise, it disposes the engine.
+
+### Run it
+
+Run the app from Visual Studio. The output file is already set to the Videos folder. Pick the video file: a clip of Big Buck Bunny. Then the audio file: a music track. Click Start. A couple of seconds later, the title bar says the file is saved. Then we close the window.
+
+### Check the file with ffprobe
+
+The file lands in Videos: twenty-seven seconds of 1920 by 1080 video at thirty frames per second. ffprobe shows what's inside. The video is H.264 at 1920 by 1080, with the same bit rate as the source. The audio is the AAC music track. And an MD5 of the video stream is the same in both files: it was copied byte for byte.
+
+### Common mistakes
+
+A few common mistakes. The FFmpeg redist package is missing, so FastEdit has no tool to run. A plain "v" or "a", where v:0 or a:0 was meant, so extra streams end up in the file. A codec the output container can't hold: use MKV instead. And closing the window in the middle of a save: wait for it to finish first.
+
+### Next steps
+
+Next, the same engine cuts a part of a file without re-encoding, with FastEdit\_CutFileAsync, and joins files of the same format with FastEdit\_JoinFilesAsync. And the images to video tutorial builds a whole new video with transitions. The full source is on GitHub, and the docs are at visioforge.com/help. Thanks for watching.
+
+## See Also
+
+- [Make a video from images with transitions](../video-images-console/) — a new video rendered from a folder of images
+- [Multiple audio streams in video files](../adding-video-file-with-multiple-audio-streams/) — select and mix the audio tracks of one video file
+- [Deployment](../../deployment/) — the redists `VideoEditCore` needs on the user's PC
+- [Video Edit SDK .NET Product Page](https://www.visioforge.com/video-edit-sdk-net)
+
+---END OF PAGE---
+
+
+
+## Picture-in-Picture and Split Screen Videos in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/picture-in-picture/
+**Description:** Build picture-in-picture and split-screen videos in C# .NET with custom layouts, corner overlays, and MP4 export using Video Edit SDK.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Streaming, Editing, MP4, AVI, WMV, C#, NuGet
+**API:** FileSegment, VideoSource
+
+# Creating Picture-in-Picture and Split-Screen Videos in .NET
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+Edition
+
+Picture-in-picture and split-screen composition in `VideoEditCore` require the Professional edition. With a Standard license the job runs in trial mode, with the trial watermark, only while the 30-day trial lasts; after that `Start` returns `false`.
+
+## Introduction to Video Composition Techniques
+
+Professional video applications often require combining multiple video sources into a single output. This capability is essential for creating engaging content such as tutorials with presenter overlays, reaction videos, interview panels, or sports broadcasts with replay windows. The Video Edit SDK for .NET makes these advanced techniques straightforward to implement in your C# applications.
+
+This guide covers three primary video composition approaches:
+
+1. **Picture-in-Picture (PIP)**: Placing a smaller video overlay on top of a main video
+2. **Horizontal Split**: Positioning two videos side-by-side horizontally
+3. **Vertical Split**: Arranging two videos one above the other
+
+Each technique has specific use cases and can be customized to create exactly the visual presentation your application requires.
+
+## Creating Picture-in-Picture Video Overlays
+
+Picture-in-Picture is the most common video composition technique, where a smaller video appears in a corner or custom position over a larger background video. This is perfect for creating commentary videos, tutorials, or any content where you want to show two perspectives simultaneously without dividing the screen evenly.
+
+### Step 1: Define Your Video Files
+
+First, specify the file paths for the videos you want to combine:
+
+```
+string[] files = {  "!video.avi", "!video2.wmv" };
+```
+
+You can use various video formats including MP4, AVI, MOV, WMV and many others supported by the SDK.
+
+### Step 2: Create Segments for the Main Video
+
+Define which portion of the main video to use by setting start and stop times:
+
+```
+FileSegment[] segments1 = new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(10000)) };
+```
+
+This example uses the first 10 seconds of the main video. You can adjust these values to use any segment of your source file.
+
+### Step 3: Initialize the Main Video Source
+
+Create a VideoSource object for your main video with your preferred settings:
+
+```
+var videoFile = new VideoSource(
+                                files[0],
+                                segments1,
+                                VideoEditStretchMode.Letterbox,
+                                0,
+                                1.0);
+```
+
+The parameters include:
+
+- File path
+- Time segments to include
+- Stretch mode (how to handle aspect ratio differences)
+- Stream number (zero-based index into a multi-stream file)
+- Playback rate (1.0 = normal speed; 2.0 = 2× fast-forward; 0.5 = half speed)
+
+### Step 4: Configure the PIP Video Source
+
+Similarly, set up the video that will appear as the overlay:
+
+```
+FileSegment[] segments2 = new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(10000)) };
+
+var videoFile2 = new VideoSource(
+                                files[1],
+                                segments2,
+                                VideoEditStretchMode.Letterbox,
+                                0,
+                                1.0);
+```
+
+### Step 5: Define Video Placement Rectangles
+
+Specify the size and position for both videos:
+
+```
+// Rectangle for the main background video (full frame)
+var rect1 = new Rectangle(0, 0, 1280, 720);
+
+// Rectangle for the smaller PIP video overlay
+var rect2 = new Rectangle(100, 100, 320, 240);
+```
+
+You can adjust the second rectangle's position and size to place the PIP video wherever you want on the screen. Common positions include top-right or bottom-left corners.
+
+### Step 6: Combine the Videos with PIP
+
+Finally, add both video sources to your project using the PIP mode:
+
+```
+// Signature: Input_AddVideoFile_PIP(fileSource1, fileSource2, timelineInsertTime, duration,
+//   mode, letterbox, customWidth=0, customHeight=0, targetVideoStream=0,
+//   rectangle1=null, rectangle2=null)
+// rectangle1 positions fileSource1 (the main video); rectangle2 positions fileSource2 (the PIP overlay).
+VideoEdit1.Input_AddVideoFile_PIP(
+    videoFile,                            // fileSource1 — main video
+    videoFile2,                           // fileSource2 — PIP overlay video
+    TimeSpan.FromMilliseconds(0),         // timelineInsertTime
+    TimeSpan.FromMilliseconds(10000),     // duration
+    VideoEditPIPMode.Custom,              // PIP mode — Custom lets you pass rectangles
+    true,                                 // letterbox
+    1280, 720,                            // customWidth / customHeight
+    0,                                    // targetVideoStream
+    rect1,                                // rectangle1 — main video position (full frame)
+    rect2                                 // rectangle2 — PIP overlay position
+);
+```
+
+The resulting video will show your main video filling the entire frame with the second video appearing in the specified rectangle position.
+
+## Creating Side-by-Side Video Layouts
+
+Side-by-side layouts divide the screen evenly between two video sources. This approach works well for comparison videos, reaction content, or interview presentations where both videos deserve equal screen space.
+
+### Horizontal Split Screen
+
+A horizontal split places videos side-by-side horizontally. This works well for comparing before/after effects or showing two people in conversation:
+
+```
+VideoEdit1.Input_AddVideoFile_PIP(
+    videoFile,
+    videoFile2,
+    TimeSpan.FromMilliseconds(0),
+    TimeSpan.FromMilliseconds(10000),
+    VideoEditPIPMode.Horizontal,
+    false
+);
+```
+
+### Vertical Split Screen
+
+A vertical split stacks videos one above the other. This can be useful for showing cause and effect relationships or creating top/bottom panel layouts:
+
+```
+VideoEdit1.Input_AddVideoFile_PIP(
+    videoFile,
+    videoFile2,
+    TimeSpan.FromMilliseconds(0),
+    TimeSpan.FromMilliseconds(10000),
+    VideoEditPIPMode.Vertical,
+    false
+);
+```
+
+## Advanced Customization Options
+
+The SDK offers numerous options to further customize your video compositions:
+
+- **Custom Positioning**: Define exact screen coordinates for precise video placement
+- **Transitions**: Add fade or other transition effects between video segments
+- **Audio Control**: Adjust volume levels for each video source independently
+- **Border Effects**: Add borders, shadows, or frames around PIP video elements
+- **Animation**: Create moving PIP elements that change position over time
+- **Multiple Overlays**: Add more than two videos to create complex compositions
+
+These capabilities allow you to create professional-level video productions directly from your .NET applications.
+
+## Implementation Requirements
+
+To successfully implement these video composition techniques in your application, you'll need to include the appropriate redistributable packages:
+
+- Video Edit SDK redist [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+For information on deploying these dependencies to your users' systems, see our [deployment guide](../../deployment/).
+
+## Performance Considerations
+
+When working with multiple video sources, especially at high resolutions, be mindful of system resource usage. Video composition operations can be processor-intensive. Consider the following best practices:
+
+- Pre-render complex compositions for playback in production environments
+- Optimize video resolution and bitrate for your target platform
+- Test performance on hardware similar to your target deployment environment
+
+## Conclusion
+
+Picture-in-Picture and split-screen video compositions add professional capabilities to media applications. The Video Edit SDK for .NET makes implementing these features straightforward with its intuitive API. Whether you're developing a video editing application, a streaming platform, or integrating video processing into a larger system, these techniques provide powerful ways to combine and present multiple video sources.
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.
+
+---END OF PAGE---
+
+
+
+## Extract and Combine Video Segments from a File in C#
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/several-segments/
+**Description:** Extract and combine multiple segments from a single video file using VisioForge Video Edit SDK .NET. Highlight reels and clip assembly in C#.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, C#, NuGet
+**API:** VideoSource, FileSegment, AudioSource
+
+# Adding Multiple Segments from a Single Video File in C#
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+## Introduction
+
+When developing video editing applications, you often need to extract specific portions of a video file and combine them into a new composition. This technique is essential for creating highlight reels, removing unwanted sections, or assembling a compilation of key moments from a larger video.
+
+This guide demonstrates how to programmatically extract and combine multiple segments from the same video file using C#. You'll learn the step-by-step process with working code examples that you can implement in your own applications.
+
+## Why Extract Multiple Segments?
+
+Extracting specific segments from videos serves many practical purposes:
+
+- Creating highlight reels from longer recordings
+- Removing unwanted sections (ads, errors, irrelevant content)
+- Assembling a compilation of key moments
+- Creating trailers or previews from full-length content
+- Generating shorter clips for social media from longer videos
+
+## Implementation Overview
+
+The implementation involves three key steps:
+
+1. Defining the time segments you want to extract
+2. Creating a video source that includes these specified segments
+3. Adding the segmented file to your editing timeline
+
+Let's break down each step with detailed code examples and explanations.
+
+## Detailed Implementation
+
+### Step 1: Define Your Segments
+
+First, you need to specify each segment's start and stop times. Each segment is defined by a starting point and duration, measured in milliseconds.
+
+```
+// Define multiple segments from a single video file
+FileSegment[] segments = new[] {
+    new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(5000)),  // First 5 seconds
+    new FileSegment(TimeSpan.FromMilliseconds(3000), TimeSpan.FromMilliseconds(10000))  // From 3s to 13s mark
+};
+```
+
+In this example, we've defined two segments:
+
+- The first segment starts at the beginning of the video (0ms) and lasts for 5 seconds
+- The second segment starts at the 3-second mark and continues for 10 seconds
+
+Note that segments can overlap, as shown in this example where the second segment starts before the first one ends. This can be useful for creating smooth transitions or when you want certain portions to appear multiple times.
+
+### Step 2: Create a Video Source with Segments
+
+Next, create a VideoSource object that incorporates your defined segments:
+
+```
+// Create a video source that includes the specified segments
+VideoSource videoFile = new VideoSource(
+    videoFileName,   // Path to your video file
+    segments,        // Array of segments defined above
+    VideoEditStretchMode.Letterbox,  // How to handle aspect ratio differences
+    0,               // streamNumber — which video stream to read from a multi-stream file
+    1.0);            // rate — playback rate (1.0 = normal speed; 2.0 = 2×; 0.5 = half speed)
+```
+
+The VideoSource constructor takes several parameters:
+
+- `videoFileName`: The path to your source video file
+- `segments`: The array of FileSegment objects you defined in Step 1
+- `VideoEditStretchMode`: How to handle aspect ratio differences (Letterbox, Stretch, Crop)
+- `streamNumber`: Zero-based index of the video stream to use from a multi-stream file (not rotation)
+- `rate`: Playback rate multiplier — 1.0 = normal, 0.5 = slow-mo, 2.0 = fast-forward
+
+### Step 3: Add to Timeline
+
+Finally, add the segmented video source to your editing timeline:
+
+```
+// Add the segmented file to the timeline.
+// Signature: Input_AddVideoFile(VideoSource fileSource, TimeSpan? timelineInsertTime = null,
+//   int targetVideoStream = 0, int customWidth = 0, int customHeight = 0).
+// Pass only the source to append at the current end of the timeline.
+VideoEdit1.Input_AddVideoFile(videoFile);
+
+// Or splice the source at a specific timeline position:
+// VideoEdit1.Input_AddVideoFile(videoFile, TimeSpan.FromSeconds(5));
+```
+
+The `Input_AddVideoFile` method takes the `VideoSource` plus an optional timeline-insert position (`TimeSpan?`, not an `int` track number). Additional optional parameters choose which video stream to consume from a multi-stream source and override custom width/height.
+
+## Working with Audio Segments
+
+The same approach works for audio files. Simply use AudioSource instead of VideoSource:
+
+```
+// Define your audio segments. FileSegment(startTime, stopTime) — stop must be greater than start.
+FileSegment[] audioSegments = new[] {
+    new FileSegment(TimeSpan.FromMilliseconds(0),     TimeSpan.FromMilliseconds(8000)),   // 0 → 8s
+    new FileSegment(TimeSpan.FromMilliseconds(15000), TimeSpan.FromMilliseconds(27000))   // 15s → 27s
+};
+
+// Create audio source with segments.
+// Signature: AudioSource(string filename, FileSegment[] segments, string fileToSync = null,
+//   int streamNumber = 0, double rate = 1.0).
+// Position 3 is fileToSync (a *string*), not a speed factor — use a named arg for rate.
+AudioSource audioFile = new AudioSource(
+    audioFileName,
+    audioSegments,
+    rate: 1.0);
+
+// Append to the timeline.
+VideoEdit1.Input_AddAudioFile(audioFile);
+```
+
+## Advanced Usage Scenarios
+
+### Variable Speed Segments
+
+You can create interesting effects by varying the speed factor for different segments:
+
+```
+// Create segments with different speeds. FileSegment(start, stop) — stop must be > start.
+VideoSource slowMotionSegment = new VideoSource(
+    videoFileName,
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(5000), TimeSpan.FromMilliseconds(8000)) },  // 5s → 8s
+    VideoEditStretchMode.Letterbox,
+    0,      // streamNumber
+    0.5);   // rate — half speed (slow motion)
+
+VideoSource fastForwardSegment = new VideoSource(
+    videoFileName,
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(10000), TimeSpan.FromMilliseconds(15000)) }, // 10s → 15s
+    VideoEditStretchMode.Letterbox,
+    0,      // streamNumber
+    2.0);   // rate — double speed
+
+// Add segments to the timeline. Position arg is TimeSpan? (insert point), not an int track.
+VideoEdit1.Input_AddVideoFile(slowMotionSegment);
+VideoEdit1.Input_AddVideoFile(fastForwardSegment, TimeSpan.FromMilliseconds(3000));
+```
+
+### Combining Multiple Files with Segments
+
+You can combine segments from different files by creating multiple VideoSource objects:
+
+```
+// Create segments from different files. FileSegment(start, stop) — stop must be > start.
+VideoSource file1Segments = new VideoSource(
+    videoFileName1,
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(0), TimeSpan.FromMilliseconds(5000)) },  // 0 → 5s
+    VideoEditStretchMode.Letterbox,
+    0,      // streamNumber
+    1.0);   // rate
+
+VideoSource file2Segments = new VideoSource(
+    videoFileName2,
+    new[] { new FileSegment(TimeSpan.FromMilliseconds(2000), TimeSpan.FromMilliseconds(6000)) }, // 2s → 6s
+    VideoEditStretchMode.Letterbox,
+    0,      // streamNumber
+    1.0);   // rate
+
+// Add to timeline in sequence. Position arg is TimeSpan?, not an int.
+VideoEdit1.Input_AddVideoFile(file1Segments);
+VideoEdit1.Input_AddVideoFile(file2Segments, TimeSpan.FromMilliseconds(5000));
+```
+
+## Required Dependencies
+
+To use this functionality, you'll need to install the appropriate redistributable packages:
+
+- Video Edit SDK redistributables:
+- [x86 package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
+- [x64 package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+For information about installing or deploying these redistributables to your users' PCs, see the [deployment guide](../../deployment/).
+
+## Conclusion
+
+Extracting and combining multiple segments from a video file is a powerful technique for creating dynamic video content in your applications. By following the steps outlined in this guide, you can implement this functionality in your C# applications with minimal effort.
+
+This approach gives you fine-grained control over which portions of a video are included in your final output, allowing for creative editing possibilities without requiring complex manual video editing tools.
+
+---
+
+Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for more code samples and examples.
+
+---END OF PAGE---
+
+
+
+## Add Video Transition Effects Between Clips in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/transition-video/
+**Description:** Apply transition effects between video clips with VisioForge Video Edit SDK .NET. Fades, wipes, and 100+ SMPTE transitions with C# code examples.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Editing, MP4, AVI, C#, NuGet
+**API:** VideoEditCoreX, VideoTransition, VideoSource, VideoFileSource, MP4Output
+
+# Creating Professional Video Transitions Between Clips in C#
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+## Introduction to Video Transitions
+
+Video transitions create a smooth visual flow between different video clips in your editing projects. Effective transitions can significantly enhance the viewing experience, making your videos appear more professional and engaging. This guide demonstrates how to implement transitions in your C# applications using Video Edit SDK .NET.
+
+Transitions require overlapping timeline segments where both videos exist simultaneously. During this overlap, the transition effect occurs, gradually replacing the first video with the second one. The SDK supports over 100 different transition effects, from simple fades to complex SMPTE standard wipes.
+
+## Understanding Timeline Positioning for Transitions
+
+For transitions to work properly, you need to understand how video clips are positioned on a timeline. Here's how the positioning works:
+
+1. **First video**: Placed at the beginning of the timeline (0ms position)
+2. **Second video**: Placed with a slight overlap with the first video
+3. **Transition**: Applied in the overlapping region where both videos exist
+
+This overlapping region is crucial - it's where the transition effect will be rendered.
+
+## Creating Video Fragments for Transition
+
+Let's add two video fragments from separate files, each 5 seconds (5000ms) long. The first fragment will be positioned at the start of the timeline, and the second fragment will start at the 4-second mark, creating a 1-second overlap where our transition will occur.
+
+VideoEditCoreVideoEditCoreX
+
+```
+// Define paths to our source video files
+string[] files = { @"c:\samples\video1.avi", @"c:\samples\video2.avi" };
+
+// Create the first video source - this will be the first clip in our timeline
+var videoFile = new VideoSource(
+        files[0],                         // Path to first video file
+        TimeSpan.Zero,                    // Start from the beginning of the source file
+        TimeSpan.FromMilliseconds(5000),  // Use 5 seconds of the video
+        VideoEditStretchMode.Letterbox,   // Maintain aspect ratio, add black bars if needed
+        0,                                // No rotation (0 degrees)
+        1.0);                             // Normal playback speed (1.0x)
+
+// Create the second video source - this will be our second clip with overlap
+var videoFile2 = new VideoSource(
+        files[1],                         // Path to second video file
+        TimeSpan.Zero,                    // Start from the beginning of the source file
+        TimeSpan.FromMilliseconds(5000),  // Use 5 seconds of the video
+        VideoEditStretchMode.Letterbox,   // Maintain aspect ratio, add black bars if needed
+        0,                                // No rotation (0 degrees)
+        1.0);                             // Normal playback speed (1.0x)
+
+// Add the first video at the beginning of the timeline (0ms position)
+await VideoEdit1.Input_AddVideoFileAsync(
+        videoFile,
+        TimeSpan.FromMilliseconds(0));    // Position on the timeline: 0ms (start)
+
+// Add the second video at 4 seconds, creating a 1-second overlap with the first video
+// This overlap will be where our transition happens
+await VideoEdit1.Input_AddVideoFileAsync(
+        videoFile2,
+        TimeSpan.FromMilliseconds(4000)); // Position on the timeline: 4000ms (4 seconds)
+```
+
+```
+// Define paths to our source video files
+string[] files = { @"c:\samples\video1.avi", @"c:\samples\video2.avi" };
+
+// Create the first video source - this will be the first clip in our timeline.
+// VideoFileSource(filename, startTime, stopTime, streamNumber, rate) — the int
+// arg is the audio/video stream index, not a rotation angle. Pass 0 to use the
+// default stream.
+var videoFile = new VideoFileSource(
+        files[0],                         // Path to first video file
+        TimeSpan.Zero,                    // Start from the beginning of the source file
+        TimeSpan.FromMilliseconds(5000),  // Use 5 seconds of the video
+        0,                                // streamNumber — 0 selects the default video stream
+        1.0);                             // Normal playback speed (1.0x)
+
+// Create the second video source - this will be our second clip with overlap
+var videoFile2 = new VideoFileSource(
+        files[1],                         // Path to second video file
+        TimeSpan.Zero,                    // Start from the beginning of the source file
+        TimeSpan.FromMilliseconds(5000),  // Use 5 seconds of the video
+        0,                                // streamNumber — 0 selects the default video stream
+        1.0);                             // Normal playback speed (1.0x)
+
+// Add the first video at the beginning of the timeline (0ms position)
+VideoEdit1.Input_AddVideoFile(
+        videoFile,
+        TimeSpan.FromMilliseconds(0));    // Position on the timeline: 0ms (start)
+
+// Add the second video at 4 seconds, creating a 1-second overlap with the first video
+// This overlap creates the region where our transition will occur
+VideoEdit1.Input_AddVideoFile(
+        videoFile2,
+        TimeSpan.FromMilliseconds(4000)); // Position on the timeline: 4000ms (4 seconds)
+```
+
+### Understanding the Parameters
+
+When adding video files to the timeline, each parameter serves a specific purpose:
+
+- **File path**: Location of the video file on disk
+- **Start time**: Position in the source video to start from (TimeSpan.Zero means beginning)
+- **Duration**: Length of video to use (5000ms in our example)
+- **Stretch mode** (VideoEditCore only): How to handle aspect ratio differences (Letterbox, Stretch, etc.)
+- **Stream number**: Index of the video/audio stream to read from the source file (0 = default). This is the integer arg between StopTime and rate — *not* a rotation angle.
+- **Playback speed**: Speed multiplier (1.0 means normal speed)
+- **Insert time**: Position on the timeline where this clip should be placed
+
+## Implementing the Transition Effect
+
+Now that we have our two overlapping video clips, we'll add a transition effect that will occur between the 4-second and 5-second marks on our timeline.
+
+VideoEditCoreVideoEditCoreX
+
+First, let's get the ID of our desired transition effect:
+
+```
+// Get the ID for the "Upper right" transition effect.
+// Video_Transition_* APIs are instance methods on VideoEditCore — call them on the engine instance, not on the type.
+int id = VideoEdit1.Video_Transition_GetIDFromName("Upper right");
+```
+
+Then, we'll add the transition by specifying the start time, end time, and transition ID:
+
+```
+// Add the transition to the timeline
+// Parameters:
+// - Start time: 4000ms (where the second clip begins and overlap starts)
+// - End time: 5000ms (where the first clip ends and overlap ends)
+// - Transition ID: The ID we retrieved for the "Upper right" transition
+VideoEdit1.Video_Transition_Add(TimeSpan.FromMilliseconds(4000), TimeSpan.FromMilliseconds(5000), id);
+```
+
+To see all available transition effects, you can use:
+
+```
+// Get the collection of all available transition effect names (instance method).
+ObservableCollection<string> availableTransitions = VideoEdit1.Video_Transition_Names();
+
+// Example of iterating through all available transitions
+foreach (string transitionName in availableTransitions)
+{
+    // Get the ID for each transition
+    int transitionId = VideoEdit1.Video_Transition_GetIDFromName(transitionName);
+    // You could use this in your app UI to let users choose transitions
+    Console.WriteLine($"Transition: {transitionName}, ID: {transitionId}");
+}
+```
+
+In VideoEditCoreX, we can first list all available transitions:
+
+```
+// Get all available transition names as an array
+var transitionNames = VideoEdit1.Video_Transitions_Names();
+
+// Select a specific transition by index
+// Note: Array is zero-based, so index 10 is the 11th transition in the list
+var transitionName = transitionNames[10];
+
+// You could also iterate through all transitions to show them in a UI dropdown
+// foreach (var name in transitionNames)
+// {
+//     Console.WriteLine($"Available transition: {name}");
+// }
+```
+
+Then, we'll create a transition object and add it to our timeline:
+
+```
+// Create a new transition object specifying:
+// - The transition name we selected above
+// - Start time (4000ms) - where the overlap begins
+// - End time (5000ms) - where the overlap ends
+var trans = new VideoTransition(
+        transitionName,                          // The transition name
+        TimeSpan.FromMilliseconds(4000),         // Start time of transition
+        TimeSpan.FromMilliseconds(5000));        // End time of transition
+
+// Add the transition to the VideoEdit component's transitions collection
+VideoEdit1.Video_Transitions.Add(trans);
+```
+
+You can also directly specify the transition name if you know it:
+
+```
+// Create a transition using a specific name without looking it up first.
+// The string ctor parses via Enum.Parse(typeof(VideoTransitionType), name).
+// Real VideoTransitionType members are: "Crossfade", "FadeIn", "FadeOut",
+// plus 100+ SMPTE wipes (e.g. "BarWipeLr", "BarWipeTb", "BoxWipeTl",
+// "BoxWipeTr", "ClockCw12", "IrisRect", "IrisDiamond", etc.). Pass any
+// other identifier (such as "Fade", "FadeFromBlack", "Push", "Slide",
+// "Iris", "Pixelate") and Enum.Parse throws ArgumentException at runtime.
+// The enumerable list of available names returned by
+// Video_Transitions_GetList is the safest source of truth.
+var trans = new VideoTransition(
+        "Crossfade",                             // Using a real VideoTransitionType identifier
+        TimeSpan.FromMilliseconds(4000),         // Start time of transition
+        TimeSpan.FromMilliseconds(5000));        // End time of transition
+
+// Add the transition to the VideoEdit component
+VideoEdit1.Video_Transitions.Add(trans);
+
+// You can also create multiple transitions between different clips:
+// var secondTrans = new VideoTransition("FadeIn", TimeSpan.FromMilliseconds(9000), TimeSpan.FromMilliseconds(10000));
+// VideoEdit1.Video_Transitions.Add(secondTrans);
+```
+
+## Popular Transition Effects and When to Use Them
+
+The SDK offers many transition effects suitable for different situations:
+
+1. **Fade transitions** (crossfade): Ideal for subtle, elegant transitions
+2. **Wipe transitions** (horizontal, vertical, diagonal): Great for dynamic scene changes
+3. **Zoom/push transitions**: Effective for emphasizing the next scene
+4. **Geometric transitions** (circle, square, diamond): Create interesting visual effects
+5. **Special transitions** (random blocks, matrix effects): For creative or dramatic transitions
+
+## Processing Your Video with Transitions
+
+After setting up your video clips and transition, you'll need to start the processing:
+
+VideoEditCoreVideoEditCoreX
+
+```
+// STEP 1: Configure the output file path
+VideoEdit1.Output_Filename = "output.mp4";  // Set the destination file path
+
+// STEP 2: Create and configure the output format
+var outputFormat = new MP4Output();
+// Tune encoder settings through the nested Video / Audio subsettings, e.g.:
+// (outputFormat.Video as MP4OutputH264Settings).Bitrate = 5000;  // kbit/s
+// Output size and frame rate are driven by VideoEdit1.Video_FrameRate and the timeline resolution.
+
+// STEP 3: Assign the output format to the VideoEdit component
+VideoEdit1.Output_Format = outputFormat;
+
+// STEP 4: Start the asynchronous processing
+// This will render the video with the transition and save it to the output file
+await VideoEdit1.StartAsync();
+
+// After this call, you should listen for processing events like:
+// - VideoEdit1.OnProgress to track processing progress
+// - VideoEdit1.OnStop to detect when processing is complete
+```
+
+```
+// STEP 1: Create and configure the output format
+// In VideoEditCoreX, we specify the output filename directly in the constructor
+var outputFormat = new MP4Output("output.mp4");
+
+// Tune encoder settings through the nested Video / Audio subsettings on MP4Output, e.g.:
+// outputFormat.Video = new OpenH264EncoderSettings { Bitrate = 5000 };  // kbit/s
+// outputFormat.Audio = new AVENCAACEncoderSettings { Bitrate = 192 };  // kbit/s
+// Output frame size comes from VideoEdit1.Output_VideoSize and frame rate from Output_VideoFrameRate.
+
+// STEP 2: Assign the output format to the VideoEdit component
+VideoEdit1.Output_Format = outputFormat;
+
+// STEP 3: Start the processing (synchronous call; returns true on success)
+// This will render the video with the transition and save it to the output file.
+VideoEdit1.Start();
+
+// You should also set up event handlers before calling Start():
+// VideoEdit1.OnProgress += (s, e) => { Console.WriteLine($"Progress: {e.Progress}%"); };
+// VideoEdit1.OnStop += (s, e) => { Console.WriteLine("Processing completed!"); };
+```
+
+## Common Transition Challenges and Solutions
+
+When implementing video transitions, you might encounter these common challenges:
+
+### Challenge 1: Transitions Not Appearing
+
+If your transitions aren't showing up:
+
+- Ensure the video clips actually overlap on the timeline
+- Verify the transition time span falls within this overlap
+- Check that the transition name or ID is valid
+
+### Challenge 2: Poor Visual Quality
+
+For higher quality transitions:
+
+- Use higher resolution source videos
+- Use a higher bitrate for your output
+- Consider adding a slight blur effect for smoother transitions
+
+### Challenge 3: Performance Issues
+
+If transition rendering is slow:
+
+- Use hardware acceleration if available
+- Simplify complex transitions when targeting lower-end hardware
+- Consider pre-rendering transitions for performance-critical applications
+
+## Required Dependencies
+
+To implement video transitions using Video Edit SDK, you'll need:
+
+- Video Edit SDK redist packages: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+For guidance on installing these dependencies, see our [deployment guide](../../deployment/).
+
+## Advanced Transition Techniques
+
+For more advanced transition effects:
+
+1. **Combining transitions with effects**: Apply a blur or color effect during the transition
+2. **Varying transition speeds**: Use different durations for the start and end of transitions
+3. **Keyframe animation**: Create custom transitions with precise control
+4. **Audio crossfading**: Synchronize audio transitions with your video transitions
+
+## Conclusion
+
+Video transitions are a powerful way to enhance your C# video applications. With the Video Edit SDK, you have access to a wide range of transition effects that can be customized to suit your specific needs. By following the examples in this guide, you can implement professional-quality transitions in your video editing projects.
+
+For additional options and detailed information about SMPTE transitions, check our [comprehensive transitions reference](../../transitions/).
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.
+
+---END OF PAGE---
+
+
+
+## Make a Video from Images with Transitions in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/video-images-console/
+**Description:** Turn a folder of JPEG images into a 1080p MP4 slideshow with a crossfade, wipe transitions and a fade in and out, in a C# console app with Video Edit SDK .NET.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, Editing, MP4, C#, NuGet
+**API:** VideoEditCoreX, VideoTransition, VideoTransitionType, MP4Output, StopEventArgs
+
+# Make a Video from Images with Transitions in C#
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+This tutorial builds a C# console app that turns a folder of JPEG images into one MP4 video with [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) and its `VideoEditCoreX` engine. Each image stays on screen for 3 seconds, and the next one starts 1 second before it ends; in that second a transition takes one image to the next: a crossfade first, then a bar wipe, an iris, a clock wipe and a barn door. The video fades in from black and out to black, and comes out 1920x1080 at 30 frames per second in H.264.
+
+`VideoEditCoreX` is the SDK's GStreamer engine. This app is built for Windows x64; for macOS and Linux, the engine's native packages are in the [cross-platform deployment guide](../../../deployment-x/).
+
+AI coding agents: use the VisioForge MCP server
+
+Building this with **Claude Code**, **Cursor**, or another AI coding agent? Connect to the public [VisioForge MCP server](../../../general/mcp-server-usage/) at `https://mcp.visioforge.com/mcp` for structured API lookups, runnable code samples, and deployment guides — more accurate than grepping `llms.txt`. No authentication required.
+
+Claude Code: `claude mcp add --transport http visioforge-sdk https://mcp.visioforge.com/mcp`
+
+## YouTube tutorial
+
+[Source code on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-console)
+
+The images in the video are frames of [Big Buck Bunny](https://peach.blender.org/) (c) Blender Foundation, under [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/).
+
+The video creates the project on .NET 10, which needs Visual Studio 2026; in Visual Studio 2022, choose .NET 8 or .NET 9.
+
+### The short version
+
+The same task in a few lines of C#, with a crossfade between the images:
+
+```
+using System.IO;
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.Types.X.VideoEncoders;
+using VisioForge.Core.VideoEditX;
+
+// The folder of images, and the video to write.
+var pics = Directory.GetFiles(args[0], "*.jpg").Order().ToArray();
+
+await VisioForgeX.InitSDKAsync();
+using var edit = new VideoEditCoreX();
+var done = new TaskCompletionSource<bool>();
+edit.OnError += (_, e) => Console.WriteLine(e.Message);
+edit.OnStop += (_, e) => done.TrySetResult(e.Successful);
+
+// Each image stays for 3 seconds, and the next one
+// starts 1 second before it ends.
+var show = TimeSpan.FromSeconds(3);
+var cross = TimeSpan.FromSeconds(1);
+var step = show - cross;
+
+for (var n = 0; n < pics.Length; n++)
+{
+    var at = step * n;
+    edit.Input_AddImageFile(pics[n], show, at);
+
+    // The crossfade fills the second the two images share.
+    if (n > 0)
+        edit.Video_Transitions.Add(
+            new VideoTransition(
+                VideoTransitionType.Crossfade, at, at + cross));
+}
+
+var end = step * (pics.Length - 1) + show;
+edit.Video_Transition_Add_FadeIn(TimeSpan.Zero, cross);
+edit.Video_Transition_Add_FadeOut(end - cross, end);
+
+edit.Output_VideoSize = new Size(1920, 1080);
+edit.Output_VideoFrameRate = new VideoFrameRate(30);
+// The default encoder is small: 3 Mbit/s at 1080p,
+// which shows as blocks in a sky or a gradient.
+var enc = new OpenH264EncoderSettings(VideoQuality.VeryHigh);
+edit.Output_Format = new MP4Output(args[1], enc);
+
+// Start returns false when the render cannot begin;
+// OnStop fires when the file is finished.
+var saved = edit.Start() && await done.Task;
+Console.WriteLine(saved ? $"Saved: {args[1]}" : "Not saved.");
+```
+
+Its code: [images-to-video-short-console on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-short-console).
+
+## Required NuGet packages
+
+- [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit/) — the SDK with `VideoEditCoreX`
+- [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64/) — GStreamer and the native libraries the engine runs on, among them the H.264 encoder
+
+```
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.27]" />
+<PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]" />
+```
+
+## The project file
+
+The Visual Studio console template targets `net10.0`, and for that target framework the SDK package resolves its Linux build. Add `-windows` to the target framework (`net8.0-windows` or `net9.0-windows` on Visual Studio 2022), and set `PlatformTarget` to `x64`, because the native package is x64:
+
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <TargetFramework>net10.0-windows</TargetFramework>
+  <PlatformTarget>x64</PlatformTarget>
+  <ImplicitUsings>enable</ImplicitUsings>
+  <Nullable>enable</Nullable>
+</PropertyGroup>
+```
+
+## The code
+
+`Program.cs`, with top-level statements. The project has `ImplicitUsings` enabled, so `System`, `System.IO`, `System.Linq` and `System.Threading.Tasks` are not listed.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.VideoEditX;
+
+// The images, in file-name order, and where the video goes.
+var folder = args.Length > 0 ? args[0] : Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "slides");
+var images = Directory.Exists(folder) ? Directory.GetFiles(folder, "*.jpg").Order().ToArray() : [];
+var output = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyVideos), "slideshow.mp4");
+if (images.Length == 0)
+{
+    Console.WriteLine($"No .jpg files in {folder}");
+    return;
+}
+
+await VisioForgeX.InitSDKAsync();
+
+var edit = new VideoEditCoreX();
+var done = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+edit.OnError += (s, e) => Console.WriteLine($"\n{e.Message}");
+edit.OnProgress += (s, e) => Console.Write($"\rRendering: {e.Progress}%");
+edit.OnStop += (s, e) => done.TrySetResult(e.Successful);
+
+// Each image is on screen for 3 seconds, and the next one starts 1 second before it ends.
+var show = TimeSpan.FromSeconds(3);
+var overlap = TimeSpan.FromSeconds(1);
+VideoTransitionType[] transitions =
+[
+    VideoTransitionType.Crossfade,
+    VideoTransitionType.BarWipeLr,
+    VideoTransitionType.IrisRect,
+    VideoTransitionType.SinglesweepCwt,
+    VideoTransitionType.BarndoorV,
+];
+
+for (int i = 0; i < images.Length; i++)
+{
+    var start = (show - overlap) * i;
+    edit.Input_AddImageFile(images[i], show, start);
+
+    // The transition fills the second where this image and the one before it overlap.
+    if (i > 0)
+    {
+        var type = transitions[(i - 1) % transitions.Length];
+        edit.Video_Transitions.Add(new VideoTransition(type, start, start + overlap));
+    }
+}
+
+// Fade in from black at the start, and out to black at the end.
+var total = (show - overlap) * (images.Length - 1) + show;
+edit.Video_Transition_Add_FadeIn(TimeSpan.Zero, overlap);
+edit.Video_Transition_Add_FadeOut(total - overlap, total);
+
+edit.Output_VideoSize = new Size(1920, 1080);
+edit.Output_VideoFrameRate = new VideoFrameRate(30);
+edit.Output_Format = new MP4Output(output);
+
+// Start returns false when the render cannot begin.
+var saved = edit.Start() && await done.Task;
+Console.WriteLine(saved ? $"\nSaved: {output}" : "\nThe video was not saved.");
+
+edit.Dispose();
+VisioForgeX.DestroySDK();
+```
+
+## How it works
+
+1. **The images** — the folder comes from the command line, or it is `Pictures\slides`. `Directory.GetFiles` takes every `.jpg` file in it, and `Order()` sorts them by name, so name the files `01.jpg`, `02.jpg` and so on. The video goes to `slideshow.mp4` in `Videos`.
+2. **The engine** — `VisioForgeX.InitSDKAsync` initializes the SDK before `VideoEditCoreX` is created. `OnError` and `OnProgress` print to the console; `OnStop` completes a `TaskCompletionSource` with `StopEventArgs.Successful`, which is `false` when the output file could not be finished.
+3. **The timeline** — `Input_AddImageFile(file, duration, insertTime)` places each image at its own start, 2 seconds after the one before, for 3 seconds, so neighboring images overlap by 1 second. The image is scaled to the output size and keeps its aspect ratio.
+4. **The transitions** — from the second image on, a `VideoTransition` of a `VideoTransitionType` covers the overlap; `Video_Transitions` holds them. `Crossfade` blends the two images; `BarWipeLr`, `IrisRect`, `SinglesweepCwt` and `BarndoorV` are SMPTE wipes. The list repeats when there are more images than transitions.
+5. **Fade in and out** — the video is 2 seconds per image plus 1 for the last one. `Video_Transition_Add_FadeIn` fades in from black over the first second, and `Video_Transition_Add_FadeOut` fades out over the last one.
+6. **The output** — `Output_VideoSize` and `Output_VideoFrameRate` set 1920x1080 at 30 frames per second, and `MP4Output` encodes the video in H.264 into an MP4 file.
+7. **The render** — `Start` returns `false` when the render cannot begin. Otherwise the app awaits `OnStop`; a render that an error ends on the way still raises `OnStop`, with `Successful` set to `false`. Then the engine is disposed and `VisioForgeX.DestroySDK` releases the SDK.
+
+Six images make a 13-second video: six times 3 seconds, minus five seconds of overlap.
+
+## Notes
+
+- **The trial watermark** — without a license, the SDK draws an orange TRIAL tag with visioforge.com/buy in the top-left corner of every frame. A license removes it; the code stays the same. Both videos on this page were recorded with an earlier SDK version, which drew a red UNREGISTERED there instead.
+- **The target framework** — with `net10.0` instead of `net10.0-windows`, the app gets the Linux build of the SDK and fails with a `DllNotFoundException`.
+- **File names** — names sort as text, so `10.jpg` comes before `2.jpg`. Pad the numbers: `01`, `02`.
+- **File extensions** — the `*.jpg` pattern skips `.jpeg` files, and on macOS and Linux, where file names are case-sensitive, `.JPG` files too.
+- **Other image formats** — the engine also reads PNG, BMP and GIF. `Directory.GetFiles` takes one pattern, so call it once per extension and sort the files together.
+- **Ending the app early** — the MP4 file is playable only once `OnStop` has fired; an app that exits before it leaves the encoder unfinished.
+
+## Sample Applications
+
+- [Images to video tutorial console (C#)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/_VideoTutorials/images-to-video-console) — the code of this page and the video
+
+## Frequently Asked Questions
+
+### How do I make a slideshow video from images in C#?
+
+Create `VideoEditCoreX`, add each image with `Input_AddImageFile(file, duration, insertTime)`, set `Output_Format` to `new MP4Output(path)`, call `Start` and wait for `OnStop`. The code above does that for a whole folder.
+
+### How do I add a crossfade between two images?
+
+Let the two images overlap on the timeline, and add `new VideoTransition(VideoTransitionType.Crossfade, start, stop)` to `Video_Transitions` for the overlap: `start` is where the second image begins, `stop` is where the first one ends.
+
+### How do I change how long each image is shown?
+
+Change `show`, and `overlap` for the length of the transitions. Each image then starts `show - overlap` after the one before.
+
+### Which transitions can I use?
+
+`Crossfade` and the SMPTE wipes of the `VideoTransitionType` enum: bar wipes, box wipes, the iris, clock sweeps, barn doors and more. See [Transition between clips](../transition-video/).
+
+## Video Transcript
+
+### What we build
+
+Let's make a video from a folder of images, with transitions between them, in a C# console app, with the VisioForge Video Edit SDK. Here's what we build. A console app that takes a folder of JPEG images and writes one MP4 video. Each image stays on screen for 3 seconds, and the next one starts 1 second before it ends. In that second, a transition takes one image to the next: a crossfade first, then a bar wipe, an iris, a clock wipe and a barn door. The video fades in from black and out to black. It is 1920 by 1080 at 30 frames per second, in H.264. This is the video the app makes from six images. They are frames of Big Buck Bunny, by the Blender Foundation, under a Creative Commons Attribution license.
+
+### Prerequisites
+
+You need Windows 10 or 11, and Visual Studio 2022 or 2026 with the .NET desktop development workload. The project is a console app on .NET 10. And a folder of JPEG images. The engine here is VideoEditCoreX, the SDK's GStreamer engine.
+
+### Create a console project
+
+In Visual Studio, create a new project. Search for console, and pick Console App for C#. Name the project ImagesToVideo, choose .NET 10, and click Create.
+
+### Add the NuGet packages
+
+Now add two NuGet packages. VisioForge.DotNet.VideoEdit holds VideoEditCoreX. CrossPlatform Core Windows x64 holds GStreamer and the native libraries the engine runs on. Or use the NuGet Package Manager: right-click the project, Manage NuGet Packages, and install VisioForge.DotNet.VideoEdit from the Browse tab. Then install the Core Windows x64 package. The Installed tab lists both.
+
+### Edit the project file
+
+A console app needs one more step. Open the project file. The console template targets net10.0, and that build of the SDK is the Linux one. Add dash windows to the target framework. And the native package is x64, so set PlatformTarget to x64.
+
+### Find the images
+
+Program.cs starts with five VisioForge usings: the SDK itself, its common types, the output formats, the video edit types, and the engine. The folder comes from the command line, or it is a slides folder in Pictures. The app takes every JPEG file in it, sorted by name, so name them 01, 02, 03, and so on. The video goes to slideshow.mp4 in Videos. With no images, the app says so and stops.
+
+### Create the editor
+
+Initialize the SDK with InitSDKAsync, and create VideoEditCoreX. A TaskCompletionSource waits for the end of the render. OnError prints errors, and OnProgress prints the progress in percent. OnStop fires when the render ends, and its Successful flag tells whether the file was finished.
+
+### Build the timeline
+
+Each image is on screen for 3 seconds, and the next one overlaps it by 1 second. The transitions come from the VideoTransitionType enum: Crossfade, then four wipes. BarWipeLr wipes from left to right. IrisRect opens a rectangle from the center. SinglesweepCwt sweeps like a clock hand. And BarndoorV opens like a barn door. For each image, its start is 2 seconds after the one before. Input\_AddImageFile puts the image on the timeline at that start, for 3 seconds. The image is scaled to the output size and keeps its aspect ratio. From the second image on, a VideoTransition fills the second where the two images overlap. The list repeats when there are more images than transitions. The total length is 2 seconds per image, plus 1 for the last one. Video\_Transition\_Add\_FadeIn fades in from black over the first second, and Video\_Transition\_Add\_FadeOut fades out over the last one. Then the output: 1920 by 1080 at 30 frames per second, to an MP4 file. MP4Output encodes the video in H.264.
+
+### Render the video
+
+Start returns false when the render cannot begin. Otherwise the app awaits OnStop and prints whether the video was saved, and where. If an error ends the render on the way, OnStop still fires, with Successful set to false. Last, dispose the engine and release the SDK.
+
+### Run it
+
+Put the code into Program.cs, and run the app. The six images are already in Pictures, slides. The console shows the progress, and then the path of the saved video.
+
+### Check the result
+
+ffprobe confirms it. H.264, 1920 by 1080, 30 frames per second, and 13 seconds: six images of 3 seconds, minus five seconds of overlap. Halfway through the first transition, both images show at once: that is the crossfade. Here the bar wipe has reached the middle of the frame. The iris opens a rectangle from the center. The clock wipe sweeps around the center. And the barn door opens from the middle.
+
+### The trial watermark
+
+You may have noticed the red UNREGISTERED in the top-left corner. That is the trial: without a license, the SDK draws it on every image. A license removes it, and the code stays the same.
+
+### Common mistakes
+
+A few common mistakes. Leaving the target framework at net10.0, without dash windows: that is the Linux build of the SDK, and the app fails with a DllNotFoundException. Naming files 1, 2 and up to 10: names sort as text, so 10 comes before 2. Use 01, 02 instead. Putting PNG files in the folder: this code looks for JPEG files only, so change the search pattern if you need more. And ending the app before OnStop: the encoder has not finished, and the MP4 file is not playable.
+
+### Next steps
+
+There are also guides for transitions between video clips, for text and image overlays, for joining several files into one, and for deploying the redists with your app. The full source is on GitHub, and the docs are at visioforge.com/help. Thanks for watching.
+
+## See Also
+
+- [Transition between clips](../transition-video/) — transitions between video files on the timeline
+- [Add a text overlay](../add-text-overlay/) — titles and captions over the video
+- [Add an image overlay](../add-image-overlay/) — a logo or a picture over the video
+- [Merge video and audio without re-encoding](../output-file-from-multiple-sources/) — the video of one file and the audio of another, copied into one MP4
+- [Cross-platform deployment](../../../deployment-x/) — the native packages `VideoEditCoreX` needs on each platform
+- [Video Edit SDK .NET Product Page](https://www.visioforge.com/video-edit-sdk-net)
+
+---END OF PAGE---
+
+
+
+## Set Individual Audio Track Volume Level in C# .NET Editor
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/code-samples/volume-for-track/
+**Description:** Control individual audio track volumes in video editing apps with VisioForge Video Edit SDK .NET. Per-track mixing with C# code examples.
+**Tags:** Video Edit SDK, .NET, VideoEditCore, Windows, Editing, Effects, C#, NuGet
+**API:** AudioVolumeEnvelopeEffect, AudioSource
+
+# Setting Custom Volume Levels for Audio Tracks in C# Applications
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [VideoEditCore](#)
+
+## Overview
+
+Managing audio volume levels is a critical aspect of video production and editing applications. This guide demonstrates how to implement individual volume controls for separate audio tracks in your .NET application.
+
+## Implementation Details
+
+Setting custom volume levels for audio tracks gives your users more precise control over their audio mix. Each track can have its own independent volume setting, allowing for professional-quality audio balancing.
+
+## Sample Code Implementation
+
+The following C# example shows how to apply a volume envelope effect to an audio track:
+
+```
+// AudioVolumeEnvelopeEffect(level) sets a constant volume for the track.
+// Optional StartTime / StopTime (TimeSpan) restrict the effect to a time window.
+var volume = new AudioVolumeEnvelopeEffect(level: 10);
+
+// The 5-arg Input_AddAudioFile overload takes an AudioSource (not a string),
+// so wrap the file path before passing it alongside the effect array.
+// Signature: Input_AddAudioFile(AudioSource, TimeSpan? timelineInsertTime = null,
+//   int targetStreamIndex = 0, AudioTrackEffect[] effects = null,
+//   TimelineAudioTrackCustomSettings = null)
+var audioSource = new AudioSource(audioFile);
+VideoEdit1.Input_AddAudioFile(audioSource, null, 0, new[] { volume });
+```
+
+## Understanding the Parameters
+
+- `AudioVolumeEnvelopeEffect(level: 10)`: constant-volume envelope. Level is an `int`; use `StartTime`/`StopTime` properties (both `TimeSpan`) to scope the effect to a time window.
+- `audioFile` (string) must be wrapped in a `new AudioSource(...)` — the effects-array overload of `Input_AddAudioFile` only accepts an `AudioSource`, not a raw filename.
+- `Input_AddAudioFile`: adds the audio file to the timeline with the given effects applied to the chosen audio stream.
+
+## Required Dependencies
+
+To implement this functionality, you'll need the following redistributable packages:
+
+- Video Edit SDK redistributables:
+- [x86 package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/)
+- [x64 package](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/)
+
+## Deployment Information
+
+For information about installing or deploying the required components to your end users' systems, please refer to our [deployment guide](../../deployment/).
+
+---
+
+## Additional Resources
+
+For more code examples and implementation techniques, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) with complete sample projects.
+
+---END OF PAGE---
+
+
+
+## Deploy Video Edit SDK .NET on Windows — NuGet and Installers
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/deployment/
+**Description:** Configure NuGet packages, silent installers, and runtime dependencies for VisioForge Video Edit SDK .NET on x86 and x64 Windows targets.
+**Tags:** Video Edit SDK, .NET, DirectShow, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Streaming, Decoding, Editing, RTSP, MP4, WebM, OGG, FLAC, Vorbis, NuGet
+
+# Comprehensive Deployment Guide for Video Edit SDK .NET
+
+## Introduction to VideoEditCore Deployment
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+The VisioForge Video Edit SDK for .NET provides a powerful set of tools for video processing, editing, and analysis in Windows environments. This comprehensive guide details the deployment options for ensuring the SDK functions correctly on target systems.
+
+For applications built with the AnyCPU configuration, you must deploy both x86 and x64 redistributables to ensure compatibility across different processor architectures. This guide covers all deployment methods, from simple NuGet packages to detailed manual installations.
+
+## Deployment Options Overview
+
+The SDK offers three primary deployment approaches:
+
+1. **NuGet Packages**: Simplest method requiring no administrative privileges
+2. **Automatic Installers**: Silent installation with administrative rights
+3. **Manual Installation**: Custom deployment with granular control over components
+
+Each approach has distinct advantages depending on your application requirements, distribution method, and target environment constraints.
+
+## Cross-Platform Deployment with VideoEditCoreX
+
+For developers seeking cross-platform compatibility, VisioForge offers the VideoEditCoreX engine. This modern implementation supports Windows, macOS, and Linux environments.
+
+For detailed instructions on deploying the cross-platform version, please refer to our dedicated [cross-platform deployment guide](../../deployment-x/). The remainder of this document focuses on the Windows-specific VideoEditCore engine.
+
+## VideoEditCore Engine (Windows-only)
+
+The Windows-specific VideoEditCore engine provides extensive video editing capabilities optimized for Windows environments. Below are the comprehensive deployment options available.
+
+### NuGet Package Deployment (No Administrative Rights Required)
+
+NuGet packages offer the simplest deployment method, requiring no administrative privileges on the target system. This approach automatically copies the necessary files to your application folder during the build process.
+
+#### Required NuGet Packages
+
+**Base Components (Always Required)**:
+
+- SDK Base Package: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.x64/) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.Base.arm64/) (.NET 5 or later)
+- Video Edit SDK Package: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.VideoEdit.x64/) | ARM64: not available yet
+
+**Format-Specific Components**:
+
+- MP4 Output: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.x64/) | [ARM64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.MP4.arm64/)
+- WebM Output: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.WebM.x86/)
+- XIPH Formats (Ogg, Vorbis, FLAC): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.XIPH.x64/)
+
+**Media Source Components**:
+
+- FFMPEG (file output, network streaming, and every `FastEdit_*` method: cut, join, stream muxing, audio extraction): [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.FFMPEG.x64/)
+- LAV Filters: [x86](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x86/) | [x64](https://www.nuget.org/packages/VisioForge.DotNet.Core.Redist.LAV.x64/)
+
+> **Input files LAV Filters cannot open:** `VideoEditCore` opens input files through DirectShow Editing Services, which uses only filters registered on the machine. When LAV Filters are not registered, as in an app deployed with NuGet packages only, `VideoEditCore` opens its input files, video and audio alike (MP4, MKV, AVI, M4A, FLAC and others), with the FFMPEG Source filter from the FFMPEG package, so add that package. WMV, ASF, WMA, WAV and MP3 files still open through the Windows filters. A timeline with transitions disables LAV Filters, and so does blacklisting a LAV splitter or decoder with `DirectShow_Filters_Blacklist_Add` (a blacklisted decoder does so only for its own stream type, audio or video), so in both cases add the FFMPEG package even where LAV Filters are registered.
+>
+> **Windows ARM64:** LAV Filters exist for x86 and x64 only. There is no upstream ARM64 build, so the SDK has no ARM64 LAV package, and most other DirectShow filters of the classic engines have no ARM64 build yet either. An app running as an ARM64 process cannot load them. AnyCPU apps usually run as ARM64 there too. On Windows ARM64, use `VideoEditCoreX` or Media Blocks SDK .NET, or build the app for x64 (`PlatformTarget` set to `x64`; it runs under emulation).
+
+Implementation is straightforward: add the required packages to your application project, and after building, the necessary redistributable files will be automatically included in your application folder.
+
+### Automatic Silent Installers (Administrative Rights Required)
+
+For scenarios where administrative rights are available, silent installers provide a streamlined deployment solution. These installers can be integrated into your application's setup process for seamless SDK deployment.
+
+**Base Components**:
+
+- Base Package (Always Required): [x86](https://files.visioforge.com/redists_net/redist_dotnet_base_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_base_x64.exe)
+
+**Media Source Components**:
+
+- FFMPEG Package: [x86](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_ffmpeg_x64.exe)
+- LAV Filters: [x86](https://files.visioforge.com/redists_net/redist_dotnet_lav_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_lav_x64.exe)
+
+**Format-Specific Components**:
+
+- XIPH Formats (Ogg, Vorbis, FLAC): [x86](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x86.exe) | [x64](https://files.visioforge.com/redists_net/redist_dotnet_xiph_x64.exe)
+
+**Installation and Uninstallation**:
+
+- To install: Run the appropriate executable with administrative privileges
+- To uninstall: Run the executable with administrative privileges and the parameters "/x //"
+- .NET assemblies can be installed in the Global Assembly Cache (GAC) or used directly from a local folder
+
+### Manual Installation (Advanced)
+
+Manual installation provides the highest level of control over the deployment process. This approach is recommended for advanced scenarios where specific components must be customized or for deployment environments with unique constraints.
+
+#### Step-by-Step Manual Installation Process
+
+1. **Runtime Dependencies**:
+2. For applications with administrative privileges: Install VC++ 2022 (v143) runtime (x86/x64) and OpenMP runtime DLLs using executable redistributables or MSM modules
+3. For applications without administrative privileges: Copy the VC++ 2022 (v143) runtime (x86/x64) and OpenMP runtime DLLs directly to the application folder
+4. **Core Components**:
+5. Copy the VisioForge\_MFP/VisioForge\_MFPX (or x64 versions) DLLs from Redist\Filters to your application folder
+6. Copy .NET assemblies to the application folder or install them to the Global Assembly Cache (GAC)
+7. **DirectShow Filters**:
+8. Copy and COM-register SDK DirectShow filters using [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32) or an equivalent method
+9. If your application executable is in a different folder, add the folder containing the filters to the system PATH environment variable
+
+## Essential DirectShow Filters Reference
+
+### Core Functionality Filters
+
+**Basic Video Processing**:
+
+- VisioForge\_Video\_Effects\_Pro.ax - Core video effects processing
+- VisioForge\_Audio\_Mixer.ax - Audio mixing and processing
+- VisioForge\_MP3\_Splitter.ax - MP3 format handling
+- VisioForge\_H264\_Decoder.ax - H.264 video decoding
+
+**Audio Processing**:
+
+- VisioForge\_Audio\_Effects\_4.ax - Legacy audio effects processing
+
+### Streaming Filters
+
+**RTSP Streaming**:
+
+- VisioForge\_RTSP\_Sink.ax - RTSP streaming output
+- All MP4 filters (legacy/modern) except Muxer
+
+**SSF Streaming**:
+
+- VisioForge\_SSF\_Muxer.ax - SSF format multiplexer
+- All MP4 filters (legacy/modern) except Muxer
+
+### Media Source Filters
+
+**FFMPEG Source**:
+
+- VisioForge\_FFMPEG\_Source.ax - FFMPEG-based media input
+- Copy all files from Redist\FFMPEG folder and add to Windows PATH
+
+**Memory Source**:
+
+- VisioForge\_AsyncEx.ax - Memory-based source input
+
+**LAV Source**:
+
+- Copy all files from Redist\LAV\x86(x64)
+- Register all .ax files
+
+### Format-Specific Filters
+
+**WebM Decoding**:
+
+- VisioForge\_WebM\_Ogg\_Source.ax - WebM/Ogg container support
+- VisioForge\_WebM\_Source.ax - WebM format source
+- VisioForge\_WebM\_Split.ax - WebM demuxing
+- VisioForge\_WebM\_Vorbis\_Decoder.ax - Vorbis audio decoder
+- VisioForge\_WebM\_VP8\_Decoder.ax - VP8 video decoder
+- VisioForge\_WebM\_VP9\_Decoder.ax - VP9 video decoder
+
+**FLAC Source**:
+
+- VisioForge\_Xiph\_FLAC\_Source.ax - FLAC audio format support
+
+**Ogg Vorbis Source**:
+
+- VisioForge\_Xiph\_Ogg\_Demux2.ax - Ogg container demuxer
+- VisioForge\_Xiph\_Vorbis\_Decoder.ax - Vorbis audio decoder
+
+### Advanced Functionality Filters
+
+**Video Encryption**:
+
+- VisioForge\_Encryptor\_v8.ax - Version 8 encryption
+- VisioForge\_Encryptor\_v9.ax - Version 9 encryption
+
+**GPU Acceleration**:
+
+- VisioForge\_DXP.dll / VisioForge\_DXP64.dll - DirectX 11 GPU effects
+
+### Simplified Filter Registration
+
+For convenient registration of multiple DirectShow filters, place the `reg_special.exe` utility from the SDK redistributable into the folder containing the filters and run it with administrator privileges.
+
+## Additional Resources
+
+For code samples and implementation examples, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+For technical support, documentation updates, and community discussions, visit the [VisioForge Developer Portal](https://helpdesk.visioforge.com/helpdesk/my-tickets).
+
+---END OF PAGE---
+
+
+
+## Getting Started - Timeline Video Editing API in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/getting-started/
+**Description:** Set up your first project with VisioForge Video Edit SDK .NET. Customizable timelines, multi-format support, transitions, effects, and live preview.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Playback, Editing, MP4, C#
+**API:** VideoEditCoreX, VideoEditCore, VideoSource, VideoFileSource, IVideoView
+
+# Building Professional Video Editing Applications with .NET SDK
+
+## Introduction to Video Editing with .NET
+
+The Video Edit SDK offers powerful functionality for .NET developers who want to create professional video editing applications. This SDK supports a wide range of platforms and UI frameworks, enabling you to build feature-rich video editors that handle multiple formats, apply effects, manage transitions, and deliver high-quality output.
+
+## Setting Up Your Development Environment
+
+### Creating Your Initial Project
+
+The SDK is designed to work seamlessly with various development environments. You can utilize either Visual Studio or JetBrains Rider to create your project, selecting your preferred platform and UI framework according to your requirements.
+
+For a smooth setup process, please refer to our detailed [installation guide](../../install/) which provides instructions for adding the necessary NuGet packages and setting up native dependencies correctly.
+
+## Implementing Core Video Editing Functionality
+
+### Initializing the Video Editing Engine
+
+The SDK provides a robust core editing object that serves as the foundation of your video editing application. `VideoEditCoreX` is an X-engine and requires SDK initialization before any core is created (see [Initialization](../../init/)); the DirectShow `VideoEditCore` does not. Follow these steps to create and initialize this essential component:
+
+VideoEditCoreVideoEditCoreX
+
+```
+private VideoEditCore core;
+
+core = new VideoEditCore(VideoView1 as IVideoView);
+```
+
+```
+private VideoEditCoreX core;
+
+private async void Form_Load(object sender, EventArgs e)
+{
+    // X-engine: initialize the SDK once before any core is created.
+    // InitSDKAsync can fail (e.g. native libs missing, or init failed on another thread); guard so the app doesn't crash.
+    try
+    {
+        await VisioForge.Core.VisioForgeX.InitSDKAsync();
+    }
+    catch (Exception ex)
+    {
+        // Log the init failure instead of crashing on a faulted async void await.
+        System.Diagnostics.Debug.WriteLine($"SDK initialization failed: {ex.Message}");
+        return;
+    }
+
+    core = new VideoEditCoreX(VideoView1 as IVideoView);
+}
+```
+
+You'll need to specify a Video View object as a parameter to enable video preview functionality during editing operations. For the `VideoEditCoreX` engine, initialize the SDK and create the core inside an `async void Form_Load` handler (or your equivalent startup path) before wiring up the editor — the engine's `core` is ready only after `await InitSDKAsync()` completes.
+
+### Implementing Robust Event Handling
+
+#### Error Event Management
+
+For proper error management in your application, implement the `OnError` event handler:
+
+```
+core.OnError += Core_OnError;
+
+private void Core_OnError(object sender, ErrorsEventArgs e)
+{
+    Debug.WriteLine("Error: " + e.Message);
+}
+```
+
+#### Progress Tracking System
+
+To keep your users informed about ongoing processes, implement the progress event handler:
+
+```
+core.OnProgress += Core_OnProgress;
+
+private void Core_OnProgress(object sender, ProgressEventArgs e)
+{
+    Debug.WriteLine("Progress: " + e.Progress);
+}
+```
+
+#### Operation Completion Notification
+
+To detect when editing operations have completed, implement the stop event handler:
+
+```
+core.OnStop += Core_OnStop;
+
+private void Core_OnStop(object sender, StopEventArgs e)
+{
+    Debug.WriteLine("Editing completed");
+}
+```
+
+### Configuring Timeline Parameters
+
+Before adding media sources to your project, you must establish the basic timeline parameters such as frame rate and resolution, which vary depending on which engine you're using:
+
+VideoEditCoreVideoEditCoreX
+
+```
+core.Video_FrameRate = new VideoFrameRate(30);
+```
+
+```
+core.Output_VideoSize = new VisioForge.Core.Types.Size(1920, 1080);
+core.Output_VideoFrameRate = new VideoFrameRate(30);
+```
+
+## Working with Media Sources
+
+### Managing Video and Audio on Your Timeline
+
+The SDK enables you to add various media sources to your timeline using straightforward API methods. For each source, you can precisely control parameters such as start time, end time, and position on the timeline. You have the flexibility to add video and audio sources either independently or together.
+
+### Integrating Video Files
+
+The SDK supports an extensive range of video formats including MP4, AVI, MOV, WMV, and many others. Here's how to add video content to your project:
+
+First, create a video source object and set the source file path. You can specify start and end times in the constructor or use null parameters to include the entire file.
+
+For files with multiple video streams, you can select which stream to use by specifying the stream number.
+
+VideoEditCoreVideoEditCoreX
+
+```
+var videoFile = new VisioForge.Core.Types.VideoEdit.VideoSource(
+    filename,
+    null,
+    null,
+    VideoEditStretchMode.Letterbox,
+    0,
+    1.0);
+```
+
+API:
+
+```
+public VideoSource(
+    string filename,
+    TimeSpan? startTime = null,
+    TimeSpan? stopTime = null,
+    VideoEditStretchMode stretchMode = VideoEditStretchMode.Letterbox,
+    int streamNumber = 0,
+    double rate = 1.0)
+```
+
+```
+var videoFile = new VisioForge.Core.Types.X.VideoEdit.VideoFileSource(
+    filename,
+    null,
+    null,
+    0,
+    1.0);
+```
+
+API:
+
+```
+public VideoFileSource(
+    string filename,
+    TimeSpan? startTime = null,
+    TimeSpan? stopTime = null,
+    int streamNumber = 0,
+    double rate = 1.0)
+```
+
+You can control playback speed by adjusting the rate parameter. For example, setting the rate to 2.0 will play the file at twice the normal speed.
+
+An alternative constructor allows you to add multiple file segments:
+
+VideoEditCoreVideoEditCoreX
+
+```
+public VideoSource(
+    string filename,
+    FileSegment[] segments,
+    VideoEditStretchMode stretchMode = VideoEditStretchMode.Letterbox,
+    int streamNumber = 0,
+    double rate = 1.0)
+```
+
+```
+public VideoFileSource(
+    string filename,
+    FileSegment[] segments,
+    int streamNumber = 0,
+    double rate = 1.0)
+```
+
+To add the source to your timeline, use the following methods:
+
+VideoEditCoreVideoEditCoreX
+
+```
+await core.Input_AddVideoFileAsync(
+    videoFile,
+    null,
+    0);
+```
+
+The third parameter specifies the destination video stream number. Use 0 to add the source to the first video stream.
+
+API:
+
+```
+public Task<bool> Input_AddVideoFileAsync(
+    VideoSource fileSource,
+    TimeSpan? timelineInsertTime = null,
+    int targetVideoStream = 0,
+    int customWidth = 0,
+    int customHeight = 0)
+```
+
+```
+core.Input_AddVideoFile(
+    videoFile,
+    null);
+```
+
+API:
+
+```
+public bool Input_AddVideoFile(
+    VideoFileSource source,
+    TimeSpan? insertTime = null)
+```
+
+The second parameter determines the timeline position. Using null automatically adds the source at the end of the existing timeline.
+
+### Incorporating Audio Files
+
+The SDK supports numerous audio formats including AAC, MP3, WMA, OPUS, Vorbis and more. The process for adding audio is similar to adding video:
+
+VideoEditCoreVideoEditCoreX
+
+```
+var audioFile = new VisioForge.Core.Types.VideoEdit.AudioSource(
+    filename,
+    startTime: null,
+    stopTime: null,
+    fileToSync: string.Empty,
+    streamNumber: 0,
+    rate: 1.0);
+```
+
+The `fileToSync` parameter enables audio-video synchronization. When working with separate video and audio files, you can specify the video filename in this parameter to ensure the audio synchronizes correctly with the video.
+
+```
+await core.Input_AddAudioFileAsync(
+    audioFile,
+    timelineInsertTime: null,
+    0);
+```
+
+```
+var audioFile = new AudioFileSource(
+    filename,
+    startTime: null,
+    stopTime: null);
+
+core.Input_AddAudioFile(
+    audioFile,
+    insertTime: null);
+```
+
+### Combining Video and Audio Sources
+
+For efficiency, you can add combined video and audio sources with a single method call:
+
+VideoEditCoreX
+
+```
+core.Input_AddAudioVideoFile(
+    filename,
+    startTime: null,
+    stopTime: null,
+    insertTime: null);
+```
+
+### Working with Static Images
+
+The SDK supports adding still images to your timeline, including JPG, PNG, BMP, and GIF formats. When adding an image, you'll need to specify how long it should appear on the timeline:
+
+VideoEditCoreVideoEditCoreX
+
+```
+await core.Input_AddImageFileAsync(
+    filename,
+    duration: TimeSpan.FromMilliseconds(2000),
+    timelineInsertTime: null,
+    stretchMode: VideoEditStretchMode.Letterbox);
+```
+
+```
+core.Input_AddImageFile(
+    filename,
+    duration: TimeSpan.FromMilliseconds(2000),
+    insertTime: null);
+```
+
+## Configuring Output Settings
+
+### Setting Output Format and Encoding Options
+
+The SDK offers flexible output options with support for numerous video and audio formats, including MP4, AVI, WMV, MKV, WebM, AAC, MP3, animated GIF, and many others.
+
+Use the `Output_Format` property to configure your desired output format:
+
+VideoEditCoreVideoEditCoreX
+
+```
+var mp4Output = new MP4HWOutput();
+core.Output_Format = mp4Output;
+```
+
+```
+var mp4Output = new MP4Output("output.mp4");
+core.Output_Format = mp4Output;
+```
+
+For a comprehensive list of supported output formats and detailed code examples, please refer to our [Output Formats](../../general/output-formats/) documentation section.
+
+### Rendering to Animated GIF
+
+`VideoEditCoreX` can render the timeline directly to an animated GIF via `GIFOutput`. GIF has no container — `gifenc` writes the final `.gif` file in one step, so the encoder profile contains only the video stream and any audio on the timeline is dropped.
+
+```
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEncoders;
+
+core.Output_Format = new GIFOutput("output.gif", new GIFEncoderSettings
+{
+    Speed = 10,    // 1..30 — higher value = faster encoding, lower visual quality
+    Repeat = 0     // -1 = loop forever, 0 = play once, n = play n+1 times
+});
+```
+
+Notes:
+
+- GIF output is video-only — audio tracks are ignored.
+- 256-color palette per frame is a format limitation — expect larger files than equivalent video codecs for long clips.
+- `SmartRender = true` is incompatible with GIF output (no source clip is already in `image/gif`).
+
+## Enhancing Your Videos
+
+### Applying Professional Video Effects
+
+The SDK provides a rich collection of video effects that you can apply to enhance your video content. For detailed information on implementing effects, see our [Video Effects](../../general/video-effects/) guide.
+
+The `VideoEditCoreX` engine includes dedicated API methods for adding text overlays. For implementation details, refer to our [Text Overlays](../code-samples/add-text-overlay/) guide.
+
+### Adding Smooth Transitions
+
+To create professional-looking transitions between video clips, check our detailed [transition usage code sample](../code-samples/transition-video/).
+
+## Processing Your Video Project
+
+### Starting the Editing Process
+
+Once you've configured all your sources, effects, and output settings, you can initiate the editing process:
+
+VideoEditCoreVideoEditCoreX
+
+```
+await core.StartAsync();
+```
+
+```
+core.Start();
+```
+
+During the editing process, your application will receive progress updates through the event handlers you've implemented, and you'll be notified when the operation completes via the stop event.
+
+## Conclusion
+
+By following this guide, you've learned the fundamental techniques for creating a powerful video editing application using the Video Edit SDK for .NET. This foundation will enable you to build sophisticated video editing tools that can compete with professional video editing software while being tailored to your specific requirements.
+
+When your application exits, de-initialize the SDK with `VisioForge.Core.VisioForgeX.DestroySDK()` (required for X-engines, including `VideoEditCoreX`) to avoid a hang-on-exit; see [Initialization](../../init/).
+
+---END OF PAGE---
+
+
+
+## Video Editing - Timeline, Transitions, Overlays in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/
+**Description:** Build video editing apps with VisioForge Video Edit SDK .NET. Timeline editing, transitions, overlays, format conversion, and GPU-accelerated encoding.
+**Tags:** Video Edit SDK, .NET, DirectShow, Windows, macOS, Linux, Android, iOS, Editing
+**API:** VideoEditCoreX, MP4Output
+
+# Video Edit SDK for C# .NET — Timeline Video Editing API
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+## Introduction
+
+Video Edit SDK for .NET is a C# video editing library that lets you build timeline-based video editing applications. Add video and audio files to a timeline, trim segments, apply transitions and effects, overlay text and images, and render the result to MP4, AVI, MKV, WebM, animated GIF, or other formats — all from your .NET code.
+
+The SDK provides two engines: **VideoEditCore** (Windows-only, DirectShow-based) and **VideoEditCoreX** (cross-platform, runs on Windows, macOS, Linux, Android, and iOS). Both engines share the same timeline model — add sources, configure output, and start editing.
+
+## Quick Start
+
+### 1. Install NuGet Package
+
+```
+dotnet add package VisioForge.DotNet.VideoEdit
+```
+
+For platform-specific dependencies and UI framework setup, see the [Installation Guide](../install/).
+
+### 2. Minimal Video Editing Example
+
+```
+using VisioForge.Core;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.VideoEdit;
+using VisioForge.Core.VideoEditX;
+
+// Initialize SDK
+VisioForgeX.InitSDK();
+
+// Create editor with video preview
+var editor = new VideoEditCoreX(videoView);
+
+// Set output resolution and frame rate
+editor.Output_VideoSize = new VisioForge.Core.Types.Size(1920, 1080);
+editor.Output_VideoFrameRate = new VideoFrameRate(30);
+
+// Add video files to timeline
+editor.Input_AddAudioVideoFile("intro.mp4", null, null, null);
+editor.Input_AddAudioVideoFile("main.mp4", null, null, null);
+
+// Set output format
+editor.Output_Format = new MP4Output("output.mp4");
+
+// Start editing
+editor.Start();
+
+// ... when done:
+editor.Stop();
+editor.Dispose();
+VisioForgeX.DestroySDK();
+```
+
+For the complete implementation guide with event handling, audio sources, image sources, and advanced timeline configuration, see the [Getting Started Guide](getting-started/).
+
+## Common Use Cases
+
+### Combine Multiple Video Files
+
+Merge multiple video clips into a single output file. Add files to the timeline in sequence, set the output format, and render. Supports mixing different source formats — combine MP4, AVI, and MOV files into one output.
+
+See: [Getting Started Guide](getting-started/). Files of the same format join without re-encoding with `VideoEditCore.FastEdit_JoinFilesAsync`.
+
+### Trim and Cut Video Segments
+
+Extract specific time ranges from video files by setting start and stop times on each source. Combine multiple segments from the same file or different files into a final edit.
+
+See: [Working with Video Segments](code-samples/several-segments/)
+
+### Add Text and Image Overlays
+
+Insert text titles, captions, logos, and watermarks over video content. Position, scale, and time overlays on the timeline.
+
+See: [Text Overlay Implementation](code-samples/add-text-overlay/) | [Adding Image Overlays](code-samples/add-image-overlay/)
+
+### Apply Transitions Between Clips
+
+Add cross-dissolve, wipe, slide, fade, and 100+ SMPTE standard transitions between video segments. Control transition duration, border style, and direction.
+
+See: [Transition Effects Between Video Fragments](code-samples/transition-video/) | [Transitions Reference](transitions/)
+
+### Create Slideshow from Images
+
+Build video slideshows from JPG, PNG, BMP, and GIF images with configurable display duration per image, transitions between slides, and background music.
+
+See: [Generating Videos from Image Sequences](code-samples/video-images-console/)
+
+### Add Background Music and Audio Mixing
+
+Mix multiple audio tracks with video content. Control volume per track, apply audio envelope effects for fade-in/fade-out, and synchronize audio with video.
+
+See: [Audio Volume Envelope Effects](code-samples/audio-envelope/) | [Custom Volume Control](code-samples/volume-for-track/)
+
+### Picture-in-Picture Composition
+
+Layer multiple video sources with position and size control for picture-in-picture layouts, reaction videos, or multi-camera compositions.
+
+See: [Picture-In-Picture Effects](code-samples/picture-in-picture/)
+
+## Supported Formats
+
+| Category | Formats |
+| --- | --- |
+| Video Containers | MP4, AVI, MOV, WMV, MKV, WebM, TS, FLV |
+| Video Codecs | H.264, H.265/HEVC, VP9, AV1, MPEG-2 |
+| Audio Formats | AAC, MP3, WMA, OPUS, Vorbis, FLAC, WAV |
+| Image Formats | JPG, PNG, BMP, GIF (input), animated GIF (output) |
+
+## Platform Support
+
+| Platform | UI Frameworks | Engine | Notes |
+| --- | --- | --- | --- |
+| Windows x64 | WinForms, WPF, MAUI, Avalonia, Console | VideoEditCore, VideoEditCoreX | Full feature set including DirectShow bridges |
+| macOS | MAUI, Avalonia, Console | VideoEditCoreX | Intel and Apple Silicon |
+| Linux x64, ARM64 | Avalonia, Console | VideoEditCoreX | Ubuntu, Debian, CentOS |
+| Android | MAUI | VideoEditCoreX | See [Video editing in .NET MAUI](maui/video-editing-maui/) |
+| iOS | MAUI | VideoEditCoreX | See [Video editing in .NET MAUI](maui/video-editing-maui/) |
+
+## Developer Documentation
+
+### Guides
+
+- [Getting Started Guide](getting-started/) — Full implementation walkthrough with both engines
+- [Code Examples](code-samples/) — Ready-to-use examples for overlays, transitions, audio, and composition
+- [Deployment Guide](deployment/) — NuGet packages, installers, and manual installation
+- [Transitions Reference](transitions/) — 100+ SMPTE wipe transition codes and properties
+
+### iOS
+
+- [iOS Video Editor](code-samples/ios-video-editor/) — Building video editing apps for iPhone and iPad
+
+## Developer Resources
+
+- [Code Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples)
+- [API Reference](https://api.visioforge.org/dotnet/api/index.html)
+- [Changelog](../changelog/)
+- [End User License Agreement](../../eula/)
+- [Licensing Information](https://www.visioforge.com/licensing)
+
+---END OF PAGE---
+
+
+
+## Video Editing in .NET MAUI — Android, iOS, Windows
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/maui/video-editing-maui/
+**Description:** Join and render video on Android, iOS, macCatalyst and Windows from one .NET MAUI codebase with the VideoEditCoreX timeline engine.
+**Tags:** Video Edit SDK, .NET, VideoEditCoreX, Windows, macOS, Android, iOS, MAUI, Editing, Encoding, MP4, H.264, C#, NuGet
+**API:** VideoEditCoreX, VideoView, IVideoView, MP4Output, ProgressEventArgs
+
+# Video Editing in .NET MAUI Apps
+
+## Introduction
+
+`VideoEditCoreX` is the cross-platform timeline engine of the Video Edit SDK .NET. It runs on the GStreamer backend, so the same editing code compiles and runs on Android, iOS, macCatalyst and Windows from a single .NET MAUI project — the preview surface is the shared `VideoView` control, and the timeline API is identical on every target.
+
+This guide builds the smallest useful editor: pick clips from the device gallery, append them to the timeline, preview the result, then render it to an MP4 file.
+
+The full sample is on [GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit).
+
+## Prerequisites
+
+- .NET MAUI workloads for the platforms you target (`maui-android`, `maui-ios`, `maui-maccatalyst`).
+- A VisioForge licence, or the 30-day trial.
+- On iOS and macCatalyst, an `NSPhotoLibraryUsageDescription` string in `Info.plist` — the gallery picker is what feeds the timeline.
+
+## NuGet Packages
+
+Two packages: the SDK itself and the MAUI `VideoView` control.
+
+```
+<PackageReference Include="VisioForge.DotNet.VideoEdit" Version="[2026.11.27]"/>
+<PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="[2026.11.27]"/>
+```
+
+`VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control — on its own it cannot compile `VideoEditCoreX`. The `VisioForge.DotNet.VideoEdit` package is what brings the engine in.
+
+Then add the redistributable for each platform you build for. See [Installing in MAUI apps](../../../install/maui/) for the full per-platform breakdown, including the Android Java bindings project reference, which Android builds require.
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.26]"/>
+  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
+</ItemGroup>
+
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <!-- The iOS redist version trails the SDK version on purpose - it tracks the
+       GStreamer-iOS rebuild cadence, not the wrapper release. -->
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.26]"/>
+</ItemGroup>
+
+<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]"/>
+</ItemGroup>
+
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]"/>
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="[2026.11.26]"/>
+</ItemGroup>
+```
+
+## MauiProgram.cs
+
+Register the VisioForge handlers so `VideoView` resolves to its native implementation:
+
+```
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
+
+var builder = MauiApp.CreateBuilder();
+builder
+    .UseMauiApp<App>()
+    .UseSkiaSharp()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers());
+```
+
+## XAML Layout
+
+```
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:my="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI">
+    <Grid RowDefinitions="*,Auto">
+        <my:VideoView Grid.Row="0" x:Name="videoView" Background="Black"
+                      HorizontalOptions="FillAndExpand" VerticalOptions="FillAndExpand" />
+        <VerticalStackLayout Grid.Row="1">
+            <ProgressBar x:Name="pbProgress" />
+            <Button x:Name="btAdd" Text="ADD CLIP" Clicked="btAdd_Clicked" />
+            <Button x:Name="btPreview" Text="PREVIEW" Clicked="btPreview_Clicked" />
+            <Button x:Name="btRender" Text="RENDER MP4" Clicked="btRender_Clicked" />
+        </VerticalStackLayout>
+    </Grid>
+</ContentPage>
+```
+
+## Creating the Engine
+
+`AddVisioForgeHandlers` registers the control. It does **not** load the native stack — that is a separate call, and it must happen before the first `VideoEditCoreX` is constructed. Skip it and the constructor throws `DllNotFoundException` on a clean machine.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types;
+using VisioForge.Core.Types.Events;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.VideoEditX;
+
+private VideoEditCoreX _core;
+
+private async void MainPage_Loaded(object sender, EventArgs e)
+{
+    // Loads the native GStreamer stack. The first call builds the plugin registry and
+    // can take hundreds of milliseconds, so use the async form off the UI thread.
+    await VisioForgeX.InitSDKAsync();
+
+    IVideoView vv = videoView.GetVideoView();
+    _core = new VideoEditCoreX(vv);
+
+    _core.OnError += Core_OnError;
+    _core.OnProgress += Core_OnProgress;
+    _core.OnStop += Core_OnStop;
+}
+```
+
+Keep the controls dead until the engine exists
+
+`InitSDKAsync` runs on the thread pool and a cold start spends hundreds of milliseconds building the GStreamer registry. `MainPage_Loaded` is `async void`, so the page is interactive for that whole window and every handler that touches `_core` would hit a null reference. Disable the control panel in the constructor and enable it once the engine is constructed, and wrap the body in a `try`/`catch` so a failed init leaves the controls off with the reason on screen. The sample does both.
+
+Release it on the way out:
+
+```
+private void MainPage_Unloaded(object sender, EventArgs e)
+{
+    _core?.Stop();
+    _core?.Dispose();
+    _core = null;
+
+    VisioForgeX.DestroySDK();
+}
+```
+
+## Building the Timeline
+
+Each `Input_Add*` call appends to the end of the timeline. Use `Input_AddAudioVideoFile` for a normal clip, `Input_AddAudioFile` for an audio-only track and `Input_AddImageFile` for a still with an explicit duration.
+
+```
+private async void btAdd_Clicked(object sender, EventArgs e)
+{
+    var picked = await MediaPicker.Default.PickVideoAsync();
+    if (picked == null)
+    {
+        return;
+    }
+
+    _core.Input_AddAudioVideoFile(await ResolveLocalPathAsync(picked));
+}
+```
+
+`Input_Clear_List()` empties the timeline.
+
+The picker does not always hand you a file path
+
+On Android, `MediaPicker` copies the asset into a cache folder, so `FullPath` is absolute and usable as is. On iOS, `PHPicker` hands MAUI an `NSItemProvider` and only the original file name survives in `FullPath` — the stream has to be copied into your own cache first. The sample's `ResolveLocalPathAsync` covers both cases.
+
+## Preview and Render
+
+The engine has one switch between the two modes: `Output_Format`. A null value plays the timeline into the `VideoView`; a format object renders it to a file.
+
+```
+private void btPreview_Clicked(object sender, EventArgs e)
+{
+    _core.Output_Format = null;
+    _core.Start();
+}
+
+private void btRender_Clicked(object sender, EventArgs e)
+{
+    var output = Path.Combine(FileSystem.Current.AppDataDirectory, "joined.mp4");
+
+    _core.Output_Format = new MP4Output(output, H264EncoderBlock.GetDefaultSettings());
+    _core.Start();
+}
+```
+
+`new MP4Output(path)` uses the same selector
+
+`H264EncoderBlock.GetDefaultSettings()` is the SDK's own platform selector: VideoToolbox on Apple, MediaCodec on Android, then NVENC, AMF and QSV before falling back to software. `new MP4Output(path)` uses it too, except on Linux, where it stays on OpenH264.
+
+It lives in the `VisioForge.Core.MediaBlocks.VideoEncoders` namespace, but it is a shared helper rather than a Media Blocks pipeline — `MP4Output` itself calls it.
+
+Leave the audio encoder unset: `MP4Output` picks AAC on Windows and MP3 elsewhere.
+
+Write to a per-app directory such as `FileSystem.Current.AppDataDirectory`. It needs no runtime permission on any platform, unlike the shared media store on Android.
+
+## Progress and Completion
+
+`OnProgress` reports 0–100 and `OnStop` reports success. Both fire on a background thread, so marshal to the UI thread before touching controls:
+
+```
+private void Core_OnProgress(object sender, ProgressEventArgs e)
+{
+    MainThread.BeginInvokeOnMainThread(() => pbProgress.Progress = e.Progress / 100.0);
+}
+
+private void Core_OnStop(object sender, StopEventArgs e)
+{
+    MainThread.BeginInvokeOnMainThread(() =>
+        DisplayAlert("Render", e.Successful ? "Completed" : "Failed", "OK"));
+}
+```
+
+## Platform Notes
+
+- **Android** needs the Java bindings project reference. Without it the app builds but the native stack fails to initialise at runtime.
+- **iOS and macCatalyst** need `<UseInterpreter>true</UseInterpreter>`. MAUI's XAML type conversion uses `DynamicMethod`, which requires JIT and throws `ExecutionEngineException` in AOT-only mode.
+- **Windows** builds resolve the redists through `VisioForge.CrossPlatform.Core.Windows.x64`.
+
+## Sample Applications
+
+- **[SimpleEdit (MAUI)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/MAUI/SimpleEdit)** — the app this guide builds.
+- **[Video Join Demo X (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Edit%20SDK%20X/WPF/CSharp/Video%20Join%20Demo%20X)** — the same timeline API on the desktop, with per-format output options.
+
+## See Also
+
+- [Installing in MAUI apps](../../../install/maui/)
+- [Video Edit SDK cheat sheet](../../cheat-sheet/)
+- [Transitions](../../transitions/)
+- [Android deployment](../../../deployment-x/Android/)
+- [iOS deployment](../../../deployment-x/iOS/)
+
+---END OF PAGE---
+
+
+
+## SMPTE Wipe Transitions - 100+ Video Effects in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/videoedit/transitions/
+**Description:** Apply 100+ SMPTE video transition effects with VisioForge Video Edit SDK .NET. Customize border width, softness, and positioning between clips.
+**Tags:** Video Edit SDK, .NET, Windows
+
+# Transitions
+
+[Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+The SMPTE Wipe transition produces any of the standard wipes defined by the Society of Motion Picture and Television Engineers (SMPTE) in SMPTE document 258M-1993, except for the quad split.
+
+VideoEditCore (DirectShow)
+
+`VideoEditCore` draws each SMPTE code with the closest built-in DirectX transition (bar, barn door, iris, clock, wheel, strips, blinds, spiral, zigzag or dissolve). The look is close to the SMPTE pattern, not identical, and the border, offset, replicate and scale properties have no effect.
+
+## Properties
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| Border Color | Color/TColor | Black | Color of the border around the edges of the wipe pattern. |
+| BorderSoftness | long | 0 | Width of the blurry region around the edges of the wipe pattern. Specify zero for no blurry region. |
+| BorderWidth | long | 0 | Width of the solid border along the edges of the wipe pattern. Specify zero for no border. |
+| ID | long | 1 | Standard SMPTE wipe code specifying the style of wipe to use. For a list of wipe codes and their associated schematics, see SMPTE document 258M-1993. |
+| OffsetX | long | 0 | Horizontal offset of the wipe origin from the center of the image. Valid only for values of **ID** from 101 to 131. |
+| OffsetY | long | 0 | Verical offset of the wipe origin from the center of the image. Valid only for values of **ID** from 101 to 131. |
+| ReplicateX | long | 0 | Number of times to replicate the wipe pattern horizontally. Valid only for values of **ID** from 101 to 131. |
+| ReplicateY | long | 0 | Number of times to replicate the wipe pattern vertically. Valid only for values of **ID** from 101 to 131. |
+| ScaleX | double | 1.0 | Amount by which to stretch the wipe horizontally, as a percentage of the original wipe definition. Valid only for values of **ID** from 101 to 131. |
+| ScaleY | double | 1.0 | Amount by which to stretch the wipe vertically, as a percentage of the original wipe definition. Valid only for values of **ID** from 101 to 131. |
+
+## SMPTE
+
+This transition supports the following standard SMPTE wipes:
+
+| Number | Description | Number | Description |
+| --- | --- | --- | --- |
+| 1 | Horizontal | 211 | Radial, left-right, top |
+| 2 | Vertical | 212 | Radial, up-down, right |
+| 3 | Upper left | 213 | Radial, left-right, top-bottom |
+| 4 | Upper right | 214 | Radial, up-down, left-right |
+| 5 | Lower right | 221 | Radial, top |
+| 6 | Lower left | 222 | Radial, right |
+| 7 | Four corners | 223 | Radial, bottom |
+| 8 | Four squares | 224 | Radial, left |
+| 21 | Barn doors, vertical | 225 | Radial, top clockwise, bottom clockwise |
+| 22 | Barn doors, horizontal | 226 | Radial, left clockwise, right clockwise |
+| 23 | Top center | 227 | Radial, top clockwise, bottom anticlockwise |
+| 24 | Right center | 228 | Radial, left clockwise, right anticlockwise |
+| 25 | Bottom center | 231 | Radial, top split |
+| 26 | Left center | 232 | Radial, right split |
+| 41 | Diagonal, NW to SE | 233 | Radial, bottom split |
+| 42 | Diagonal, NE to SW | 234 | Radial, left split |
+| 43 | Triangles, top/bottom | 235 | Radial, top-bottom split |
+| 44 | Triangles, left/right | 236 | Radial, left-right split |
+| 45 | Diagonal stripe, SW to NE | 241 | Radial, top-left corner |
+| 46 | Diagonal stripe, NW to SE | 242 | Radial, bottom-left corner |
+| 47 | Cross | 243 | Radial, bottom-right corner |
+| 48 | Diamond Box | 244 | Radial, top-right corner |
+| 61 | Wedge, top | 245 | Radial, top-left, bottom-right |
+| 62 | Wedge, right | 246 | Radial, bottom-left, top-right |
+| 63 | Wedge, bottom | 251 | Center radial, top |
+| 64 | Wedge, left | 252 | Center radial, left |
+| 65 | V | 253 | Center radial, bottom |
+| 66 | V, right | 254 | Center radial, right |
+| 67 | V, inverted | 261 | Box radial, right |
+| 68 | V, left | 262 | Box radial, top |
+| 71 | Sawtooth, left | 263 | Center radial, top, bottom |
+| 72 | Sawtooth, top | 264 | Center radial, left, right |
+| 73 | Sawtooth, vertical | 301 | Matrix, horizontal |
+| 74 | Sawtooth, horizontal | 302 | Matrix, vertical |
+| 101 | Box | 303 | Matrix, diagonal, top-left |
+| 102 | Diamond | 304 | Matrix, diagonal, top-right |
+| 103 | Triangle, up | 305 | Matrix, diagonal, bottom-right |
+| 104 | Triangle, right | 306 | Matrix, diagonal, bottom-left |
+| 105 | Triangle, bottom | 310 | Matrix, clockwise top-left |
+| 106 | Triangle, left | 311 | Matrix, clockwise top-right |
+| 107 | Arrow head, up | 312 | Matrix, clockwise bottom-right |
+| 108 | Arrow head, right | 313 | Matrix, clockwise bottom-left |
+| 109 | Arrow head, down | 314 | Matrix, anticlockwise top-left |
+| 110 | Arrow head, left | 315 | Matrix, anticlockwise top-right |
+| 111 | Pentagon, up | 316 | Matrix, anticlockwise bottom-right |
+| 112 | Pentagon, down | 317 | Matrix, anticlockwise bottom-left |
+| 113 | Hexagon | 320 | Matrix, vertical top-left, top-right |
+| 114 | Hexagon, rotated | 321 | Matrix, vertical bottom-left, bottom-right |
+| 119 | Circle | 322 | Matrix, vertical top-left, bottom-right |
+| 120 | Oval, horizontal | 323 | Matrix, vertical bottom-left, top-right |
+| 121 | Oval, vertical | 324 | Matrix, horizontal top-left, bottom-left |
+| 122 | Eye, horizontal | 325 | Matrix, horizontal top-right, bottom-right |
+| 123 | Eye, vertical | 326 | Matrix, horizontal top-left, bottom-right |
+| 124 | Rounded rectangle, horizontal | 327 | Matrix, horizontal top-right, bottom-left |
+| 125 | Rounded rectangle, vertical | 328 | Matrix, diagonal bottom-left, top-right |
+| 127 | 4-point star | 329 | Matrix, diagonal top-left, bottom-right |
+| 128 | 4-point star | 340 | Matrix, top double spiral |
+| 129 | 6-point star | 341 | Matrix, bottom double spiral |
+| 130 | Heart | 342 | Matrix, left double spiral |
+| 131 | Keyhole | 343 | Matrix, right double spiral |
+| 201 | Radial, 12 o'clock | 344 | Matrix, quad spiral, top-bottom |
+| 202 | Radial, 3 o'clock | 345 | Matrix, quad spiral, left-right |
+| 203 | Radial, 6 o'clock | 350 | Waterfall, left |
+| 204 | Radial, 9 o'clock | 351 | Waterfall, right |
+| 205 | Radial, 12 + 6 o'clock | 352 | Waterfall, horizontal, left |
+| 206 | Radial, 3 + 9 o'clock | 353 | Waterfall, horizontal, right |
+| 207 | Radial, 4-way | 409 | Random mask |
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples.
+
+---END OF PAGE---
+
+

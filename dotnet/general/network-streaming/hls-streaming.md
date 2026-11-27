@@ -32,9 +32,9 @@ primary_api_classes:
   - H264EncoderBlock
 
 video:
-  id: Cw3UCgzu2wI
-  upload_date: 2026-11-24T20:18:00Z
-  duration: PT1M
+  id: xLOZmjgWHpo
+  upload_date: 2026-11-27T15:35:30Z
+  duration: PT10M27S
 
 ---
 
@@ -78,13 +78,17 @@ Since HLS is entirely HTTP-based, you'll need either a dedicated HTTP server or 
 
 The Media Blocks SDK offers a comprehensive approach to HLS streaming through its pipeline architecture, giving developers granular control over each aspect of the streaming process.
 
-### The Short Version
+### Video Tutorial: Webcam over HLS to a Browser in C# WinForms
 
-The one-minute video runs this console app and plays the stream in a browser.
+The tutorial builds a WinForms app that streams a webcam and its microphone live over HLS with `HLSSinkBlock`. A `TeeBlock` splits the camera between a local preview and the H.264 encoder, the microphone goes through `AACEncoderBlock`, and the sink's built-in HTTP server serves the two-second segments, the playlist and an hls.js viewer page, with no web server to install. The run then looks inside one segment and the live playlist, shows how far behind live the browser plays, and covers other players and what to check when the stream does not play.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Cw3UCgzu2wI?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/xLOZmjgWHpo?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
+
+Its code: [hls-webcam-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/hls-webcam-winforms) on GitHub.
+
+### The Short Version
 
 A complete console app: it streams the first webcam live over HLS until Enter is pressed. `SystemVideoSourceBlock` captures the camera and `H264EncoderBlock` encodes the video to H.264. `HLSSinkBlock` cuts the stream into MPEG-TS segments of about five seconds (`TargetDuration`, cut at keyframes) and writes them, with the `playlist.m3u8` playlist, into the `hls` subfolder of the app folder; it keeps the last ten segments on disk and the last five in the playlist. The app first deletes the segments and the playlist a previous run left there, so a player never picks up the old stream. With `Custom_HTTP_Server_Enabled`, the sink's built-in HTTP server serves that subfolder, and only it, on port 8088: open `http://localhost:8088/` in a browser. The stream has video only; the example below adds a microphone with `AACEncoderBlock`.
 

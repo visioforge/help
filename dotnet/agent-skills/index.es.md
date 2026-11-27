@@ -143,6 +143,6 @@ VisioForge ya expone tres superficies para agentes de IA — Agent Skills es la 
 | Superficie | Forma | Mejor para |
 |---|---|---|
 | `mcp.visioforge.com/mcp` (vía `/.well-known/mcp.json` + `/.well-known/mcp-server-card`) | Servidor MCP en vivo con 14 herramientas read-only | Consultar la API del SDK, buscar media blocks, obtener ejemplos de código |
-| `/llms.txt`, `/llms-full.txt` | Índice de docs amigable a LLMs | Ingesta masiva del corpus de documentación |
+| `/llms.txt`, `/llms-full.txt` | Índice de docs amigable a LLMs | Ingesta masiva del corpus de documentación: `/llms-full.txt` enumera los archivos de texto completo, uno por sección, en `/help/llms-full/` |
 | `<meta name="x-webmcp-tools">` + runtime WebMCP | 10 herramientas in-page registradas vía `navigator.modelContext.provideContext()` | Agente actuando en la pestaña actual del usuario (cambio de idioma, esquema de página, copiar código, …) |
 | **`/.well-known/agent-skills/index.json`** | **Skills procedimentales por (SDK, plataforma) en archivos** | **Bootstrap de un proyecto nuevo que usa uno de nuestros SDKs** |

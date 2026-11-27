@@ -1223,7 +1223,8 @@ Utilisez la méthode de fabrique `RTSPRAWSourceSettings.CreateAsync(uri, login, 
 | --- | --- | :---: | --- |
 | `Uri` | `Uri` | — | URL du flux RTSP |
 | `AllowedProtocols` | `RTSPSourceProtocol` | Tous | Protocoles de transport (TCP, UDP, UDP_Multicast, HTTP) |
-| `Latency` | `int` | — | Mise en tampon en millisecondes |
+| `Latency` | `int` | `0` | Mise en tampon en millisecondes |
+| `BufferMode` | `RTSPBufferMode` | `Synced` | Mode du tampon de gigue. `Synced` conserve la cadence d'images de la caméra dans un enregistrement sans réencodage en UDP ; `Auto` ou `Slave` suivent la dérive de l'horloge de la caméra, mais avec une petite `Latency` les intervalles entre images de l'enregistrement varient. `Synced` ne suit pas la dérive entre l'horloge média de la caméra et celle de cette machine : pour des sessions en direct de plusieurs heures, ou pour un mixage avec l'audio d'un autre appareil, utilisez `Auto` avec une `Latency` qui couvre la gigue du réseau (500 ms ou plus) |
 | `Login` | `string` | — | Nom d'utilisateur pour l'authentification |
 | `Password` | `string` | — | Mot de passe pour l'authentification |
 | `AudioEnabled` | `bool` | `true` | Activer le pad de sortie audio |

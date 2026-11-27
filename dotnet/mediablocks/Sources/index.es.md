@@ -1223,7 +1223,8 @@ Use el método de fábrica `RTSPRAWSourceSettings.CreateAsync(uri, login, passwo
 | --- | --- | :---: | --- |
 | `Uri` | `Uri` | — | URL del stream RTSP |
 | `AllowedProtocols` | `RTSPSourceProtocol` | Todos | Protocolos de transporte (TCP, UDP, UDP_Multicast, HTTP) |
-| `Latency` | `int` | — | Almacenamiento en búfer en milisegundos |
+| `Latency` | `int` | `0` | Almacenamiento en búfer en milisegundos |
+| `BufferMode` | `RTSPBufferMode` | `Synced` | Modo del búfer de jitter. `Synced` conserva la cadencia de fotogramas de la cámara en una grabación sin recodificar por UDP; `Auto` o `Slave` siguen la deriva del reloj de la cámara, pero con una `Latency` pequeña los intervalos entre fotogramas de la grabación fluctúan. `Synced` no sigue la deriva entre el reloj de medios de la cámara y el de esta máquina: para sesiones en directo de muchas horas, o al mezclar con audio de otro dispositivo, use `Auto` con una `Latency` que cubra la fluctuación de la red (500 ms o más) |
 | `Login` | `string` | — | Nombre de usuario de autenticación |
 | `Password` | `string` | — | Contraseña de autenticación |
 | `AudioEnabled` | `bool` | `true` | Habilitar pad de salida de audio |

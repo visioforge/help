@@ -1227,7 +1227,8 @@ Use the factory method `RTSPRAWSourceSettings.CreateAsync(uri, login, password, 
 | --- | --- | :---: | --- |
 | `Uri` | `Uri` | — | RTSP stream URL |
 | `AllowedProtocols` | `RTSPSourceProtocol` | All | Transport protocols (TCP, UDP, UDP_Multicast, HTTP) |
-| `Latency` | `int` | — | Buffering in milliseconds |
+| `Latency` | `int` | `0` | Buffering in milliseconds |
+| `BufferMode` | `RTSPBufferMode` | `Synced` | Jitter-buffer mode. `Synced` keeps the camera's frame timing in a passthrough recording over UDP; `Auto` or `Slave` follow camera clock drift, but with a small `Latency` the frame intervals of a recording jitter. `Synced` does not follow drift between the camera's media clock and this machine's clock: for live sessions of many hours, or when mixing with audio from another device, use `Auto` with a `Latency` that covers the network's jitter (500 ms or more) |
 | `Login` | `string` | — | Authentication username |
 | `Password` | `string` | — | Authentication password |
 | `AudioEnabled` | `bool` | `true` | Enable audio output pad |

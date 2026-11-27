@@ -32,9 +32,9 @@ primary_api_classes:
   - H264EncoderBlock
 
 video:
-  id: Cw3UCgzu2wI
-  upload_date: 2026-11-24T20:18:00Z
-  duration: PT1M
+  id: xLOZmjgWHpo
+  upload_date: 2026-11-27T15:35:30Z
+  duration: PT10M27S
 
 ---
 
@@ -78,13 +78,17 @@ HLS étant entièrement basé sur HTTP, vous aurez besoin soit d'un serveur HTTP
 
 Le Media Blocks SDK propose une approche complète de la diffusion HLS grâce à son architecture de pipeline, offrant aux développeurs un contrôle granulaire sur chaque aspect du processus de diffusion.
 
-### La version courte
+### Tutoriel vidéo : webcam en HLS vers un navigateur en C# WinForms
 
-La vidéo d'une minute exécute cette application console et lit le flux dans un navigateur.
+Le tutoriel construit une application WinForms qui diffuse en direct une webcam et son micro en HLS avec `HLSSinkBlock`. Un `TeeBlock` partage la caméra entre un aperçu local et l'encodeur H.264, le micro passe par `AACEncoderBlock`, et le serveur HTTP intégré du sink sert les segments de deux secondes, la playlist et une page de lecteur hls.js, sans serveur web à installer. L'exécution examine ensuite un segment et la playlist en direct, montre le retard du navigateur sur le direct, et passe en revue d'autres lecteurs et ce qu'il faut vérifier quand le flux ne se lit pas.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Cw3UCgzu2wI?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/xLOZmjgWHpo?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
+
+Son code : [hls-webcam-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/hls-webcam-winforms) sur GitHub.
+
+### La version courte
 
 Une application console complète : elle diffuse en direct en HLS la première webcam jusqu'à l'appui sur Entrée. `SystemVideoSourceBlock` capture la caméra et `H264EncoderBlock` encode la vidéo en H.264. `HLSSinkBlock` découpe le flux en segments MPEG-TS d'environ cinq secondes (`TargetDuration`, coupés sur les images clés) et les écrit, avec la playlist `playlist.m3u8`, dans le sous-dossier `hls` du dossier de l'application ; il garde sur le disque les dix derniers segments et dans la playlist les cinq derniers. L'application supprime d'abord les segments et la playlist qu'une exécution précédente y a laissés, pour qu'un lecteur ne reprenne jamais l'ancien flux. Avec `Custom_HTTP_Server_Enabled`, le serveur HTTP intégré du sink sert ce sous-dossier, et lui seul, sur le port 8088 : ouvrez `http://localhost:8088/` dans un navigateur. Le flux ne contient que la vidéo ; l'exemple suivant ajoute un microphone avec `AACEncoderBlock`.
 

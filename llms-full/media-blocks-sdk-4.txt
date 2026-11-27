@@ -1,0 +1,4961 @@
+# VisioForge — Media Blocks SDK, part 4 of 7
+
+> Full text of 8 pages. All parts: https://www.visioforge.com/llms-full.txt; index: https://www.visioforge.com/llms.txt.
+
+**Author:** VisioForge
+**License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
+**Generated:** 2026-11-27 20:41:07 UTC (c5e129a2023)
+**MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
+
+---
+
+## Live Video Compositor for Real-Time Mixing in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/LiveVideoCompositor/
+**Description:** Mix multiple live video and audio sources in real-time using VisioForge Media Blocks SDK. Dynamic source switching for streaming and recording in C#.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Capture, Streaming
+**API:** LiveVideoCompositor, LVCVideoInput, MediaBlock, LVCAudioInput, LVCAudioOutput
+
+# Live Video Compositor
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+Live Video Compositor is a part of the [VisioForge Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) that allows you to add and remove sources and outputs in real time to a pipeline.
+
+This allows you to create applications that simultaneously handle multiple video and audio sources.
+
+For example, the LVC allows you to start streaming to YouTube at just the right moment while simultaneously recording video to disk. Using the LVC, you can create an application similar to OBS Studio.
+
+Each source and output has its unique identifier that can be used to add and remove sources and outputs in real time.
+
+Each source and output has its own independent pipeline that can be started and stopped.
+
+## Features
+
+- Supports multiple video and audio sources
+- Supports multiple video and audio outputs
+- Setting the position and size of video sources
+- Setting the transparency of video sources
+- Setting the volume of audio sources
+
+## LiveVideoCompositor class
+
+The `LiveVideoCompositor` is the main class that allows the addition and removal of live sources and outputs to the pipeline. When creating it, it is necessary to specify the resolution and frame rate to use. All sources with a different frame rate will be automatically converted to the frame rate specified when creating the LVC.
+
+`LiveVideoCompositorSettings` allows you to set the video and audio parameters. Key properties include:
+
+- `MixerType`: Specifies the video mixer type (e.g., `LVCMixerType.OpenGL`, `LVCMixerType.D3D11` (Windows only), or `LVCMixerType.CPU`).
+- `AudioEnabled`: A boolean indicating whether the audio stream is enabled.
+- `VideoWidth`, `VideoHeight`, `VideoFrameRate`: Define the output video resolution and frame rate.
+- `AudioFormat`, `AudioSampleRate`, `AudioChannels`: Define the output audio parameters.
+- `AudioMixerLatency`: How long the audio mixer waits for late input before it mixes without it. Default 100 ms; `TimeSpan.Zero` waits only for the latency the inputs report. Read once, when the compositor is constructed.
+- `VideoView`: An optional `IVideoView` for rendering video output directly.
+- `AudioOutput`: An optional `AudioRendererBlock` for rendering audio output directly.
+
+It is also necessary to set the maximum number of sources and outputs when designing your application, though this is not a direct parameter of `LiveVideoCompositorSettings`.
+
+### Sample code
+
+1. Create a new instance of the `LiveVideoCompositor` class.
+
+```
+var settings = new LiveVideoCompositorSettings(1920, 1080, VideoFrameRate.FPS_25);
+// Optionally, configure other settings like MixerType, AudioEnabled, etc.
+// settings.MixerType = LVCMixerType.OpenGL;
+// settings.AudioEnabled = true;
+var compositor = new LiveVideoCompositor(settings);
+```
+
+1. Add video and audio sources and outputs (see below)
+2. Start the pipeline.
+
+```
+await compositor.StartAsync();
+```
+
+## LVC Video Input
+
+The `LVCVideoInput` class is used to add video sources to the LVC pipeline. The class allows you to set the video parameters and the rectangle of the video source.
+
+You can use any block that has a video output pad. For example, you can use `VirtualVideoSourceBlock` to create a virtual video source or `SystemVideoSourceBlock` to capture video from the webcam.
+
+Key properties for `LVCVideoInput` include:
+
+- `Rectangle`: Defines the position and size of the video source within the compositor's output.
+- `ZOrder`: Determines the stacking order of overlapping video sources.
+- `ResizePolicy`: Specifies how the video source should be resized if its aspect ratio differs from the target rectangle (`LVCResizePolicy.Stretch`, `LVCResizePolicy.Letterbox`, `LVCResizePolicy.LetterboxToFill`).
+- `VideoView`: An optional `IVideoView` to preview this specific input source.
+
+### Usage
+
+When creating an `LVCVideoInput` object, you must specify the `MediaBlock` to be used as the video data source, along with `VideoFrameInfoX` describing the video, a `Rect` for its placement, and whether it should `autostart`.
+
+### Sample code
+
+#### Virtual video source
+
+The sample code below shows how to create an `LVCVideoInput` object with a `VirtualVideoSourceBlock` as the video source.
+
+```
+var rect = new Rect(0, 0, 640, 480);
+
+var name = "Video source [Virtual]";
+var settings = new VirtualVideoSourceSettings();
+var info = new VideoFrameInfoX(settings.Width, settings.Height, settings.FrameRate);
+var src = new LVCVideoInput(name, _compositor, new VirtualVideoSourceBlock(settings), info, rect, true);
+// Optionally, set ZOrder or ResizePolicy
+// src.ZOrder = 1;
+// src.ResizePolicy = LVCResizePolicy.Letterbox;
+if (await _compositor.Input_AddAsync(src))
+{
+    // added successfully
+}
+else
+{
+    src.Dispose();
+}
+```
+
+#### Screen source
+
+For Desktop platforms, we can capture the screen. The sample code below shows how to create an `LVCVideoInput` object with a `ScreenSourceBlock` as the video source.
+
+```
+var settings = new ScreenCaptureDX9SourceSettings();
+settings.CaptureCursor = true;
+settings.Monitor = 0;
+settings.FrameRate = new VideoFrameRate(30);
+settings.Rectangle = new Rect(0, 0, 1920, 1080); // (left, top, right, bottom) — full 1920x1080
+
+var rect = new Rect(0, 0, 640, 480);
+var name = $"Screen source";
+var info = new VideoFrameInfoX(settings.Rectangle.Width, settings.Rectangle.Height, settings.FrameRate);
+var src = new LVCVideoInput(name, _compositor, new ScreenSourceBlock(settings), info, rect, true);
+// Optionally, set ZOrder or ResizePolicy
+// src.ZOrder = 0;
+// src.ResizePolicy = LVCResizePolicy.Stretch;
+if (await _compositor.Input_AddAsync(src))
+{
+    // added successfully
+}
+else
+{
+    src.Dispose();
+}
+```
+
+#### System video source (webcam)
+
+The sample code below shows how to create an `LVCVideoInput` object with a `SystemVideoSourceBlock` as the video source.
+
+We use the `DeviceEnumerator` class to get the video source devices. The first video device will be used as the video source. The first video format of the device will be used as the video format.
+
+```
+VideoCaptureDeviceSourceSettings settings = null;
+
+var device = (await DeviceEnumerator.Shared.VideoSourcesAsync())[0];
+if (device != null)
+{
+    var formatItem = device.VideoFormats[0];
+    if (formatItem != null)
+    {
+        settings = new VideoCaptureDeviceSourceSettings(device)
+        {
+            Format = formatItem.ToFormat()
+        };
+
+        settings.Format.FrameRate = dlg.FrameRate;
+    }
+}
+
+if (settings == null)
+{
+    MessageBox.Show(this, "Unable to configure video capture device.");
+    return;
+}
+
+var name = $"Camera source [{device.Name}]";
+var rect = new Rect(0, 0, 1280, 720);
+var videoInfo = new VideoFrameInfoX(settings.Format.Width, settings.Format.Height, settings.Format.FrameRate);
+var src = new LVCVideoInput(name, _compositor, new SystemVideoSourceBlock(settings), videoInfo, rect, true);
+// Optionally, set ZOrder or ResizePolicy
+// src.ZOrder = 2;
+// src.ResizePolicy = LVCResizePolicy.LetterboxToFill;
+
+if (await _compositor.Input_AddAsync(src))
+{
+    // added successfully
+}
+else
+{
+    src.Dispose();
+}
+```
+
+## LVC Audio Input
+
+The `LVCAudioInput` class is used to add audio sources to the LVC pipeline. The class allows you to set the audio parameters and the volume of the audio source.
+
+You can use any block that has an audio output pad. For example, you can use the `VirtualAudioSourceBlock` to create a virtual audio source or `SystemAudioSourceBlock` to capture audio from the microphone.
+
+### Usage
+
+When creating an `LVCAudioInput` object, you must specify the `MediaBlock` to be used as the audio data source, along with `AudioInfoX` (which requires format, channels, and sample rate) and whether it should `autostart`.
+
+### Sample code
+
+#### Virtual audio source
+
+The sample code below shows how to create an `LVCAudioInput` object with a `VirtualAudioSourceBlock` as the audio source.
+
+```
+var name = "Audio source [Virtual]";
+var settings = new VirtualAudioSourceSettings();
+var info = new AudioInfoX(settings.Format, settings.SampleRate, settings.Channels);
+var src = new LVCAudioInput(name, _compositor, new VirtualAudioSourceBlock(settings), info, true);
+if (await _compositor.Input_AddAsync(src))
+{
+    // added successfully
+}
+else
+{
+    src.Dispose();
+}
+```
+
+#### System audio source (DirectSound in Windows)
+
+The sample code below shows how to create an `LVCAudioInput` object with a `SystemAudioSourceBlock` as the audio source.
+
+We use the `DeviceEnumerator` class to get the audio devices. The first audio device is used as the audio source. The first audio format of the device is used as the audio format.
+
+```
+DSAudioCaptureDeviceSourceSettings settings = null;
+AudioCaptureDeviceFormat deviceFormat = null;
+
+var device = (await DeviceEnumerator.Shared.AudioSourcesAsync(AudioCaptureDeviceAPI.DirectSound))[0];
+if (device != null)
+{
+    var formatItem = device.Formats[0];
+    if (formatItem != null)
+    {
+        deviceFormat = formatItem.ToFormat();
+        settings = new DSAudioCaptureDeviceSourceSettings(device, deviceFormat);
+    }
+}
+
+if (settings == null)
+{
+    MessageBox.Show(this, "Unable to configure audio capture device.");
+    return;
+}
+
+var name = $"Audio source [{device.Name}]";
+var info = new AudioInfoX(deviceFormat.Format, deviceFormat.SampleRate, deviceFormat.Channels);
+var src = new LVCAudioInput(name, _compositor, new SystemAudioSourceBlock(settings), info, true);
+if (await _compositor.Input_AddAsync(src))
+{
+    // added successfully
+}
+else
+{
+    src.Dispose();
+}
+```
+
+## LVC Video Output
+
+The `LVCVideoOutput` class is used to add video outputs to the LVC pipeline. You can start and stop the output pipeline independently from the main pipeline.
+
+### Usage
+
+When creating an `LVCVideoOutput` object, you must specify the `MediaBlock` to be used as the video data output, its `name`, a reference to the `LiveVideoCompositor`, and whether it should `autostart` with the main pipeline. An optional processing `MediaBlock` can also be provided. Usually, this element is used to save the video as a file or stream it (without audio).
+
+For video+audio outputs, use the `LVCVideoAudioOutput` class.
+
+You can use the SuperMediaBlock to make a custom block pipeline for video output. For example, you can add a video encoder, a muxer, and a file writer to save the video to a file.
+
+## LVC Audio Output
+
+The `LVCAudioOutput` class is used to add audio outputs to the LVC pipeline. You can start and stop the output pipeline independently from the main pipeline.
+
+### Usage
+
+When creating an `LVCAudioOutput` object, you must specify the `MediaBlock` to be used as the audio data output, its `name`, a reference to the `LiveVideoCompositor`, and whether it should `autostart`.
+
+### Sample code
+
+#### Add an audio renderer
+
+Add an audio renderer to the LVC pipeline. You need to create an `AudioRendererBlock` object and then create an `LVCAudioOutput` object. Finally, add the output to the compositor.
+
+The first device is used as an audio output.
+
+```
+var audioRenderer = new AudioRendererBlock((await DeviceEnumerator.Shared.AudioOutputsAsync())[0]);
+var audioRendererOutput = new LVCAudioOutput("Audio renderer", _compositor, audioRenderer, true);
+await _compositor.Output_AddAsync(audioRendererOutput, true);
+```
+
+#### Add an MP3 output
+
+Add an MP3 output to the LVC pipeline. You need to create an `MP3OutputBlock` object and then create an `LVCAudioOutput` object. Finally, add the output to the compositor.
+
+```
+var mp3Output = new MP3OutputBlock(outputFile, new MP3EncoderSettings());
+var output = new LVCAudioOutput(outputFile, _compositor, mp3Output, false);
+
+if (await _compositor.Output_AddAsync(output))
+{
+    // added successfully
+}
+else
+{
+    output.Dispose();
+}
+```
+
+## LVC Video/Audio Output
+
+The `LVCVideoAudioOutput` class is used to add video+audio outputs to the LVC pipeline. You can start and stop the output pipeline independently from the main pipeline.
+
+### Usage
+
+When creating an `LVCVideoAudioOutput` object, you must specify the `MediaBlock` to be used as the video+audio data output, its `name`, a reference to the `LiveVideoCompositor`, and whether it should `autostart`. Optional processing `MediaBlock`s for video and audio can also be provided.
+
+### Sample code
+
+#### Add an MP4 output
+
+```
+var mp4Output = new MP4OutputBlock(new MP4SinkSettings("output.mp4"), new OpenH264EncoderSettings(), new MFAACEncoderSettings());
+
+var output = new LVCVideoAudioOutput(outputFile, _compositor, mp4Output, false);
+
+if (await _compositor.Output_AddAsync(output))
+{
+    // added successfully
+}
+else
+{
+    output.Dispose();
+}
+```
+
+#### Add a WebM output
+
+```
+var webmOutput = new WebMOutputBlock(new WebMSinkSettings("output.webm"), new VP8EncoderSettings(), new VorbisEncoderSettings());
+var output = new LVCVideoAudioOutput(outputFile, _compositor, webmOutput, false);
+
+if (await _compositor.Output_AddAsync(output))
+{
+   // added successfully
+}
+else
+{
+    output.Dispose();
+}
+```
+
+## LVC Video View Output
+
+The `LVCVideoViewOutput` class is used to add video view to the LVC pipeline. You can use it to display the video on the screen.
+
+### Usage
+
+When creating an `LVCVideoViewOutput` object, you must specify the `IVideoView` control to be used, its `name`, a reference to the `LiveVideoCompositor`, and whether it should `autostart`. An optional processing `MediaBlock` can also be provided.
+
+### Sample code
+
+```
+var name = "[VideoView] Preview";
+var videoRendererOutput = new LVCVideoViewOutput(name, _compositor, VideoView1, true);
+await _compositor.Output_AddAsync(videoRendererOutput);
+```
+
+VideoView1 is a `VideoView` object that is used to display the video. Each platform / UI framework has its own `VideoView` implementation.
+
+You can add several `LVCVideoViewOutput` objects to the LVC pipeline to display the video on different displays.
+
+## Monitoring render frame rate
+
+When composing many inputs at once, the compositor can fall behind the configured `VideoFrameRate` if the CPU or GPU runs out of headroom. Subscribe to `OnRenderStatistics` to read the actual output frame rate and detect drops early:
+
+```
+using System.Diagnostics;
+
+compositor.OnRenderStatistics += (sender, e) =>
+{
+    // Fires roughly twice a second on a threadpool thread.
+    Debug.WriteLine($"FPS: {e.ActualFps:F1} / configured {e.ConfiguredFps:F1}, total frames: {e.FramesDelivered}");
+};
+```
+
+`RenderStatisticsEventArgs` exposes:
+
+- `ActualFps` – measured output frame rate over the last sampling window.
+- `ConfiguredFps` – the frame rate requested via `LiveVideoCompositorSettings.VideoFrameRate`.
+- `FramesDelivered` – monotonic count of frames produced since the compositor started.
+- `LastFrameTimestamp` – PTS of the most recent frame (`TimeSpan.Zero` if none yet).
+
+If `ActualFps` sits noticeably below `ConfiguredFps` for several consecutive ticks, the pipeline is not keeping up — typical causes are too many inputs, oversized source resolutions, a software-only mixer on a heavily loaded CPU, or a slow downstream encoder. Switching `LVCMixerType` to `OpenGL` or `D3D11`, reducing inputs, or dropping source resolution usually restores the configured rate.
+
+Marshal to the UI thread before updating controls, since the event fires on a threadpool thread.
+
+## V1 vs V2
+
+The SDK ships two implementations under different namespaces:
+
+- `VisioForge.Core.LiveVideoCompositorV2` – current, recommended.
+- `VisioForge.Core.LiveVideoCompositor` – original implementation, **deprecated** and scheduled for removal in a future release.
+
+Both namespaces expose an identically named `LiveVideoCompositor` class plus the same `LVC*` helpers. Migrating a file is usually a single-line `using` swap:
+
+```
+// Before
+using VisioForge.Core.LiveVideoCompositor;
+
+// After
+using VisioForge.Core.LiveVideoCompositorV2;
+```
+
+After switching the `using`, `new LiveVideoCompositor(...)` resolves to the V2 class and the obsolete warnings disappear. The `OnRenderStatistics` event is only available on V2.
+
+### Video effects do not migrate one-to-one
+
+Two differences survive the `using` swap, and both concern `Video_Effects_*`:
+
+- **Scope.** V1 keeps one effects block per channel, sized by `LiveVideoCompositorSettings.VideoChannelCount`, and the `channel` argument selects among them. V2 has no `VideoChannelCount` and a single effects block on the composed output, after the mixer — so its `channel` argument never had anything to select. The overloads that take one are obsolete and forward to the channel-free methods: use `Video_Effects_AddOrUpdateAsync(effect)`, `Video_Effects_Get(name)`, `Video_Effects_RemoveAsync(...)` and `Video_Effects_Clear()`.
+- **Effect type.** V1 takes `IBaseVideoEffect`, V2 takes `BaseVideoEffect`. This one is a compile error rather than a silent difference.
+
+To process a single input instead of the whole composition — what V1's per-channel effects did — add a `VideoEffectsBlock` to that input's `ProcessingVideoBlocks`. Those blocks run between the source and the mixer:
+
+```
+var input = new LVCVideoInput("camera", compositor, sourceBlock, videoInfo, rect, autostart: true);
+
+var effects = new VideoEffectsBlock();
+await effects.AddOrUpdateAsync(new GrayscaleVideoEffect("gray"));
+input.ProcessingVideoBlocks.Add(effects);
+
+await compositor.Input_AddAsync(input);
+```
+
+---
+
+[Sample application on GitHub](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Live%20Video%20Compositor%20Demo)
+
+---END OF PAGE---
+
+
+
+## NVIDIA CUDA GPU Video Processing Blocks in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Nvidia/
+**Description:** Accelerate video conversion, resizing, and data transfer with Nvidia CUDA GPU blocks in VisioForge Media Blocks SDK pipelines for .NET.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS
+**API:** NVDataUploadBlock, NVDataDownloadBlock, NVVideoResizeBlock, NVVideoConverterBlock, NVDSDewarpBlock
+
+# Nvidia Blocks - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+Nvidia blocks leverage Nvidia GPU capabilities for accelerated media processing tasks such as data transfer, video conversion, and resizing.
+
+## NVDataDownloadBlock
+
+Nvidia data download block. Downloads data from Nvidia GPU to system memory.
+
+#### Block info
+
+Name: NVDataDownloadBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Video (GPU memory) | 1 |
+| Output video | Video (system memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    NVCUDAConverterBlock-->NVDataDownloadBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create a source that outputs to GPU memory (e.g., a decoder or another Nvidia block)
+// For example, NVDataUploadBlock or an NV-accelerated decoder
+var upstreamNvidiaBlock = new NVDataUploadBlock(); // Conceptual: assume this block is properly configured
+
+// create Nvidia data download block
+var nvDataDownload = new NVDataDownloadBlock();
+
+// create video renderer block
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1 is your display control
+
+// connect blocks
+// pipeline.Connect(upstreamNvidiaBlock.Output, nvDataDownload.Input); // Connect GPU source to download block
+// pipeline.Connect(nvDataDownload.Output, videoRenderer.Input); // Connect download block (system memory) to renderer
+
+// start pipeline
+// await pipeline.StartAsync();
+```
+
+#### Remarks
+
+This block is used to transfer video data from the Nvidia GPU's memory to the main system memory. This is typically needed when a GPU-processed video stream needs to be accessed by a component that operates on system memory, like a CPU-based encoder or a standard video renderer. Ensure that the correct Nvidia drivers and CUDA toolkit are installed for this block to function. Use `NVDataDownloadBlock.IsAvailable()` to check if the block can be used.
+
+#### Platforms
+
+Windows, Linux (Requires Nvidia GPU and appropriate drivers/SDK).
+
+## NVDataUploadBlock
+
+Nvidia data upload block. Uploads data to Nvidia GPU from system memory.
+
+#### Block info
+
+Name: NVDataUploadBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Video (system memory) | 1 |
+| Output video | Video (GPU memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->NVDataUploadBlock-->H264EncoderBlock;
+```
+
+#### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create a video source (e.g., SystemVideoSourceBlock or UniversalSourceBlock).
+// UniversalSourceBlock requires UniversalSourceSettings via the async factory:
+var sourceSettings = await UniversalSourceSettings.CreateAsync("input.mp4");
+var videoSource = new UniversalSourceBlock(sourceSettings);
+
+// create Nvidia data upload block
+var nvDataUpload = new NVDataUploadBlock();
+
+// create an Nvidia accelerated encoder (e.g., an H264EncoderBlock with NVENC settings)
+// var nvEncoder = new H264EncoderBlock(new NVENCH264EncoderSettings()); // Conceptual
+
+// connect blocks
+// pipeline.Connect(videoSource.VideoOutput, nvDataUpload.Input); // Connect system memory source to upload block
+// pipeline.Connect(nvDataUpload.Output, nvEncoder.Input); // Connect upload block (GPU memory) to NV encoder
+
+// start pipeline
+// await pipeline.StartAsync();
+```
+
+#### Remarks
+
+This block is used to transfer video data from main system memory to the Nvidia GPU's memory. This is typically a prerequisite for using Nvidia-accelerated processing blocks like encoders, decoders, or filters that operate on GPU memory. Ensure that the correct Nvidia drivers and CUDA toolkit are installed for this block to function. Use `NVDataUploadBlock.IsAvailable()` to check if the block can be used.
+
+#### Platforms
+
+Windows, Linux (Requires Nvidia GPU and appropriate drivers/SDK).
+
+## NVVideoConverterBlock
+
+Nvidia video converter block. Performs color space conversions and other video format conversions using the Nvidia GPU.
+
+#### Block info
+
+Name: NVVideoConverterBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Video (GPU memory) | 1 |
+| Output video | Video (GPU memory, possibly different format) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    NVDataUploadBlock-->NVVideoConverterBlock-->NVDataDownloadBlock;
+```
+
+#### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// Assume video data is already in GPU memory via NVDataUploadBlock or an NV-decoder
+// var nvUploadedSource = new NVDataUploadBlock(); // Conceptual
+// pipeline.Connect(systemMemorySource.Output, nvUploadedSource.Input);
+
+// create Nvidia video converter block
+var nvVideoConverter = new NVVideoConverterBlock();
+// Specific conversion settings might be applied here if the block has properties for them.
+
+// Assume we want to download the converted video back to system memory
+// var nvDataDownload = new NVDataDownloadBlock(); // Conceptual
+
+// connect blocks
+// pipeline.Connect(nvUploadedSource.Output, nvVideoConverter.Input);
+// pipeline.Connect(nvVideoConverter.Output, nvDataDownload.Input);
+// pipeline.Connect(nvDataDownload.Output, videoRenderer.Input); // Or to another system memory component
+
+// start pipeline
+// await pipeline.StartAsync();
+```
+
+#### Remarks
+
+The `NVVideoConverterBlock` is used for efficient video format conversions (e.g., color space, pixel format) leveraging the Nvidia GPU. This is often faster than CPU-based conversions, especially for high-resolution video. It typically operates on video data already present in GPU memory. Ensure that the correct Nvidia drivers and CUDA toolkit are installed. Use `NVVideoConverterBlock.IsAvailable()` to check if the block can be used.
+
+#### Platforms
+
+Windows, Linux (Requires Nvidia GPU and appropriate drivers/SDK).
+
+## NVVideoResizeBlock
+
+Nvidia video resize block. Resizes video frames using the Nvidia GPU.
+
+#### Block info
+
+Name: NVVideoResizeBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Video (GPU memory) | 1 |
+| Output video | Video (GPU memory, resized) | 1 |
+
+#### Settings
+
+The `NVVideoResizeBlock` is configured using a `VisioForge.Core.Types.Size` object passed to its constructor.
+
+- `Resolution` (`VisioForge.Core.Types.Size`): Specifies the target output resolution (Width, Height) for the video.
+
+#### The sample pipeline
+
+```
+graph LR;
+    NVDataUploadBlock-->NVVideoResizeBlock-->H264EncoderBlock;
+```
+
+#### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// Target resolution for resizing
+var targetResolution = new VisioForge.Core.Types.Size(1280, 720);
+
+// Assume video data is already in GPU memory via NVDataUploadBlock or an NV-decoder
+// var nvUploadedSource = new NVDataUploadBlock(); // Conceptual
+// pipeline.Connect(systemMemorySource.Output, nvUploadedSource.Input);
+
+// create Nvidia video resize block
+var nvVideoResize = new NVVideoResizeBlock(targetResolution);
+
+// Assume the resized video will be encoded by an NV-encoder
+// var nvEncoder = new H264EncoderBlock(new NVENCH264EncoderSettings()); // Conceptual
+
+// connect blocks
+// pipeline.Connect(nvUploadedSource.Output, nvVideoResize.Input);
+// pipeline.Connect(nvVideoResize.Output, nvEncoder.Input);
+
+// start pipeline
+// await pipeline.StartAsync();
+```
+
+#### Remarks
+
+The `NVVideoResizeBlock` performs video scaling operations efficiently using the Nvidia GPU. This is useful for adapting video streams to different display resolutions or encoding requirements. It typically operates on video data already present in GPU memory. Ensure that the correct Nvidia drivers and CUDA toolkit are installed. Use `NVVideoResizeBlock.IsAvailable()` to check if the block can be used.
+
+#### Platforms
+
+Windows, Linux (Requires Nvidia GPU and appropriate drivers/SDK).
+
+## NVDSDewarpBlock
+
+Nvidia DeepStream dewarp block. Performs dewarping transformations for fisheye and wide-angle camera distortion correction using GPU acceleration.
+
+#### Block info
+
+Name: NVDSDewarpBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Video (GPU memory) | 1 |
+| Output video | Video (GPU memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    NVDataUploadBlock-->NVDSDewarpBlock-->NVDataDownloadBlock;
+```
+
+#### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// Upload video to GPU memory
+var nvUpload = new NVDataUploadBlock();
+
+// Configure dewarp settings for fisheye correction. Camera calibration and projection
+// parameters live in the DeepStream-format ConfigFile; the .NET settings object only
+// holds the top-level knobs (GPU id, memory type, source id, config-file path).
+var dewarpSettings = new NVDSDewarpSettings
+{
+    Enabled = true,
+    NumSourcePlanes = 1,
+    ConfigFile = "config_dewarper.txt",
+    GpuId = 0,
+    SourceId = 0
+};
+
+// Create dewarp block
+var nvDewarp = new NVDSDewarpBlock(dewarpSettings);
+
+// Download from GPU if needed
+var nvDownload = new NVDataDownloadBlock();
+
+// Connect blocks
+pipeline.Connect(nvUpload.Output, nvDewarp.Input);
+pipeline.Connect(nvDewarp.Output, nvDownload.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+#### Remarks
+
+The `NVDSDewarpBlock` is part of Nvidia's DeepStream SDK and provides GPU-accelerated dewarping for correcting distortion from fisheye and wide-angle cameras. This is essential for surveillance, automotive, and 360-degree video applications.
+
+Requires Nvidia DeepStream SDK and compatible GPU. Use `NVDSDewarpBlock.IsAvailable()` to check availability.
+
+#### Platforms
+
+Linux (Requires Nvidia DeepStream SDK, Jetson or compatible GPU).
+
+---END OF PAGE---
+
+
+
+## OpenCV Computer Vision Blocks for Video Pipeline in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenCV/
+**Description:** OpenCV blocks in Media Blocks SDK .NET: face, hand and motion detection, tracking, templates, filters. Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, iOS
+**API:** SystemVideoSourceBlock, VideoRendererBlock, MediaBlocksPipeline, CVHandDetectBlock, CVDewarpBlock
+
+# OpenCV Blocks - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+OpenCV (Open Source Computer Vision Library) blocks provide powerful video processing capabilities within the VisioForge Media Blocks SDK .NET. These blocks enable a wide range of computer vision tasks, from basic image manipulation to complex object detection and tracking.
+
+To use OpenCV blocks, add the redistributable NuGet package for your platform: `VisioForge.CrossPlatform.OpenCV.Windows.x64`, `VisioForge.CrossPlatform.OpenCV.Windows.x86`, `VisioForge.CrossPlatform.OpenCV.Windows.arm64` (Windows on Arm), `VisioForge.CrossPlatform.OpenCV.Linux.x64`, `VisioForge.CrossPlatform.OpenCV.Linux.arm64` (Debian 12, Ubuntu 24.04 and later, with the distribution's GStreamer 1.22 or later), `VisioForge.CrossPlatform.OpenCV.macOS` (macOS and Mac Catalyst), `VisioForge.CrossPlatform.OpenCV.iOS` (iOS devices and arm64 simulators) or `VisioForge.CrossPlatform.OpenCV.Android` (`arm64-v8a` and `x86_64`; the 32-bit ABIs are not covered). These are the platforms the OpenCV GStreamer plugin currently ships for; on any other platform each block's `IsAvailable()` returns `false`.
+
+Most OpenCV blocks typically require a `videoconvert` element before them to ensure the input video stream is in a compatible format. The SDK handles this internally when you initialize the block.
+
+## CV Dewarp Block
+
+The CV Dewarp block applies dewarping effects to a video stream, which can correct distortions from wide-angle lenses, for example.
+
+### Block info
+
+Name: `CVDewarpBlock` (GStreamer element: `dewarp`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVDewarpBlock` is configured using `CVDewarpSettings`. Key properties:
+
+- `DisplayMode` (`CVDewarpDisplayMode` enum): Specifies the display mode for dewarping (e.g., `SinglePanorama`, `DoublePanorama`). Default is `CVDewarpDisplayMode.SinglePanorama`.
+- `InnerRadius` (double): Inner radius for dewarping.
+- `InterpolationMethod` (`CVDewarpInterpolationMode` enum): Interpolation method used (e.g., `Bilinear`, `Bicubic`). Default is `CVDewarpInterpolationMode.Bilinear`.
+- `OuterRadius` (double): Outer radius for dewarping.
+- `XCenter` (double): X-coordinate of the center for dewarping.
+- `XRemapCorrection` (double): X-coordinate remap correction factor.
+- `YCenter` (double): Y-coordinate of the center for dewarping.
+- `YRemapCorrection` (double): Y-coordinate remap correction factor.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVDewarpBlock;
+    CVDewarpBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+// Create Dewarp settings
+var dewarpSettings = new CVDewarpSettings
+{
+    DisplayMode = CVDewarpDisplayMode.SinglePanorama, // Example mode, default is SinglePanorama
+    InnerRadius = 0.2, // Example value
+    OuterRadius = 0.8, // Example value
+    XCenter = 0.5,     // Example value, default is 0.5
+    YCenter = 0.5,     // Example value, default is 0.5
+    // InterpolationMethod = CVDewarpInterpolationMode.Bilinear, // This is the default
+};
+
+var dewarpBlock = new CVDewarpBlock(dewarpSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, dewarpBlock.Input);
+pipeline.Connect(dewarpBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Dilate Block
+
+The CV Dilate block performs a dilation operation on the video stream. Dilation is a morphological operation that typically expands bright regions and shrinks dark regions.
+
+### Block info
+
+Name: `CVDilateBlock` (GStreamer element: `cvdilate`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+This block does not have specific settings beyond the default behavior. The dilation is performed with a default structuring element.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVDilateBlock;
+    CVDilateBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var dilateBlock = new CVDilateBlock();
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, dilateBlock.Input);
+pipeline.Connect(dilateBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Edge Detect Block
+
+The CV Edge Detect block uses the Canny edge detector algorithm to find edges in the video stream.
+
+### Block info
+
+Name: `CVEdgeDetectBlock` (GStreamer element: `edgedetect`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVEdgeDetectBlock` is configured using `CVEdgeDetectSettings`. Key properties:
+
+- `ApertureSize` (int): Aperture size for the Sobel operator (e.g., 3, 5, or 7). Default is 3.
+- `Threshold1` (int): First threshold for the hysteresis procedure. Default is 50.
+- `Threshold2` (int): Second threshold for the hysteresis procedure. Default is 150.
+- `Mask` (bool): If true, the output is a mask; otherwise, it's the original image with edges highlighted. Default is `false`.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVEdgeDetectBlock;
+    CVEdgeDetectBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var edgeDetectSettings = new CVEdgeDetectSettings
+{
+    ApertureSize = 3, // Example value, default is 3
+    Threshold1 = 2000, // Example value, actual C# type is int, default is 50
+    Threshold2 = 4000, // Example value, actual C# type is int, default is 150
+    Mask = true       // Example value, default is false
+};
+
+var edgeDetectBlock = new CVEdgeDetectBlock(edgeDetectSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, edgeDetectBlock.Input);
+pipeline.Connect(edgeDetectBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Equalize Histogram Block
+
+The CV Equalize Histogram block equalizes the histogram of a video frame using the `cvEqualizeHist` function. This typically improves the contrast of the image.
+
+### Block info
+
+Name: `CVEqualizeHistogramBlock` (GStreamer element: `cvequalizehist`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+This block does not have specific settings beyond the default behavior.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVEqualizeHistogramBlock;
+    CVEqualizeHistogramBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var equalizeHistBlock = new CVEqualizeHistogramBlock();
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, equalizeHistBlock.Input);
+pipeline.Connect(equalizeHistBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Erode Block
+
+The CV Erode block performs an erosion operation on the video stream. Erosion is a morphological operation that typically shrinks bright regions and expands dark regions.
+
+### Block info
+
+Name: `CVErodeBlock` (GStreamer element: `cverode`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+This block does not have specific settings beyond the default behavior. The erosion is performed with a default structuring element.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVErodeBlock;
+    CVErodeBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var erodeBlock = new CVErodeBlock();
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, erodeBlock.Input);
+pipeline.Connect(erodeBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Face Blur Block
+
+The CV Face Blur block detects faces in the video stream and applies a blur effect to them.
+
+### Block info
+
+Name: `CVFaceBlurBlock` (GStreamer element: `faceblur`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVFaceBlurBlock` is configured using `CVFaceBlurSettings`. Key properties:
+
+- `MainCascadeFile` (string): Path to the XML file for the primary Haar cascade classifier used for face detection (e.g., `haarcascade_frontalface_default.xml`). Default is `"haarcascade_frontalface_default.xml"`.
+- `MinNeighbors` (int): Minimum number of neighbors each candidate rectangle should have to retain it. Default is 3.
+- `MinSize` (`Size`): Minimum possible object size. Objects smaller than this are ignored. Default `new Size(30, 30)`.
+- `ScaleFactor` (double): How much the image size is reduced at each image scale. Default is 1.25.
+
+Note: `ProcessPaths(Context)` should be called on the settings object to ensure correct path resolution for cascade files.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVFaceBlurBlock;
+    CVFaceBlurBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var faceBlurSettings = new CVFaceBlurSettings
+{
+    MainCascadeFile = "haarcascade_frontalface_default.xml", // Adjust path as needed, this is the default
+    MinNeighbors = 5, // Example value, default is 3
+    ScaleFactor = 1.2, // Example value, default is 1.25
+    // MinSize = new VisioForge.Core.Types.Size(30, 30) // This is the default
+};
+// It's important to call ProcessPaths if you are not providing an absolute path
+// and relying on SDK's internal mechanisms to locate the file, especially when deployed.
+// faceBlurSettings.ProcessPaths(pipeline.GetContext()); // or pass appropriate context
+
+var faceBlurBlock = new CVFaceBlurBlock(faceBlurSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, faceBlurBlock.Input);
+pipeline.Connect(faceBlurBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+This block requires Haar cascade XML files for face detection. These files are typically bundled with OpenCV distributions. Ensure the path to `MainCascadeFile` is correctly specified. The `ProcessPaths` method on the settings object can help resolve paths if files are placed in standard locations known to the SDK.
+
+## CV Face Detect Block
+
+The CV Face Detect block detects faces, and optionally eyes, noses, and mouths, in the video stream using Haar cascade classifiers.
+
+### Block info
+
+Name: `CVFaceDetectBlock` (GStreamer element: `facedetect`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVFaceDetectBlock` is configured using `CVFaceDetectSettings`. Key properties:
+
+- `Display` (bool): If `true`, draws rectangles around detected features on the output video. Default is `true`.
+- `MainCascadeFile` (string): Path to the XML for the primary Haar cascade. Default is `"haarcascade_frontalface_default.xml"`.
+- `EyesCascadeFile` (string): Path to the XML for eyes detection. Default is `"haarcascade_mcs_eyepair_small.xml"`. Optional.
+- `NoseCascadeFile` (string): Path to the XML for nose detection. Default is `"haarcascade_mcs_nose.xml"`. Optional.
+- `MouthCascadeFile` (string): Path to the XML for mouth detection. Default is `"haarcascade_mcs_mouth.xml"`. Optional.
+- `MinNeighbors` (int): Minimum neighbors for candidate retention. Default 3.
+- `MinSize` (`Size`): Minimum object size. Default `new Size(30, 30)`.
+- `MinDeviation` (int): Minimum standard deviation. Default 0.
+- `ScaleFactor` (double): Image size reduction factor at each scale. Default 1.25.
+- `UpdatesMode` (`CVFaceDetectUpdates` enum): Controls how updates/events are posted (`EveryFrame`, `OnChange`, `OnFace`, `None`). Default `CVFaceDetectUpdates.EveryFrame`.
+
+Note: `ProcessPaths(Context)` should be called on the settings object for cascade files.
+
+### Events
+
+- `FaceDetected`: Occurs when faces (and other enabled features) are detected. Provides `CVFaceDetectedEventArgs` with an array of `CVFace` objects and a timestamp. It fires once per frame that contains faces; `TimeStamp` is the frame's position in the media, on the same timeline as the pipeline position; `HasTimeStamp` is `false` for a frame that had no timestamp.
+- `CVFace` contains `Rect` for `Position`, `Nose`, `Mouth`, and a list of `Rect` for `Eyes`.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVFaceDetectBlock;
+    CVFaceDetectBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var faceDetectSettings = new CVFaceDetectSettings
+{
+    MainCascadeFile = "haarcascade_frontalface_default.xml", // Adjust path, default
+    EyesCascadeFile = "haarcascade_mcs_eyepair_small.xml", // Adjust path, default, optional
+    // NoseCascadeFile = "haarcascade_mcs_nose.xml", // Optional, default
+    // MouthCascadeFile = "haarcascade_mcs_mouth.xml", // Optional, default
+    Display = true, // Default
+    UpdatesMode = CVFaceDetectUpdates.EveryFrame, // Default, possible values: EveryFrame, OnChange, OnFace, None
+    MinNeighbors = 5, // Example value, default is 3
+    ScaleFactor = 1.2, // Example value, default is 1.25
+    // MinSize = new VisioForge.Core.Types.Size(30,30) // Default
+};
+// faceDetectSettings.ProcessPaths(pipeline.GetContext()); // or appropriate context
+
+var faceDetectBlock = new CVFaceDetectBlock(faceDetectSettings);
+
+faceDetectBlock.FaceDetected += (s, e) =>
+{
+    Console.WriteLine($"Timestamp: {e.TimeStamp}, Faces found: {e.Faces.Length}");
+    foreach (var face in e.Faces)
+    {
+        Console.WriteLine($"  Face at [{face.Position.Left},{face.Position.Top},{face.Position.Width},{face.Position.Height}]");
+        if (face.Eyes.Any())
+        {
+            Console.WriteLine($"    Eyes at [{face.Eyes[0].Left},{face.Eyes[0].Top},{face.Eyes[0].Width},{face.Eyes[0].Height}]");
+        }
+    }
+};
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, faceDetectBlock.Input);
+pipeline.Connect(faceDetectBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Requires Haar cascade XML files. The `ProcessBusMessage` method in the C# class handles parsing messages from the GStreamer element to fire the `FaceDetected` event.
+
+## CV Hand Detect Block
+
+The CV Hand Detect block detects hand gestures (fist or palm) in the video stream using Haar cascade classifiers. It internally resizes the input video to 320x240 for processing.
+
+### Block info
+
+Name: `CVHandDetectBlock` (GStreamer element: `handdetect`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVHandDetectBlock` is configured using `CVHandDetectSettings`. Key properties:
+
+- `Display` (bool): If `true`, draws rectangles around detected hands on the output video. Default is `true`.
+- `FistCascadeFile` (string): Path to the XML for fist detection. Default is `"fist.xml"`.
+- `PalmCascadeFile` (string): Path to the XML for palm detection. Default is `"palm.xml"`.
+- `ROI` (`Rect`): Region Of Interest for detection. Coordinates are relative to the 320x240 processed image. Default (0,0,0,0) - full frame (corresponds to `new Rect()`).
+
+Note: `ProcessPaths(Context)` should be called on the settings object for cascade files.
+
+### Events
+
+- `HandDetected`: Occurs when hands are detected. Provides `CVHandDetectedEventArgs` with an array of `CVHand` objects.
+- `CVHand` contains `Rect` for `Position` and `CVHandGesture` for `Gesture` (Fist or Palm). `Position` is in the coordinates of the block's 320x240 output frame, not of the source frame.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVHandDetectBlock;
+    CVHandDetectBlock-->VideoRendererBlock;
+```
+
+Note: The `CVHandDetectBlock` internally includes a `videoscale` element to resize input to 320x240 before the `handdetect` GStreamer element.
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var handDetectSettings = new CVHandDetectSettings
+{
+    FistCascadeFile = "fist.xml", // Adjust path, default
+    PalmCascadeFile = "palm.xml", // Adjust path, default
+    Display = true, // Default
+    ROI = new VisioForge.Core.Types.Rect(0, 0, 320, 240) // Example: full frame of scaled image, default is new Rect()
+};
+// handDetectSettings.ProcessPaths(pipeline.GetContext()); // or appropriate context
+
+var handDetectBlock = new CVHandDetectBlock(handDetectSettings);
+
+handDetectBlock.HandDetected += (s, e) =>
+{
+    Console.WriteLine($"Hands found: {e.Hands.Length}");
+    foreach (var hand in e.Hands)
+    {
+        Console.WriteLine($"  Hand at [{hand.Position.Left},{hand.Position.Top},{hand.Position.Width},{hand.Position.Height}], Gesture: {hand.Gesture}");
+    }
+};
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, handDetectBlock.Input);
+pipeline.Connect(handDetectBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Requires Haar cascade XML files for fist and palm detection. The block scales the video to 320x240 for the `handdetect` element and outputs it at that size. The `ProcessBusMessage` method handles GStreamer messages to fire `HandDetected`.
+
+## CV Laplace Block
+
+The CV Laplace block applies a Laplace operator to the video stream, which highlights regions of rapid intensity change, often used for edge detection.
+
+### Block info
+
+Name: `CVLaplaceBlock` (GStreamer element: `cvlaplace`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVLaplaceBlock` is configured using `CVLaplaceSettings`. Key properties:
+
+- `ApertureSize` (int): Aperture size for the Sobel operator used internally (e.g., 1, 3, 5, or 7). Default 3.
+- `Scale` (double): Optional scale factor for the computed Laplacian values. Default 1.
+- `Shift` (double): Optional delta value that is added to the results prior to storing them. Default 0.
+- `Mask` (bool): If true, the output is a mask; otherwise, it's the original image with the effect applied. Default is true.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVLaplaceBlock;
+    CVLaplaceBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var laplaceSettings = new CVLaplaceSettings
+{
+    ApertureSize = 3, // Example value
+    Scale = 1.0,      // Example value
+    Shift = 0.0,      // Example value
+    Mask = true
+};
+
+var laplaceBlock = new CVLaplaceBlock(laplaceSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, laplaceBlock.Input);
+pipeline.Connect(laplaceBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Motion Cells Block
+
+The CV Motion Cells block detects motion in a video stream by dividing the frame into a grid of cells and analyzing changes within these cells.
+
+### Block info
+
+Name: `CVMotionCellsBlock` (GStreamer element: `motioncells`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVMotionCellsBlock` is configured using `CVMotionCellsSettings`. Key properties:
+
+- `CalculateMotion` (bool): Enable or disable motion calculation. Default `true`.
+- `CellsColor` (`SKColor`): Color to draw motion cells if `Display` is true. Default `SKColors.Red`.
+- `DataFile` (string): Path to a data file for loading/saving cell configuration. Extension is handled separately by `DataFileExtension`.
+- `DataFileExtension` (string): Extension for the data file (e.g., "dat").
+- `Display` (bool): If `true`, draws the grid and motion indication on the output video. Default `true`.
+- `Gap` (`TimeSpan`): Interval after which motion is considered finished and a "motion finished" bus message is posted. Default `TimeSpan.FromSeconds(5)`. (Note: This is different from a pixel gap between cells).
+- `GridSize` (`Size`): Number of cells in the grid (Width x Height). Default `new Size(10, 10)`.
+- `MinimumMotionFrames` (int): Minimum number of frames motion must be detected in a cell to trigger. Default 1.
+- `MotionCellsIdx` (string): Comma-separated string of cell indices (e.g., "0:0,1:1") to monitor for motion.
+- `MotionCellBorderThickness` (int): Thickness of the border for cells with detected motion. Default 1.
+- `MotionMaskCellsPos` (string): String defining cell positions for a motion mask.
+- `MotionMaskCoords` (string): String defining coordinates for a motion mask.
+- `PostAllMotion` (bool): Post all motion events. Default `false`.
+- `PostNoMotion` (`TimeSpan`): Time after which a "no motion" event is posted if no motion is detected. Default `TimeSpan.Zero` (disabled).
+- `Sensitivity` (double): Motion sensitivity. Expected range might be 0.0 to 1.0. Default `0.5`.
+- `Threshold` (double): Threshold for motion detection, representing the fraction of cells that need to have moved. Default `0.01`.
+- `UseAlpha` (bool): Use alpha channel for drawing. Default `true`.
+
+### Events
+
+- `MotionDetected`: Occurs when motion is detected or changes state. Provides `CVMotionCellsEventArgs`:
+- `Cells`: String indicating which cells have motion (e.g., "0:0,1:2").
+- `StartedTime`: Timestamp when motion began in the current event scope.
+- `FinishedTime`: Timestamp when motion finished (if applicable to the event).
+- `CurrentTime`: Timestamp of the current frame related to the event; for a no-motion event, of the last frame with motion.
+- `IsMotion`: Boolean indicating if the event signifies motion (`true`) or no motion (`false`).
+
+The times are positions in the media, on the same timeline as the pipeline position; a time is `null` for a frame with no position in the media: one that had no timestamp, or lies outside the played segment. A no-motion event before any motion has no time either, nor does one after a seek about motion before the seek.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVMotionCellsBlock;
+    CVMotionCellsBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var motionCellsSettings = new CVMotionCellsSettings
+{
+    GridSize = new VisioForge.Core.Types.Size(8, 6), // Example: 8x6 grid, default is new Size(10,10)
+    Sensitivity = 0.75, // Example value, C# default is 0.5. Represents sensitivity.
+    Threshold = 0.05,   // Example value, C# default is 0.01. Represents fraction of moved cells.
+    Display = true,     // Default is true
+    CellsColor = SKColors.Aqua, // Example color, default is SKColors.Red
+    PostNoMotion = TimeSpan.FromSeconds(5) // Post no_motion after 5s of inactivity, default is TimeSpan.Zero
+};
+
+var motionCellsBlock = new CVMotionCellsBlock(motionCellsSettings);
+
+motionCellsBlock.MotionDetected += (s, e) =>
+{
+    if (e.IsMotion)
+    {
+        Console.WriteLine($"Motion DETECTED at {e.CurrentTime}. Cells: {e.Cells}. Started: {e.StartedTime}");
+    }
+    else
+    {
+        Console.WriteLine($"Motion FINISHED or NO MOTION at {e.CurrentTime}. Finished: {e.FinishedTime}");
+    }
+};
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, motionCellsBlock.Input);
+pipeline.Connect(motionCellsBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+The `ProcessBusMessage` method handles GStreamer messages to fire `MotionDetected`. Event structure provides timestamps for motion start, finish, and current event time.
+
+## CV Smooth Block
+
+The CV Smooth block applies various smoothing (blurring) filters to the video stream.
+
+### Block info
+
+Name: `CVSmoothBlock` (GStreamer element: `cvsmooth`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVSmoothBlock` is configured using `CVSmoothSettings`. Key properties:
+
+- `Type` (`CVSmoothType` enum): Type of smoothing filter to apply (`Blur`, `Gaussian`, `Median`, `Bilateral`). Default `CVSmoothType.Gaussian`.
+- `KernelWidth` (int): Width of the kernel for `Blur`, `Gaussian`, `Median` filters. Default 3.
+- `KernelHeight` (int): Height of the kernel for `Blur`, `Gaussian`, `Median` filters. Default 3.
+- `Width` (int): Width of the area to blur. Default `int.MaxValue` (full frame).
+- `Height` (int): Height of the area to blur. Default `int.MaxValue` (full frame).
+- `PositionX` (int): X position for the blur area. Default 0.
+- `PositionY` (int): Y position for the blur area. Default 0.
+- `Color` (double): Sigma for color space (for Bilateral filter) or standard deviation (for Gaussian if `SpatialSigma` is 0). Default 0.
+- `SpatialSigma` (double): Sigma for coordinate space (for Bilateral and Gaussian filters). For Gaussian, if 0, it's calculated from `KernelWidth`/`KernelHeight`. Default 0.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVSmoothBlock;
+    CVSmoothBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var smoothSettings = new CVSmoothSettings
+{
+    Type = CVSmoothType.Gaussian, // Example: Gaussian blur, also the default
+    KernelWidth = 5,  // Kernel width, default is 3
+    KernelHeight = 5, // Kernel height, default is 3
+    SpatialSigma = 1.5 // Sigma for Gaussian. If 0 (default), it's calculated from kernel size.
+};
+
+var smoothBlock = new CVSmoothBlock(smoothSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, smoothBlock.Input);
+pipeline.Connect(smoothBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project. The specific parameters used by the GStreamer element (`color`, `spatial`, `kernel-width`, `kernel-height`) depend on the chosen `Type`. For kernel dimensions, use `KernelWidth` and `KernelHeight`. `Width` and `Height` define the area to apply the blur if not the full frame.
+
+## CV Sobel Block
+
+The CV Sobel block applies a Sobel operator to the video stream, which is used to calculate the derivative of an image intensity function, typically for edge detection.
+
+### Block info
+
+Name: `CVSobelBlock` (GStreamer element: `cvsobel`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVSobelBlock` is configured using `CVSobelSettings`. Key properties:
+
+- `XOrder` (int): Order of the derivative x. Default 1.
+- `YOrder` (int): Order of the derivative y. Default 1.
+- `ApertureSize` (int): Size of the extended Sobel kernel (1, 3, 5, or 7). Default 3.
+- `Mask` (bool): If true, the output is a mask; otherwise, it's the original image with the effect applied. Default is true.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVSobelBlock;
+    CVSobelBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var sobelSettings = new CVSobelSettings
+{
+    XOrder = 1,       // Default is 1. Used for order of the derivative X.
+    YOrder = 0,       // Example: Use 0 for Y-order to primarily detect vertical edges. C# class default is 1.
+    ApertureSize = 3, // Default is 3. Size of the extended Sobel kernel.
+    Mask = true       // Default is true. Output as a mask.
+};
+
+var sobelBlock = new CVSobelBlock(sobelSettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, sobelBlock.Input);
+pipeline.Connect(sobelBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced in your project.
+
+## CV Template Match Block
+
+The CV Template Match block searches for occurrences of a template image within the video stream.
+
+### Block info
+
+Name: `CVTemplateMatchBlock` (GStreamer element: `templatematch`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVTemplateMatchBlock` is configured using `CVTemplateMatchSettings`. Key properties:
+
+- `TemplateImage` (string): Path to the template image file (e.g., PNG, JPG) to search for.
+- `Method` (`CVTemplateMatchMethod` enum): The comparison method to use (e.g., `Sqdiff`, `CcorrNormed`, `CcoeffNormed`). Default `CVTemplateMatchMethod.Correlation`.
+- `Display` (bool): If `true`, draws a rectangle around the best match on the output video. Default `true`.
+
+### Events
+
+- `TemplateMatch`: Occurs when a template match is found. Provides `CVTemplateMatchEventArgs`:
+- `Rectangle`: A `Types.Rect` object representing the location (`Left`, `Top`, `Right`, `Bottom`) of the best match. `Width` and `Height` are computed properties (`Right - Left`, `Bottom - Top`).
+- `Result`: A double value representing the quality or result of the match, depending on the method used.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVTemplateMatchBlock;
+    CVTemplateMatchBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+// Ensure "template.png" exists and is accessible.
+var templateMatchSettings = new CVTemplateMatchSettings("path/to/your/template.png") // Adjust path as needed
+{
+    // Method: Specifies the comparison method.
+    // Example: CVTemplateMatchMethod.CcoeffNormed is often a good choice.
+    // C# class default is CVTemplateMatchMethod.Correlation.
+    Method = CVTemplateMatchMethod.CcoeffNormed,
+
+    // Display: If true, draws a rectangle around the best match.
+    // C# class default is true.
+    Display = true
+};
+
+var templateMatchBlock = new CVTemplateMatchBlock(templateMatchSettings);
+
+templateMatchBlock.TemplateMatch += (s, e) =>
+{
+    Console.WriteLine($"Template matched at [{e.Rectangle.Left},{e.Rectangle.Top},{e.Rectangle.Width},{e.Rectangle.Height}] with result: {e.Result}");
+};
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, templateMatchBlock.Input);
+pipeline.Connect(templateMatchBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package and a valid template image file are available. The `ProcessBusMessage` method handles GStreamer messages to fire the `TemplateMatch` event.
+
+## CV Text Overlay Block
+
+The CV Text Overlay block renders text onto the video stream using OpenCV drawing functions.
+
+### Block info
+
+Name: `CVTextOverlayBlock` (GStreamer element: `opencvtextoverlay`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVTextOverlayBlock` is configured using `CVTextOverlaySettings`. Key properties:
+
+- `Text` (string): The text string to overlay. Default: `"Default text"`.
+- `X` (int): X-coordinate of the bottom-left corner of the text string. Default: `50`.
+- `Y` (int): Y-coordinate of the bottom-left corner of the text string (from the top, OpenCV origin is top-left, GStreamer textoverlay might be bottom-left). Default: `50`.
+- `FontWidth` (double): Font scale factor that is multiplied by the font-specific base size. Default: `1.0`.
+- `FontHeight` (double): Font scale factor (similar to FontWidth, though GStreamer element usually has one `font-scale` or relies on point size). Default: `1.0`.
+- `FontThickness` (int): Thickness of the lines used to draw a text. Default: `1`.
+- `Color` (`SKColor`): Color of the text. Default: `SKColors.Black`.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVTextOverlayBlock;
+    CVTextOverlayBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var textOverlaySettings = new CVTextOverlaySettings
+{
+    Text = "VisioForge MediaBlocks.NET ROCKS!", // Default: "Default text"
+    X = 20, // X position of the text start. Default: 50
+    Y = 40, // Y position of the text baseline (from top). Default: 50
+    FontWidth = 1.2, // Font scale. Default: 1.0
+    FontHeight = 1.2, // Font scale (usually FontWidth is sufficient for opencvtextoverlay). Default: 1.0
+    FontThickness = 2, // Default: 1
+    Color = SKColors.Blue // Default: SKColors.Black
+};
+
+var textOverlayBlock = new CVTextOverlayBlock(textOverlaySettings);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, textOverlayBlock.Input);
+pipeline.Connect(textOverlayBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced. The GStreamer properties `colorR`, `colorG`, `colorB` are set based on the `Color` property.
+
+## CV Tracker Block
+
+The CV Tracker block implements various object tracking algorithms to follow an object defined by an initial bounding box in a video stream.
+
+### Block info
+
+Name: `CVTrackerBlock` (GStreamer element: `cvtracker`).
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | Uncompressed video | 1 |
+| Output video | Uncompressed video | 1 |
+
+### Settings
+
+The `CVTrackerBlock` is configured using `CVTrackerSettings`. Key properties:
+
+- `Algorithm` (`CVTrackerAlgorithm` enum): Specifies the tracking algorithm (`Boosting`, `CSRT`, `KCF`, `MedianFlow`, `MIL`, `MOSSE`, `TLD`). Default: `CVTrackerAlgorithm.MedianFlow`.
+- `InitialRect` (`Rect`): The initial bounding box of the object to track. `Rect` ctor is `(left, top, right, bottom)` — e.g., `new Rect(50, 50, 150, 150)` is a 100×100 box at (50, 50). Default: `new Rect()` (zero-sized).
+- `DrawRect` (bool): If `true`, draws a rectangle around the tracked object on the output video. Default: `true`.
+
+### Sample pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->CVTrackerBlock;
+    CVTrackerBlock-->VideoRendererBlock;
+```
+
+### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Assuming SystemVideoSourceBlock is already created and configured as 'videoSource'
+
+var trackerSettings = new CVTrackerSettings
+{
+    Algorithm = CVTrackerAlgorithm.CSRT, // CSRT is often a good general-purpose tracker. Default: CVTrackerAlgorithm.MedianFlow
+    InitialRect = new VisioForge.Core.Types.Rect(150, 120, 230, 200), // (left, top, right, bottom) — 80x80 box at (150,120). Default: new Rect()
+    DrawRect = true // Default: true
+};
+
+var trackerBlock = new CVTrackerBlock(trackerSettings);
+
+// Note: The tracker initializes with InitialRect.
+// To re-initialize tracking on a new object/location at runtime:
+// 1. Pause or Stop the pipeline.
+// 2. Update trackerBlock.Settings.InitialRect (or create new CVTrackerSettings).
+//    It's generally safer to update settings on a stopped/paused pipeline,
+//    or if the block/element supports dynamic property changes, that might be an option.
+//    Directly modifying `trackerBlock.Settings.InitialRect` might not re-initialize the underlying GStreamer element.
+//    You may need to remove and re-add the block, or check SDK documentation for live update capabilities.
+// 3. Resume/Start the pipeline.
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1); // Assuming VideoView1
+
+// Connect blocks
+pipeline.Connect(videoSource.Output, trackerBlock.Input);
+pipeline.Connect(trackerBlock.Output, videoRenderer.Input);
+
+// Start pipeline
+await pipeline.StartAsync();
+```
+
+### Platforms
+
+Windows, Linux, macOS, Mac Catalyst, iOS, Android.
+
+### Remarks
+
+Ensure the VisioForge OpenCV NuGet package is referenced. The choice of tracking algorithm can significantly impact performance and accuracy. Some algorithms (like CSRT, KCF) are generally more robust than older ones (like Boosting, MedianFlow). Some trackers might require OpenCV contrib modules to be available in your OpenCV build/distribution.
+
+---END OF PAGE---
+
+
+
+## GPU-Accelerated OpenGL Video Effects and Shaders in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/OpenGL/
+**Description:** Apply GPU-accelerated OpenGL video effects like blur, color correction, and shaders in real-time using VisioForge Media Blocks SDK pipelines.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS
+**API:** GLBaseVideoEffect, GLShaderSettings, GLVideoMixerSettings, GLVirtualVideoSourceBlock
+
+# OpenGL Video Effects - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+OpenGL video effects in VisioForge Media Blocks SDK .NET allow for powerful, hardware-accelerated manipulation of video streams. Each effect ships as its own stand-alone MediaBlock (e.g. `GLBlurBlock`, `GLFlipBlock`, `GLAlphaBlock`) that carries its GPU upload and download internally, so it can be chained directly between regular system-memory video blocks; explicit `GLUploadBlock` / `GLDownloadBlock` blocks around it are optional and still work. This guide covers the available effects, their configuration settings, and other related OpenGL types.
+
+## Base Effect: `GLBaseVideoEffect`
+
+All OpenGL video effects inherit from the `GLBaseVideoEffect` class, which provides common properties and events.
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Name` | `string` | The internal name of the effect (read-only). |
+| `ID` | `GLVideoEffectID` | The unique identifier for the effect (read-only). |
+| `Index` | `int` | The index of the effect in a chain. |
+
+**Events:**
+
+- `OnUpdate`: Occurs when effect properties need to be updated in the pipeline. Call `OnUpdateCall()` to trigger it.
+
+## Available Video Effects
+
+This section details the various OpenGL video effects you can use. Each effect is an independent MediaBlock — instantiate the block directly (e.g. `new GLBlurBlock()`) and connect it between any video blocks, system-memory or OpenGL, in your pipeline.
+
+### Alpha Effect (`GLAlphaVideoEffect`)
+
+Replaces a selected color with an alpha channel or sets/adjusts the existing alpha channel.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `Alpha` | `double` | `1.0` | The value for the alpha channel. |
+| `Angle` | `float` | `20` | The size of the colorcube to change (sensitivity radius for color matching). |
+| `BlackSensitivity` | `uint` | `100` | The sensitivity to dark colors. |
+| `Mode` | `GLAlphaVideoEffectMode` | `Set` | The method used for alpha modification. |
+| `NoiseLevel` | `float` | `2` | The size of noise radius (pixels to ignore around the matched color). |
+| `CustomColor` | `SKColor` | `SKColors.Green` | Custom color value for `Custom` chroma key mode. |
+| `WhiteSensitivity` | `uint` | `100` | The sensitivity to bright colors. |
+
+**Associated Enum: `GLAlphaVideoEffectMode`**
+
+Defines the mode of operation for the Alpha video effect.
+
+| Value | Description |
+| --- | --- |
+| `Set` | Set/adjust alpha channel directly using the `Alpha` property. |
+| `Green` | Chroma Key on pure green. |
+| `Blue` | Chroma Key on pure blue. |
+| `Custom` | Chroma Key on the color specified by `CustomColor`. |
+
+### Blur Effect (`GLBlurVideoEffect`)
+
+Applies a blur effect using a 9x9 separable convolution. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Bulge Effect (`GLBulgeVideoEffect`)
+
+Creates a bulge distortion on the video. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Color Balance Effect (`GLColorBalanceVideoEffect`)
+
+Adjusts the color balance of the video, including brightness, contrast, hue, and saturation.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `Brightness` | `double` | `0` | Adjusts brightness (-1.0 to 1.0, 0 means no change). |
+| `Contrast` | `double` | `1` | Adjusts contrast (0.0 to infinity, 1 means no change). |
+| `Hue` | `double` | `0` | Adjusts hue (-1.0 to 1.0, 0 means no change). |
+| `Saturation` | `double` | `1` | Adjusts saturation (0.0 to infinity, 1 means no change). |
+
+### Deinterlace Effect (`GLDeinterlaceVideoEffect`)
+
+Applies a deinterlacing filter to the video.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `Method` | `GLDeinterlaceMethod` | `VerticalBlur` | The deinterlacing method to use. |
+
+**Associated Enum: `GLDeinterlaceMethod`**
+
+Defines the method for the Deinterlace video effect.
+
+| Value | Description |
+| --- | --- |
+| `VerticalBlur` | Vertical blur method. |
+| `MAAD` | Motion Adaptive: Advanced Detection. |
+
+### Fish Eye Effect (`GLFishEyeVideoEffect`)
+
+Applies a fish-eye lens distortion effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Flip Effect (`GLFlipVideoEffect`)
+
+Flips or rotates the video.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `Method` | `GLFlipVideoMethod` | `None` | The flip or rotation method to use. |
+
+**Associated Enum: `GLFlipVideoMethod`**
+
+Defines the video flip or rotation method.
+
+| Value | Description |
+| --- | --- |
+| `None` | No rotation. |
+| `Clockwise` | Rotate clockwise 90 degrees. |
+| `Rotate180` | Rotate 180 degrees. |
+| `CounterClockwise` | Rotate counter-clockwise 90 degrees. |
+| `HorizontalFlip` | Flip horizontally. |
+| `VerticalFlip` | Flip vertically. |
+| `UpperLeftDiagonal` | Flip across upper left/lower right diagonal. |
+| `UpperRightDiagonal` | Flip across upper right/lower left diagonal. |
+
+### Glow Lighting Effect (`GLGlowLightingVideoEffect`)
+
+Adds a glow lighting effect to the video. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Grayscale Effect (`GLGrayscaleVideoEffect`)
+
+Converts the video to grayscale. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Heat Effect (`GLHeatVideoEffect`)
+
+Applies a heat signature-like effect to the video. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Laplacian Effect (`GLLaplacianVideoEffect`)
+
+Applies a Laplacian edge detection filter.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `Invert` | `bool` | `false` | If `true`, inverts colors to get dark edges on a bright background. |
+
+### Light Tunnel Effect (`GLLightTunnelVideoEffect`)
+
+Creates a light tunnel visual effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Luma Cross Processing Effect (`GLLumaCrossProcessingVideoEffect`)
+
+Applies a luma cross-processing (often "xpro") effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Mirror Effect (`GLMirrorVideoEffect`)
+
+Applies a mirror effect to the video. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Resize Effect (`GLResizeVideoEffect`)
+
+Resizes the video to the specified dimensions.
+
+**Properties:**
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Width` | `int` | The target width for the video resize. |
+| `Height` | `int` | The target height for the video resize. |
+
+### Sepia Effect (`GLSepiaVideoEffect`)
+
+Applies a sepia tone effect to the video. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Sin City Effect (`GLSinCityVideoEffect`)
+
+Applies a "Sin City" movie style effect (grayscale with red highlights). This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Sobel Effect (`GLSobelVideoEffect`)
+
+Applies a Sobel edge detection filter.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `Invert` | `bool` | `false` | If `true`, inverts colors to get dark edges on a bright background. |
+
+### Square Effect (`GLSquareVideoEffect`)
+
+Applies a "square" distortion or pixelation effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Squeeze Effect (`GLSqueezeVideoEffect`)
+
+Applies a squeeze distortion effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Stretch Effect (`GLStretchVideoEffect`)
+
+Applies a stretch distortion effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### Transformation Effect (`GLTransformationVideoEffect`)
+
+Applies 3D transformations to the video, including rotation, scaling, and translation.
+
+**Properties:**
+
+| Property | Type | Default Value | Description |
+| --- | --- | --- | --- |
+| `FOV` | `float` | `90.0f` | Field of view angle in degrees for perspective projection. |
+| `Ortho` | `bool` | `false` | If `true`, uses orthographic projection; otherwise, perspective. |
+| `PivotX` | `float` | `0.0f` | X-coordinate of the rotation pivot point (0 is center). |
+| `PivotY` | `float` | `0.0f` | Y-coordinate of the rotation pivot point (0 is center). |
+| `PivotZ` | `float` | `0.0f` | Z-coordinate of the rotation pivot point (0 is center). |
+| `RotationX` | `float` | `0.0f` | Rotation around the X-axis in degrees. |
+| `RotationY` | `float` | `0.0f` | Rotation around the Y-axis in degrees. |
+| `RotationZ` | `float` | `0.0f` | Rotation around the Z-axis in degrees. |
+| `ScaleX` | `float` | `1.0f` | Scale multiplier for the X-axis. |
+| `ScaleY` | `float` | `1.0f` | Scale multiplier for the Y-axis. |
+| `TranslationX` | `float` | `0.0f` | Translation along the X-axis (universal coordinates [0-1]). |
+| `TranslationY` | `float` | `0.0f` | Translation along the Y-axis (universal coordinates [0-1]). |
+| `TranslationZ` | `float` | `0.0f` | Translation along the Z-axis (universal coordinates [0-1], depth). |
+
+### Twirl Effect (`GLTwirlVideoEffect`)
+
+Applies a twirl distortion effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+### X-Ray Effect (`GLXRayVideoEffect`)
+
+Applies an X-ray like visual effect. This effect does not have additional configurable properties beyond those inherited from `GLBaseVideoEffect`.
+
+## OpenGL Effect Identification: `GLVideoEffectID` Enum
+
+This enumeration lists all available OpenGL video effect types, used by `GLBaseVideoEffect.ID`.
+
+| Value | Description |
+| --- | --- |
+| `ColorBalance` | The color balance effect. |
+| `Grayscale` | The grayscale effect. |
+| `Resize` | The resize effect. |
+| `Deinterlace` | The deinterlace effect. |
+| `Flip` | The flip effect. |
+| `Blur` | Blur with 9x9 separable convolution effect. |
+| `FishEye` | The fish eye effect. |
+| `GlowLighting` | The glow lighting effect. |
+| `Heat` | The heat signature effect. |
+| `LumaX` | The luma cross processing effect. |
+| `Mirror` | The mirror effect. |
+| `Sepia` | The sepia effect. |
+| `Square` | The square effect. |
+| `XRay` | The X-ray effect. |
+| `Stretch` | The stretch effect. |
+| `LightTunnel` | The light tunnel effect. |
+| `Twirl` | The twirl effect. |
+| `Squeeze` | The squeeze effect. |
+| `SinCity` | The sin city movie gray-red effect. |
+| `Bulge` | The bulge effect. |
+| `Sobel` | The sobel effect. |
+| `Laplacian` | The laplacian effect. |
+| `Alpha` | The alpha channels effect. |
+| `Transformation` | The transformation effect. |
+
+## OpenGL Rendering and View Configuration
+
+These types assist in configuring how video is rendered or viewed in an OpenGL context, especially for specialized scenarios like VR or custom display setups.
+
+### Equirectangular View Settings (`GLEquirectangularViewSettings`)
+
+Manages settings for rendering equirectangular (360-degree) video, commonly used in VR applications. Implements `IVRVideoControl`.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `VideoWidth` | `int` | (readonly) | Width of the source video. |
+| `VideoHeight` | `int` | (readonly) | Height of the source video. |
+| `FieldOfView` | `float` | `80.0f` | Field of view in degrees. |
+| `Yaw` | `float` | `0.0f` | Yaw (rotation around Y-axis) in degrees. |
+| `Pitch` | `float` | `0.0f` | Pitch (rotation around X-axis) in degrees. |
+| `Roll` | `float` | `0.0f` | Roll (rotation around Z-axis) in degrees. |
+| `Mode` | `VRMode` | `Equirectangular` | The VR mode (supports `Equirectangular`). |
+
+**Methods:**
+
+- `IsModeSupported(VRMode mode)`: Checks if the specified `VRMode` is supported.
+
+**Events:**
+
+- `SettingsChanged`: Occurs when any view setting is changed.
+
+### Video Renderer Settings (`GLVideoRendererSettings`)
+
+Configures general properties for an OpenGL-based video renderer.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `ForceAspectRatio` | `bool` | `true` | Whether scaling will respect the original aspect ratio. |
+| `IgnoreAlpha` | `bool` | `true` | Whether alpha channel will be ignored (treated as black). |
+| `PixelAspectRatio` | `System.Tuple<int, int>` | `(0, 1)` | Pixel aspect ratio of the display device (numerator, denominator). |
+| `Rotation` | `GLVideoRendererRotateMethod` | `None` | Specifies the rotation applied to the video. |
+
+**Associated Enum: `GLVideoRendererRotateMethod`**
+
+Defines rotation methods for the OpenGL video renderer.
+
+| Value | Description |
+| --- | --- |
+| `None` | No rotation. |
+| `_90C` | Rotate 90 degrees clockwise. |
+| `_180` | Rotate 180 degrees. |
+| `_90CC` | Rotate 90 degrees counter-clockwise. |
+| `FlipHorizontal` | Flip horizontally. |
+| `FlipVertical` | Flip vertically. |
+
+## Custom OpenGL Shaders
+
+Allows for the application of custom GLSL shaders to the video stream.
+
+### Shader Definition (`GLShader`)
+
+Represents a pair of vertex and fragment shaders.
+
+**Properties:**
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `VertexShader` | `string` | The GLSL source code for the vertex shader. |
+| `FragmentShader` | `string` | The GLSL source code for the fragment shader. |
+
+**Constructors:** - `GLShader()` - `GLShader(string vertexShader, string fragmentShader)`
+
+### Shader Settings (`GLShaderSettings`)
+
+Configures custom GLSL shaders for use in the pipeline.
+
+**Properties:**
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Vertex` | `string` | The GLSL source code for the vertex shader. |
+| `Fragment` | `string` | The GLSL source code for the fragment shader. |
+| `Uniforms` | `System.Collections.Generic.Dictionary<string, object>` | A dictionary of uniform variables (parameters) to be passed to the shaders. |
+
+**Constructors:** - `GLShaderSettings()` - `GLShaderSettings(string vertex, string fragment)` - `GLShaderSettings(GLShader shader)`
+
+## Image Overlays in OpenGL
+
+Provides settings for overlaying static images onto a video stream within an OpenGL context.
+
+### Overlay Settings (`GLOverlaySettings`)
+
+Defines the properties of an image overlay.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Filename` | `string` | (N/A) | Path to the image file (read-only after init). |
+| `Data` | `byte[]` | (N/A) | Image data as a byte array (read-only after init). |
+| `X` | `int` |  | X-coordinate of the overlay's top-left corner. |
+| `Y` | `int` |  | Y-coordinate of the overlay's top-left corner. |
+| `Width` | `int` |  | Width of the overlay. |
+| `Height` | `int` |  | Height of the overlay. |
+| `Alpha` | `double` | `1.0` | Opacity of the overlay (0.0 transparent to 1.0 opaque). |
+
+**Constructor:** - `GLOverlaySettings(string filename)`
+
+## OpenGL Video Mixing
+
+These types are used to configure an OpenGL-based video mixer, allowing multiple video streams to be combined and composited.
+
+### Mixer Settings (`GLVideoMixerSettings`)
+
+Extends `VideoMixerBaseSettings` for OpenGL-specific video mixing. It manages a list of `GLVideoMixerStream` objects and inherits properties like `Width`, `Height`, and `FrameRate`.
+
+**Methods:** - `AddStream(GLVideoMixerStream stream)`: Adds a stream to the mixer. - `RemoveStream(GLVideoMixerStream stream)`: Removes a stream from the mixer. - `SetStream(int index, GLVideoMixerStream stream)`: Replaces a stream at a specific index.
+
+**Constructors:** - `GLVideoMixerSettings(int width, int height, VideoFrameRate frameRate)` - `GLVideoMixerSettings(int width, int height, VideoFrameRate frameRate, List<VideoMixerStream> streams)`
+
+### Mixer Stream (`GLVideoMixerStream`)
+
+Extends `VideoMixerStream` and defines properties for an individual stream within the OpenGL video mixer. Inherits `Rectangle`, `ZOrder`, and `Alpha` from `VideoMixerStream`.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Crop` | `Rect` | `null` | Pixels to cut from each edge of the input: `Left`, `Top`, `Right`, `Bottom` are counts, not coordinates; a negative edge counts as 0. `null` means no crop. Requires GStreamer 1.22 or later. |
+| `BlendConstantColorAlpha` | `double` | `0` | Alpha component for constant blend color. |
+| `BlendConstantColorBlue` | `double` | `0` | Blue component for constant blend color. |
+| `BlendConstantColorGreen` | `double` | `0` | Green component for constant blend color. |
+| `BlendConstantColorRed` | `double` | `0` | Red component for constant blend color. |
+| `BlendEquationAlpha` | `GLVideoMixerBlendEquation` | `Add` | Blend equation for the alpha channel. |
+| `BlendEquationRGB` | `GLVideoMixerBlendEquation` | `Add` | Blend equation for RGB channels. |
+| `BlendFunctionDestinationAlpha` | `GLVideoMixerBlendFunction` | `OneMinusSourceAlpha` | Blend function for destination alpha. |
+| `BlendFunctionDesctinationRGB` | `GLVideoMixerBlendFunction` | `OneMinusSourceAlpha` | Blend function for destination RGB. |
+| `BlendFunctionSourceAlpha` | `GLVideoMixerBlendFunction` | `One` | Blend function for source alpha. |
+| `BlendFunctionSourceRGB` | `GLVideoMixerBlendFunction` | `SourceAlpha` | Blend function for source RGB. |
+
+**Constructor:** - `GLVideoMixerStream(Rect rectangle, uint zorder, double alpha = 1.0)`
+
+### Blend Equation (`GLVideoMixerBlendEquation` Enum)
+
+Specifies how source and destination colors are combined during blending.
+
+| Value | Description |
+| --- | --- |
+| `Add` | Source + Destination |
+| `Subtract` | Source - Destination |
+| `ReverseSubtract` | Destination - Source |
+
+### Blend Function (`GLVideoMixerBlendFunction` Enum)
+
+Defines factors for source and destination colors in blending operations. (Rs, Gs, Bs, As are source color components; Rd, Gd, Bd, Ad are destination; Rc, Gc, Bc, Ac are constant color components).
+
+| Value | Description |
+| --- | --- |
+| `Zero` | Factor is (0, 0, 0, 0). |
+| `One` | Factor is (1, 1, 1, 1). |
+| `SourceColor` | Factor is (Rs, Gs, Bs, As). |
+| `OneMinusSourceColor` | Factor is (1-Rs, 1-Gs, 1-Bs, 1-As). |
+| `DestinationColor` | Factor is (Rd, Gd, Bd, Ad). |
+| `OneMinusDestinationColor` | Factor is (1-Rd, 1-Gd, 1-Bd, 1-Ad). |
+| `SourceAlpha` | Factor is (As, As, As, As). |
+| `OneMinusSourceAlpha` | Factor is (1-As, 1-As, 1-As, 1-As). |
+| `DestinationAlpha` | Factor is (Ad, Ad, Ad, Ad). |
+| `OneMinusDestinationAlpha` | Factor is (1-Ad, 1-Ad, 1-Ad, 1-Ad). |
+| `ConstantColor` | Factor is (Rc, Gc, Bc, Ac). |
+| `OneMinusContantColor` | Factor is (1-Rc, 1-Gc, 1-Bc, 1-Ac). |
+| `ConstantAlpha` | Factor is (Ac, Ac, Ac, Ac). |
+| `OneMinusContantAlpha` | Factor is (1-Ac, 1-Ac, 1-Ac, 1-Ac). |
+| `SourceAlphaSaturate` | Factor is (min(As, 1-Ad), min(As, 1-Ad), min(As, 1-Ad), 1). |
+
+## Virtual Test Sources for OpenGL
+
+These settings classes are used to configure virtual sources that generate test patterns directly within an OpenGL context.
+
+### Virtual Video Source Settings (`GLVirtualVideoSourceSettings`)
+
+Configures a source block (`GLVirtualVideoSourceBlock`) that produces test video data. Implements `IMediaPlayerBaseSourceSettings` and `IVideoCaptureBaseVideoSourceSettings`.
+
+**Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Width` | `int` | `1280` | Width of the output video. |
+| `Height` | `int` | `720` | Height of the output video. |
+| `FrameRate` | `VideoFrameRate` | `30/1` (30 fps) | Frame rate of the output video. |
+| `IsLive` | `bool` | `true` | Indicates if the source is live. |
+| `Mode` | `GLVirtualVideoSourceMode` | (N/A - must be set) | Specifies the type of test pattern to generate. |
+
+**Associated Enum: `GLVirtualVideoSourceMode`**
+
+Defines the test pattern generated by `GLVirtualVideoSourceBlock`.
+
+| Value | Description |
+| --- | --- |
+| `SMPTE` | SMPTE 100% color bars. |
+| `Snow` | Random (television snow). |
+| `Black` | 100% Black. |
+| `White` | 100% White. |
+| `Red` | Solid Red color. |
+| `Green` | Solid Green color. |
+| `Blue` | Solid Blue color. |
+| `Checkers1` | Checkerboard pattern (1px). |
+| `Checkers2` | Checkerboard pattern (2px). |
+| `Checkers4` | Checkerboard pattern (4px). |
+| `Checkers8` | Checkerboard pattern (8px). |
+| `Circular` | Circular pattern. |
+| `Blink` | Blinking pattern. |
+| `Mandelbrot` | Mandelbrot fractal. |
+
+**Methods:** - `Task<MediaFileInfo> ReadInfoAsync()`: Asynchronously reads media information (returns synthetic info based on settings). - `MediaBlock CreateBlock()`: Creates a `GLVirtualVideoSourceBlock` instance configured with these settings.
+
+## OpenGL Processing Blocks
+
+In addition to the per-effect blocks listed above, the SDK ships several stand-alone OpenGL processing blocks for overlay compositing, GPU resizing, format conversion, multi-stream mixing, and hardware-accelerated rendering. The overlay and resize blocks carry their own upload/download like the effect blocks. The format converter, mixer and renderer operate on GPU memory only and are chained between `GLUploadBlock` (CPU memory to GL) and `GLDownloadBlock` (GL to CPU memory), or fed directly from other OpenGL blocks. Each block exposes a static `IsAvailable()` method you can call to verify OpenGL support on the current system before building the pipeline.
+
+### GL Overlay
+
+The `GLOverlayBlock` composites a static image (logo, watermark, graphic) onto the video stream on the GPU, with positioning, scaling, and alpha blending.
+
+#### Block info
+
+Name: GLOverlayBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | Video (system or GL memory) | 1 |
+| Output | Video (system or GL memory) | 1 |
+
+The overlay is configured with `GLOverlaySettings` (see [Overlay Settings](#overlay-settings-gloverlaysettings) above). Call `UpdateSettings()` after changing the `Settings` properties to apply changes to a running pipeline.
+
+#### The sample pipeline
+
+```
+graph LR;
+    UniversalSourceBlock-->GLUploadBlock;
+    GLUploadBlock-->GLOverlayBlock;
+    GLOverlayBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+
+// configure the image overlay
+var overlaySettings = new GLOverlaySettings("logo.png")
+{
+    X = 20,
+    Y = 20,
+    Width = 160,
+    Height = 80,
+    Alpha = 0.8
+};
+var glOverlay = new GLOverlayBlock(overlaySettings);
+
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glOverlay.Input);
+pipeline.Connect(glOverlay.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Resize
+
+The `GLResizeBlock` performs GPU-accelerated video scaling to a target resolution using `GLResizeVideoEffect`.
+
+#### Block info
+
+Name: GLResizeBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | Video (system or GL memory) | 1 |
+| Output | Video (system or GL memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    UniversalSourceBlock-->GLUploadBlock;
+    GLUploadBlock-->GLResizeBlock;
+    GLResizeBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+
+// resize to 1280x720 on the GPU
+var glResize = new GLResizeBlock(new GLResizeVideoEffect(1280, 720));
+
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glResize.Input);
+pipeline.Connect(glResize.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Square
+
+The `GLSquareBlock` applies a "square" geometric distortion effect on the GPU. It has no additional configuration.
+
+#### Block info
+
+Name: GLSquareBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | Video (system or GL memory) | 1 |
+| Output | Video (system or GL memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    UniversalSourceBlock-->GLUploadBlock;
+    GLUploadBlock-->GLSquareBlock;
+    GLSquareBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+var glSquare = new GLSquareBlock();
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glSquare.Input);
+pipeline.Connect(glSquare.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Video Converter
+
+The `GLVideoConverterBlock` performs GPU-accelerated pixel format and colorspace conversion. It has no additional configuration.
+
+#### Block info
+
+Name: GLVideoConverterBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | Video (GL memory) | 1 |
+| Output | Video (GL memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    GLUploadBlock-->GLVideoConverterBlock;
+    GLVideoConverterBlock-->GLSepiaBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+var glUpload = new GLUploadBlock();
+var glConverter = new GLVideoConverterBlock();
+var glSepia = new GLSepiaBlock();
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, glUpload.Input);
+pipeline.Connect(glUpload.Output, glConverter.Input);
+pipeline.Connect(glConverter.Output, glSepia.Input);
+pipeline.Connect(glSepia.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Video Mixer
+
+The `GLVideoMixerBlock` composites multiple input video streams into a single output on the GPU, with per-stream positioning, scaling, Z-order, alpha blending, and chroma key. It is configured with `GLVideoMixerSettings` (see [Mixer Settings](#mixer-settings-glvideomixersettings) above) and exposes one input pad per configured stream. The block implements `IVideoMixerControl`, so input streams can be queried, updated, animated (`Input_Move`, `StartFadeIn`, `StartFadeOut`), and chroma-keyed at runtime.
+
+#### Block info
+
+Name: GLVideoMixerBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | Video (GL memory) | 1 per stream |
+| Output | Video (GL memory) | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    Source1Block-->GLUpload1Block;
+    Source2Block-->GLUpload2Block;
+    GLUpload1Block-->GLVideoMixerBlock;
+    GLUpload2Block-->GLVideoMixerBlock;
+    GLVideoMixerBlock-->GLDownloadBlock;
+    GLDownloadBlock-->VideoRendererBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// configure the mixer output and two streams
+var mixerSettings = new GLVideoMixerSettings(1280, 720, new VideoFrameRate(30));
+mixerSettings.AddStream(new GLVideoMixerStream(new Rect(0, 0, 1280, 720), 0));
+mixerSettings.AddStream(new GLVideoMixerStream(new Rect(960, 480, 1280, 720), 1)); // left, top, right, bottom
+var glMixer = new GLVideoMixerBlock(mixerSettings);
+
+// first source
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("background.mp4"));
+var glUpload1 = new GLUploadBlock();
+pipeline.Connect(source1.VideoOutput, glUpload1.Input);
+pipeline.Connect(glUpload1.Output, glMixer.Inputs[0]);
+
+// second source (picture-in-picture)
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("overlay.mp4"));
+var glUpload2 = new GLUploadBlock();
+pipeline.Connect(source2.VideoOutput, glUpload2.Input);
+pipeline.Connect(glUpload2.Output, glMixer.Inputs[1]);
+
+var glDownload = new GLDownloadBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(glMixer.Output, glDownload.Input);
+pipeline.Connect(glDownload.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+### GL Video Renderer
+
+The `GLVideoRendererBlock` displays the video stream on an `IVideoView` surface using hardware-accelerated OpenGL rendering. It is a terminal block (input only) and accepts both CPU and GL memory input. The renderer is configured with `GLVideoRendererSettings` (see [Video Renderer Settings](#video-renderer-settings-glvideorenderersettings) above).
+
+#### Block info
+
+Name: GLVideoRendererBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | Video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    UniversalSourceBlock-->GLVideoRendererBlock;
+```
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("test.mp4"));
+
+// VideoView1 is your IVideoView control on the form/page
+var glRenderer = new GLVideoRendererBlock(VideoView1);
+
+pipeline.Connect(source.VideoOutput, glRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+On Android, use the constructor overload that also takes the pipeline: `new GLVideoRendererBlock(pipeline, VideoView1)`.
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---END OF PAGE---
+
+
+
+## Media Output Blocks in C# .NET - MP4, MKV, WebM, RTMP
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Outputs/
+**Description:** Save video to MP4, AVI, MKV, WebM files or stream via RTMP and HLS using VisioForge Media Blocks SDK output blocks with C# code examples.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Streaming
+**API:** MP4OutputBlock, IAACEncoderSettings, MediaBlocksPipeline, AudioSource, MediaBlockPadMediaType
+
+# Output Blocks - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+Output blocks, also known as sinks, are responsible for writing media data to files, network streams, or other destinations. They are typically the last blocks in any media processing chain. VisioForge Media Blocks SDK .NET provides a comprehensive collection of output blocks for various formats and protocols.
+
+This guide covers file output blocks like MP4, AVI, WebM, MKV, and network streaming blocks for protocols such as RTMP (used by YouTube and Facebook Live).
+
+## AVI Output Block
+
+The `AVIOutputBlock` is used to create AVI files. It combines video and audio encoders with a file sink to produce `.avi` files.
+
+### Block info
+
+Name: `AVIOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | H264 (default), other `IVideoEncoder` compatible encoders |
+| Input Audio | various | AAC (default), MP3, other `IAudioEncoder` compatible encoders |
+
+### Settings
+
+The `AVIOutputBlock` is configured using `AVISinkSettings` along with settings for the chosen video and audio encoders (e.g., `IH264EncoderSettings` and `IAACEncoderSettings` or `MP3EncoderSettings`).
+
+Key `AVISinkSettings` properties:
+
+- `Filename` (string): The path to the output AVI file.
+
+Constructors:
+
+- `AVIOutputBlock(string filename)`: Uses default H264 video and AAC audio encoders.
+- `AVIOutputBlock(AVISinkSettings sinkSettings, IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`: Uses specified H264 video and AAC audio encoders.
+- `AVIOutputBlock(AVISinkSettings sinkSettings, IH264EncoderSettings h264settings, MP3EncoderSettings mp3Settings)`: Uses specified H264 video and MP3 audio encoders.
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->AVIOutputBlock;
+    AudioEncoder-->AVIOutputBlock;
+```
+
+Or, if using a source that provides encoded data, or if the `AVIOutputBlock` handles internal encoders based on settings:
+
+```
+graph LR;
+    UniversalSourceBlock--Video Output-->AVIOutputBlock;
+    UniversalSourceBlock--Audio Output-->AVIOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (example: virtual source)
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+
+// create audio source (example: virtual source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// create AVI output block
+// This constructor uses default H264 video and AAC audio encoders internally.
+var aviOutput = new AVIOutputBlock("output.avi");
+
+// Create inputs for the AVI output block
+var videoInputPad = aviOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = aviOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `AVIOutputBlock` internally manages encoder instances (like `H264Encoder` and `AACEncoder` or `MP3Encoder`) based on the provided settings. Ensure the necessary GStreamer plugins and SDK components for these encoders and the AVI muxer are available.
+
+To check availability: `AVIOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Platforms
+
+Primarily Windows. Availability on other platforms depends on GStreamer plugin support for AVI muxing and the chosen encoders.
+
+## Facebook Live Output Block
+
+The `FacebookLiveOutputBlock` is designed to stream video and audio to Facebook Live using RTMP. It internally uses H.264 video and AAC audio encoders.
+
+### Block info
+
+Name: `FacebookLiveOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | H.264 (internal) |
+| Input Audio | various | AAC (internal) |
+
+### Settings
+
+The `FacebookLiveOutputBlock` is configured using `FacebookLiveSinkSettings`, `IH264EncoderSettings`, and `IAACEncoderSettings`.
+
+Key `FacebookLiveSinkSettings` properties:
+
+- `Key` (string): The Facebook Live stream key. The block streams to `rtmps://live-api-s.facebook.com:443/rtmp/`.
+- `TLSValidationFlags` (`RTMPTLSCertificateFlags`): Which problems with the ingest certificate fail the connection. Default `VALIDATE_ALL`; `NONE` accepts any certificate.
+
+Constructor:
+
+- `FacebookLiveOutputBlock(FacebookLiveSinkSettings sinkSettings, IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->FacebookLiveOutputBlock;
+    AudioSource-->FacebookLiveOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (e.g., SystemVideoSourceBlock)
+var videoSource = new SystemVideoSourceBlock(videoSourceSettings); // Assuming videoSourceSettings are configured
+
+// create audio source (e.g., SystemAudioSourceBlock)
+var audioSource = new SystemAudioSourceBlock(audioSourceSettings); // Assuming audioSourceSettings are configured
+
+// configure Facebook Live sink settings (ctor takes the stream key only — the SDK builds the RTMP URL)
+var fbSinkSettings = new FacebookLiveSinkSettings("your-facebook-stream-key");
+
+// configure H.264 encoder settings (use defaults or customize)
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+h264Settings.Bitrate = 4000000; // Example: 4 Mbps
+
+// configure AAC encoder settings (use defaults or customize)
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+aacSettings.Bitrate = 128000; // Example: 128 Kbps
+
+// create Facebook Live output block
+var facebookOutput = new FacebookLiveOutputBlock(fbSinkSettings, h264Settings, aacSettings);
+
+// Create inputs for the Facebook Live output block
+var videoInputPad = facebookOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = facebookOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block encapsulates the necessary H.264 and AAC encoders and the RTMP sink (`FacebookLiveSink`). Ensure that the `FacebookLiveSink`, `H264Encoder`, and `AACEncoder` are available. `FacebookLiveOutputBlock.IsAvailable()` can be used to check this (though the provided source shows `FacebookLiveSink.IsAvailable()`).
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer RTMP support and encoder availability).
+
+## FLAC Output Block
+
+The `FLACOutputBlock` is used for creating FLAC (Free Lossless Audio Codec) audio files. It takes uncompressed audio data, encodes it using a FLAC encoder, and saves it to a `.flac` file.
+
+### Block info
+
+Name: `FLACOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Audio | uncompressed audio | FLAC (internal) |
+
+### Settings
+
+The `FLACOutputBlock` is configured with a filename and `FLACEncoderSettings`.
+
+Key `FLACEncoderSettings` properties (refer to `FLACEncoderSettings` documentation for full details):
+
+- Quality level, compression level, etc.
+
+Constructor:
+
+- `FLACOutputBlock(string filename, FLACEncoderSettings settings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    AudioSource-->FLACOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create audio source (example: virtual audio source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure FLAC encoder settings
+var flacSettings = new FLACEncoderSettings();
+// flacSettings.Quality = 8; // Example: Set quality level (0-8, default is 5)
+
+// create FLAC output block
+var flacOutput = new FLACOutputBlock("output.flac", flacSettings);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, flacOutput.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block combines a `FLACEncoder` and a `FileSink` internally. To check if the block and its dependencies are available: `FLACOutputBlock.IsAvailable()` (This checks for `FLACEncoder` and `FileSink` availability).
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer FLAC encoder and file sink support).
+
+## M4A Output Block
+
+The `M4AOutputBlock` creates M4A (MPEG-4 Audio) files, commonly used for AAC encoded audio. It uses an AAC audio encoder and an MP4 sink to produce `.m4a` files.
+
+### Block info
+
+Name: `M4AOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Audio | various | AAC (internal) |
+
+### Settings
+
+The `M4AOutputBlock` is configured using `MP4SinkSettings` and `IAACEncoderSettings`.
+
+Key `MP4SinkSettings` properties:
+
+- `Filename` (string): The path to the output M4A file.
+
+Key `IAACEncoderSettings` properties (refer to the `IAACEncoderSettings` implementations — `AVENCAACEncoderSettings`, `VOAACEncoderSettings`, `AppleAACEncoderSettings` — for details):
+
+- Bitrate, profile, etc.
+
+Constructors:
+
+- `M4AOutputBlock(string filename)`: Uses default AAC encoder settings.
+- `M4AOutputBlock(MP4SinkSettings sinkSettings, IAACEncoderSettings aacSettings)`: Uses specified AAC encoder settings.
+
+### The sample pipeline
+
+```
+graph LR;
+    AudioSource-->M4AOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create audio source (example: virtual audio source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure M4A output block with default AAC settings
+var m4aOutput = new M4AOutputBlock("output.m4a");
+
+// Or, with custom AAC settings:
+// var sinkSettings = new MP4SinkSettings("output.m4a");
+// var aacSettings = AACEncoderBlock.GetDefaultSettings();
+// aacSettings.Bitrate = 192000; // Example: 192 Kbps
+// var m4aOutput = new M4AOutputBlock(sinkSettings, aacSettings);
+
+// Create input for the M4A output block
+var audioInputPad = m4aOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `M4AOutputBlock` internally manages an `AACEncoder` and an `MP4Sink`. To check availability: `M4AOutputBlock.IsAvailable(IAACEncoderSettings aacSettings)`
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer MP4 muxer and AAC encoder support).
+
+## MKV Output Block
+
+The `MKVOutputBlock` is used to create Matroska (MKV) files. MKV is a flexible container format that can hold various video, audio, and subtitle streams. This block combines specified video and audio encoders with an MKV sink.
+
+### Block info
+
+Name: `MKVOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | `IVideoEncoder` (e.g., H.264, HEVC, VPX, AV1) |
+| Input Audio | various | `IAudioEncoder` (e.g., AAC, MP3, Vorbis, Opus, Speex) |
+
+### Settings
+
+The `MKVOutputBlock` is configured using `MKVSinkSettings`, along with settings for the chosen video (`IVideoEncoder`) and audio (`IAudioEncoder`) encoders.
+
+Key `MKVSinkSettings` properties:
+
+- `Filename` (string): The path to the output MKV file.
+
+Constructors:
+
+- `MKVOutputBlock(MKVSinkSettings sinkSettings, IVideoEncoder videoSettings, IAudioEncoder audioSettings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->MKVOutputBlock;
+    AudioEncoder-->MKVOutputBlock;
+```
+
+More directly, if `MKVOutputBlock` handles encoder instantiation internally:
+
+```
+graph LR;
+    VideoSource-->MKVOutputBlock;
+    AudioSource-->MKVOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (example: virtual source)
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+
+// create audio source (example: virtual source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure MKV sink settings
+var mkvSinkSettings = new MKVSinkSettings("output.mkv");
+
+// configure video encoder (example: H.264)
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+// h264Settings.Bitrate = 5000000; // Example
+
+// configure audio encoder (example: AAC)
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+// aacSettings.Bitrate = 128000; // Example
+
+// create MKV output block
+var mkvOutput = new MKVOutputBlock(mkvSinkSettings, h264Settings, aacSettings);
+
+// Create inputs for the MKV output block
+var videoInputPad = mkvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = mkvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `MKVOutputBlock` internally manages the specified video and audio encoder instances (e.g., `H264Encoder`, `HEVCEncoder`, `AACEncoder`, `VorbisEncoder`, etc.) and an `MKVSink`. Supported video encoders include H.264, HEVC, VPX (VP8/VP9), AV1. Supported audio encoders include AAC, MP3, Vorbis, Opus, Speex.
+
+To check availability (example with H.264 and AAC): `MKVOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer MKV muxer and chosen encoder support).
+
+## MP3 Output Block
+
+The `MP3OutputBlock` is used for creating MP3 audio files. It encodes uncompressed audio data using an MP3 encoder and saves it to an `.mp3` file.
+
+### Block info
+
+Name: `MP3OutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Audio | uncompressed audio | MP3 (internal) |
+
+### Settings
+
+The `MP3OutputBlock` is configured with a filename and `MP3EncoderSettings`.
+
+Key `MP3EncoderSettings` properties (refer to `MP3EncoderSettings` documentation for full details):
+
+- Bitrate, quality, channel mode, etc.
+
+Constructor:
+
+- `MP3OutputBlock(string filename, MP3EncoderSettings mp3Settings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    AudioSource-->MP3OutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create audio source (example: virtual audio source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure MP3 encoder settings
+var mp3Settings = new MP3EncoderSettings();
+// mp3Settings.Bitrate = 192;                               // bitrate in kbps
+// mp3Settings.Quality = 2.0f;                              // 0.0 (best) … 10.0 (worst)
+// mp3Settings.EncodingEngineQuality = MP3EncodingQuality.High; // Fast / Standard / High
+// mp3Settings.RateControl = MP3EncoderRateControl.CBR;     // CBR / VBR / ABR
+
+// create MP3 output block
+var mp3Output = new MP3OutputBlock("output.mp3", mp3Settings);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, mp3Output.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block combines an `MP3Encoder` and a `FileSink` internally. To check if the block and its dependencies are available: `MP3OutputBlock.IsAvailable()` (This checks for `MP3Encoder` and `FileSink` availability).
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer MP3 encoder (e.g., LAME) and file sink support).
+
+## MP4 Output Block
+
+The `MP4OutputBlock` is used for creating MP4 files. It can combine various video and audio encoders with an MP4 sink to produce `.mp4` files.
+
+### Block info
+
+Name: `MP4OutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | `IVideoEncoder` (e.g., H.264, HEVC) |
+| Input Audio | various | `IAudioEncoder` (e.g., AAC, MP3) |
+
+### Settings
+
+The `MP4OutputBlock` is configured using `MP4SinkSettings`, along with settings for the chosen video (`IVideoEncoder`, typically `IH264EncoderSettings` or `IHEVCEncoderSettings`) and audio (`IAudioEncoder`, typically `IAACEncoderSettings` or `MP3EncoderSettings`) encoders.
+
+Key `MP4SinkSettings` properties:
+
+- `Filename` (string): The path to the output MP4 file.
+- Can also be `MP4SplitSinkSettings` for recording in segments.
+
+Constructors:
+
+- `MP4OutputBlock(string filename)`: Uses default H.264 video and AAC audio encoders.
+- `MP4OutputBlock(MP4SinkSettings sinkSettings, IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+- `MP4OutputBlock(MP4SinkSettings sinkSettings, IH264EncoderSettings h264settings, MP3EncoderSettings mp3Settings)`
+- `MP4OutputBlock(MP4SinkSettings sinkSettings, IHEVCEncoderSettings hevcSettings, IAACEncoderSettings aacSettings)`
+- `MP4OutputBlock(MP4SinkSettings sinkSettings, IHEVCEncoderSettings hevcSettings, MP3EncoderSettings mp3Settings)`
+
+### Segment events
+
+When `MP4OutputBlock` is configured with `MP4SplitSinkSettings`, it raises segment-lifecycle events: `OnSegmentCreated` and `OnSegmentClosed` (notified when a segment file is opened and finished/closed), and `OnSegmentFileNameRequested` (supply a custom per-segment file name). The same events are available on `MP4SinkBlock` and `MPEGTSSinkBlock`. See [MP4 output](../../general/output-formats/mp4/) for details and a custom-naming / rename-on-close example.
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->MP4OutputBlock;
+    AudioEncoder-->MP4OutputBlock;
+```
+
+If `MP4OutputBlock` uses its default internal encoders:
+
+```
+graph LR;
+    VideoSource-->MP4OutputBlock;
+    AudioSource-->MP4OutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (example: virtual source)
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+
+// create audio source (example: virtual source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// create MP4 output block with default H.264 video and AAC audio encoders
+var mp4Output = new MP4OutputBlock("output.mp4");
+
+// Or, with custom H.264 and AAC settings:
+// var sinkSettings = new MP4SinkSettings("output.mp4");
+// var h264Settings = H264EncoderBlock.GetDefaultSettings();
+// h264Settings.Bitrate = 8000000; // Example: 8 Mbps
+// var aacSettings = AACEncoderBlock.GetDefaultSettings();
+// aacSettings.Bitrate = 192000; // Example: 192 Kbps
+// var mp4Output = new MP4OutputBlock(sinkSettings, h264Settings, aacSettings);
+
+// Create inputs for the MP4 output block
+var videoInputPad = mp4Output.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = mp4Output.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `MP4OutputBlock` internally manages video (e.g., `H264Encoder`, `HEVCEncoder`) and audio (e.g., `AACEncoder`, `MP3Encoder`) encoder instances along with an `MP4Sink`. To check availability (example with H.264 and AAC): `MP4OutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer MP4 muxer and chosen encoder support).
+
+## OGG Opus Output Block
+
+The `OGGOpusOutputBlock` is used for creating Ogg Opus audio files. It encodes uncompressed audio data using an Opus encoder and multiplexes it into an Ogg container, saving to an `.opus` or `.ogg` file.
+
+### Block info
+
+Name: `OGGOpusOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Audio | uncompressed audio | Opus (internal) |
+
+### Settings
+
+The `OGGOpusOutputBlock` is configured with a filename and `OPUSEncoderSettings`.
+
+Key `OPUSEncoderSettings` properties (refer to `OPUSEncoderSettings` documentation for full details):
+
+- Bitrate, complexity, frame duration, audio type (voice/music), etc.
+
+Constructor:
+
+- `OGGOpusOutputBlock(string filename, OPUSEncoderSettings settings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    AudioSource-->OGGOpusOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create audio source (example: virtual audio source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure Opus encoder settings
+var opusSettings = new OPUSEncoderSettings();
+// opusSettings.Bitrate = 64000; // Example: Set bitrate to 64 kbps
+// opusSettings.AudioType = OpusEncoderAudioType.Music; // Example
+
+// create OGG Opus output block
+var oggOpusOutput = new OGGOpusOutputBlock("output.opus", opusSettings);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, oggOpusOutput.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block combines an `OPUSEncoder` and an `OGGSink` internally. To check if the block and its dependencies are available: `OGGOpusOutputBlock.IsAvailable()` (This checks for `OGGSink`, `OPUSEncoder`, and `FileSink` - though `FileSink` might be implicitly part of `OGGSink` logic for file output).
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer Ogg muxer and Opus encoder support).
+
+## OGG Speex Output Block
+
+The `OGGSpeexOutputBlock` is used for creating Ogg Speex audio files, typically for voice. It encodes uncompressed audio data using a Speex encoder, multiplexes it into an Ogg container, and saves to an `.spx` or `.ogg` file.
+
+### Block info
+
+Name: `OGGSpeexOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Audio | uncompressed audio | Speex (internal) |
+
+### Settings
+
+The `OGGSpeexOutputBlock` is configured with a filename and `SpeexEncoderSettings`.
+
+Key `SpeexEncoderSettings` properties (refer to `SpeexEncoderSettings` documentation for full details):
+
+- Quality, complexity, encoding mode (VBR/ABR/CBR), etc.
+
+Constructor:
+
+- `OGGSpeexOutputBlock(string filename, SpeexEncoderSettings settings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    AudioSource-->OGGSpeexOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create audio source (example: virtual audio source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure Speex encoder settings
+var speexSettings = new SpeexEncoderSettings();
+// speexSettings.Quality = 8; // Example: Set quality (0-10)
+// speexSettings.Mode = SpeexEncoderMode.VBR; // Example: Use Variable Bitrate
+
+// create OGG Speex output block
+var oggSpeexOutput = new OGGSpeexOutputBlock("output.spx", speexSettings);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, oggSpeexOutput.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block combines a `SpeexEncoder` and an `OGGSink` internally. To check if the block and its dependencies are available: `OGGSpeexOutputBlock.IsAvailable()` (This checks for `OGGSink`, `SpeexEncoder`, and `FileSink` - `FileSink` might be implicit to `OGGSink` for file output).
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer Ogg muxer and Speex encoder support).
+
+## OGG Vorbis Output Block
+
+The `OGGVorbisOutputBlock` is used for creating Ogg Vorbis audio files. It encodes uncompressed audio data using a Vorbis encoder, multiplexes it into an Ogg container, and saves to an `.ogg` file.
+
+### Block info
+
+Name: `OGGVorbisOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Audio | uncompressed audio | Vorbis (internal) |
+
+### Settings
+
+The `OGGVorbisOutputBlock` is configured with a filename and `VorbisEncoderSettings`.
+
+Key `VorbisEncoderSettings` properties (refer to `VorbisEncoderSettings` documentation for full details):
+
+- Quality, bitrate, managed/unmanaged bitrate settings, etc.
+
+Constructor:
+
+- `OGGVorbisOutputBlock(string filename, VorbisEncoderSettings settings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    AudioSource-->OGGVorbisOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create audio source (example: virtual audio source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure Vorbis encoder settings
+var vorbisSettings = new VorbisEncoderSettings();
+// vorbisSettings.Quality = 0.8f; // Example: Set quality (0.0 to 1.0)
+// vorbisSettings.Bitrate = 128000; // Example if not using quality based encoding
+
+// create OGG Vorbis output block
+var oggVorbisOutput = new OGGVorbisOutputBlock("output.ogg", vorbisSettings);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, oggVorbisOutput.Input);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block combines a `VorbisEncoder` and an `OGGSink` internally. To check if the block and its dependencies are available: `OGGVorbisOutputBlock.IsAvailable()` (This checks for `OGGSink`, `VorbisEncoder`, and `FileSink` - `FileSink` might be implicit to `OGGSink` for file output).
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer Ogg muxer and Vorbis encoder support).
+
+## WebM Output Block
+
+The `WebMOutputBlock` is used for creating WebM files, typically containing VP8 or VP9 video and Vorbis audio. It combines a VPX video encoder and a Vorbis audio encoder with a WebM sink.
+
+### Block info
+
+Name: `WebMOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | VPX (VP8/VP9 - internal) |
+| Input Audio | various | Vorbis (internal) |
+
+### Settings
+
+The `WebMOutputBlock` is configured using `WebMSinkSettings`, `IVPXEncoderSettings` (for VP8 or VP9), and `VorbisEncoderSettings`.
+
+Key `WebMSinkSettings` properties:
+
+- `Filename` (string): The path to the output WebM file.
+
+Key `IVPXEncoderSettings` properties (refer to `VPXEncoderSettings` for details):
+
+- Bitrate, quality, speed, threads, etc.
+
+Key `VorbisEncoderSettings` properties:
+
+- Quality, bitrate, etc.
+
+Constructor:
+
+- `WebMOutputBlock(WebMSinkSettings sinkSettings, IVPXEncoderSettings videoEncoderSettings, VorbisEncoderSettings vorbisSettings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->WebMOutputBlock;
+    AudioSource-->WebMOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (example: virtual source)
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+
+// create audio source (example: virtual source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure WebM sink settings
+var webmSinkSettings = new WebMSinkSettings("output.webm");
+
+// configure VP9 encoder settings. VPXEncoderSettings is an abstract base — instantiate
+// the concrete VP9EncoderSettings (or VP8EncoderSettings). Encoder type is implicit per subclass.
+var vp9Settings = new VP9EncoderSettings
+{
+    RateControl = VPXRateControl.CBR,      // CBR / VBR / CQ / ...
+    TargetBitrate = 2000,                  // kbit/s
+    Deadline = 1,                          // 1 = realtime; higher values = slower/better quality
+};
+
+// configure Vorbis encoder settings
+var vorbisSettings = new VorbisEncoderSettings();
+// vorbisSettings.Quality = 0.7f; // Example: Set quality
+
+// create WebM output block
+var webmOutput = new WebMOutputBlock(webmSinkSettings, vp9Settings, vorbisSettings);
+
+// Create inputs for the WebM output block
+var videoInputPad = webmOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = webmOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `WebMOutputBlock` internally manages a `VPXEncoder` (for VP8/VP9), a `VorbisEncoder`, and a `WebMSink`. To check availability: `WebMOutputBlock.IsAvailable(IVPXEncoderSettings videoEncoderSettings)`
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer WebM muxer, VPX encoder, and Vorbis encoder support).
+
+## Separate Output Block
+
+The `SeparateOutputBlock` provides a flexible way to configure custom output pipelines, allowing you to specify distinct video and audio encoders, processors, and a final writer/sink. It uses bridge sources (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`) to tap into the main pipeline, enabling recording independently from preview or other processing chains.
+
+### Block info
+
+Name: `SeparateOutputBlock`.
+
+This block itself doesn't have direct input pads in the traditional sense; it orchestrates a sub-pipeline.
+
+### Settings
+
+The `SeparateOutputBlock` is configured using the `SeparateOutput` settings object.
+
+Key `SeparateOutput` properties:
+
+- `Sink` (`MediaBlock`): The final sink/muxer for the output (e.g., `MP4OutputBlock`, `FileSink`). Must implement `IMediaBlockDynamicInputs` if separate encoders are used, or `IMediaBlockSinkAllInOne` if it handles encoding internally.
+- `VideoEncoder` (`MediaBlock`): An optional video encoder block.
+- `AudioEncoder` (`MediaBlock`): An optional audio encoder block.
+- `VideoProcessor` (`MediaBlock`): An optional video processing block to insert before the video encoder.
+- `AudioProcessor` (`MediaBlock`): An optional audio processing block to insert before the audio encoder.
+- `Writer` (`MediaBlock`): An optional writer block that takes the output of the `Sink` (e.g., for custom file writing or network streaming logic if the `Sink` is just a muxer).
+- `GetFilename()`: Method to retrieve the configured output filename if applicable.
+
+Constructor:
+
+- `SeparateOutputBlock(MediaBlocksPipeline pipeline, SeparateOutput settings, BridgeVideoSourceSettings bridgeVideoSourceSettings, BridgeAudioSourceSettings bridgeAudioSourceSettings)`
+
+### The conceptual pipeline
+
+This block creates an independent processing branch. For video:
+
+```
+graph LR;
+    MainVideoPath --> BridgeVideoSink;
+    BridgeVideoSourceBlock --> OptionalVideoProcessor --> VideoEncoder --> SinkOrWriter;
+```
+
+For audio:
+
+```
+graph LR;
+    MainAudioPath --> BridgeAudioSink;
+    BridgeAudioSourceBlock --> OptionalAudioProcessor --> AudioEncoder --> SinkOrWriter;
+```
+
+### Sample code
+
+```
+// Assuming 'pipeline' is your main MediaBlocksPipeline
+// Assuming 'mainVideoSourceOutputPad' and 'mainAudioSourceOutputPad' are outputs from your main sources
+
+// 1. Configure Bridge Sinks in your main pipeline
+// BridgeVideoSinkSettings/BridgeAudioSinkSettings require a channel name + format info (VideoFrameInfoX / AudioInfoX).
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+
+var bridgeVideoSinkSettings = new BridgeVideoSinkSettings("sep_video_bridge", videoInfo);
+var bridgeVideoSink = new BridgeVideoSinkBlock(bridgeVideoSinkSettings);
+pipeline.Connect(mainVideoSourceOutputPad, bridgeVideoSink.Input);
+
+var bridgeAudioSinkSettings = new BridgeAudioSinkSettings("sep_audio_bridge", audioInfo);
+var bridgeAudioSink = new BridgeAudioSinkBlock(bridgeAudioSinkSettings);
+pipeline.Connect(mainAudioSourceOutputPad, bridgeAudioSink.Input);
+
+// 2. Configure Bridge Sources for the SeparateOutputBlock's sub-pipeline (must use the same channel name + matching format info as the sink)
+var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("sep_video_bridge", videoInfo);
+var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("sep_audio_bridge", audioInfo);
+
+// 3. Configure encoders and sink for the SeparateOutput
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+var videoEncoder = new H264EncoderBlock(h264Settings);
+
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+var audioEncoder = new AACEncoderBlock(aacSettings);
+
+var mp4SinkSettings = new MP4SinkSettings("separate_output.mp4");
+var mp4Sink = new MP4OutputBlock(mp4SinkSettings, h264Settings, aacSettings); // Using MP4OutputBlock which handles muxing.
+                                                                            // Alternatively, use a raw MP4Sink and connect encoders to it.
+
+// 4. Configure SeparateOutput settings. SeparateOutput has a parameterless ctor — populate
+// the Sink / VideoEncoder / AudioEncoder properties rather than passing them to the constructor.
+var separateOutputSettings = new SeparateOutput
+{
+    Sink = mp4Sink,
+    VideoEncoder = videoEncoder,
+    AudioEncoder = audioEncoder,
+};
+
+// 5. Create the SeparateOutputBlock (this will internally connect its components)
+var separateOutput = new SeparateOutputBlock(pipeline, separateOutputSettings, bridgeVideoSourceSettings, bridgeAudioSourceSettings);
+
+// 6. Build the sources, encoders, and sink used by SeparateOutputBlock
+// Note: Building these might be handled by the pipeline if they are added to it,
+// or might need to be done explicitly if they are part of a sub-graph not directly in the main pipeline's block list.
+// The SeparateOutputBlock's Build() method will handle building its internal sources (_videoSource, _audioSource)
+// and the provided encoders/sink if they haven't been built.
+
+// pipeline.Add(bridgeVideoSink);
+// pipeline.Add(bridgeAudioSink);
+// pipeline.Add(separateOutput); // Add the orchestrator block
+
+// Start main pipeline
+// await pipeline.StartAsync(); // This will also start the separate output processing via bridges
+
+// To change filename later:
+// separateOutput.SetFilenameOrURL("new_separate_output.mp4");
+```
+
+### Remarks
+
+The `SeparateOutputBlock` itself is more of an orchestrator for a sub-pipeline that's fed by bridge sinks/sources from the main pipeline. It allows for complex recording or streaming configurations that can be started/stopped or modified independently to some extent.
+
+The `VideoEncoder`, `AudioEncoder`, `Sink`, and `Writer` components must be built correctly. The `SeparateOutputBlock.Build()` method attempts to build these components.
+
+### Platforms
+
+Depends on the components used within the `SeparateOutput` configuration (encoders, sinks, processors). Generally cross-platform if GStreamer elements are available.
+
+## WMV Output Block
+
+The `WMVOutputBlock` is used for creating Windows Media Video (WMV) files. It uses WMV video (`WMVEncoder`) and WMA audio (`WMAEncoder`) encoders with an ASF (Advanced Systems Format) sink to produce `.wmv` files.
+
+### Block info
+
+Name: `WMVOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | WMV (internal) |
+| Input Audio | various | WMA (internal) |
+
+### Settings
+
+The `WMVOutputBlock` is configured using `ASFSinkSettings`, `WMVEncoderSettings`, and `WMAEncoderSettings`.
+
+Key `ASFSinkSettings` properties:
+
+- `Filename` (string): The path to the output WMV file.
+
+Key `WMVEncoderSettings` properties (refer to `WMVEncoderSettings` documentation):
+
+- Bitrate, GOP size, quality, etc.
+
+Key `WMAEncoderSettings` properties (refer to `WMAEncoderSettings` documentation):
+
+- Bitrate, WMA version, etc.
+
+Constructors:
+
+- `WMVOutputBlock(string filename)`: Uses default WMV video and WMA audio encoder settings.
+- `WMVOutputBlock(ASFSinkSettings sinkSettings, WMVEncoderSettings videoSettings, WMAEncoderSettings audioSettings)`: Uses specified encoder settings.
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->WMVOutputBlock;
+    AudioSource-->WMVOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (example: virtual source)
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+
+// create audio source (example: virtual source)
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// create WMV output block with default settings
+var wmvOutput = new WMVOutputBlock("output.wmv");
+
+// Or, with custom settings:
+// var asfSinkSettings = new ASFSinkSettings("output.wmv");
+// var wmvEncSettings = WMVEncoderBlock.GetDefaultSettings();
+// wmvEncSettings.Bitrate = 3000000; // Example: 3 Mbps
+// var wmaEncSettings = WMAEncoderBlock.GetDefaultSettings();
+// wmaEncSettings.Bitrate = 160000; // Example: 160 Kbps
+// var wmvOutput = new WMVOutputBlock(asfSinkSettings, wmvEncSettings, wmaEncSettings);
+
+// Create inputs for the WMV output block
+var videoInputPad = wmvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = wmvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `WMVOutputBlock` internally manages `WMVEncoder`, `WMAEncoder`, and `ASFSink`. To check availability: `WMVOutputBlock.IsAvailable()`
+
+### Platforms
+
+Primarily Windows. Availability on other platforms depends on GStreamer plugin support for ASF muxing, WMV, and WMA encoders (which may be limited outside of Windows).
+
+## YouTube Output Block
+
+The `YouTubeOutputBlock` is designed for streaming video and audio to YouTube Live using RTMP. It internally utilizes H.264 video and AAC audio encoders.
+
+### Block info
+
+Name: `YouTubeOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | H.264 (internal) |
+| Input Audio | various | AAC (internal) |
+
+### Settings
+
+The `YouTubeOutputBlock` is configured using `YouTubeSinkSettings`, `IH264EncoderSettings`, and `IAACEncoderSettings`.
+
+Key `YouTubeSinkSettings` properties:
+
+- `Key` (string): The YouTube Live stream key. The block streams to `rtmps://a.rtmps.youtube.com/live2/` on port 443.
+- `TLSValidationFlags` (`RTMPTLSCertificateFlags`): Which problems with the ingest certificate fail the connection. Default `VALIDATE_ALL`; `NONE` accepts any certificate.
+
+Constructor:
+
+- `YouTubeOutputBlock(YouTubeSinkSettings sinkSettings, IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->YouTubeOutputBlock;
+    AudioSource-->YouTubeOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create video source (e.g., SystemVideoSourceBlock)
+var videoSource = new SystemVideoSourceBlock(videoSourceSettings); // Assuming videoSourceSettings are configured
+
+// create audio source (e.g., SystemAudioSourceBlock)
+var audioSource = new SystemAudioSourceBlock(audioSourceSettings); // Assuming audioSourceSettings are configured
+
+// configure YouTube sink settings (ctor takes the stream key only — the SDK builds the RTMP URL)
+var ytSinkSettings = new YouTubeSinkSettings("YOUR-STREAM-KEY");
+
+// configure H.264 encoder settings (use defaults or customize per YouTube recommendations)
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+// h264Settings.Bitrate = 6000000; // Example: 6 Mbps for 1080p
+// h264Settings.UsagePreset = H264UsagePreset.None; // Adjust based on performance/quality needs
+
+// configure AAC encoder settings (use defaults or customize per YouTube recommendations)
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+// aacSettings.Bitrate = 128000; // Example: 128 Kbps stereo
+
+// create YouTube output block
+var youTubeOutput = new YouTubeOutputBlock(ytSinkSettings, h264Settings, aacSettings);
+
+// Create inputs for the YouTube output block
+var videoInputPad = youTubeOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = youTubeOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect video path
+pipeline.Connect(videoSource.Output, videoInputPad);
+
+// connect audio path
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+This block encapsulates the H.264 and AAC encoders and the RTMP sink (`YouTubeSink`). Ensure that the `YouTubeSink`, `H264Encoder`, and `AACEncoder` are available. `YouTubeOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)` can be used to check this. It's crucial to configure encoder settings (bitrate, resolution, frame rate) according to YouTube's recommended settings for live streaming to ensure optimal quality and compatibility.
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (Platform availability depends on GStreamer RTMP support and H.264/AAC encoder availability).
+
+## Enhanced FLV Output Block
+
+The `EFLVOutputBlock` creates Enhanced FLV (Flash Video) files with Enhanced RTMP (V2) support. Unlike the classic FLV container, the Enhanced FLV muxer signals codecs through FOURCC values, so it can carry modern video codecs such as H.265/HEVC alongside H.264, and supports multiple video and audio tracks. It combines per-track video and audio encoders with an Enhanced FLV sink to produce `.flv` files.
+
+### Block info
+
+Name: `EFLVOutputBlock`.
+
+| Pin direction | Media type | Expected Encoders |
+| --- | --- | --- |
+| Input Video | various | H.264 (`IH264EncoderSettings`), HEVC (`IHEVCEncoderSettings`) |
+| Input Audio | various | AAC (`IAACEncoderSettings`), MP3 (`MP3EncoderSettings`) |
+
+Input pads are dynamic. Call `CreateNewInput(MediaBlockPadMediaType.Video)` and `CreateNewInput(MediaBlockPadMediaType.Audio)` to add tracks; each input pad gets its own encoder instance built from the supplied encoder settings.
+
+### Settings
+
+The `EFLVOutputBlock` is configured using `EFLVSinkSettings` along with settings for the chosen video and audio encoders.
+
+Key `EFLVSinkSettings` properties:
+
+- `Filename` (string): The path to the output Enhanced FLV file. Defaults to `output.flv`.
+
+`EFLVSinkSettings` constructors:
+
+- `EFLVSinkSettings()`: Uses the default filename.
+- `EFLVSinkSettings(string filename)`: Sets the output filename.
+
+`EFLVOutputBlock` constructor:
+
+- `EFLVOutputBlock(EFLVSinkSettings sinkSettings, IVideoEncoder videoSettings, IAudioEncoder audioSettings)`
+
+### The sample pipeline
+
+```
+graph LR;
+    VideoSource-->VideoEncoder;
+    AudioSource-->AudioEncoder;
+    VideoEncoder-->EFLVOutputBlock;
+    AudioEncoder-->EFLVOutputBlock;
+```
+
+### Sample code
+
+```
+// create pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create sources
+var videoSource = new VirtualVideoSourceBlock(new VirtualVideoSourceSettings());
+var audioSource = new VirtualAudioSourceBlock(new VirtualAudioSourceSettings());
+
+// configure encoders (HEVC video + AAC audio for Enhanced FLV)
+var videoSettings = HEVCEncoderBlock.GetDefaultSettings();
+var audioSettings = new AVENCAACEncoderSettings();
+
+// create Enhanced FLV output block
+var sinkSettings = new EFLVSinkSettings("output.flv");
+var eflvOutput = new EFLVOutputBlock(sinkSettings, videoSettings, audioSettings);
+
+// create dynamic inputs for the Enhanced FLV output block
+var videoInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Video);
+var audioInputPad = eflvOutput.CreateNewInput(MediaBlockPadMediaType.Audio);
+
+// connect
+pipeline.Connect(videoSource.Output, videoInputPad);
+pipeline.Connect(audioSource.Output, audioInputPad);
+
+// start pipeline
+await pipeline.StartAsync();
+
+// ... later, to stop ...
+// await pipeline.StopAsync();
+```
+
+### Remarks
+
+The `EFLVOutputBlock` manages its own encoder instances internally based on the provided `IVideoEncoder` / `IAudioEncoder` settings (H.264 or HEVC for video; AAC or MP3 for audio). The output destination can be changed at runtime with `SetFilenameOrURL(string)` and queried with `GetFilenameOrURL()`.
+
+To check availability: `EFLVOutputBlock.IsAvailable(IH264EncoderSettings h264settings, IAACEncoderSettings aacSettings)`
+
+### Platforms
+
+Windows, macOS, Linux, iOS, Android (depends on the availability of the Enhanced FLV muxer and the chosen encoder plugins).
+
+## Pre-Event Recording Block
+
+The `PreEventRecordingBlock` implements circular buffer (pre-event) recording. It continuously buffers encoded video and audio in memory and writes event clips to disk on trigger, including footage from before the event occurred.
+
+For full documentation, settings, state machine, and code samples, see the dedicated [Pre-Event Recording Block](pre-event-recording/) page.
+
+## Pre-Event Separate Output Block
+
+The `PreEventSeparateOutputBlock` combines the independent sub-pipeline pattern of the [Separate Output Block](#separate-output-block) with [pre-event (circular buffer) recording](pre-event-recording/). Instead of routing the encoded streams into a muxer + file sink, it routes them into a `PreEventRecordingBlock`, so the pre-event branch records event clips (including pre-trigger footage) independently from the main preview/processing chain. It taps the main pipeline through bridge sources (`BridgeVideoSourceBlock`, `BridgeAudioSourceBlock`).
+
+### Block info
+
+Name: `PreEventSeparateOutputBlock`.
+
+This block is a sink that orchestrates a sub-pipeline; it has no direct input pads. Video and audio enter through the bridge sources and leave through the supplied `PreEventRecordingBlock`.
+
+### Settings
+
+The block reuses the `SeparateOutput` settings object to describe the encoding branch.
+
+Key `SeparateOutput` properties used by this block:
+
+- `VideoEncoder` (`MediaBlock`): An optional video encoder block. When set, a video branch is wired from the bridge video source into the pre-event block.
+- `AudioEncoder` (`MediaBlock`): An optional audio encoder block. When set, an audio branch is wired from the bridge audio source into the pre-event block.
+- `VideoProcessor` (`MediaBlock`): An optional video processing block inserted before the video encoder.
+- `AudioProcessor` (`MediaBlock`): An optional audio processing block inserted before the audio encoder.
+
+Constructor:
+
+- `PreEventSeparateOutputBlock(MediaBlocksPipeline pipeline, SeparateOutput settings, BridgeVideoSourceSettings bridgeVideoSourceSettings, BridgeAudioSourceSettings bridgeAudioSourceSettings, PreEventRecordingBlock preEventBlock)`
+
+### The conceptual pipeline
+
+```
+graph LR;
+    MainVideoPath --> BridgeVideoSink;
+    BridgeVideoSourceBlock --> OptionalVideoProcessor --> VideoEncoder --> PreEventRecordingBlock;
+    MainAudioPath --> BridgeAudioSink;
+    BridgeAudioSourceBlock --> OptionalAudioProcessor --> AudioEncoder --> PreEventRecordingBlock;
+```
+
+### Sample code
+
+```
+// Assuming 'pipeline' is your main MediaBlocksPipeline
+// Assuming bridge sinks for the main video/audio paths are already configured
+// with the channel names "pe_video_bridge" / "pe_audio_bridge".
+
+// 1. Configure bridge sources for the separate sub-pipeline (match the sink channel names + format info)
+var videoInfo = new VideoFrameInfoX(1920, 1080, new VideoFrameRate(30));
+var audioInfo = new AudioInfoX(AudioFormatX.S16LE, 48000, 2);
+
+var bridgeVideoSourceSettings = new BridgeVideoSourceSettings("pe_video_bridge", videoInfo);
+var bridgeAudioSourceSettings = new BridgeAudioSourceSettings("pe_audio_bridge", audioInfo);
+
+// 2. Configure encoders for the recording branch
+var h264Settings = H264EncoderBlock.GetDefaultSettings();
+var videoEncoder = new H264EncoderBlock(h264Settings);
+
+var aacSettings = AACEncoderBlock.GetDefaultSettings();
+var audioEncoder = new AACEncoderBlock(aacSettings);
+
+var separateOutputSettings = new SeparateOutput
+{
+    VideoEncoder = videoEncoder,
+    AudioEncoder = audioEncoder,
+};
+
+// 3. Create the pre-event recording block (see the Pre-Event Recording Block page for its settings)
+var preEventBlock = new PreEventRecordingBlock(new PreEventRecordingSettings());
+
+// 4. Create the PreEventSeparateOutputBlock (wires bridge sources -> encoders -> pre-event block)
+var preEventOutput = new PreEventSeparateOutputBlock(
+    pipeline,
+    separateOutputSettings,
+    bridgeVideoSourceSettings,
+    bridgeAudioSourceSettings,
+    preEventBlock);
+
+// start main pipeline (the sub-pipeline runs through the bridges)
+await pipeline.StartAsync();
+
+// ... trigger an event clip on the pre-event block when needed ...
+```
+
+### Remarks
+
+The `PreEventSeparateOutputBlock` writes pre-event and main segments to separate output files through the `PreEventRecordingBlock`; the filename is set per recording when the event is triggered, not on the output block. `GetFilenameOrURL()` returns the pre-event block's current filename. Building the block builds the supplied encoders, the pre-event block, and the bridge sources.
+
+### Platforms
+
+Depends on the components used within the `SeparateOutput` configuration and the `PreEventRecordingBlock` (encoders, processors). Generally cross-platform if the required GStreamer elements are available.
+
+## See Also
+
+- [Getting Started with Media Blocks](../GettingStarted/) — pipeline basics, installation, and first project setup
+- [Pipeline Architecture](../GettingStarted/pipeline/) — MediaBlocksPipeline lifecycle, connecting blocks, and error handling
+- [Video Encoders](../VideoEncoders/) — H.264, HEVC, VP8/VP9, AV1, and GPU-accelerated encoder blocks
+- [Media Sources](../Sources/) — camera, screen, file, and network source blocks
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) — product page and downloads
+
+---END OF PAGE---
+
+
+
+## Pre-Event Buffering and Recording with Ring Buffer in C#
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Outputs/pre-event-recording/
+**Description:** Buffer and record pre-event surveillance video from IP cameras with ring buffer in VisioForge Media Blocks SDK. Motion-triggered capture in C# .NET.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, GStreamer, Encoding, MP4, TS, H.264, AAC, C#
+**API:** PreEventRecordingBlock, PreEventRecordingEventArgs, PreEventRecordingSettings, MotionDetector, H264Encoder
+
+# Pre-Event Recording Block - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+The `PreEventRecordingBlock` continuously buffers encoded video and audio frames in a memory-based circular (ring) buffer. When an event triggers (motion detection, alarm, API call), it flushes the buffered pre-event footage to a file and continues recording live frames for a configurable post-event duration. This creates complete event clips that include footage from before the trigger occurred.
+
+This block is commonly used in surveillance and security applications where you need to capture what happened before and after an event, without continuously writing to disk.
+
+## Block info
+
+Name: `PreEventRecordingBlock`.
+
+| Pin direction | Media type | Description |
+| --- | --- | --- |
+| Input video | encoded video (H.264, H.265) | Encoded video stream from an encoder or passthrough source |
+| Input audio | encoded audio (AAC, MP3, etc.) | Encoded audio stream (optional, can be disabled) |
+
+This is a sink block — it has no output pads. Recorded files are written directly to disk when a recording is triggered.
+
+## Settings
+
+The `PreEventRecordingBlock` is configured using `PreEventRecordingSettings`.
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `PreEventDuration` | TimeSpan | 30 seconds | Duration of video/audio to keep buffered in memory. When a trigger occurs, this amount of footage is flushed to the output file. |
+| `PostEventDuration` | TimeSpan | 10 seconds | Duration to continue recording after trigger. After this time elapses, recording stops automatically and the block returns to buffering mode. |
+| `MaxBufferBytes` | long | 0 (unlimited) | Maximum buffer memory in bytes. When exceeded, oldest frames are evicted regardless of time-based duration. Set to 0 for time-based eviction only. |
+
+### Constructor
+
+```
+public PreEventRecordingBlock(PreEventRecordingSettings settings, string muxFactoryName = "mp4mux")
+```
+
+**Parameters:**
+
+- `settings` — Pre-event recording configuration. Uses defaults if null.
+- `muxFactoryName` — GStreamer muxer element factory name. Default: `"mp4mux"`. Other options: `"matroskamux"` (MKV), `"mpegtsmux"` (MPEG-TS).
+
+### Block properties
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `AudioEnabled` | bool | Enable/disable audio capture. Set before pipeline start. Default: `true`. |
+| `State` | PreEventRecordingState | Current block state (read-only, thread-safe). |
+| `CurrentFilename` | string | Current recording filename. Null when not recording. |
+| `BufferTotalBytes` | long | Total bytes currently stored in the ring buffer. |
+| `BufferedDuration` | TimeSpan | Current duration of buffered media. |
+| `DebugLogPath` | string | Path to debug log file. When non-null, writes detailed frame timestamp debugging. |
+
+## State machine
+
+The block follows a well-defined state machine:
+
+```
+stateDiagram-v2
+    [*] --> Idle
+    Idle --> Buffering : pipeline start / StartBuffering()
+    Buffering --> Recording : TriggerRecording()
+    Recording --> PostEventRecording : Pre-event buffer flushed
+    PostEventRecording --> Buffering : Post-event timer expires / StopRecording() / StartBuffering() / format change
+    Recording --> Buffering : StopRecording() / StartBuffering() / format change / trigger failed
+    Idle --> Stopped : StopBuffering()
+    Buffering --> Stopped : StopBuffering() / pipeline stop
+    Recording --> Stopped : StopBuffering() / pipeline stop
+    PostEventRecording --> Stopped : StopBuffering() / pipeline stop
+    Stopped --> Buffering : StartBuffering() / restart after a pipeline stop
+```
+
+| State | Description |
+| --- | --- |
+| `Idle` | Not initialized or not started. |
+| `Buffering` | Actively buffering frames in the ring buffer, not recording to file. |
+| `Recording` | Flushing pre-event buffer to file and capturing live frames. |
+| `PostEventRecording` | Post-event phase — recording live frames until the timer expires. |
+| `Stopped` | Not buffering. After a pipeline stop, a restart resumes buffering; after `StopBuffering()`, only `StartBuffering()` does. |
+
+A change of the encoded format during a run — resolution, profile, level, codec data, or the audio rate, channel count or codec — closes a recording that is in progress, the same way `StopRecording()` does, and drops that stream's buffered frames. The other stream stays buffered. The next file is built from the new format. A restated frame rate or pixel aspect ratio does not close the recording.
+
+## Events
+
+```
+public event EventHandler<PreEventRecordingEventArgs> OnRecordingStarted;
+public event EventHandler<PreEventRecordingEventArgs> OnRecordingStopped;
+public event EventHandler<PreEventRecordingEventArgs> OnStateChanged;
+```
+
+The events are raised one at a time, in the order the changes happened: a handler never runs alongside another one, and `OnRecordingStopped` follows the `OnRecordingStarted` of the same file and comes once the file is finalized. While a handler is running, anything that causes a new event — `StopRecording()`, `StopBuffering()`, `StartBuffering()`, `TriggerRecording()`, a pipeline stop or a format change, on another thread or inside the handler — returns before that event is raised; the thread running the handler raises it when the handler returns. A handler can therefore run on a worker thread even when the call was made on the UI thread, and after the pipeline stopped or the block was disposed; marshal to the UI thread before touching controls. `StopRecording()`, `StopBuffering()`, `StartBuffering()` and `TriggerRecording()` rethrow what the handlers they raised threw; on the post-event timer, a pipeline start or stop, or a format change the exception is logged as an error.
+
+`PreEventRecordingEventArgs` properties:
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `State` | PreEventRecordingState | Current state at the time of the event. |
+| `Filename` | string | Output filename for the recording. |
+| `PreEventDuration` | TimeSpan | Actual pre-event duration included in the file (may be less than configured if insufficient buffered data or keyframe alignment adjusted the start). |
+
+## Methods
+
+| Method | Description |
+| --- | --- |
+| `TriggerRecording(string filename)` | Flush the ring buffer to the specified file and start recording live frames. If already recording, extends the current recording (resets post-event timer). Refused, with an error, until the first encoded video frame has arrived and, when audio is enabled, until the first encoded audio frame has arrived. A later call records normally. |
+| `ExtendRecording()` | Reset the post-event timer. Call this when the trigger condition is still active (e.g., motion continues). |
+| `StopRecording()` | Manually stop the current recording and return to buffering mode. |
+| `StartBuffering()` | Start or resume buffering after being stopped. Frames are buffered only while the pipeline runs. Called before the pipeline starts, it raises `OnStateChanged` with `Buffering` at once, and the start does not raise it again. Does nothing when the block is already buffering. |
+| `StopBuffering()` | Stop everything including buffering and clear the buffer. The block stays stopped, across pipeline restarts, until `StartBuffering()`. A repeated call raises no event. |
+
+## The sample pipeline
+
+With a local camera source, motion detection, video preview, and pre-event recording:
+
+```
+graph LR;
+    VideoSource-->MotionDetector;
+    MotionDetector-->VideoTee;
+    VideoTee-->VideoRenderer;
+    VideoTee-->H264Encoder;
+    H264Encoder-->PreEventRecordingBlock;
+    AudioSource-->AudioTee;
+    AudioTee-->AudioRenderer;
+    AudioTee-->AACEncoder;
+    AACEncoder-->PreEventRecordingBlock;
+```
+
+When `TriggerRecording()` is called, the block internally creates a dynamic output pipeline:
+
+```
+graph LR;
+    RingBuffer-->AppSrcVideo;
+    RingBuffer-->AppSrcAudio;
+    AppSrcVideo-->Muxer;
+    AppSrcAudio-->Muxer;
+    Muxer-->FileSink;
+```
+
+## Sample code
+
+The following snippet shows how to create and connect the block. For a complete working application with motion detection, video preview, RTSP camera support, and full WPF UI, see the [Pre-Event Recording Guide](../../Guides/pre-event-recording/).
+
+```
+// Configure pre-event settings
+var preEventSettings = new PreEventRecordingSettings
+{
+    PreEventDuration = TimeSpan.FromSeconds(10),
+    PostEventDuration = TimeSpan.FromSeconds(5)
+};
+
+// Create the block (MP4 output)
+var preEventBlock = new PreEventRecordingBlock(preEventSettings, "mp4mux");
+preEventBlock.AudioEnabled = true;
+
+// Subscribe to events
+preEventBlock.OnRecordingStarted += (s, args) =>
+    Debug.WriteLine($"Recording started: {args.Filename}");
+preEventBlock.OnRecordingStopped += (s, args) =>
+    Debug.WriteLine($"Recording stopped: {args.Filename}");
+
+// Connect encoded video and audio to the block
+pipeline.Connect(h264Encoder.Output, preEventBlock.VideoInput);
+pipeline.Connect(aacEncoder.Output, preEventBlock.AudioInput);
+
+// Start pipeline — buffering begins immediately
+await pipeline.StartAsync();
+
+// Later: trigger recording on event
+preEventBlock.TriggerRecording("/recordings/event_001.mp4");
+
+// Extend if trigger condition persists
+preEventBlock.ExtendRecording();
+
+// Or stop manually
+preEventBlock.StopRecording();
+```
+
+## Container format options
+
+| Format | Muxer Factory Name | Pros | Cons |
+| --- | --- | --- | --- |
+| **MP4** | `mp4mux` | Most compatible, widely supported | Requires finalization (moov atom); file may be corrupt if process crashes during recording |
+| **MPEG-TS** | `mpegtsmux` | Crash-safe — no finalization step needed; file is always playable | Slightly larger file size; less universal support in some players |
+| **MKV** | `matroskamux` | Flexible container; supports many codecs | Less compatible with some mobile players |
+
+Crash Safety
+
+For surveillance applications where process crashes are a concern, use **MPEG-TS** (`mpegtsmux`). MP4 files that are not properly finalized (e.g., due to a crash or power loss during recording) may be unplayable.
+
+## Platforms
+
+Windows, macOS, Linux, Android, iOS (platform availability depends on GStreamer muxer and encoder support).
+
+---END OF PAGE---
+
+
+
+## Stream Parser Blocks - H.264, HEVC, AV1 Pipelines in C#
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/Parsers/
+**Description:** Parse elementary video and audio streams to extract metadata and prepare content for decoding and multiplexing in VisioForge Media Blocks SDK.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS
+**API:** VideoRendererBlock, DataSourceBlock, AV1ParseBlock, H263ParseBlock, H264ParseBlock
+
+# Parser Blocks - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+Parser blocks are essential components in media processing pipelines. They are used to parse elementary streams, which might be raw or partially processed, to extract metadata, and to prepare the streams for further processing like decoding or multiplexing. VisioForge Media Blocks SDK .NET offers a variety of parser blocks for common video and audio codecs.
+
+## Video Parser Blocks
+
+### AV1 Parser Block
+
+The `AV1ParseBlock` is used to parse AV1 video elementary streams. It helps in identifying frame boundaries and extracting codec-specific information.
+
+#### Block info
+
+Name: `AV1ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | AV1 video | 1 |
+| Output video | AV1 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source (e.g., File or Network)"] --> AV1ParseBlock;
+    AV1ParseBlock --> AV1DecoderBlock["AV1 Decoder Block"];
+    AV1DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### H.263 Parser Block
+
+The `H263ParseBlock` is designed to parse H.263 video elementary streams. This is useful for older video conferencing and mobile video applications.
+
+#### Block info
+
+Name: `H263ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | H.263 video | 1 |
+| Output video | H.263 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source"] --> H263ParseBlock;
+    H263ParseBlock --> H263DecoderBlock["H.263 Decoder Block"];
+    H263DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### H.264 Parser Block
+
+The `H264ParseBlock` parses H.264 (AVC) video elementary streams. This is one of the most widely used video codecs. The parser helps in identifying NAL units and other stream properties.
+
+#### Block info
+
+Name: `H264ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | H.264 video | 1 |
+| Output video | H.264 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    PushDataSource["Push Data Source (H.264 NALUs)"] --> H264ParseBlock;
+    H264ParseBlock --> H264DecoderBlock["H.264 Decoder Block"];
+    H264DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### H.265 Parser Block
+
+The `H265ParseBlock` parses H.265 (HEVC) video elementary streams. H.265 offers better compression than H.264. The parser helps in identifying NAL units and other stream properties.
+
+#### Block info
+
+Name: `H265ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | H.265 video | 1 |
+| Output video | H.265 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    PushDataSource["Push Data Source (H.265 NALUs)"] --> H265ParseBlock;
+    H265ParseBlock --> H265DecoderBlock["H.265 Decoder Block"];
+    H265DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### JPEG 2000 Parser Block
+
+The `JPEG2000ParseBlock` is used to parse JPEG 2000 video streams. JPEG 2000 is a wavelet-based compression standard that can be used for still images and video.
+
+#### Block info
+
+Name: `JPEG2000ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | JPEG 2000 video | 1 |
+| Output video | JPEG 2000 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source"] --> JPEG2000ParseBlock;
+    JPEG2000ParseBlock --> JPEG2000DecoderBlock["JPEG 2000 Decoder Block"];
+    JPEG2000DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### MPEG-1/2 Video Parser Block
+
+The `MPEG12VideoParseBlock` parses MPEG-1 and MPEG-2 video elementary streams. These are older but still relevant video codecs, especially MPEG-2 for DVDs and broadcast.
+
+#### Block info
+
+Name: `MPEG12VideoParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | MPEG-1/2 video | 1 |
+| Output video | MPEG-1/2 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source"] --> MPEG12VideoParseBlock;
+    MPEG12VideoParseBlock --> MPEGVideoDecoderBlock["MPEG-1/2 Decoder Block"];
+    MPEGVideoDecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### MPEG-4 Video Parser Block
+
+The `MPEG4ParseBlock` parses MPEG-4 Part 2 video elementary streams (often referred to as DivX/Xvid in its early forms).
+
+#### Block info
+
+Name: `MPEG4ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | MPEG-4 video | 1 |
+| Output video | MPEG-4 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source"] --> MPEG4ParseBlock;
+    MPEG4ParseBlock --> MPEG4DecoderBlock["MPEG-4 Decoder Block"];
+    MPEG4DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### PNG Parser Block
+
+The `PNGParseBlock` is used to parse PNG image data. While PNG is primarily an image format, this parser can be useful in scenarios where PNG images are part of a stream or need to be processed within the Media Blocks pipeline.
+
+#### Block info
+
+Name: `PNGParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | PNG image data | 1 |
+| Output video | PNG image data | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source (PNG data)"] --> PNGParseBlock;
+    PNGParseBlock --> PNGDecoderBlock["PNG Decoder Block"];
+    PNGDecoderBlock --> VideoRendererBlock["Video Renderer Block (or Image Overlay)"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### VC-1 Parser Block
+
+The `VC1ParseBlock` parses VC-1 video elementary streams. VC-1 was developed by Microsoft and was used in Blu-ray Discs and Windows Media Video.
+
+#### Block info
+
+Name: `VC1ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | VC-1 video | 1 |
+| Output video | VC-1 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source"] --> VC1ParseBlock;
+    VC1ParseBlock --> VC1DecoderBlock["VC-1 Decoder Block"];
+    VC1DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+### VP9 Parser Block
+
+The `VP9ParseBlock` parses VP9 video elementary streams. VP9 is an open and royalty-free video coding format developed by Google, often used for web video.
+
+#### Block info
+
+Name: `VP9ParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | VP9 video | 1 |
+| Output video | VP9 video | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source"] --> VP9ParseBlock;
+    VP9ParseBlock --> VP9DecoderBlock["VP9 Decoder Block"];
+    VP9DecoderBlock --> VideoRendererBlock["Video Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---
+
+## Audio Parser Blocks
+
+### MPEG Audio Parser Block
+
+The `MPEGAudioParseBlock` parses MPEG audio elementary streams, which includes MP1, MP2, and MP3 audio.
+
+#### Block info
+
+Name: `MPEGAudioParseBlock`.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input audio | MPEG audio | 1 |
+| Output audio | MPEG audio | 1 |
+
+#### The sample pipeline
+
+```
+graph LR;
+    DataSourceBlock["Data Source (MP3 data)"] --> MPEGAudioParseBlock;
+    MPEGAudioParseBlock --> MP3DecoderBlock["MP3 Decoder Block"];
+    MP3DecoderBlock --> AudioRendererBlock["Audio Renderer Block"];
+```
+
+#### Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+## Individual Parser Blocks
+
+### AV1 Parse
+
+Parses AV1 video streams to extract frame boundaries and metadata.
+
+#### Block info
+
+Name: AV1ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | AV1 compressed | 1 |
+| Output | AV1 parsed | 1 |
+
+#### Sample code
+
+```
+var pipeline = new MediaBlocksPipeline();
+var av1Parse = new AV1ParseBlock();
+// Connect to AV1 stream source and decoder
+await pipeline.StartAsync();
+```
+
+### H263 Parse
+
+Parses H.263 video streams for frame boundary detection.
+
+#### Block info
+
+Name: H263ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | H.263 compressed | 1 |
+| Output | H.263 parsed | 1 |
+
+### H264 Parse
+
+Parses H.264/AVC video streams to extract NAL units and frame information.
+
+#### Block info
+
+Name: H264ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | H.264 compressed | 1 |
+| Output | H.264 parsed | 1 |
+
+### H265 Parse
+
+Parses H.265/HEVC video streams to extract NAL units and coding information.
+
+#### Block info
+
+Name: H265ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | H.265 compressed | 1 |
+| Output | H.265 parsed | 1 |
+
+### JPEG2000 Parse
+
+Parses JPEG2000 video streams.
+
+#### Block info
+
+Name: JPEG2000ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | JPEG2000 compressed | 1 |
+| Output | JPEG2000 parsed | 1 |
+
+### MPEG-1/2 Video Parse
+
+Parses MPEG-1 and MPEG-2 video streams.
+
+#### Block info
+
+Name: MPEG12VideoParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | MPEG-1/2 compressed | 1 |
+| Output | MPEG-1/2 parsed | 1 |
+
+### MPEG-4 Parse
+
+Parses MPEG-4 video streams.
+
+#### Block info
+
+Name: MPEG4ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | MPEG-4 compressed | 1 |
+| Output | MPEG-4 parsed | 1 |
+
+### MPEG Audio Parse
+
+Parses MPEG audio streams (MP1, MP2, MP3).
+
+#### Block info
+
+Name: MPEGAudioParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | MPEG audio compressed | 1 |
+| Output | MPEG audio parsed | 1 |
+
+### PNG Parse
+
+Parses PNG image streams.
+
+#### Block info
+
+Name: PNGParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | PNG compressed | 1 |
+| Output | PNG parsed | 1 |
+
+### VC-1 Parse
+
+Parses VC-1 video streams (Windows Media Video 9).
+
+#### Block info
+
+Name: VC1ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | VC-1 compressed | 1 |
+| Output | VC-1 parsed | 1 |
+
+### VP9 Parse
+
+Parses VP9 video streams.
+
+#### Block info
+
+Name: VP9ParseBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input | VP9 compressed | 1 |
+| Output | VP9 parsed | 1 |
+
+## Platforms
+
+Windows, macOS, Linux, iOS, Android.
+
+---END OF PAGE---
+
+
+
+## RTSP Server Streaming in C# .NET — Developer Guide
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/RTSPServer/
+**Description:** Create RTSP streaming servers for low-latency audio and video delivery with H.264/H.265 codec support using VisioForge Media Blocks SDK.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS, Streaming
+**API:** RTSPServerBlock, RTSPServerSettings, H264EncoderBlock, AACEncoderBlock, SystemVideoSourceBlock, UniversalSourceBlock
+
+# RTSP Server Block - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+Cross-platform support
+
+The `RTSPServerBlock` runs on **Windows, macOS, and Linux** via GStreamer (requires the `gst-rtsp-server` plugin). See the [platform support matrix](../../platform-matrix/) for codec and hardware-acceleration details, and the [Linux deployment guide](../../deployment-x/Ubuntu/) for Ubuntu / NVIDIA Jetson / Raspberry Pi setup.
+
+The RTSP Server block creates an RTSP (Real-Time Streaming Protocol) server endpoint for streaming audio/video content over networks. Clients can connect to receive live or recorded media streams with low latency.
+
+## Video Tutorial: Stream an MP4 File as an RTSP Server in a Few Lines of C#
+
+A console app that serves a video file as an RTSP stream: `UniversalSourceBlock` reads the file, and `RTSPServerBlock` encodes it to H.264, plus AAC when the file has audio, and serves it at `rtsp://127.0.0.1:8554/live`.
+
+Its code: [rtsp-server-short-console](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/rtsp-server-short-console) on GitHub, and [File Streaming over RTSP](#file-streaming-over-rtsp) below.
+
+## Overview
+
+The RTSPServerBlock provides a complete RTSP streaming server implementation with the following capabilities:
+
+- **Multiple Client Support**: Handles simultaneous connections from multiple RTSP clients, which share one encoded stream
+- **Standard Compliance**: Compatible with VLC, FFmpeg, GStreamer, and IP camera viewers
+- **Built-in Encoding**: The block takes uncompressed video and audio and encodes them itself
+- **Video Codecs**: H.264, H.265 (HEVC) and VP9
+- **Audio Codecs**: AAC, MP3, Opus and Vorbis
+- **Transport Protocols**: RTP/RTCP for reliable media delivery
+- **Authentication**: Optional RTSP authentication support
+- **Configurable**: Custom port, mount point and listening address
+- **Low Latency**: Optimized for real-time streaming applications
+
+## Block Info
+
+Name: RTSPServerBlock.
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | uncompressed video, encoded with `VideoEncoder` | 1 |
+| Input audio | uncompressed audio, encoded with `AudioEncoder` | 1 |
+
+## The Sample Pipeline
+
+```
+graph LR;
+    SystemVideoSourceBlock-->RTSPServerBlock;
+    SystemAudioSourceBlock-->RTSPServerBlock;
+```
+
+## Settings
+
+The RTSPServerBlock is configured using `RTSPServerSettings`:
+
+### RTSPServerSettings Properties
+
+- `Port` (`int`): The TCP port for the RTSP server. Default `8554`.
+- `Point` (`string`): The URL path under which the stream is served (for example `/live`). Default `/live`.
+- `Username` (`string`): Optional username for basic RTSP authentication.
+- `Password` (`string`): Optional password for basic RTSP authentication.
+- `Address` (`string`): The host name or IP address clients use to reach the server. It only sets the host part of `URL`; it does not choose the interfaces the server listens on. Default `127.0.0.1`.
+- `ListenAddress` (`string`): The local IP address the server listens on. Default `0.0.0.0`, every IPv4 interface; `127.0.0.1` accepts only clients on the same machine. When you set a specific address here, set `Address` too, so `URL` names it.
+- `Name` (`string`): Server display name announced to clients. Default `"VisioForge RTSP Server"`.
+- `Description` (`string`): Human-readable description. Default `"VisioForge RTSP Server"`.
+- `Latency` (`TimeSpan`): Buffering latency applied by the server. Default `250 ms`.
+- `URL` (`string`, read-only): Computed `rtsp://{Address}:{Port}{Point}` URL — use this after constructing the settings to log the client-facing URL.
+- `VideoEncoder` (`IVideoEncoder`): Video encoder settings: H.264, H.265 or VP9. Pass `null` to disable the video stream.
+- `AudioEncoder` (`IAudioEncoder`): Audio encoder settings: AAC, MP3, Opus or Vorbis. Pass `null` to disable the audio stream.
+
+`RTSPServerSettings` has **no parameterless constructor**. Use one of:
+
+- `new RTSPServerSettings(IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)`
+- `new RTSPServerSettings(Uri uri, IVideoEncoder videoEncoder, IAudioEncoder audioEncoder)` — parses host / port / point from the URI; it does not set `ListenAddress`, so for an IPv6 host set `ListenAddress` to an IPv6 address too.
+
+## Sample Code
+
+### Basic RTSP Server
+
+Connect the camera and the microphone straight to the server: it encodes them with the encoders named in its settings.
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Create video source
+var videoDevice = (await DeviceEnumerator.Shared.VideoSourcesAsync())[0];
+var videoFormat = videoDevice.VideoFormats[0];
+var videoSettings = new VideoCaptureDeviceSourceSettings(videoDevice)
+{
+    Format = videoFormat.ToFormat()
+};
+var videoSource = new SystemVideoSourceBlock(videoSettings);
+
+// Create audio source
+var audioDevice = (await DeviceEnumerator.Shared.AudioSourcesAsync())[0];
+var audioFormat = audioDevice.Formats[0];
+var audioSettings = audioDevice.CreateSourceSettings(audioFormat.ToFormat());
+var audioSource = new SystemAudioSourceBlock(audioSettings);
+
+// Create RTSP server: it encodes the video to H.264 and the audio to AAC
+var rtspSettings = new RTSPServerSettings(
+    H264EncoderBlock.GetDefaultSettings(),
+    AACEncoderBlock.GetDefaultSettings())
+{
+    Port = 8554,
+    Point = "/live"
+};
+var rtspServer = new RTSPServerBlock(rtspSettings);
+pipeline.Connect(videoSource.Output, rtspServer.VideoInput);
+pipeline.Connect(audioSource.Output, rtspServer.AudioInput);
+
+// Start streaming
+await pipeline.StartAsync();
+
+// rtspSettings.URL returns the client-facing URL:
+Console.WriteLine($"RTSP server started at {rtspSettings.URL}");
+Console.WriteLine($"Connect with: vlc {rtspSettings.URL}");
+```
+
+The server listens on every network interface by default, so other machines reach it at this machine's IP address. To keep it on this machine only, set `ListenAddress = "127.0.0.1"`.
+
+### RTSP Server with Authentication
+
+```
+var rtspSettings = new RTSPServerSettings(
+    videoEncoder: H264EncoderBlock.GetDefaultSettings(),
+    audioEncoder: AACEncoderBlock.GetDefaultSettings())
+{
+    Port = 8554,
+    Point = "/secure",
+    Username = "admin",
+    Password = "password123"
+};
+var rtspServer = new RTSPServerBlock(rtspSettings);
+
+// Connect the sources as above
+// ...
+
+await pipeline.StartAsync();
+
+// Clients must authenticate: rtsp://admin:password123@localhost:8554/secure
+Console.WriteLine($"Secure RTSP server started at {rtspSettings.URL}");
+```
+
+### File Streaming over RTSP
+
+A complete console app that serves an MP4 file (or any other video file `UniversalSourceBlock` plays) at `rtsp://127.0.0.1:8554/live` until Enter is pressed. Pass the file path as the first argument. The AAC encoder is set only when the file has an audio track, so a video-only file gives a video-only stream.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.AudioEncoders;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.Output;
+using VisioForge.Core.Types.X.Sources;
+
+await VisioForgeX.InitSDKAsync();
+await using var p = new MediaBlocksPipeline();
+p.OnError += (_, e) =>
+    Console.WriteLine(e.Message);
+var file = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(
+        args[0]));
+var aac = file.AudioOutput == null ? null
+    : AACEncoderBlock.GetDefaultSettings();
+var rtsp = new RTSPServerBlock(
+    new RTSPServerSettings(
+        H264EncoderBlock.GetDefaultSettings(),
+        aac));
+p.Connect(file.VideoOutput, rtsp.VideoInput);
+if (aac != null)
+    p.Connect(file.AudioOutput, rtsp.AudioInput);
+if (!await p.StartAsync()) return;
+Console.WriteLine(rtsp.Settings.URL);
+Console.ReadLine();
+await p.StopAsync();
+```
+
+The file plays once, in real time, from the moment the pipeline starts: a client that connects later joins it at that point. When the file ends, connected clients receive black frames until the app stops.
+
+## Client Connection
+
+Clients can connect to the RTSP server using the URL format:
+
+```
+rtsp://hostname:port/mountpoint
+```
+
+Examples: - `rtsp://localhost:8554/live` - `rtsp://192.168.1.100:8554/stream1` - `rtsp://username:password@server.com:8554/secure`
+
+### VLC Player
+
+```
+vlc rtsp://localhost:8554/live
+```
+
+### FFmpeg
+
+```
+ffplay rtsp://localhost:8554/live
+ffmpeg -i rtsp://localhost:8554/live -c copy output.mp4
+```
+
+### GStreamer
+
+```
+gst-launch-1.0 rtspsrc location=rtsp://localhost:8554/live ! decodebin ! autovideosink
+```
+
+## Use Cases
+
+- **Live Streaming**: Broadcast live camera feeds over networks
+- **Security Systems**: Stream surveillance cameras to monitoring stations
+- **Video Distribution**: Distribute media content to multiple clients
+- **Remote Monitoring**: Enable remote viewing of industrial processes
+- **Broadcasting**: Create low-latency streaming solutions
+- **Video Conferencing**: Stream participant feeds to viewers
+- **IoT Cameras**: Provide RTSP endpoint for smart camera devices
+
+## Performance Considerations
+
+- **Encoding**: The server encodes once for all clients; a hardware encoder (NVENC, QSV, AMF) keeps the CPU free
+- **Bandwidth**: Monitor network bandwidth for multiple clients
+- **Latency**: Optimize encoder settings for low-latency requirements
+- **Clients**: Each client consumes server resources and bandwidth
+- **Port**: Ensure firewall allows traffic on the configured port
+
+## Remarks
+
+- Connect uncompressed video and audio; the server encodes them with `VideoEncoder` and `AudioEncoder`
+- The server supports H.264, H.265 and VP9 for video and AAC, MP3, Opus and Vorbis for audio
+- Port 8554 is the usual alternative to the standard RTSP port 554, which needs root on Linux; any free port works
+- Mount point defines the URL path for accessing the stream
+- Server continues streaming as long as the pipeline is running
+- Multiple RTSPServerBlock instances can run on different ports simultaneously
+- Use authentication for secure streaming environments
+
+## Platforms
+
+Windows, macOS, Linux.
+
+Note: Requires GStreamer with RTSP server support (gst-rtsp-server plugin).
+
+## Sample Applications
+
+- [RTSP Webcam Server](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Console/RTSP%20Webcam%20Server)
+
+## Related Blocks
+
+- [H264EncoderBlock](../VideoEncoders/#h264-encoder) - H.264 video encoding
+- [H265EncoderBlock](../VideoEncoders/#hevch265-encoder) - H.265 video encoding
+- [AACEncoderBlock](../AudioEncoders/#aac-encoder) - AAC audio encoding
+- [SystemVideoSourceBlock](../Sources/#system-video-source) - Camera capture
+- [SystemAudioSourceBlock](../Sources/#system-audio-source) - Audio capture
+
+## Related Guides
+
+- [RTSP protocol deep-dive](../../general/network-streaming/rtsp/) — how RTSP works under the hood
+- [RTSP camera source configuration](../../videocapture/video-sources/ip-cameras/rtsp/) — consume RTSP streams in your own applications
+- [Media Blocks RTSP player](../Guides/rtsp-player-csharp/) — a client pipeline for RTSP streams (pair with this server)
+- [Save RTSP stream without re-encoding](../Guides/rtsp-save-original-stream/) — archive streams from an RTSP source to disk
+- [RTSP reconnection and fallback switch](../../general/network-sources/reconnection-and-fallback/) — handle upstream source drops with reconnect events and `FallbackSwitch` when you feed this server from an RTSP camera
+
+## Video Transcript
+
+Serve a video file as an RTSP stream, in a few lines of C#. Load the SDK and create a pipeline. The source is the video file. `RTSPServerBlock` encodes it to H.264, and to AAC when the file has sound, and serves it on port 8554. Run it with a file. It prints the URL, and any RTSP player can open it. The film, received over RTSP. This page adds a camera and a password: see [Basic RTSP Server](#basic-rtsp-server) and [RTSP Server with Authentication](#rtsp-server-with-authentication).
+
+The video file is Big Buck Bunny, (c) copyright 2008, Blender Foundation, www.bigbuckbunny.org, CC BY 3.0.
+
+---END OF PAGE---
+
+

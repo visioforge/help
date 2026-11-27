@@ -11,7 +11,7 @@ synced from the internal documentation source.
 ## LLM-Ready Files
 
 - [llms.txt](llms.txt) - Summary for AI agents (follows [llmstxt.org](https://llmstxt.org) spec)
-- [llms-full.txt](llms-full.txt) - Comprehensive documentation + website content
+- [llms-full.txt](llms-full.txt) - Index of the full-text parts in [llms-full/](llms-full/), one per product section + the website
 
 ## Structure
 

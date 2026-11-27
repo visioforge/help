@@ -2,7 +2,7 @@
   "$schema": "https://context7.com/schema/context7.json",
   "projectTitle": "VisioForge SDK",
   "description": "Documentation for the VisioForge SDKs: Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET for video capture, playback, editing, encoding and streaming, plus the DirectShow filters, the Delphi/ActiveX framework and Video Fingerprinting SDK.",
-  "excludeFolders": ["static"],
+  "excludeFolders": ["static", "llms-full"],
   "excludeFiles": [
     "changelog.md",
     "changelog.es.md",

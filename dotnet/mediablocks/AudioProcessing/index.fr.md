@@ -2020,6 +2020,10 @@ Sous Windows, `ShowEditor()` ouvre la fenêtre d'édition du plug-in. Appelez-la
 reverb.ShowEditor(new WindowInteropHelper(this).Handle);
 ```
 
+#### Application d'exemple
+
+La [VST3 Audio Effects Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/VST3%20Audio%20Effects%20Demo) (WPF) fait passer un microphone ou un fichier par jusqu'à quatre plug-ins, avec le contournement (bypass), des curseurs pour les paramètres et la fenêtre de l'éditeur de chacun, vers les haut-parleurs et, en option, vers un fichier MP3. Elle propose une liste de plug-ins gratuits à essayer.
+
 #### Plateformes
 
 Windows x64, macOS (Apple Silicon et Intel) et Linux x64, fournis dans les paquets `VisioForge.CrossPlatform.Core.Windows.Adds.x64`, `VisioForge.CrossPlatform.Core.macOS.Adds` et `VisioForge.CrossPlatform.Core.Linux.Adds.x64`. Sous Linux, le GStreamer du système doit être en version 1.22 ou ultérieure. Windows x86 et ARM64, Linux ARM64, iOS et Android ne sont pas encore pris en charge. Le plug-in doit être compilé pour la même architecture que l'application : une application 64 bits charge des plug-ins 64 bits.

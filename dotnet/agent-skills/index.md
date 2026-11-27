@@ -143,6 +143,6 @@ VisioForge already exposes three other AI-agent surfaces — Agent Skills is the
 | Surface | Shape | Best for |
 |---|---|---|
 | `mcp.visioforge.com/mcp` (via `/.well-known/mcp.json` + `/.well-known/mcp-server-card`) | Live MCP server with 14 read-only doc tools | Querying the SDK API surface, looking up media blocks, fetching code examples |
-| `/llms.txt`, `/llms-full.txt` | LLM-friendly docs index | Bulk ingestion of the docs corpus |
+| `/llms.txt`, `/llms-full.txt` | LLM-friendly docs index | Bulk ingestion of the docs corpus: `/llms-full.txt` lists the full-text files, one per section, under `/help/llms-full/` |
 | `<meta name="x-webmcp-tools">` + WebMCP runtime | 10 in-page tools registered via `navigator.modelContext.provideContext()` | Agent acting in the user's current browser tab (locale switch, page outline, copy code, …) |
 | **`/.well-known/agent-skills/index.json`** | **Per-(SDK, platform) procedural skill archives** | **Bootstrapping a new project that uses one of our SDKs** |

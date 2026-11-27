@@ -1,0 +1,2399 @@
+# VisioForge — Delphi SDKs, part 2 of 2
+
+> Full text of 13 pages. All parts: https://www.visioforge.com/llms-full.txt; index: https://www.visioforge.com/llms.txt.
+
+**Author:** VisioForge
+**License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
+**Generated:** 2026-11-27 20:41:07 UTC (c5e129a2023)
+**MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
+
+---
+
+## Select Video and Audio Capture Devices in Delphi and VB6
+**URL:** https://www.visioforge.com/help/docs/delphi/videocapture/video-audio-sources/
+**Description:** Select video and audio devices in Delphi - enumerate devices, configure formats, set frame rates with code examples for Delphi, C++, and VB6.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Capture
+
+# Code sample - How to select video and audio capture devices?
+
+Delphi, C++ MFC and VB6 sample code
+
+## Select video source
+
+### Get a list of available video capture devices
+
+```
+for i := 0 to VideoCapture1.Video_CaptureDevices_GetCount - 1 do
+  cbVideoInputDevice.Items.Add(VideoCapture1.Video_CaptureDevices_GetItem(i));
+```
+
+```
+// C++ MFC
+for (int i = 0; i < m_VideoCapture.Video_CaptureDevices_GetCount(); i++)
+  m_cbVideoInputDevice.AddString(m_VideoCapture.Video_CaptureDevices_GetItem(i));
+```
+
+```
+' VB6
+For i = 0 To VideoCapture1.Video_CaptureDevices_GetCount - 1
+  cbVideoInputDevice.AddItem VideoCapture1.Video_CaptureDevices_GetItem(i)
+Next i
+```
+
+### Select the video input device
+
+```
+VideoCapture1.Video_CaptureDevice := cbVideoInputDevice.Items[cbVideoInputDevice.ItemIndex];
+```
+
+```
+// C++ MFC
+CString strDevice;
+m_cbVideoInputDevice.GetLBText(m_cbVideoInputDevice.GetCurSel(), strDevice);
+m_VideoCapture.put_Video_CaptureDevice(strDevice);
+```
+
+```
+' VB6
+VideoCapture1.Video_CaptureDevice = cbVideoInputDevice.Text
+```
+
+### Get a list of available video formats
+
+```
+VideoCapture1.Video_CaptureDevice_Formats_Fill;
+for I := 0 to VideoCapture1.Video_CaptureDevice_Formats_GetCount - 1 do
+ cbVideoInputFormat.Items.Add(VideoCapture1.Video_CaptureDevice_Formats_GetItem(i));
+```
+
+```
+// C++ MFC
+m_VideoCapture.Video_CaptureDevice_Formats_Fill();
+for (int i = 0; i < m_VideoCapture.Video_CaptureDevice_Formats_GetCount(); i++)
+  m_cbVideoInputFormat.AddString(m_VideoCapture.Video_CaptureDevice_Formats_GetItem(i));
+```
+
+```
+' VB6
+VideoCapture1.Video_CaptureDevice_Formats_Fill
+For i = 0 To VideoCapture1.Video_CaptureDevice_Formats_GetCount - 1
+  cbVideoInputFormat.AddItem VideoCapture1.Video_CaptureDevice_Formats_GetItem(i)
+Next i
+```
+
+### Select video format
+
+```
+VideoCapture1.Video_CaptureFormat := cbVideoInputFormat.Items[cbVideoInputFormat.ItemIndex];
+```
+
+```
+// C++ MFC
+CString strFormat;
+m_cbVideoInputFormat.GetLBText(m_cbVideoInputFormat.GetCurSel(), strFormat);
+m_VideoCapture.put_Video_CaptureFormat(strFormat);
+```
+
+```
+' VB6
+VideoCapture1.Video_CaptureFormat = cbVideoInputFormat.Text
+```
+
+or
+
+### Automatically choose the best video format
+
+```
+VideoCapture1.Video_CaptureFormat_UseBest := cbUseBestVideoInputFormat.Checked;
+```
+
+```
+// C++ MFC
+m_VideoCapture.put_Video_CaptureFormat_UseBest(m_cbUseBestVideoInputFormat.GetCheck() == BST_CHECKED);
+```
+
+```
+' VB6
+VideoCapture1.Video_CaptureFormat_UseBest = cbUseBestVideoInputFormat.Value
+```
+
+### Get a list of available frame rates
+
+```
+VideoCapture1.Video_CaptureDevice_FrameRates_Fill;
+for I := 0 to VideoCapture1.Video_CaptureDevice_FrameRates_GetCount - 1 do
+  cbFrameRate.Items.Add(VideoCapture1.Video_CaptureDevice_FrameRates_GetItem(i));
+```
+
+```
+// C++ MFC
+m_VideoCapture.Video_CaptureDevice_FrameRates_Fill();
+for (int i = 0; i < m_VideoCapture.Video_CaptureDevice_FrameRates_GetCount(); i++)
+  m_cbFrameRate.AddString(m_VideoCapture.Video_CaptureDevice_FrameRates_GetItem(i));
+```
+
+```
+' VB6
+VideoCapture1.Video_CaptureDevice_FrameRates_Fill
+For i = 0 To VideoCapture1.Video_CaptureDevice_FrameRates_GetCount - 1
+  cbFrameRate.AddItem VideoCapture1.Video_CaptureDevice_FrameRates_GetItem(i)
+Next i
+```
+
+### Select frame rate
+
+```
+VideoCapture1.Video_FrameRate := StrToFloat(cbFrameRate.Items[cbFrameRate.ItemIndex]);
+```
+
+```
+// C++ MFC
+CString strFrameRate;
+m_cbFrameRate.GetLBText(m_cbFrameRate.GetCurSel(), strFrameRate);
+m_VideoCapture.put_Video_FrameRate(_wtof(strFrameRate));
+```
+
+```
+' VB6
+VideoCapture1.Video_FrameRate = CDbl(cbFrameRate.Text)
+```
+
+Select needed video input (configure crossbar) if needed.
+
+## Select audio source
+
+### Use video capture device as audio source
+
+```
+VideoCapture1.Video_CaptureDevice_IsAudioSource := true;
+```
+
+```
+// C++ MFC
+m_VideoCapture.put_Video_CaptureDevice_IsAudioSource(true);
+```
+
+```
+' VB6
+VideoCapture1.Video_CaptureDevice_IsAudioSource = True
+```
+
+or
+
+### Get a list of available audio capture devices
+
+```
+for I := 0 to VideoCapture1.Audio_CaptureDevices_GetCount - 1 do
+  cbAudioInputDevice.Items.Add(VideoCapture1.Audio_CaptureDevices_GetItem(i));
+```
+
+```
+// C++ MFC
+for (int i = 0; i < m_VideoCapture.Audio_CaptureDevices_GetCount(); i++)
+  m_cbAudioInputDevice.AddString(m_VideoCapture.Audio_CaptureDevices_GetItem(i));
+```
+
+```
+' VB6
+For i = 0 To VideoCapture1.Audio_CaptureDevices_GetCount - 1
+  cbAudioInputDevice.AddItem VideoCapture1.Audio_CaptureDevices_GetItem(i)
+Next i
+```
+
+### Select the audio input device
+
+```
+VideoCapture1.Audio_CaptureDevice := cbAudioInputDevice.Items[cbAudioInputDevice.ItemIndex];
+```
+
+```
+// C++ MFC
+CString strAudioDevice;
+m_cbAudioInputDevice.GetLBText(m_cbAudioInputDevice.GetCurSel(), strAudioDevice);
+m_VideoCapture.put_Audio_CaptureDevice(strAudioDevice);
+```
+
+```
+' VB6
+VideoCapture1.Audio_CaptureDevice = cbAudioInputDevice.Text
+```
+
+### Get a list of available audio formats
+
+```
+VideoCapture1.Audio_CaptureDevice_Formats_Fill;
+for I := 0 to VideoCapture1.Audio_CaptureDevice_Formats_GetCount - 1 do
+  cbAudioInputFormat.Items.Add(VideoCapture1.Audio_CaptureDevice_Formats_GetItem(i));
+```
+
+```
+// C++ MFC
+m_VideoCapture.Audio_CaptureDevice_Formats_Fill();
+for (int i = 0; i < m_VideoCapture.Audio_CaptureDevice_Formats_GetCount(); i++)
+  m_cbAudioInputFormat.AddString(m_VideoCapture.Audio_CaptureDevice_Formats_GetItem(i));
+```
+
+```
+' VB6
+VideoCapture1.Audio_CaptureDevice_Formats_Fill
+For i = 0 To VideoCapture1.Audio_CaptureDevice_Formats_GetCount - 1
+  cbAudioInputFormat.AddItem VideoCapture1.Audio_CaptureDevice_Formats_GetItem(i)
+Next i
+```
+
+### Select the format
+
+```
+VideoCapture1.Audio_CaptureFormat := cbAudioInputFormat.Items[cbAudioInputFormat.ItemIndex];
+```
+
+```
+// C++ MFC
+CString strAudioFormat;
+m_cbAudioInputFormat.GetLBText(m_cbAudioInputFormat.GetCurSel(), strAudioFormat);
+m_VideoCapture.put_Audio_CaptureFormat(strAudioFormat);
+```
+
+```
+' VB6
+VideoCapture1.Audio_CaptureFormat = cbAudioInputFormat.Text
+```
+
+or
+
+### Automatically choose the best audio format
+
+```
+VideoCapture1.Audio_CaptureFormat_UseBest := cbUseBestAudioInputFormat.Checked;
+```
+
+```
+// C++ MFC
+m_VideoCapture.put_Audio_CaptureFormat_UseBest(m_cbUseBestAudioInputFormat.GetCheck() == BST_CHECKED);
+```
+
+```
+' VB6
+VideoCapture1.Audio_CaptureFormat_UseBest = cbUseBestAudioInputFormat.Value
+```
+
+### Get a list of available audio inputs (lines)
+
+```
+VideoCapture1.Audio_CaptureDevice_Lines_Fill;
+for I := 0 to VideoCapture1.Audio_CaptureDevice_Lines_GetCount - 1 do
+  cbAudioInputLine.Items.Add(VideoCapture1.Audio_CaptureDevice_Lines_GetItem(i));
+```
+
+```
+// C++ MFC
+m_VideoCapture.Audio_CaptureDevice_Lines_Fill();
+for (int i = 0; i < m_VideoCapture.Audio_CaptureDevice_Lines_GetCount(); i++)
+  m_cbAudioInputLine.AddString(m_VideoCapture.Audio_CaptureDevice_Lines_GetItem(i));
+```
+
+```
+' VB6
+VideoCapture1.Audio_CaptureDevice_Lines_Fill
+For i = 0 To VideoCapture1.Audio_CaptureDevice_Lines_GetCount - 1
+  cbAudioInputLine.AddItem VideoCapture1.Audio_CaptureDevice_Lines_GetItem(i)
+Next i
+```
+
+### Select audio input
+
+```
+VideoCapture1.Audio_CaptureLine := cbAudioInputLine.Items[cbAudioInputLine.ItemIndex];
+```
+
+```
+// C++ MFC
+CString strAudioLine;
+m_cbAudioInputLine.GetLBText(m_cbAudioInputLine.GetCurSel(), strAudioLine);
+m_VideoCapture.put_Audio_CaptureLine(strAudioLine);
+```
+
+```
+' VB6
+VideoCapture1.Audio_CaptureLine = cbAudioInputLine.Text
+```
+
+---
+
+Please get in touch with [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) to get help with this tutorial. Visit our [GitHub](https://github.com/visioforge/) page to get more code samples.
+
+---END OF PAGE---
+
+
+
+## AVI Video Capture in Delphi Using TVFVideoCapture SDK
+**URL:** https://www.visioforge.com/help/docs/delphi/videocapture/video-capture-avi/
+**Description:** Record video to AVI format in Delphi with TVFVideoCapture using codec selection, audio configuration, and complete implementation examples.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, C++, Windows, VCL, Capture, AVI
+**API:** TVFVideoCapture
+
+# Complete Guide to Video Capture to AVI Files in Delphi
+
+When developing multimedia applications in Delphi, video capture functionality is often a critical requirement. This guide explores how to implement high-quality video capture to AVI files using the TVFVideoCapture component in Delphi applications. We'll cover everything from setting up codecs to configuring audio parameters and starting the capture process.
+
+## Understanding AVI Video Capture in Delphi
+
+The TVFVideoCapture component provides a powerful and flexible way to capture video directly to AVI format in Delphi applications. AVI (Audio Video Interleave) remains a popular video container format due to its broad compatibility and reliability for recording purposes.
+
+When implementing video capture in your Delphi application, you'll need to consider several key aspects:
+
+1. Selecting appropriate video and audio codecs
+2. Configuring audio parameters
+3. Setting the output format and capture mode
+4. Managing the capture process
+
+This guide provides detailed explanations and code samples for each of these steps.
+
+## Working with Video and Audio Codecs
+
+### Retrieving Available Codecs
+
+Before capturing video, you'll need to populate your application with the available video and audio codecs. The TVFVideoCapture component makes this straightforward:
+
+```
+procedure TMyForm.PopulateCodecLists;
+var
+  I: Integer;
+begin
+  // Clear existing items
+  cbVideoCodecs.Items.Clear;
+  cbAudioCodecs.Items.Clear;
+
+  // Populate video codecs
+  for I := 0 to VideoCapture1.Video_Codecs_GetCount - 1 do
+    cbVideoCodecs.Items.Add(VideoCapture1.Video_Codecs_GetItem(i));
+
+  // Populate audio codecs
+  for I := 0 to VideoCapture1.Audio_Codecs_GetCount - 1 do
+    cbAudioCodecs.Items.Add(VideoCapture1.Audio_Codecs_GetItem(i));
+end;
+```
+
+For developers using C++ MFC, the equivalent code would be:
+
+```
+void CMyDialog::PopulateCodecLists()
+{
+    // Clear existing items
+    m_VideoCodecsCombo.ResetContent();
+    m_AudioCodecsCombo.ResetContent();
+
+    // Populate video codecs
+    for (int i = 0; i < m_VideoCapture.Video_Codecs_GetCount(); i++) {
+        CString codecName = m_VideoCapture.Video_Codecs_GetItem(i);
+        m_VideoCodecsCombo.AddString(codecName);
+    }
+
+    // Populate audio codecs
+    for (int i = 0; i < m_VideoCapture.Audio_Codecs_GetCount(); i++) {
+        CString codecName = m_VideoCapture.Audio_Codecs_GetItem(i);
+        m_AudioCodecsCombo.AddString(codecName);
+    }
+}
+```
+
+For VB6 developers, here's how to implement the same functionality:
+
+```
+Private Sub PopulateCodecLists()
+    ' Clear existing items
+    cboVideoCodecs.Clear
+    cboAudioCodecs.Clear
+
+    ' Populate video codecs
+    Dim i As Integer
+    For i = 0 To VideoCapture1.Video_Codecs_GetCount - 1
+        cboVideoCodecs.AddItem VideoCapture1.Video_Codecs_GetItem(i)
+    Next i
+
+    ' Populate audio codecs
+    For i = 0 To VideoCapture1.Audio_Codecs_GetCount - 1
+        cboAudioCodecs.AddItem VideoCapture1.Audio_Codecs_GetItem(i)
+    Next i
+End Sub
+```
+
+### Selecting Codecs for Capture
+
+Once you've populated the lists, you'll need to let users select their preferred codecs and apply those selections to the capture component:
+
+```
+procedure TMyForm.ApplyCodecSelections;
+begin
+  if cbVideoCodecs.ItemIndex >= 0 then
+    VideoCapture1.Video_Codec := cbVideoCodecs.Items[cbVideoCodecs.ItemIndex];
+
+  if cbAudioCodecs.ItemIndex >= 0 then
+    VideoCapture1.Audio_Codec := cbAudioCodecs.Items[cbAudioCodecs.ItemIndex];
+end;
+```
+
+C++ MFC implementation:
+
+```
+void CMyDialog::ApplyCodecSelections()
+{
+    int videoIndex = m_VideoCodecsCombo.GetCurSel();
+    if (videoIndex >= 0) {
+        CString videoCodec;
+        m_VideoCodecsCombo.GetLBText(videoIndex, videoCodec);
+        m_VideoCapture.Video_Codec = videoCodec;
+    }
+
+    int audioIndex = m_AudioCodecsCombo.GetCurSel();
+    if (audioIndex >= 0) {
+        CString audioCodec;
+        m_AudioCodecsCombo.GetLBText(audioIndex, audioCodec);
+        m_VideoCapture.Audio_Codec = audioCodec;
+    }
+}
+```
+
+VB6 implementation:
+
+```
+Private Sub ApplyCodecSelections()
+    If cboVideoCodecs.ListIndex >= 0 Then
+        VideoCapture1.Video_Codec = cboVideoCodecs.Text
+    End If
+
+    If cboAudioCodecs.ListIndex >= 0 Then
+        VideoCapture1.Audio_Codec = cboAudioCodecs.Text
+    End If
+End Sub
+```
+
+## Configuring Audio Parameters
+
+Quality audio capture requires proper configuration of three key parameters:
+
+1. **Audio Channels**: Typically 1 (mono) or 2 (stereo)
+2. **Bits Per Sample (BPS)**: Common values include 8, 16, or 24 bits
+3. **Sample Rate**: Standard rates include 44100 Hz (CD quality) or 48000 Hz
+
+Here's how to apply these settings in Delphi:
+
+```
+procedure TMyForm.ConfigureAudioSettings;
+begin
+  // Apply audio channel configuration (mono/stereo)
+  VideoCapture1.Audio_Channels := StrToInt(cbChannels.Items[cbChannels.ItemIndex]);
+
+  // Set bits per sample for audio quality
+  VideoCapture1.Audio_BPS := StrToInt(cbBPS.Items[cbBPS.ItemIndex]);
+
+  // Configure sample rate
+  VideoCapture1.Audio_SampleRate := StrToInt(cbSampleRate.Items[cbSampleRate.ItemIndex]);
+end;
+```
+
+C++ MFC implementation:
+
+```
+void CMyDialog::ConfigureAudioSettings()
+{
+    CString channelStr, bpsStr, sampleRateStr;
+
+    // Get selected values from combo boxes
+    m_ChannelsCombo.GetLBText(m_ChannelsCombo.GetCurSel(), channelStr);
+    m_BpsCombo.GetLBText(m_BpsCombo.GetCurSel(), bpsStr);
+    m_SampleRateCombo.GetLBText(m_SampleRateCombo.GetCurSel(), sampleRateStr);
+
+    // Apply audio channel configuration
+    m_VideoCapture.Audio_Channels = _ttoi(channelStr);
+
+    // Set bits per sample
+    m_VideoCapture.Audio_BPS = _ttoi(bpsStr);
+
+    // Configure sample rate
+    m_VideoCapture.Audio_SampleRate = _ttoi(sampleRateStr);
+}
+```
+
+VB6 implementation:
+
+```
+Private Sub ConfigureAudioSettings()
+    ' Apply audio channel configuration
+    VideoCapture1.Audio_Channels = CInt(cboChannels.Text)
+
+    ' Set bits per sample
+    VideoCapture1.Audio_BPS = CInt(cboBPS.Text)
+
+    ' Configure sample rate
+    VideoCapture1.Audio_SampleRate = CInt(cboSampleRate.Text)
+End Sub
+```
+
+## Configuring Output Format and Capture Mode
+
+The next step is to configure the output format as AVI and set the appropriate capture mode:
+
+```
+procedure TMyForm.PrepareForCapture;
+begin
+  // Set AVI as the output format
+  VideoCapture1.OutputFormat := Format_AVI;
+
+  // Configure video capture mode
+  VideoCapture1.Mode := Mode_Video_Capture;
+end;
+```
+
+C++ MFC implementation:
+
+```
+void CMyDialog::PrepareForCapture()
+{
+    // Set AVI as the output format
+    m_VideoCapture.OutputFormat = Format_AVI;
+
+    // Configure video capture mode
+    m_VideoCapture.Mode = Mode_Video_Capture;
+}
+```
+
+VB6 implementation:
+
+```
+Private Sub PrepareForCapture()
+    ' Set AVI as the output format
+    VideoCapture1.OutputFormat = Format_AVI
+
+    ' Configure video capture mode
+    VideoCapture1.Mode = Mode_Video_Capture
+End Sub
+```
+
+## Starting and Managing the Capture Process
+
+Once everything is configured, you can start the capture process:
+
+```
+procedure TMyForm.StartCapture;
+begin
+  try
+    // Set output filename
+    VideoCapture1.Output_Filename := ExtractFilePath(Application.ExeName) + 'CapturedVideo.avi';
+
+    // Begin capture process
+    VideoCapture1.Start;
+
+    // Update UI to show capture in progress
+    btnStart.Enabled := False;
+    btnStop.Enabled := True;
+    lblStatus.Caption := 'Recording...';
+  except
+    on E: Exception do
+      ShowMessage('Error starting capture: ' + E.Message);
+  end;
+end;
+```
+
+C++ MFC implementation:
+
+```
+void CMyDialog::StartCapture()
+{
+    try {
+        TCHAR appPath[MAX_PATH];
+        GetModuleFileName(NULL, appPath, MAX_PATH);
+        CString appDir = appPath;
+        int pos = appDir.ReverseFind('\\');
+        if (pos != -1) {
+            appDir = appDir.Left(pos + 1);
+        }
+
+        // Set output filename
+        m_VideoCapture.Output_Filename = appDir + _T("CapturedVideo.avi");
+
+        // Begin capture process
+        m_VideoCapture.Start();
+
+        // Update UI
+        GetDlgItem(IDC_START_BUTTON)->EnableWindow(FALSE);
+        GetDlgItem(IDC_STOP_BUTTON)->EnableWindow(TRUE);
+        SetDlgItemText(IDC_STATUS_STATIC, _T("Recording..."));
+    }
+    catch (COleDispatchException* e) {
+        CString errorMsg = _T("Error starting capture: ");
+        errorMsg += e->m_strDescription;
+        MessageBox(errorMsg, _T("Error"), MB_ICONERROR);
+        e->Delete();
+    }
+}
+```
+
+VB6 implementation:
+
+```
+Private Sub StartCapture()
+    On Error GoTo ErrorHandler
+
+    ' Set output filename
+    VideoCapture1.Output_Filename = App.Path & "\CapturedVideo.avi"
+
+    ' Begin capture process
+    VideoCapture1.Start
+
+    ' Update UI
+    btnStart.Enabled = False
+    btnStop.Enabled = True
+    lblStatus.Caption = "Recording..."
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "Error starting capture: " & Err.Description, vbExclamation
+End Sub
+```
+
+## Handling Capture Completion
+
+It's important to provide functionality to stop the capture process:
+
+```
+procedure TMyForm.StopCapture;
+begin
+  try
+    // Stop the capture process
+    VideoCapture1.Stop;
+
+    // Update UI
+    btnStart.Enabled := True;
+    btnStop.Enabled := False;
+    lblStatus.Caption := 'Capture completed';
+
+    // Optionally open the captured file
+    if FileExists(VideoCapture1.Output_Filename) and (MessageDlg('Open captured video?',
+                                                       mtConfirmation, [mbYes, mbNo], 0) = mrYes) then
+      ShellExecute(0, 'open', PChar(VideoCapture1.Output_Filename), nil, nil, SW_SHOW);
+  except
+    on E: Exception do
+      ShowMessage('Error stopping capture: ' + E.Message);
+  end;
+end;
+```
+
+C++ MFC implementation:
+
+```
+void CMyDialog::StopCapture()
+{
+    try {
+        // Stop the capture process
+        m_VideoCapture.Stop();
+
+        // Update UI
+        GetDlgItem(IDC_START_BUTTON)->EnableWindow(TRUE);
+        GetDlgItem(IDC_STOP_BUTTON)->EnableWindow(FALSE);
+        SetDlgItemText(IDC_STATUS_STATIC, _T("Capture completed"));
+
+        // Optionally open the captured file
+        CString outputFile = m_VideoCapture.Output_Filename;
+        if (PathFileExists(outputFile) &&
+            MessageBox(_T("Open captured video?"), _T("Confirmation"),
+                      MB_YESNO | MB_ICONQUESTION) == IDYES) {
+            ShellExecute(NULL, _T("open"), outputFile, NULL, NULL, SW_SHOW);
+        }
+    }
+    catch (COleDispatchException* e) {
+        CString errorMsg = _T("Error stopping capture: ");
+        errorMsg += e->m_strDescription;
+        MessageBox(errorMsg, _T("Error"), MB_ICONERROR);
+        e->Delete();
+    }
+}
+```
+
+VB6 implementation:
+
+```
+Private Sub StopCapture()
+    On Error GoTo ErrorHandler
+
+    ' Stop the capture process
+    VideoCapture1.Stop
+
+    ' Update UI
+    btnStart.Enabled = True
+    btnStop.Enabled = False
+    lblStatus.Caption = "Capture completed"
+
+    ' Optionally open the captured file
+    If Dir(VideoCapture1.Output_Filename) <> "" Then
+        If MsgBox("Open captured video?", vbQuestion + vbYesNo) = vbYes Then
+            Shell "explorer.exe """ & VideoCapture1.Output_Filename & """", vbNormalFocus
+        End If
+    End If
+
+    Exit Sub
+
+ErrorHandler:
+    MsgBox "Error stopping capture: " & Err.Description, vbExclamation
+End Sub
+```
+
+## Conclusion
+
+Implementing video capture to AVI files in Delphi applications using the TVFVideoCapture component is a straightforward process when you understand the key concepts. By following this guide, you can create robust multimedia applications with professional video capture functionality.
+
+The TVFVideoCapture component provides a wide range of additional features and customization options beyond what's covered in this guide, including video effects, overlays, and device property configuration.
+
+Remember to test your video capture implementation thoroughly with different codecs and audio configurations to ensure the best quality for your specific use case.
+
+---
+
+For additional code samples and implementation guidance, visit our GitHub repository. If you need further assistance with this tutorial, our support team is available to help.
+
+---END OF PAGE---
+
+
+
+## DV Video Capture in Delphi — Direct Stream and Recompressed
+**URL:** https://www.visioforge.com/help/docs/delphi/videocapture/video-capture-dv/
+**Description:** Implement DV video capture in Delphi - compressed and uncompressed formats with step-by-step implementation and working code examples.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Capture, Streaming
+
+# Video Capture to DV File Format: Implementation Guide
+
+Digital Video (DV) remains a reliable format for video capture applications, particularly when working with legacy systems or specific professional requirements. This guide explores how to implement DV video capture functionality in your Delphi applications, with additional C++ MFC and VB6 examples for cross-platform reference.
+
+## Understanding DV Format Options
+
+DV format offers several advantages for video capture applications:
+
+- Consistent quality with minimal generation loss
+- Efficient storage for professional video content
+- Support for both PAL and NTSC standards
+- Compatibility with professional video editing software
+- Reliable audio synchronization
+
+When implementing DV video capture, developers have two primary approaches:
+
+1. **Direct Stream Capture** - Raw DV data without recompression
+2. **Recompressed DV** - Processed video with customizable settings
+
+Each approach serves different use cases depending on your application requirements.
+
+## Direct Stream Capture Implementation
+
+Direct stream capture provides the highest quality by avoiding any recompression of the video signal. This method is ideal for archival purposes and professional video production where maintaining the original signal integrity is crucial.
+
+### Configuring DV Type Settings
+
+The first step in implementing direct stream capture is setting the appropriate DV type configuration:
+
+#### Delphi
+
+```
+VideoCapture1.DV_Capture_Type2 := rbDVType2.Checked;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.put_DV_Capture_Type2(m_rbDVType2.GetCheck() == BST_CHECKED);
+```
+
+#### VB6
+
+```
+VideoCapture1.DV_Capture_Type2 = rbDVType2.Value
+```
+
+The DV Type setting determines the specific format variation used for capture. Most modern applications use Type 2, which offers better compatibility with editing software.
+
+### Setting Output Format for Direct Stream
+
+For direct stream capture, you must specify the DirectStream\_DV format:
+
+#### Delphi
+
+```
+VideoCapture1.OutputFormat := Format_DirectStream_DV;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.SetOutputFormat(Format_DirectStream_DV);
+```
+
+#### VB6
+
+```
+VideoCapture1.OutputFormat = Format_DirectStream_DV
+```
+
+This ensures the video data is stored without additional processing or compression.
+
+### Configuring Capture Mode
+
+Next, set the component to video capture mode:
+
+#### Delphi
+
+```
+VideoCapture1.Mode := Mode_Video_Capture;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.SetMode(Mode_Video_Capture);
+```
+
+#### VB6
+
+```
+VideoCapture1.Mode = Mode_Video_Capture
+```
+
+This prepares the component for continuous video acquisition rather than single-frame capture.
+
+### Initiating Direct Stream Capture
+
+With all settings in place, you can begin the capture process:
+
+#### Delphi
+
+```
+VideoCapture1.Start;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.Start();
+```
+
+#### VB6
+
+```
+VideoCapture1.Start
+```
+
+The component will now capture the video stream directly to the specified output location in DV format.
+
+## Implementing DV Capture with Recompression
+
+In some scenarios, you may need to modify the DV stream during capture. This approach allows for customization of audio parameters and video format standards.
+
+### Configuring Audio Parameters
+
+DV format supports multiple audio configurations. Set the channels and sample rate to match your requirements:
+
+#### Delphi
+
+```
+VideoCapture1.DV_Capture_Audio_Channels := StrToInt(cbDVChannels.Items[cbDVChannels.ItemIndex]);
+VideoCapture1.DV_Capture_Audio_SampleRate := StrToInt(cbDVSampleRate.Items[cbDVSampleRate.ItemIndex]);
+```
+
+#### C++ MFC
+
+```
+CString channelStr, sampleRateStr;
+m_cbDVChannels.GetLBText(m_cbDVChannels.GetCurSel(), channelStr);
+m_cbDVSampleRate.GetLBText(m_cbDVSampleRate.GetCurSel(), sampleRateStr);
+
+m_videoCapture.put_DV_Capture_Audio_Channels(_ttoi(channelStr));
+m_videoCapture.put_DV_Capture_Audio_SampleRate(_ttoi(sampleRateStr));
+```
+
+#### VB6
+
+```
+VideoCapture1.DV_Capture_Audio_Channels = CInt(cbDVChannels.List(cbDVChannels.ListIndex))
+VideoCapture1.DV_Capture_Audio_SampleRate = CInt(cbDVSampleRate.List(cbDVSampleRate.ListIndex))
+```
+
+Standard DV audio options include:
+
+- Channels: 1 (mono) or 2 (stereo)
+- Sample rates: 32000 Hz, 44100 Hz, or 48000 Hz
+
+### Setting Video Format Standard
+
+DV supports both PAL and NTSC standards. Select the appropriate standard for your target region:
+
+#### Delphi
+
+```
+if rbDVPAL.Checked then
+  VideoCapture1.DV_Capture_Video_Format := DVF_PAL
+else
+  VideoCapture1.DV_Capture_Video_Format := DVF_NTSC;
+```
+
+#### C++ MFC
+
+```
+if (m_rbDVPAL.GetCheck() == BST_CHECKED)
+  m_videoCapture.put_DV_Capture_Video_Format(DVF_PAL);
+else
+  m_videoCapture.put_DV_Capture_Video_Format(DVF_NTSC);
+```
+
+#### VB6
+
+```
+If rbDVPAL.Value Then
+  VideoCapture1.DV_Capture_Video_Format = DVF_PAL
+Else
+  VideoCapture1.DV_Capture_Video_Format = DVF_NTSC
+End If
+```
+
+Remember that:
+
+- PAL: 720×576 resolution at 25 fps (used in Europe, Australia, parts of Asia)
+- NTSC: 720×480 resolution at 29.97 fps (used in North America, Japan, parts of South America)
+
+### DV Type Selection
+
+As with direct streaming, specify the DV type for recompressed capture:
+
+#### Delphi
+
+```
+VideoCapture1.DV_Capture_Type2 := rbDVType2.Checked;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.put_DV_Capture_Type2(m_rbDVType2.GetCheck() == BST_CHECKED);
+```
+
+#### VB6
+
+```
+VideoCapture1.DV_Capture_Type2 = rbDVType2.Value
+```
+
+### Setting Output Format for Recompression
+
+For recompressed DV capture, specify the DV format rather than DirectStream\_DV:
+
+#### Delphi
+
+```
+VideoCapture1.OutputFormat := Format_DV;
+VideoCapture1.Mode := Mode_Video_Capture;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.SetOutputFormat(Format_DV);
+m_videoCapture.SetMode(Mode_Video_Capture);
+```
+
+#### VB6
+
+```
+VideoCapture1.OutputFormat = Format_DV
+VideoCapture1.Mode = Mode_Video_Capture
+```
+
+This tells the component to process the stream through the DV codec during capture.
+
+### Starting Recompressed Capture
+
+With all parameters configured, begin the capture process:
+
+#### Delphi
+
+```
+VideoCapture1.Start;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.Start();
+```
+
+#### VB6
+
+```
+VideoCapture1.Start
+```
+
+## Best Practices for DV Capture Implementation
+
+When implementing DV capture in your applications, consider these recommendations:
+
+1. **Pre-allocate sufficient disk space** - DV format requires approximately 13 GB per hour of footage
+2. **Implement capture time limits** - DV files have a 4 GB size limit on some file systems
+3. **Monitor system resources** - DV capture requires consistent CPU and disk performance
+4. **Provide format selection UI** - Let users choose between direct stream and recompressed options
+5. **Test with various camera models** - DV implementation can vary between manufacturers
+
+## Error Handling Considerations
+
+Robust DV capture implementations should include error handling for these common scenarios:
+
+- Device disconnection during capture
+- Disk space exhaustion
+- Buffer overrun conditions
+- Invalid format settings
+- Codec compatibility issues
+
+## Conclusion
+
+Implementing DV video capture in your Delphi, C++ MFC, or VB6 applications provides a solid foundation for professional video acquisition workflows. Whether you choose direct stream capture for maximum quality or recompressed capture for additional flexibility, the DV format offers reliable performance for specialized video applications.
+
+By following the implementation examples in this guide, you can integrate professional-grade video capture capabilities into your custom software solutions.
+
+---
+
+Need additional assistance with your video capture implementation? Visit our [GitHub](https://github.com/visioforge/) page for more code samples or contact our [support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for personalized guidance.
+
+---END OF PAGE---
+
+
+
+## Video Capture to WMV Format in Delphi, C++ MFC and VB6
+**URL:** https://www.visioforge.com/help/docs/delphi/videocapture/video-capture-wmv/
+**Description:** Capture video to WMV format - external profiles, output configuration, and implementation for Delphi, C++ MFC, and VB6 with code examples.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, C++, Windows, VCL, Capture, Streaming, Encoding, WMV
+
+# Video Capture to Windows Media Video (WMV) Using External Profiles
+
+## Introduction
+
+Capturing video to Windows Media Video (WMV) format is a common requirement in many software applications. This guide provides a detailed walkthrough of implementing video capture functionality using external WMV profiles in Delphi, C++ MFC, and VB6 applications. The WMV format remains popular due to its compatibility with Windows platforms and efficient compression algorithms that balance quality and file size.
+
+## Understanding WMV and External Profiles
+
+Windows Media Video (WMV) is a compressed video file format developed by Microsoft as part of the Windows Media framework. When capturing video to WMV format, using external profiles allows for greater flexibility and customization of the output. External profiles contain pre-configured settings that define:
+
+- Video resolution
+- Bitrate
+- Frame rate
+- Compression quality
+- Audio settings
+- Other encoding parameters
+
+By leveraging external profiles, developers can quickly implement different quality presets without having to manually configure each parameter in code.
+
+## Implementation Steps
+
+### Step 1: Setting Up Your Environment
+
+Before implementing video capture functionality, ensure your development environment is properly configured:
+
+1. Install the necessary video capture component
+2. Add the component reference to your project
+3. Design your user interface to include:
+4. A file selector for choosing the WMV profile
+5. Output file location selector
+6. Video capture preview window
+7. Start/Stop capture controls
+
+### Step 2: Selecting a WMV Profile
+
+The first step in the implementation is to specify which WMV profile to use for encoding. This profile contains all the encoding parameters that will be applied to the captured video.
+
+> `WMV_Profile_Filename` expects the path to a `.prx` Windows Media profile (the encoding-parameters template) — NOT the path to the captured `.wmv` output file. Set the captured filename via `Output_Filename` (or the project's standard filename property).
+
+#### Delphi
+
+```
+// Pascal string literals use single quotes.
+VideoCapture1.WMV_Profile_Filename := 'C:\Profiles\HighQuality.prx';
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.SetWMVProfileFilename(_T("C:\\Profiles\\HighQuality.prx"));
+```
+
+#### VB6
+
+```
+VideoCapture1.WMV_Profile_Filename = "C:\Profiles\HighQuality.prx"
+```
+
+### Step 3: Configuring the Output Format
+
+Once the profile is selected, you need to configure the component to use WMV as the output format. This tells the capture component which encoder to use for processing the video stream.
+
+#### Delphi
+
+```
+VideoCapture1.OutputFormat := Format_WMV;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.SetOutputFormat(FORMAT_WMV);
+```
+
+#### VB6
+
+```
+VideoCapture1.OutputFormat = FORMAT_WMV
+```
+
+### Step 4: Setting the Capture Mode
+
+The capture component can operate in various modes, so it's important to explicitly set it to video capture mode.
+
+#### Delphi
+
+```
+VideoCapture1.Mode := Mode_Video_Capture;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.SetMode(MODE_VIDEO_CAPTURE);
+```
+
+#### VB6
+
+```
+VideoCapture1.Mode = MODE_VIDEO_CAPTURE
+```
+
+This ensures that the component is configured for continuous video recording rather than other modes like snapshot capture or streaming.
+
+### Step 5: Starting the Video Capture
+
+With all the configuration in place, the final step is to start the actual capture process.
+
+#### Delphi
+
+```
+VideoCapture1.Start;
+```
+
+#### C++ MFC
+
+```
+m_videoCapture.Start();
+```
+
+#### VB6
+
+```
+VideoCapture1.Start
+```
+
+This command begins the capture process using all the previously configured settings.
+
+## Advanced Configuration Options
+
+### Custom Output File Naming
+
+You can implement custom file naming for your captured video files:
+
+#### Delphi
+
+```
+VideoCapture1.Output_Filename := 'C:\Captures\Video_' + FormatDateTime('yyyymmdd_hhnnss', Now) + '.wmv';
+```
+
+#### C++ MFC
+
+```
+CTime currentTime = CTime::GetCurrentTime();
+CString fileName;
+fileName.Format(_T("C:\\Captures\\Video_%04d%02d%02d_%02d%02d%02d.wmv"),
+                currentTime.GetYear(), currentTime.GetMonth(), currentTime.GetDay(),
+                currentTime.GetHour(), currentTime.GetMinute(), currentTime.GetSecond());
+m_videoCapture.SetOutputFilename(fileName);
+```
+
+#### VB6
+
+```
+VideoCapture1.Output_Filename = "C:\Captures\Video_" & Format(Now, "yyyymmdd_hhnnss") & ".wmv"
+```
+
+These examples create a timestamped filename to ensure each captured file has a unique name.
+
+When designing your application, consider these best practices:
+
+1. Always verify device availability before attempting capture
+2. Provide feedback during long encoding operations
+3. Include a preview window so users can see what's being captured
+4. Implement a file size monitor for long recordings
+5. Test with various WMV profiles to ensure compatibility
+
+## Conclusion
+
+Implementing video capture to WMV format using external profiles provides flexibility and control over the capture process. The approach outlined in this guide works effectively in Delphi, C++ MFC, and VB6 development environments, allowing you to integrate professional-grade video capture capabilities into your applications.
+
+By using external profiles, you can quickly switch between different quality settings without changing your code, which is ideal for applications that need to adapt to different use cases or hardware capabilities.
+
+---
+
+For additional code samples, visit our GitHub repository. If you need technical assistance with implementation, our support team is available to help.
+
+---END OF PAGE---
+
+
+
+## Video Input Crossbar Selection in Delphi Applications
+**URL:** https://www.visioforge.com/help/docs/delphi/videocapture/video-input-crossbar/
+**Description:** Select video input sources in Delphi with crossbar - configure composite, S-Video, HDMI inputs with step-by-step code examples for Delphi.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Capture, Decoding, TV Tuner
+
+# Selecting Video Input Sources with Crossbar Technology
+
+## Introduction to Video Input Selection
+
+When developing applications that capture video from external devices, you'll often need to handle multiple input sources. The crossbar is a crucial component in video capture systems that allows you to route different physical inputs (like composite, S-Video, HDMI) to your application. This guide walks you through the process of detecting, configuring, and selecting video inputs using the crossbar interface in Delphi, C++ MFC, and Visual Basic 6 applications.
+
+## Understanding Crossbar Technology
+
+Crossbar technology functions as a routing matrix in video capture devices, enabling the connection between various inputs and outputs. Modern capture cards and TV tuners frequently incorporate crossbar functionality to facilitate switching between different video sources such as:
+
+- Composite video inputs
+- S-Video connections
+- Component video
+- HDMI inputs
+- TV tuner inputs
+- Digital video interfaces
+
+Properly configuring these connections programmatically is essential for applications that need to dynamically switch between different video sources.
+
+## Implementation Steps Overview
+
+The implementation process for configuring crossbar connections in your application involves three main steps:
+
+1. Initializing the crossbar interface and verifying its availability
+2. Enumerating available video inputs for selection
+3. Connecting the selected input to the video decoder output
+
+Let's examine each step in detail with sample code for Delphi, C++ MFC, and VB6 environments.
+
+## Detailed Implementation Guide
+
+### Step 1: Initialize the Crossbar Interface
+
+Before you can work with input selection, you need to initialize the crossbar interface and verify it's available on the current capture device.
+
+#### Delphi Implementation
+
+```
+// Initialize the crossbar interface
+CrossBarFound := VideoCapture1.Video_CaptureDevice_CrossBar_Init;
+
+// Check if crossbar functionality is available
+if CrossBarFound then
+  ShowMessage('Crossbar functionality detected and initialized')
+else
+  ShowMessage('No crossbar available on this capture device');
+```
+
+#### C++ MFC Implementation
+
+```
+// Initialize the crossbar interface
+BOOL bCrossBarFound = m_videoCapture.Video_CaptureDevice_CrossBar_Init();
+
+// Check if crossbar functionality is available
+if (bCrossBarFound) {
+    AfxMessageBox(_T("Crossbar functionality detected and initialized"));
+} else {
+    AfxMessageBox(_T("No crossbar available on this capture device"));
+}
+```
+
+#### VB6 Implementation
+
+```
+' Initialize the crossbar interface
+Dim CrossBarFound As Boolean
+CrossBarFound = VideoCapture1.Video_CaptureDevice_CrossBar_Init()
+
+' Check if crossbar functionality is available
+If CrossBarFound Then
+    MsgBox "Crossbar functionality detected and initialized"
+Else
+    MsgBox "No crossbar available on this capture device"
+End If
+```
+
+The initialization function returns a boolean value indicating whether the crossbar functionality is available on the current capture device. Not all capture devices support crossbar functionality, so this check is crucial.
+
+### Step 2: Enumerate Available Video Inputs
+
+Once you've confirmed that the crossbar is available, the next step is to retrieve a list of available inputs for the "Video Decoder" output. This allows users to select from available physical connections.
+
+#### Delphi Implementation
+
+```
+// Variables declared at the procedure level so the snippet compiles on any Delphi 6+ IDE
+// (inline `var name: T := ...` requires Delphi 10.3 Rio or later).
+procedure TForm1.PopulateCrossBarInputs;
+var
+  inputCount: Integer;
+  inputName: String;
+  i: Integer;
+begin
+  // Clear any existing connections and UI elements
+  VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
+  cbCrossbarVideoInput.Clear;
+
+  // Get count of available inputs for the "Video Decoder" output
+  inputCount := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount('Video Decoder');
+
+  // Populate UI with available inputs
+  for i := 0 to inputCount - 1 do begin
+    inputName := VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem('Video Decoder', i);
+    cbCrossbarVideoInput.Items.Add(inputName);
+  end;
+
+  // Select the first item by default if available
+  if cbCrossbarVideoInput.Items.Count > 0 then
+    cbCrossbarVideoInput.ItemIndex := 0;
+end;
+```
+
+#### C++ MFC Implementation
+
+```
+// Clear any existing connections and UI elements
+m_videoCapture.Video_CaptureDevice_CrossBar_ClearConnections();
+m_comboVideoInputs.ResetContent();
+
+// Get count of available inputs for the "Video Decoder" output
+int inputCount = m_videoCapture.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount(_T("Video Decoder"));
+
+// Populate UI with available inputs
+for (int i = 0; i < inputCount; i++) {
+    CString inputName = m_videoCapture.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem(_T("Video Decoder"), i);
+    m_comboVideoInputs.AddString(inputName);
+}
+
+// Select the first item by default if available
+if (m_comboVideoInputs.GetCount() > 0) {
+    m_comboVideoInputs.SetCurSel(0);
+}
+```
+
+#### VB6 Implementation
+
+```
+' Clear any existing connections and UI elements
+VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections
+cboVideoInputs.Clear
+
+' Get count of available inputs for the "Video Decoder" output
+Dim inputCount As Integer
+inputCount = VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetCount("Video Decoder")
+
+' Populate UI with available inputs
+Dim i As Integer
+Dim inputName As String
+For i = 0 To inputCount - 1
+    inputName = VideoCapture1.Video_CaptureDevice_CrossBar_GetInputsForOutput_GetItem("Video Decoder", i)
+    cboVideoInputs.AddItem inputName
+Next i
+
+' Select the first item by default if available
+If cboVideoInputs.ListCount > 0 Then
+    cboVideoInputs.ListIndex = 0
+End If
+```
+
+Common input types you might encounter include:
+
+- Composite
+- S-Video
+- HDMI
+- Component
+- TV Tuner
+
+The exact list depends on your specific capture hardware capabilities.
+
+### Step 3: Apply the Selected Input
+
+After the user selects their desired input source, you need to apply this selection by establishing a connection between the selected input and the video decoder output.
+
+#### Delphi Implementation
+
+```
+// Variables at procedure level — compatible with Delphi 6+ (avoids the inline `var`
+// shorthand introduced in Delphi 10.3 Rio).
+procedure TForm1.ApplySelectedCrossBarInput;
+var
+  selectedInput: String;
+  success: Boolean;
+begin
+  // First clear any existing connections
+  VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections;
+
+  // Connect the selected input to the "Video Decoder" output
+  // Parameters: input name, output name, automatic signal routing
+  if cbCrossbarVideoInput.ItemIndex >= 0 then begin
+    selectedInput := cbCrossbarVideoInput.Items[cbCrossbarVideoInput.ItemIndex];
+    success := VideoCapture1.Video_CaptureDevice_CrossBar_Connect(selectedInput, 'Video Decoder', true);
+
+    if success then
+      ShowMessage('Successfully connected ' + selectedInput + ' to Video Decoder')
+    else
+      ShowMessage('Failed to establish connection');
+  end;
+end;
+```
+
+#### C++ MFC Implementation
+
+```
+// First clear any existing connections
+m_videoCapture.Video_CaptureDevice_CrossBar_ClearConnections();
+
+// Connect the selected input to the "Video Decoder" output
+// Parameters: input name, output name, automatic signal routing
+int selectedIndex = m_comboVideoInputs.GetCurSel();
+if (selectedIndex >= 0) {
+    CString selectedInput;
+    m_comboVideoInputs.GetLBText(selectedIndex, selectedInput);
+
+    BOOL success = m_videoCapture.Video_CaptureDevice_CrossBar_Connect(
+        selectedInput, _T("Video Decoder"), TRUE);
+
+    if (success) {
+        CString msg;
+        msg.Format(_T("Successfully connected %s to Video Decoder"), selectedInput);
+        AfxMessageBox(msg);
+    } else {
+        AfxMessageBox(_T("Failed to establish connection"));
+    }
+}
+```
+
+#### VB6 Implementation
+
+```
+' First clear any existing connections
+VideoCapture1.Video_CaptureDevice_CrossBar_ClearConnections
+
+' Connect the selected input to the "Video Decoder" output
+' Parameters: input name, output name, automatic signal routing
+If cboVideoInputs.ListIndex >= 0 Then
+    Dim selectedInput As String
+    selectedInput = cboVideoInputs.Text
+
+    Dim success As Boolean
+    success = VideoCapture1.Video_CaptureDevice_CrossBar_Connect(selectedInput, "Video Decoder", True)
+
+    If success Then
+        MsgBox "Successfully connected " & selectedInput & " to Video Decoder"
+    Else
+        MsgBox "Failed to establish connection"
+    End If
+End If
+```
+
+The third parameter (`true`) enables automatic signal routing, which helps handle complex connection scenarios where intermediate routing might be required.
+
+## Best Practices for Crossbar Implementation
+
+For robust video input selection in your applications:
+
+1. **Always initialize the crossbar first**: Check for availability before attempting operations
+2. **Clear existing connections**: Before setting a new connection, clear any existing ones
+3. **Handle missing crossbar gracefully**: Provide fallback options when crossbar functionality isn't available
+4. **Validate selections**: Ensure a valid input is selected before attempting to establish connections
+5. **Provide user feedback**: Inform users about successful or failed connection attempts
+
+## Troubleshooting Common Issues
+
+If you encounter problems with crossbar connections:
+
+- Verify your capture device supports crossbar functionality
+- Check that input and output names match exactly what the device reports
+- Ensure proper device driver installation
+- Use debug logging to track connection attempts
+- Test with different input sources to isolate hardware-specific issues
+
+## Conclusion
+
+Proper implementation of crossbar technology in your video capture applications gives users the flexibility to work with multiple input sources. By following the steps outlined in this guide, you can create a robust and user-friendly video input selection system for your applications regardless of whether you're developing in Delphi, C++ MFC, or Visual Basic 6.
+
+The code samples provided demonstrate how to initialize the crossbar, enumerate available inputs, and connect selected inputs to the video decoder output. With these fundamentals in place, you can build sophisticated video capture applications that support a wide range of input devices and connection types.
+
+---
+
+For additional assistance with implementing this functionality, explore our other documentation pages and code samples repository for more advanced techniques and solutions.
+
+---END OF PAGE---
+
+
+
+## Video Renderer Selection in Delphi — EVR, VMR9, and GDI
+**URL:** https://www.visioforge.com/help/docs/delphi/videocapture/video-renderer/
+**Description:** Select optimal video renderers in Delphi - Video Renderer, VMR9, EVR with code examples for performance and hardware acceleration on Windows.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Capture
+**API:** TVFVideoCapture
+
+# Video Renderer Selection Guide for TVFVideoCapture
+
+## Overview of Available Renderers
+
+When developing video capture applications with TVFVideoCapture, selecting the appropriate video renderer significantly impacts performance and compatibility. This guide provides detailed implementation examples for the three available renderer options in Delphi, C++, and VB6 environments.
+
+## Standard Video Renderer
+
+The standard Video Renderer utilizes GDI for drawing operations. This renderer option is primarily recommended for:
+
+- Legacy systems
+- Environments where Direct3D acceleration is unavailable
+- Maximum compatibility with older hardware
+
+```
+// Delphi
+VideoCapture1.Video_Renderer := VR_VideoRenderer;
+```
+
+```
+// C++ MFC
+m_VideoCapture.SetVideo_Renderer(VR_VideoRenderer);
+```
+
+```
+' VB6
+VideoCapture1.Video_Renderer = VR_VideoRenderer
+```
+
+## Video Mixing Renderer 9 (VMR9)
+
+VMR9 represents a modern filtering solution capable of leveraging GPU capabilities for enhanced rendering. Key advantages include:
+
+- Hardware-accelerated video processing
+- Advanced deinterlacing options
+- Improved performance for high-resolution content
+
+```
+// Delphi
+VideoCapture1.Video_Renderer := VR_VMR9;
+```
+
+```
+// C++ MFC
+m_VideoCapture.SetVideo_Renderer(VR_VMR9);
+```
+
+```
+' VB6
+VideoCapture1.Video_Renderer = VR_VMR9
+```
+
+### Accessing Deinterlacing Modes
+
+VMR9 supports multiple deinterlacing techniques. The following code demonstrates how to retrieve available deinterlacing options:
+
+```
+// Delphi
+VideoCapture1.Video_Renderer_Deinterlace_Modes_Fill;
+for I := 0 to VideoCapture1.Video_Renderer_Deinterlace_Modes_GetCount - 1 do
+  cbDeinterlaceModes.Items.Add(VideoCapture1.Video_Renderer_Deinterlace_Modes_GetItem(i));
+```
+
+```
+// C++ MFC
+m_VideoCapture.Video_Renderer_Deinterlace_Modes_Fill();
+for (int i = 0; i < m_VideoCapture.Video_Renderer_Deinterlace_Modes_GetCount(); i++) {
+    m_DeinterlaceCombo.AddString(m_VideoCapture.Video_Renderer_Deinterlace_Modes_GetItem(i));
+}
+```
+
+```
+' VB6
+VideoCapture1.Video_Renderer_Deinterlace_Modes_Fill
+For i = 0 To VideoCapture1.Video_Renderer_Deinterlace_Modes_GetCount - 1
+    cboDeinterlaceModes.AddItem VideoCapture1.Video_Renderer_Deinterlace_Modes_GetItem(i)
+Next i
+```
+
+## Enhanced Video Renderer (EVR)
+
+EVR is the recommended renderer for modern Windows environments (Vista and later). This advanced renderer provides:
+
+- Superior video acceleration capabilities
+- Optimal performance on Windows 7/10/11
+- Better resource utilization
+
+```
+// Delphi
+VideoCapture1.Video_Renderer := VR_EVR;
+```
+
+```
+// C++ MFC
+m_VideoCapture.SetVideo_Renderer(VR_EVR);
+```
+
+```
+' VB6
+VideoCapture1.Video_Renderer = VR_EVR
+```
+
+## Managing Aspect Ratio and Display Options
+
+When displaying video content, you'll often need to handle aspect ratio differences between the source video and the display area.
+
+### Stretching the Video Image
+
+To stretch the video to fill the entire display area:
+
+```
+// Delphi
+VideoCapture1.Screen_Stretch := true;
+VideoCapture1.Screen_Update;
+```
+
+```
+// C++ MFC
+m_VideoCapture.SetScreen_Stretch(true);
+m_VideoCapture.Screen_Update();
+```
+
+```
+' VB6
+VideoCapture1.Screen_Stretch = True
+VideoCapture1.Screen_Update
+```
+
+### Using Letterbox Mode (Black Borders)
+
+For preserving the original aspect ratio with black borders:
+
+```
+// Delphi
+VideoCapture1.Screen_Stretch := false;
+VideoCapture1.Screen_Update;
+```
+
+```
+// C++ MFC
+m_VideoCapture.SetScreen_Stretch(false);
+m_VideoCapture.Screen_Update();
+```
+
+```
+' VB6
+VideoCapture1.Screen_Stretch = False
+VideoCapture1.Screen_Update
+```
+
+## Performance Considerations
+
+When selecting a renderer for your application, consider these factors:
+
+1. Target operating system version
+2. Hardware capabilities of end-user systems
+3. Video resolution and processing requirements
+4. Compatibility needs for your deployment environment
+
+---
+
+Please get in touch with [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) if you need technical assistance with this implementation. Visit our [GitHub](https://github.com/visioforge/) repository for additional code samples and resources.
+
+---END OF PAGE---
+
+
+
+## Deploy TVFVideoEdit in Delphi and ActiveX Applications
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/deployment/
+**Description:** Deploy TVFVideoEdit in Delphi and ActiveX applications with automatic installers or manual setup for required components and dependencies.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, DirectShow, Windows, VCL, Encoding, Editing, IP Camera, MP4, WebM, H.264, AAC
+**API:** TVFVideoEdit
+
+# TVFVideoEdit Library Deployment Guide
+
+## Introduction
+
+The TVFVideoEdit library provides powerful video editing capabilities for your Delphi and ActiveX applications. This guide explains how to properly deploy all necessary components to ensure your application functions correctly on end-user systems without requiring the full development framework.
+
+## Deployment Options
+
+You have two primary methods for deploying the TVFVideoEdit library components: automatic installers or manual installation. Each approach has specific advantages depending on your distribution requirements.
+
+### Automatic Silent Installers
+
+For streamlined deployment, we offer silent installer packages that handle all necessary component installation without user interaction:
+
+#### Required Base Package
+
+- **Base components** (always required):
+- [Delphi version](https://files.visioforge.com/redists_delphi/redist_video_edit_base_delphi.exe)
+- [ActiveX version](https://files.visioforge.com/redists_delphi/redist_video_edit_base_ax.exe)
+
+#### Optional Feature Packages
+
+- **FFMPEG package** (required for file and IP camera support (only for FFMPEG source engine)):
+- [x86 architecture](https://files.visioforge.com/redists_delphi/redist_video_edit_ffmpeg.exe)
+- **MP4 output package** (for MP4 video creation):
+- [x86 architecture](https://files.visioforge.com/redists_delphi/redist_video_edit_mp4.exe)
+
+### Manual Installation Process
+
+For situations where you need precise control over component deployment, follow these detailed steps:
+
+1. **Install Visual C++ Dependencies**
+2. Install VC++ 2010 SP1 redistributable:
+
+   - [x86 version](https://files.visioforge.com/shared/vcredist_2010_x86.exe)
+   - [x64 version](https://files.visioforge.com/shared/vcredist_2010_x64.exe)
+3. **Deploy Core Media Foundation Components**
+4. Copy all MFP DLLs from the `Redist\Filters` directory to your application folder
+5. **Register DirectShow Filters**
+6. Copy and COM-register these essential DirectShow filters using [regsvr32.exe](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/regsvr32).
+7. **Bitness:** the bare filename is the **x86 (32-bit)** filter; the matching **x64 (64-bit)** filter has the `_x64` suffix (for example `VisioForge_Video_Effects_Pro_x64.ax`). Both ship in the redistributable; deploy and register the variant that matches your application's target architecture. 64-bit applications must register the `_x64` variants.
+   - `VisioForge_Audio_Effects_4.ax`
+   - `VisioForge_Dump.ax`
+   - `VisioForge_RGB2YUV.ax`
+   - `VisioForge_Video_Effects_Pro.ax`
+   - `VisioForge_Video_Mixer.ax`
+   - `VisioForge_Video_Resize.ax`
+   - `VisioForge_WavDest.ax`
+   - `VisioForge_YUV2RGB.ax`
+   - `VisioForge_FFMPEG_Source.ax`
+
+Screen-capture functionality (formerly delivered as `VisioForge_Screen_Capture.ax`) is now part of the base filters and does not require a separate registration step.
+
+1. **Configure Path Settings**
+2. Add the folder containing these filters to the system environment variable `PATH` if your application executable resides in a different directory
+
+## Additional Components Installation
+
+### FFMPEG Integration
+
+To enable advanced media format support:
+
+- Copy all files from the `Redist\FFMPEG` folder
+- Add this folder to the Windows system `PATH` variable
+- Register all .ax files from the `Redist\FFMPEG` folder
+
+### VLC Support
+
+For extended format compatibility:
+
+- Copy all files from the `Redist\VLC` folder
+- COM-register the .ax file using regsvr32.exe
+- Create an environment variable named `VLC_PLUGIN_PATH`
+- Set its value to point to the `VLC\plugins` folder
+
+### Audio Output Support
+
+For MP3 encoding capabilities:
+
+- Copy the lame.ax file from the `Redist\Formats` folder
+- Register the lame.ax file using regsvr32.exe
+
+### WebM Format Support
+
+For WebM encoding and decoding:
+
+- Install the necessary free codecs available from the [xiph.org website](https://www.xiph.org/dshow/)
+
+### Matroska Container Support
+
+For MKV format compatibility:
+
+- Install [Haali Matroska Splitter](https://haali.net/mkv/) for proper encoding and decoding
+
+### MP4 H264/AAC Output - Modern Encoder
+
+For high-quality MP4 creation with modern codecs:
+
+- Copy `libmfxsw32.dll` / `libmfxsw64.dll` files
+- Register these DirectShow filters:
+- `VisioForge_H264_Encoder.ax`
+- `VisioForge_MP4_Muxer.ax`
+- `VisioForge_AAC_Encoder.ax`
+- `VisioForge_Video_Resize.ax`
+
+### MP4 H264/AAC Output - Legacy Encoder
+
+For compatibility with older systems:
+
+- Copy `libmfxxp32.dll` / `libmfxxp64.dll` files
+- Register these DirectShow filters:
+- `VisioForge_H264_Encoder_XP.ax`
+- `VisioForge_MP4_Muxer_XP.ax`
+- `VisioForge_AAC_Encoder_XP.ax`
+- `VisioForge_Video_Resize.ax`
+
+## Bulk Registration Utility
+
+To simplify the registration process for multiple DirectShow filters:
+
+- Place the `reg_special.exe` utility from the redistributable package into the folder containing your filters
+- Run it with administrator privileges to register all compatible filters in that directory
+
+## Troubleshooting Tips
+
+Common issues during deployment often include:
+
+- Missing dependencies
+- Incorrect registration of COM components
+- Path configuration problems
+- Insufficient user permissions
+
+Ensure all required files are properly deployed and registered before launching your application.
+
+---
+
+Please contact [our support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) if you encounter any issues with this deployment process. Visit our [GitHub repository](https://github.com/visioforge/) for additional code samples and implementation examples.
+
+---END OF PAGE---
+
+
+
+## TVFVideoEdit - Video Editing SDK for Delphi and ActiveX
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/
+**Description:** Build video editing software in Delphi with TVFVideoEdit - supporting multiple formats, effects, transitions, timeline editing, and encryption.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
+**API:** TVFVideoEdit
+
+# TVFVideoEdit for Delphi / ActiveX Development
+
+## Introduction to TVFVideoEdit
+
+The TVFVideoEdit library empowers Delphi developers to integrate sophisticated video editing functionality into their applications. This robust SDK provides a complete framework for handling diverse media operations while maintaining excellent performance and stability across projects of varying complexity.
+
+## Core Capabilities
+
+### Format Support
+
+TVFVideoEdit accommodates a wide array of video and audio formats, enabling seamless work with most industry-standard media types. This extensive compatibility ensures your application can process virtually any file users might import.
+
+### Video Processing
+
+The library excels in fundamental video manipulation tasks, offering precise control over:
+
+- Resolution adjustment
+- Frame rate conversion
+- Aspect ratio modification
+- Color correction tools
+- Quality enhancement algorithms
+
+### Effects and Transitions
+
+Enhance your application with:
+
+- Professional visual effects
+- Smooth transitions between clips
+- Custom animation capabilities
+- Real-time preview functionality
+- Text overlay with font control
+- Image compositing
+- Watermarking capabilities
+- Custom graphic insertion
+
+#### Audio Processing
+
+Create complete multimedia solutions with:
+
+- Volume normalization
+- Equalization tools
+- Audio effects application
+- Voice enhancement options
+
+## Technical Advantages
+
+### Output Flexibility
+
+Export finished projects in multiple formats with customizable quality settings to meet specific distribution requirements.
+
+### Timeline Precision
+
+The timeline-based editing framework gives developers granular control over media positioning, transitions, and effects timing.
+
+### Multi-Platform Compatibility
+
+Deploy your video editing solutions across different Windows environments with consistent performance and reliability.
+
+### Distribution Rights
+
+TVFVideoEdit supports royalty-free distribution, making it a cost-effective solution for commercial software development.
+
+## Resources for Developers
+
+Accelerate your development with these valuable resources:
+
+- [Product Information](https://www.visioforge.com/all-in-one-media-framework)
+- [API Documentation](https://api.visioforge.org/delphi/video_edit_sdk/index.html)
+- [Changelog](changelog/)
+- [Installation Guide](install/)
+- [Deployment Instructions](deployment/)
+- [License Agreement](../../eula/)
+
+---END OF PAGE---
+
+
+
+## Install TVFVideoEdit ActiveX Control in C++ Builder
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/install/builder/
+**Description:** Import and configure TVFVideoEdit ActiveX components in C++ Builder 5/6, 2006, and newer versions with package and control setup.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
+**API:** TVFVideoEdit
+
+# Complete Guide to TVFVideoEdit Installation in C++ Builder
+
+> Related products: [VisioForge All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+## Introduction to TVFVideoEdit for C++ Builder
+
+The TVFVideoEdit library provides powerful media processing capabilities for C++ Builder applications. This guide walks you through the installation process across different C++ Builder versions. Before you begin development, you'll need to properly install the ActiveX control into your IDE environment where it will be accessible through the component palette.
+
+## Installation Process for Borland C++ Builder 5/6
+
+### Accessing the Import Menu
+
+Begin the installation process by navigating to the Component menu in your IDE:
+
+1. Launch your Borland C++ Builder 5/6 environment
+2. From the main menu, select **Component -> Import ActiveX Controls**
+
+### Selecting the Video Edit Control
+
+In the Import ActiveX Control dialog:
+
+1. Locate and select the **"VisioForge Video Edit Control"** from the available controls list
+2. Click the **Install** button to begin the import process
+
+### Confirming Installation
+
+The system will prompt you to confirm the installation:
+
+1. A confirmation dialog will appear
+2. Click the **Yes** button to proceed with the installation
+
+### Verifying Successful Installation
+
+After installation completes:
+
+1. The control will be added to your component palette
+2. You can now use it in your C++ Builder projects
+
+## Installation Guide for C++ Builder 2006 and Later Versions
+
+Modern versions of C++ Builder require a different installation approach using packages.
+
+### Creating a New Package
+
+First, you'll need to create a package for the component:
+
+1. Open C++ Builder 2006 or later
+2. Select **File -> New -> Package**
+3. This will create the foundation for adding the ActiveX control
+
+### Importing the ActiveX Component
+
+Next, import the ActiveX control into your environment:
+
+1. Navigate to **Component → Import Component** in the main menu
+2. This opens the import wizard for adding new components
+
+### Selecting Import Type
+
+In the import wizard:
+
+1. Select the **Import ActiveX Control** radio button option
+2. Click the **Next** button to proceed to component selection
+
+### Choosing the Video Edit Control
+
+From the available ActiveX controls:
+
+1. Find and select the **"VisioForge Video Edit Control"** from the list
+2. Click **Next** to continue with the import process
+
+### Configuring Output Location
+
+Specify where the component files should be stored:
+
+1. Choose an appropriate package output folder for your development environment
+2. Click **Next** to proceed with configuration
+
+### Finalizing Component Import
+
+Complete the import process:
+
+1. Select the **Add unit to…** radio button option
+2. Click the **Finish** button to create the component wrapper
+
+### Saving the Package Project
+
+After import completion:
+
+1. The system will prompt you to save your package project
+2. Choose an appropriate location and name for your package files
+
+### Installing the Component Package
+
+To make the component available in the IDE:
+
+1. Right-click on the package in the Project Manager
+2. Select **Install** from the context menu
+3. This compiles and registers the package with the IDE
+
+### Verification and Usage
+
+Once installed:
+
+1. The TVFVideoEdit control appears in your component palette
+2. It's now ready to use in your C++ Builder applications
+3. You can drag and drop it onto forms just like native components
+
+## Additional Resources and Support
+
+### Getting Help with Implementation
+
+If you encounter any issues during installation or implementation:
+
+1. Our technical support team is available to assist
+2. Contact [support](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) with specific questions
+3. Provide details about your Builder version and installation environment
+
+### Code Examples and Documentation
+
+To accelerate your development process:
+
+1. Visit our [GitHub repository](https://github.com/visioforge/) for code samples
+2. Find implementation examples for common media processing tasks
+3. Access additional documentation on component features and usage
+
+## Troubleshooting Common Installation Issues
+
+When installing the TVFVideoEdit component, developers may encounter several common issues:
+
+1. **Missing Dependencies**: Ensure all required dependencies are installed
+2. **Registration Problems**: Verify ActiveX registration status in Windows registry
+3. **IDE Compatibility**: Check compatibility between component and Builder version
+4. **Package Conflicts**: Resolve any conflicts with existing packages
+
+By following this detailed guide, you'll have TVFVideoEdit successfully integrated into your C++ Builder environment and ready for implementing advanced media functionality in your applications.
+
+---END OF PAGE---
+
+
+
+## Install TVFVideoEdit in Delphi - Setup and Configuration
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/install/delphi/
+**Description:** Install TVFVideoEdit packages in Delphi 6/7, 2005+, and 11 to 13 with library paths, package building, and troubleshooting configuration.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
+**API:** TVFVideoEdit
+
+# Install TVFVideoEdit in Delphi
+
+> Related products: [VisioForge All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+## Installation Requirements
+
+Before beginning the installation process, ensure that you have:
+
+1. Appropriate Delphi version installed and properly configured
+2. Administrative rights for package installation
+3. Downloaded the latest version of the TVFVideoEdit library
+
+## Automatic Installation (Delphi 6 to Delphi 13)
+
+The SDK installer registers the package with every Delphi it finds on the computer, Delphi 6 through Delphi 13, for the Windows user who runs it:
+
+- it adds the `Video Edit\Packages\Delphi <version>` folder to the Windows 32-bit library path, and, from Delphi XE2 on, the `Delphi <version> x64` folder to the Windows 64-bit library path;
+- it registers the precompiled package `VisioForge_Video_Edit_Package.bpl` from that folder, so the IDE loads it at startup. The registration is for the 32-bit IDE, the one Delphi starts by default; if you use the 64-bit IDE of Delphi 12 or 13, start the 32-bit one to design with the component.
+
+Close Delphi before you run the installer. Then start Delphi: `TVFVideoEdit` is on the **VisioForge** page of the component palette, ready to drop on a form, and the demo projects under `Demos\Source code` compile without further setup.
+
+If Delphi was running during the installation, the setup ran under another Windows account (for example, an administrator's account entered at the elevation prompt), or you installed Delphi after the SDK, close Delphi and run **Install Delphi packages** from the **VisioForge Video Capture SDK** folder of the Start menu (the setup's one folder, for all three products). It does the same registration for the current user and lists in its window any Delphi for which no precompiled package ships; install the package by hand there, as described below. The setup's own run writes that list to `VFPackageInstaller.log` in the `%TEMP%` folder of the account that ran the setup.
+
+## Installing in Borland Delphi 6/7
+
+### Step 1: Configure Library Paths
+
+Begin by opening the "Options" window in your Delphi IDE.
+
+Navigate to the Library section and add the package folder (`Video Edit\Packages\Delphi <version>`, which holds the precompiled `.dcu` units) to both the library and browsing paths. This ensures that Delphi can locate the necessary files.
+
+### Step 2: Open and Install the Package
+
+Locate and open the main package file from the library.
+
+Install the package by clicking the Install button in the IDE. This registers the components with Delphi's component palette.
+
+### Architecture Considerations
+
+The library includes both x86 and x64 architecture versions. However, for Delphi 6/7, you must use the x86 version as these Delphi versions do not support 64-bit development.
+
+## Installing in Delphi 2005 and Later
+
+### Step 1: Launch with Administrative Privileges
+
+For Delphi 2005 and later versions, launch the IDE with administrative rights to ensure proper installation permissions.
+
+### Step 2: Configure Library Paths
+
+Open the Options window and navigate to the Library section. Add the package folder (`Video Edit\Packages\Delphi <version>`, which holds the precompiled `.dcu` units) to both the library and browsing paths.
+
+### Step 3: Install the Package
+
+Open the main package file `VisioForge_Video_Edit_Package.dpk` from the `Video Edit\Packages\Delphi <version>` folder.
+
+Click the Install button to register the components with Delphi's component palette.
+
+### Architecture Support
+
+For Delphi XE2 and later versions, both x86 and x64 versions are available. You can utilize the 64-bit version if you need to develop 64-bit applications. The IDE itself uses the x86 version at design time.
+
+## Installing in Delphi 11 and Later
+
+Modern Delphi versions feature a streamlined installation process:
+
+1. Open the `VisioForge_Video_Edit_Package.dproj` package project located in the `Video Edit\Packages\Delphi <version>` folder after installation
+2. Select the Release build configuration from the dropdown menu and the **Windows 32-bit** target platform (both are the project's defaults); the IDE installs the package from its 32-bit build, so open the project from the `Delphi <version>` folder, not from `Delphi <version> x64`
+3. Build and install the package using the IDE's build commands
+4. The components will be registered and ready to use
+
+## Project Configuration Best Practices
+
+The IDE uses the 32-bit package at design time; your applications can target Windows 32-bit or, from Delphi XE2 on, 64-bit. Ensure you've properly configured your application's library path settings:
+
+1. Add the correct library folder path to your project options
+2. Configure the path to properly locate `.dcu` files
+3. Verify architecture compatibility between your project and the installed packages
+
+## Troubleshooting Common Installation Issues
+
+If you encounter problems during installation, check these common issues:
+
+### Delphi 64-bit Package Installation Problems
+
+Some specific issues can occur when installing 64-bit packages. See our [detailed troubleshooting guide](../../../general/install-64bit/) for solutions.
+
+### Issues with .otares Files
+
+Installation problems related to `.otares` files are documented in our [dedicated troubleshooting page](../../../general/install-otares/).
+
+## Additional Resources and Support
+
+For additional code examples and implementations, visit our [GitHub repository](https://github.com/visioforge/) where we maintain a collection of sample projects.
+
+If you need personalized assistance with installation or implementation, please contact our [technical support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) who can provide guidance specific to your development environment.
+
+---
+
+For technical questions or installation assistance with this library, please reach out to our [development support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Browse additional code samples and resources on our [GitHub](https://github.com/visioforge/) page.
+
+---END OF PAGE---
+
+
+
+## Install TVFVideoEdit in Delphi, VB6, and C++ Builder
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/install/
+**Description:** Install TVFVideoEdit library in Delphi and ActiveX-compatible IDEs including MFC, VB6, and C++ Builder with package and control setup.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
+**API:** TVFVideoEdit
+
+# TVFVideoEdit library installation guide
+
+The library is available as a Delphi package exclusively for Delphi developers, offering tailored functionality and integration. Additionally, the ActiveX control version is versatile and can be used in MFC, VB6, or any other ActiveX-compatible IDEs, providing broad compatibility and flexibility for developers across different platforms. This ensures a robust and adaptable development experience regardless of your preferred environment.
+
+## Installation
+
+1. **Download the latest version of the All-in-One Media Framework**: Visit the [product page](https://www.visioforge.com/all-in-one-media-framework) and download the most recent version of the framework that is suitable for your needs.
+2. **Run the setup file**: Once the download is complete, locate the setup file in your download directory and run it. This will start the installation process.
+3. **Follow the installation wizard instructions**: The installation wizard will guide you through each step of the process. Carefully read and follow the prompts, accept the license agreement, select the installation directory, and continue by clicking the "Next" button.
+4. **Completion**: After the installation is complete, navigate to the installation folder. Here, you will find various library samples and comprehensive documentation designed to assist you in getting started with integrating the library into your projects.
+
+### Delphi packages installation
+
+For detailed instructions on installing the TVFVideoEdit packages in your Delphi IDE, please refer to the following [Delphi installation guide](delphi/).
+
+### ActiveX installation
+
+#### C++ Builder
+
+For [C++ Builder](builder/), the installation process involves importing the ActiveX control into your project. This straightforward process ensures that you can quickly start using the TVFVideoEdit library in your C++ Builder projects.
+
+#### Visual Basic 6
+
+In [Visual Basic 6](visual-basic-6/), open your project and go to the "Project" menu. Select "Components" item, then click "Browse" and find `VisioForge_Video_Edit.ocx` in the `Redist` folder of the installation. Add it to your project to make the components available in your toolbox.
+
+#### Visual Studio 2010 and later
+
+For [Visual Studio 2010 and newer](visual-studio/) versions, open your project in the IDE, right-click on the toolbox, and select "Choose Items". Navigate to the COM components tab, click "Browse", and select `VisioForge_Video_Edit.ocx` from the `Redist` folder (or `Redist\x64` for 64-bit) of the framework's installation directory. This will add the components to your toolbox, allowing their use in your Visual Studio projects.
+
+## Conclusion
+
+By following this detailed guide, you can successfully install and integrate the TVFVideoEdit library into your preferred development environment. If you encounter any issues or need further assistance, please refer to the documentation provided with the framework or contact our support team for help.
+
+---END OF PAGE---
+
+
+
+## Install TVFVideoEdit ActiveX Control in Visual Basic 6
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/install/visual-basic-6/
+**Description:** Install TVFVideoEdit ActiveX control in Visual Basic 6 with x86 compatibility for video editing features in legacy applications.
+**Tags:** All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
+**API:** TVFVideoEdit
+
+# Installing TVFVideoEdit ActiveX Control in Visual Basic 6
+
+## Introduction
+
+Visual Basic 6 remains a popular development environment for creating Windows applications. By leveraging our TVFVideoEdit library as an ActiveX control, developers can incorporate advanced video editing and processing capabilities into their VB6 applications without extensive coding.
+
+## Technical Requirements and Limitations
+
+Microsoft Visual Basic 6 operates as a 32-bit development platform and cannot produce 64-bit applications. Due to this architectural constraint, only the x86 (32-bit) version of our library is compatible with VB6 projects. Despite this limitation, the 32-bit implementation delivers excellent performance and provides full access to the library's extensive feature set.
+
+## Installation Process
+
+Follow these detailed steps to properly install the TVFVideoEdit ActiveX control in your Visual Basic 6 environment:
+
+### Step 1: Create a New Project
+
+Begin by launching Visual Basic 6 and creating a new project:
+
+1. Open Visual Basic 6 IDE
+2. Select "New Project" from the File menu
+3. Choose "Standard EXE" as the project type
+4. Click "OK" to create the baseline project
+
+### Step 2: Access Components Dialog
+
+Next, you need to register the ActiveX control within your development environment:
+
+1. In the menu, navigate to "Project"
+2. Select "Components" to open the components dialog
+
+### Step 3: Select the TVFVideoEdit Control
+
+From the Components dialog:
+
+1. Scroll through the available controls
+2. Locate and check the box for "VisioForge Video Edit Control"
+3. Click "OK" to confirm your selection
+
+### Step 4: Verify Control Registration
+
+After successful registration:
+
+1. The TVFVideoEdit control icon appears in your toolbox
+2. This confirms the control is ready for use in your application
+
+### Step 5: Implement the Control
+
+To begin using the control in your application:
+
+1. Select the TVFVideoEdit control from the toolbox
+2. Click and drag on your form to place an instance of the control
+3. Size the control appropriately for your interface
+4. Access properties and methods through the Properties window and code
+
+## Advanced Implementation Tips
+
+- Set appropriate control properties before loading media files
+- Handle events for user interaction and processing notifications
+- Consider memory management when working with large video files
+- Test your application thoroughly with various media formats
+
+---
+
+For technical questions or implementation challenges, contact our [support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new). Access additional code examples and resources on our [GitHub repository](https://github.com/visioforge/).
+
+---END OF PAGE---
+
+
+
+## Install TVFVideoEdit ActiveX Control in Visual Studio
+**URL:** https://www.visioforge.com/help/docs/delphi/videoedit/install/visual-studio/
+**Description:** Install TVFVideoEdit ActiveX controls in Visual Studio 2010+ for C++, C#, and VB.NET projects with wrapper assembly configuration.
+**Tags:** Video Edit SDK, All-in-One Media Framework, Delphi, ActiveX, Windows, VCL, Editing
+**API:** TVFVideoEdit
+
+# Install TVFVideoEdit in Visual Studio
+
+## Overview
+
+> Related products: [All-in-One Media Framework (Delphi / ActiveX)](https://www.visioforge.com/all-in-one-media-framework)
+
+TVFVideoEdit provides powerful video editing capabilities through ActiveX controls that integrate smoothly with various development environments. This guide walks you through the installation process specifically for Visual Studio 2010 and later versions.
+
+## Compatibility Information
+
+The ActiveX control can be used directly in C++ projects without additional wrappers. For C# or VB.NET development, Visual Studio automatically creates a custom wrapper assembly that enables the ActiveX API in managed code environments.
+
+## Prerequisites
+
+Before beginning the installation process, ensure you have:
+
+- Visual Studio 2010 or later installed on your development machine
+- Administrative privileges (required for ActiveX registration)
+- Both x86 and x64 ActiveX controls registered (Visual Studio might use x86 for the UI designer even when targeting x64)
+
+## Step-by-Step Installation Guide
+
+### Creating a New Project
+
+1. Start Visual Studio and create a new project using C++, C#, or Visual Basic.
+2. For this demonstration, we'll use a C# Windows Forms application, but the process applies similarly to VB.NET and C++ MFC projects.
+
+### Adding the ActiveX Control to Your Toolbox
+
+1. Right-click on the Toolbox panel in Visual Studio
+2. Select the "Choose Items" option from the context menu that appears
+
+### Selecting the Video Edit Control
+
+1. In the Choose Toolbox Items dialog, locate the COM Components tab
+2. Browse through the list or use the search functionality
+3. Find and select the "VisioForge Video Edit Control" item
+4. Click OK to add the control to your toolbox
+
+### Implementing the Control in Your Form
+
+1. Locate the newly added control in your toolbox
+2. Click and drag it onto your form design surface
+3. The control is now ready for implementation in your application
+
+## Advanced Integration Options
+
+### .NET Development Recommendations
+
+For developers working with .NET applications, we strongly recommend considering the native [.NET SDK](https://www.visioforge.com/video-edit-sdk-net) as an alternative to ActiveX integration. The .NET SDK offers several advantages:
+
+- Enhanced performance and stability
+- Native support for WinForms, WPF, and MAUI controls
+- Broader feature set and API capabilities
+- Simpler integration with modern development practices
+
+## Troubleshooting Common Issues
+
+When integrating TVFVideoEdit, you might encounter these common challenges:
+
+- Registration issues: Ensure you have administrative privileges
+- Architecture mismatches: Verify both x86 and x64 versions are properly registered
+- Reference errors: Check that all required dependencies are included in your project
+
+## Additional Resources
+
+If you encounter any difficulties following this tutorial or need specialized assistance with your implementation, our development team is available to provide technical guidance.
+
+- Access additional code samples on our [GitHub repository](https://github.com/visioforge/)
+- Contact our [technical support team](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) for personalized assistance
+
+---END OF PAGE---
+
+

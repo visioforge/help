@@ -1,0 +1,2548 @@
+# VisioForge — DirectShow SDKs, part 4 of 4
+
+> Full text of 3 pages. All parts: https://www.visioforge.com/llms-full.txt; index: https://www.visioforge.com/llms.txt.
+
+**Author:** VisioForge
+**License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
+**Generated:** 2026-11-27 20:41:07 UTC (c5e129a2023)
+**MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
+
+---
+
+## VLC Source DirectShow Filter Integration Code Examples
+**URL:** https://www.visioforge.com/help/docs/directshow/vlc-source-filter/examples/
+**Description:** Code examples for VLC Source Filter with multi-track audio, subtitles, 360° video, and custom VLC parameters in DirectShow.
+**Tags:** DirectShow, C++, Windows, WinForms, Playback, Streaming, Decoding, RTSP, HLS, MP4, MKV, AVI, MOV, C#, VB.NET
+**API:** IBaseFilter, IVFRegister
+
+# Code Examples
+
+## Overview
+
+This page provides practical code examples for using the VLC Source Filter in DirectShow applications. The VLC Source Filter supports multi-audio tracks, subtitles, 360° video, and custom VLC command-line options.
+
+---
+
+## Prerequisites
+
+### C++ Projects
+
+```
+#include <dshow.h>
+#include <streams.h>
+#include "ivlcsrc.h"      // Single header from SDK — declares IVlcSrc, IVlcSrc2, IVlcSrc3 + CLSID/IID GUIDs
+#pragma comment(lib, "strmiids.lib")
+```
+
+### C# Projects
+
+```
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+using System.Runtime.InteropServices;
+using System.Text;
+```
+
+**NuGet Packages**: - VisioForge.DirectShowAPI - MediaFoundationCore
+
+---
+
+## Example 1: Basic File Playback
+
+Play a local media file with VLC Source Filter.
+
+### C++ Implementation
+
+```
+#include <dshow.h>
+#include "ivlcsrc.h"
+
+// CLSID for VLC Source Filter
+DEFINE_GUID(CLSID_VFVLCSource,
+    0x3fc97748, 0x7cb6, 0x4195, 0x89, 0xde, 0x07, 0x17, 0x58, 0x2a, 0x48, 0x63);
+
+HRESULT PlayVLCFile(LPCWSTR filename, HWND hVideoWindow)
+{
+    IGraphBuilder* pGraph = NULL;
+    IMediaControl* pControl = NULL;
+    IBaseFilter* pSourceFilter = NULL;
+    IVlcSrc* pVlcSrc = NULL;
+
+    HRESULT hr = S_OK;
+
+    // Create Filter Graph
+    hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+                         IID_IGraphBuilder, (void**)&pGraph);
+    if (FAILED(hr)) return hr;
+
+    // Create VLC Source Filter
+    hr = CoCreateInstance(CLSID_VFVLCSource, NULL, CLSCTX_INPROC_SERVER,
+                         IID_IBaseFilter, (void**)&pSourceFilter);
+    if (FAILED(hr)) goto cleanup;
+
+    // Add filter to graph
+    hr = pGraph->AddFilter(pSourceFilter, L"VLC Source");
+    if (FAILED(hr)) goto cleanup;
+
+    // Get VLC interface
+    hr = pSourceFilter->QueryInterface(IID_IVlcSrc, (void**)&pVlcSrc);
+    if (FAILED(hr)) goto cleanup;
+
+    // Load file
+    hr = pVlcSrc->SetFile((WCHAR*)filename);
+    if (FAILED(hr)) goto cleanup;
+
+    // Build and render graph
+    ICaptureGraphBuilder2* pBuild = NULL;
+    hr = CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER,
+                         IID_ICaptureGraphBuilder2, (void**)&pBuild);
+    if (SUCCEEDED(hr))
+    {
+        hr = pBuild->SetFiltergraph(pGraph);
+
+        // Render video and audio
+        hr = pBuild->RenderStream(NULL, &MEDIATYPE_Video, pSourceFilter, NULL, NULL);
+        hr = pBuild->RenderStream(NULL, &MEDIATYPE_Audio, pSourceFilter, NULL, NULL);
+
+        pBuild->Release();
+    }
+
+    // Run graph
+    hr = pGraph->QueryInterface(IID_IMediaControl, (void**)&pControl);
+    if (SUCCEEDED(hr))
+    {
+        hr = pControl->Run();
+    }
+
+cleanup:
+    if (pVlcSrc) pVlcSrc->Release();
+    if (pControl) pControl->Release();
+    if (pSourceFilter) pSourceFilter->Release();
+    if (pGraph) pGraph->Release();
+
+    return hr;
+}
+```
+
+### C# Implementation
+
+```
+using System;
+using System.Runtime.InteropServices;
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+
+public class VLCSourceBasicExample
+{
+    private IFilterGraph2 filterGraph;
+    private IMediaControl mediaControl;
+    private IVideoWindow videoWindow;
+    private IBaseFilter sourceFilter;
+
+    public void PlayFile(string filename, IntPtr videoWindowHandle)
+    {
+        try
+        {
+            // Create filter graph
+            filterGraph = (IFilterGraph2)new FilterGraph();
+            mediaControl = (IMediaControl)filterGraph;
+            videoWindow = (IVideoWindow)filterGraph;
+
+            // Create and add VLC Source filter
+            sourceFilter = FilterGraphTools.AddFilterFromClsid(
+                filterGraph,
+                Consts.CLSID_VFVLCSource,
+                "VLC Source");
+
+            // Load file using IVlcSrc interface
+            var vlcSrc = sourceFilter as IVlcSrc;
+            if (vlcSrc != null)
+            {
+                int hr = vlcSrc.SetFile(filename);
+                DsError.ThrowExceptionForHR(hr);
+            }
+
+            // Render streams
+            ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+            int result = captureGraph.SetFiltergraph(filterGraph);
+            DsError.ThrowExceptionForHR(result);
+
+            captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
+            captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+
+            // Set video window
+            videoWindow.put_Owner(videoWindowHandle);
+            videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
+            videoWindow.put_Visible(OABool.True);
+
+            // Run graph
+            mediaControl.Run();
+
+            Marshal.ReleaseComObject(captureGraph);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+        }
+    }
+
+    public void Stop()
+    {
+        if (mediaControl != null)
+        {
+            mediaControl.Stop();
+        }
+
+        if (videoWindow != null)
+        {
+            videoWindow.put_Visible(OABool.False);
+            videoWindow.put_Owner(IntPtr.Zero);
+        }
+
+        FilterGraphTools.RemoveAllFilters(filterGraph);
+
+        if (sourceFilter != null) Marshal.ReleaseComObject(sourceFilter);
+        if (videoWindow != null) Marshal.ReleaseComObject(videoWindow);
+        if (mediaControl != null) Marshal.ReleaseComObject(mediaControl);
+        if (filterGraph != null) Marshal.ReleaseComObject(filterGraph);
+    }
+}
+```
+
+### VB.NET Implementation
+
+```
+Imports System.Runtime.InteropServices
+Imports VisioForge.DirectShowAPI
+Imports VisioForge.DirectShowLib
+
+Public Class VLCSourceBasicExample
+    Private filterGraph As IFilterGraph2
+    Private mediaControl As IMediaControl
+    Private videoWindow As IVideoWindow
+    Private sourceFilter As IBaseFilter
+
+    Public Sub PlayFile(filename As String, videoWindowHandle As IntPtr)
+        Try
+            ' Create filter graph
+            filterGraph = DirectCast(New FilterGraph(), IFilterGraph2)
+            mediaControl = DirectCast(filterGraph, IMediaControl)
+            videoWindow = DirectCast(filterGraph, IVideoWindow)
+
+            ' Create and add VLC Source filter
+            sourceFilter = FilterGraphTools.AddFilterFromClsid(
+                filterGraph,
+                Consts.CLSID_VFVLCSource,
+                "VLC Source")
+
+            ' Load file
+            Dim vlcSrc = DirectCast(sourceFilter, IVlcSrc)
+            If vlcSrc IsNot Nothing Then
+                Dim hr As Integer = vlcSrc.SetFile(filename)
+                DsError.ThrowExceptionForHR(hr)
+            End If
+
+            ' Render streams
+            Dim captureGraph As ICaptureGraphBuilder2 = DirectCast(New CaptureGraphBuilder2(), ICaptureGraphBuilder2)
+            captureGraph.SetFiltergraph(filterGraph)
+
+            captureGraph.RenderStream(Nothing, MediaType.Video, sourceFilter, Nothing, Nothing)
+            captureGraph.RenderStream(Nothing, MediaType.Audio, sourceFilter, Nothing, Nothing)
+
+            ' Set video window
+            videoWindow.put_Owner(videoWindowHandle)
+            videoWindow.put_WindowStyle(WindowStyle.Child Or WindowStyle.ClipSiblings)
+            videoWindow.put_Visible(OABool.True)
+
+            ' Run graph
+            mediaControl.Run()
+
+            Marshal.ReleaseComObject(captureGraph)
+        Catch ex As Exception
+            Console.WriteLine($"Error: {ex.Message}")
+        End Try
+    End Sub
+
+    Public Sub [Stop]()
+        If mediaControl IsNot Nothing Then
+            mediaControl.Stop()
+        End If
+
+        If videoWindow IsNot Nothing Then
+            videoWindow.put_Visible(OABool.False)
+            videoWindow.put_Owner(IntPtr.Zero)
+        End If
+
+        FilterGraphTools.RemoveAllFilters(filterGraph)
+
+        If sourceFilter IsNot Nothing Then Marshal.ReleaseComObject(sourceFilter)
+        If videoWindow IsNot Nothing Then Marshal.ReleaseComObject(videoWindow)
+        If mediaControl IsNot Nothing Then Marshal.ReleaseComObject(mediaControl)
+        If filterGraph IsNot Nothing Then Marshal.ReleaseComObject(filterGraph)
+    End Sub
+End Class
+```
+
+---
+
+## Example 2: Audio Track Selection
+
+List and select audio tracks from multi-audio files.
+
+### C# Audio Track Management
+
+```
+public class VLCAudioTrackExample
+{
+    private IFilterGraph2 filterGraph;
+    private IMediaControl mediaControl;
+    private IBaseFilter sourceFilter;
+    public void PlayWithAudioTrackSelection(string filename, IntPtr videoWindowHandle)
+    {
+        filterGraph = (IFilterGraph2)new FilterGraph();
+        mediaControl = (IMediaControl)filterGraph;
+        // Create VLC Source filter
+        sourceFilter = FilterGraphTools.AddFilterFromClsid(
+            filterGraph,
+            Consts.CLSID_VFVLCSource,
+            "VLC Source");
+        // Load file
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            vlcSrc.SetFile(filename);
+            // Get audio track count
+            int audioCount = 0;
+            vlcSrc.GetAudioTracksCount(out audioCount);
+            Console.WriteLine($"Total audio tracks: {audioCount}");
+            // List all audio tracks
+            for (int i = 0; i < audioCount; i++)
+            {
+                int trackId;
+                StringBuilder trackName = new StringBuilder(256);
+                vlcSrc.GetAudioTrackInfo(i, out trackId, trackName);
+                Console.WriteLine($"Track {i}: ID={trackId}, Name={trackName}");
+            }
+            // Get currently active track
+            int currentTrackId;
+            vlcSrc.GetAudioTrack(out currentTrackId);
+            Console.WriteLine($"Currently active track ID: {currentTrackId}");
+            // Select a specific track (e.g., track index 1)
+            if (audioCount > 1)
+            {
+                int desiredTrackId;
+                StringBuilder name = new StringBuilder(256);
+                vlcSrc.GetAudioTrackInfo(1, out desiredTrackId, name);
+                vlcSrc.SetAudioTrack(desiredTrackId);
+                Console.WriteLine($"Switched to track: {name}");
+            }
+        }
+        // Build and run graph
+        ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+        captureGraph.SetFiltergraph(filterGraph);
+        captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
+        captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+        var videoWindow = (IVideoWindow)filterGraph;
+        videoWindow.put_Owner(videoWindowHandle);
+        videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
+        mediaControl.Run();
+        Marshal.ReleaseComObject(captureGraph);
+    }
+    // Method to switch audio track during playback
+    public void SwitchAudioTrack(int trackIndex)
+    {
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            int trackId;
+            StringBuilder trackName = new StringBuilder(256);
+            vlcSrc.GetAudioTrackInfo(trackIndex, out trackId, trackName);
+            vlcSrc.SetAudioTrack(trackId);
+            Console.WriteLine($"Switched to audio track: {trackName}");
+        }
+    }
+}
+```
+
+### C++ Audio Track Management
+
+## ``` void ListAndSelectAudioTracks(IVlcSrc* pVlcSrc) { int audioCount = 0; pVlcSrc->GetAudioTracksCount(&audioCount); wprintf(L"Total audio tracks: %d\n", audioCount); // List all tracks for (int i = 0; i < audioCount; i++) { int trackId = 0; WCHAR trackName[256] = {0}; pVlcSrc->GetAudioTrackInfo(i, &trackId, trackName); wprintf(L"Track %d: ID=%d, Name=%s\n", i, trackId, trackName); } // Get current track int currentId = 0; pVlcSrc->GetAudioTrack(&currentId); wprintf(L"Current track ID: %d\n", currentId); // Select track by index (e.g., track 1) if (audioCount > 1) { int trackId = 0; WCHAR name[256] = {0}; pVlcSrc->GetAudioTrackInfo(1, &trackId, name); pVlcSrc->SetAudioTrack(trackId); wprintf(L"Switched to track: %s\n", name); } } ```
+
+## Example 3: Subtitle Management
+
+Select and manage subtitle tracks.
+
+### C# Subtitle Management
+
+```
+public class VLCSubtitleExample
+{
+    private IBaseFilter sourceFilter;
+
+    public void ManageSubtitles(string filename)
+    {
+        // Assume filter is already created and added to graph
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            vlcSrc.SetFile(filename);
+
+            // Get subtitle count
+            int subtitleCount = 0;
+            vlcSrc.GetSubtitlesCount(out subtitleCount);
+
+            Console.WriteLine($"Total subtitle tracks: {subtitleCount}");
+
+            // List all subtitles
+            for (int i = 0; i < subtitleCount; i++)
+            {
+                int subtitleId;
+                StringBuilder subtitleName = new StringBuilder(256);
+                vlcSrc.GetSubtitleInfo(i, out subtitleId, subtitleName);
+
+                Console.WriteLine($"Subtitle {i}: ID={subtitleId}, Name={subtitleName}");
+            }
+
+            // Enable subtitle (e.g., subtitle index 0)
+            if (subtitleCount > 0)
+            {
+                int subtitleId;
+                StringBuilder name = new StringBuilder(256);
+                vlcSrc.GetSubtitleInfo(0, out subtitleId, name);
+
+                vlcSrc.SetSubtitle(subtitleId);
+                Console.WriteLine($"Enabled subtitle: {name}");
+            }
+
+            // Disable subtitles (use ID -1)
+            // vlcSrc.SetSubtitle(-1);
+        }
+    }
+
+    // Method to switch subtitles during playback
+    public void SwitchSubtitle(int subtitleIndex)
+    {
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            if (subtitleIndex < 0)
+            {
+                // Disable subtitles
+                vlcSrc.SetSubtitle(-1);
+                Console.WriteLine("Subtitles disabled");
+            }
+            else
+            {
+                int subtitleId;
+                StringBuilder name = new StringBuilder(256);
+                vlcSrc.GetSubtitleInfo(subtitleIndex, out subtitleId, name);
+
+                vlcSrc.SetSubtitle(subtitleId);
+                Console.WriteLine($"Switched to subtitle: {name}");
+            }
+        }
+    }
+}
+```
+
+### C++ Subtitle Management
+
+```
+void ManageSubtitles(IVlcSrc* pVlcSrc)
+{
+    int subtitleCount = 0;
+    pVlcSrc->GetSubtitlesCount(&subtitleCount);
+
+    wprintf(L"Total subtitles: %d\n", subtitleCount);
+
+    // List all subtitles
+    for (int i = 0; i < subtitleCount; i++)
+    {
+        int subtitleId = 0;
+        WCHAR subtitleName[256] = {0};
+        pVlcSrc->GetSubtitleInfo(i, &subtitleId, subtitleName);
+
+        wprintf(L"Subtitle %d: ID=%d, Name=%s\n", i, subtitleId, subtitleName);
+    }
+
+    // Enable first subtitle
+    if (subtitleCount > 0)
+    {
+        int id = 0;
+        WCHAR name[256] = {0};
+        pVlcSrc->GetSubtitleInfo(0, &id, name);
+
+        pVlcSrc->SetSubtitle(id);
+        wprintf(L"Enabled subtitle: %s\n", name);
+    }
+
+    // Disable subtitles
+    // pVlcSrc->SetSubtitle(-1);
+}
+```
+
+---
+
+## Example 4: Custom VLC Command-Line Options
+
+Pass custom VLC parameters using IVlcSrc2 interface.
+
+### C# Custom VLC Parameters
+
+```
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using VisioForge.Core.Helpers;
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+public class VLCCustomOptionsExample
+{
+    public void PlayWithCustomVLCOptions(string filename, IntPtr videoWindowHandle)
+    {
+        var filterGraph = (IFilterGraph2)new FilterGraph();
+        var sourceFilter = FilterGraphTools.AddFilterFromClsid(
+            filterGraph,
+            Consts.CLSID_VFVLCSource,
+            "VLC Source");
+        // Set custom VLC command-line options using IVlcSrc2
+        var vlcSrc2 = sourceFilter as IVlcSrc2;
+        if (vlcSrc2 != null)
+        {
+            // Create list of VLC command-line parameters
+            var parameters = new List<string>();
+            parameters.Add("--avcodec-hw=any");          // Enable hardware decoding
+            parameters.Add("--network-caching=1000");    // 1 second network cache
+            parameters.Add("--live-caching=300");        // 300ms for live streams
+            parameters.Add("--file-caching=300");        // 300ms for files
+            parameters.Add("--sout-mux-caching=2000");   // Output muxing cache
+            parameters.Add("--vout=direct3d11");         // Use Direct3D11 renderer
+            parameters.Add("--verbose=2");               // Logging level
+            // Convert strings to native UTF-8 IntPtr array
+            var array = new IntPtr[parameters.Count];
+            for (int i = 0; i < parameters.Count; i++)
+            {
+                array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+            }
+            try
+            {
+                // Call SetCustomCommandLine with IntPtr array
+                int hr = vlcSrc2.SetCustomCommandLine(array, parameters.Count);
+                DsError.ThrowExceptionForHR(hr);
+            }
+            finally
+            {
+                // Free allocated unmanaged memory
+                for (int i = 0; i < array.Length; i++)
+                {
+                    Marshal.FreeHGlobal(array[i]);
+                }
+            }
+        }
+        // Load file using IVlcSrc
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            vlcSrc.SetFile(filename);
+        }
+        // Build and run graph
+        ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+        captureGraph.SetFiltergraph(filterGraph);
+        captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
+        captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+        var videoWindow = (IVideoWindow)filterGraph;
+        videoWindow.put_Owner(videoWindowHandle);
+        videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
+        var mediaControl = (IMediaControl)filterGraph;
+        mediaControl.Run();
+        Marshal.ReleaseComObject(captureGraph);
+    }
+}
+```
+
+### Common VLC Options
+
+Here are common VLC parameter combinations. Remember to use the proper marshaling pattern shown above.
+
+```
+// Network streaming options
+var networkOptions = new List<string>
+{
+    "--network-caching=3000",      // 3 seconds for network streams
+    "--rtsp-tcp",                  // Force TCP for RTSP
+    "--http-reconnect"             // Auto-reconnect HTTP streams
+};
+// Hardware decoding options
+var hwDecodeOptions = new List<string>
+{
+    "--avcodec-hw=any"             // Auto-detect hardware
+    // Alternative options:
+    // "--avcodec-hw=dxva2"        // Use DXVA2
+    // "--avcodec-hw=d3d11va"      // Use D3D11VA
+    // "--avcodec-hw=nvdec"        // Use NVIDIA NVDEC
+};
+// Low latency options
+var lowLatencyOptions = new List<string>
+{
+    "--network-caching=0",
+    "--live-caching=0",
+    "--file-caching=0",
+    "--sout-mux-caching=0",
+    "--clock-jitter=0",
+    "--drop-late-frames",
+    "--skip-frames"
+};
+// 360° video options
+var video360Options = new List<string>
+{
+    "--video-filter=transform",
+    "--transform-type=hflip",
+    "--vout-filter=rotate"
+};
+// Subtitle options
+var subtitleOptions = new List<string>
+{
+    "--sub-autodetect-file",       // Auto-detect subtitle files
+    "--sub-language=eng",          // Preferred subtitle language
+    "--freetype-fontsize=20"       // Subtitle font size
+};
+// Audio options
+var audioOptions = new List<string>
+{
+    "--audio-desync=0",            // Audio synchronization
+    "--audiotrack-language=eng",   // Preferred audio language
+    "--audio-filter=normvol"       // Volume normalization
+};
+// Complete example with multiple options
+var completeOptions = new List<string>
+{
+    "--avcodec-hw=any",
+    "--network-caching=1000",
+    "--rtsp-tcp",
+    "--sub-autodetect-file",
+    "--verbose=1"
+};
+// Helper method to apply VLC parameters
+private void ApplyVLCParameters(IVlcSrc2 vlcSrc2, List<string> parameters)
+{
+    if (vlcSrc2 == null || parameters == null || parameters.Count == 0)
+        return;
+    var array = new IntPtr[parameters.Count];
+    for (int i = 0; i < parameters.Count; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+    }
+    try
+    {
+        int hr = vlcSrc2.SetCustomCommandLine(array, parameters.Count);
+        DsError.ThrowExceptionForHR(hr);
+    }
+    finally
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
+}
+```
+
+---
+
+## Example 5: Frame Rate Override
+
+Override source frame rate using IVlcSrc3 interface.
+
+### C# Frame Rate Override
+
+```
+public class VLCFrameRateExample
+{
+    public void PlayWithCustomFrameRate(string filename, double fps, IntPtr videoWindowHandle)
+    {
+        var filterGraph = (IFilterGraph2)new FilterGraph();
+
+        var sourceFilter = FilterGraphTools.AddFilterFromClsid(
+            filterGraph,
+            Consts.CLSID_VFVLCSource,
+            "VLC Source");
+
+        // Set custom frame rate using IVlcSrc3
+        var vlcSrc3 = sourceFilter as IVlcSrc3;
+        if (vlcSrc3 != null)
+        {
+            // Override frame rate (e.g., 30.0, 25.0, 60.0)
+            int hr = vlcSrc3.SetDefaultFrameRate(fps);
+            DsError.ThrowExceptionForHR(hr);
+
+            Console.WriteLine($"Frame rate set to: {fps} fps");
+        }
+
+        // Load file
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            vlcSrc.SetFile(filename);
+        }
+
+        // Build and run graph
+        ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+        captureGraph.SetFiltergraph(filterGraph);
+
+        captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
+        captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+
+        var videoWindow = (IVideoWindow)filterGraph;
+        videoWindow.put_Owner(videoWindowHandle);
+        videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
+
+        var mediaControl = (IMediaControl)filterGraph;
+        mediaControl.Run();
+
+        Marshal.ReleaseComObject(captureGraph);
+    }
+}
+```
+
+### C++ Frame Rate Override
+
+```
+#include "ivlcsrc.h"
+
+void SetCustomFrameRate(IBaseFilter* pFilter, double fps)
+{
+    IVlcSrc3* pVlcSrc3 = nullptr;
+    HRESULT hr = pFilter->QueryInterface(IID_IVlcSrc3, (void**)&pVlcSrc3);
+
+    if (SUCCEEDED(hr))
+    {
+        hr = pVlcSrc3->SetDefaultFrameRate(fps);
+        if (SUCCEEDED(hr))
+        {
+            wprintf(L"Frame rate set to: %.2f fps\n", fps);
+        }
+
+        pVlcSrc3->Release();
+    }
+}
+```
+
+---
+
+## Example 6: Network Streaming (RTSP/HLS)
+
+Stream from network sources.
+
+### C# Network Streaming
+
+## ``` public class VLCNetworkStreamingExample { public void PlayRTSPStream(string rtspUrl, IntPtr videoWindowHandle) { var filterGraph = (IFilterGraph2)new FilterGraph(); var sourceFilter = FilterGraphTools.AddFilterFromClsid( filterGraph, Consts.CLSID_VFVLCSource, "VLC Source"); // Configure for RTSP streaming var vlcSrc2 = sourceFilter as IVlcSrc2; if (vlcSrc2 != null) { var parameters = new List<string> { "--rtsp-tcp", // Use TCP transport "--network-caching=300", // Low latency (300ms) "--rtsp-frame-buffer-size=500000", // Frame buffer size "--drop-late-frames", // Drop late frames "--skip-frames" // Skip frames if needed }; var array = new IntPtr[parameters.Count]; for (int i = 0; i < parameters.Count; i++) { array[i] = StringHelper.NativeUtf8FromString(parameters[i]); } try { vlcSrc2.SetCustomCommandLine(array, parameters.Count); } finally { for (int i = 0; i < array.Length; i++) { Marshal.FreeHGlobal(array[i]); } } } // Load RTSP stream var vlcSrc = sourceFilter as IVlcSrc; if (vlcSrc != null) { // Example: "rtsp://camera.example.com:554/stream" vlcSrc.SetFile(rtspUrl); } // Build and run graph ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2(); captureGraph.SetFiltergraph(filterGraph); captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null); captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null); var videoWindow = (IVideoWindow)filterGraph; videoWindow.put_Owner(videoWindowHandle); videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings); var mediaControl = (IMediaControl)filterGraph; mediaControl.Run(); Marshal.ReleaseComObject(captureGraph); } public void PlayHLSStream(string hlsUrl, IntPtr videoWindowHandle) { var filterGraph = (IFilterGraph2)new FilterGraph(); var sourceFilter = FilterGraphTools.AddFilterFromClsid( filterGraph, Consts.CLSID_VFVLCSource, "VLC Source"); // Configure for HLS streaming var vlcSrc2 = sourceFilter as IVlcSrc2; if (vlcSrc2 != null) { var parameters = new List<string> { "--http-reconnect", // Auto-reconnect "--network-caching=3000", // 3 second buffer for HLS "--hls-segment-threads=3", // Parallel segment download "--avcodec-hw=any" // Hardware decoding }; var array = new IntPtr[parameters.Count]; for (int i = 0; i < parameters.Count; i++) { array[i] = StringHelper.NativeUtf8FromString(parameters[i]); } try { vlcSrc2.SetCustomCommandLine(array, parameters.Count); } finally { for (int i = 0; i < array.Length; i++) { Marshal.FreeHGlobal(array[i]); } } } // Load HLS stream var vlcSrc = sourceFilter as IVlcSrc; if (vlcSrc != null) { // Example: "https://example.com/stream/playlist.m3u8" vlcSrc.SetFile(hlsUrl); } // Build and run graph ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2(); captureGraph.SetFiltergraph(filterGraph); captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null); captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null); var videoWindow = (IVideoWindow)filterGraph; videoWindow.put_Owner(videoWindowHandle); videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings); var mediaControl = (IMediaControl)filterGraph; mediaControl.Run(); Marshal.ReleaseComObject(captureGraph); } } ```
+
+## Example 7: License Activation
+
+Activate purchased license. `SetLicenseKey` succeeds for any key: a key the filter does not accept leaves it in trial mode, and the video carries the [trial strip](../#trial-version). Only a `null` key is refused: the method returns `E_POINTER`, which a declaration returning `void` under `[PreserveSig]` does not show.
+
+### C# License Activation
+
+```
+public void PlayWithLicense(string filename, string licenseKey, IntPtr videoWindowHandle)
+{
+    var filterGraph = (IFilterGraph2)new FilterGraph();
+
+    var sourceFilter = FilterGraphTools.AddFilterFromClsid(
+        filterGraph,
+        Consts.CLSID_VFVLCSource,
+        "VLC Source");
+
+    // Activate license: a key that is not accepted shows as the trial strip on the video, not as an error
+    var registration = sourceFilter as IVFRegister;
+    registration?.SetLicenseKey(licenseKey);
+
+    // Load and play file
+    var vlcSrc = sourceFilter as IVlcSrc;
+    if (vlcSrc != null)
+    {
+        vlcSrc.SetFile(filename);
+    }
+
+    ICaptureGraphBuilder2 captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+    captureGraph.SetFiltergraph(filterGraph);
+
+    captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
+    captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+
+    var videoWindow = (IVideoWindow)filterGraph;
+    videoWindow.put_Owner(videoWindowHandle);
+    videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
+
+    var mediaControl = (IMediaControl)filterGraph;
+    mediaControl.Run();
+
+    Marshal.ReleaseComObject(captureGraph);
+}
+```
+
+---
+
+## Example 8: Complete Multi-Track Player
+
+Full-featured media player with all VLC Source features.
+
+### C# Complete Example
+
+```
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using System.Windows.Forms;
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+public class VLCMediaPlayer : IDisposable
+{
+    private IFilterGraph2 filterGraph;
+    private ICaptureGraphBuilder2 captureGraph;
+    private IMediaControl mediaControl;
+    private IMediaSeeking mediaSeeking;
+    private IVideoWindow videoWindow;
+    private IMediaEventEx mediaEventEx;
+    private IBaseFilter sourceFilter;
+    private const int WM_GRAPHNOTIFY = 0x8000 + 1;
+    public event EventHandler PlaybackComplete;
+    public List<AudioTrackInfo> AudioTracks { get; private set; } = new List<AudioTrackInfo>();
+    public List<SubtitleInfo> Subtitles { get; private set; } = new List<SubtitleInfo>();
+    public class AudioTrackInfo
+    {
+        public int Index { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public class SubtitleInfo
+    {
+        public int Index { get; set; }
+        public int Id { get; set; }
+        public string Name { get; set; }
+    }
+    public void Initialize(IntPtr windowHandle, IntPtr notifyHandle)
+    {
+        filterGraph = (IFilterGraph2)new FilterGraph();
+        captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+        mediaControl = (IMediaControl)filterGraph;
+        mediaSeeking = (IMediaSeeking)filterGraph;
+        videoWindow = (IVideoWindow)filterGraph;
+        mediaEventEx = (IMediaEventEx)filterGraph;
+        int hr = mediaEventEx.SetNotifyWindow(notifyHandle, WM_GRAPHNOTIFY, IntPtr.Zero);
+        DsError.ThrowExceptionForHR(hr);
+        hr = captureGraph.SetFiltergraph(filterGraph);
+        DsError.ThrowExceptionForHR(hr);
+    }
+    public void LoadFile(string filename, string licenseKey = null,
+                        string vlcOptions = null, double? frameRate = null)
+    {
+        sourceFilter = FilterGraphTools.AddFilterFromClsid(
+            filterGraph,
+            Consts.CLSID_VFVLCSource,
+            "VLC Source");
+        // Register license
+        if (!string.IsNullOrEmpty(licenseKey))
+        {
+            var registration = sourceFilter as IVFRegister;
+            registration?.SetLicenseKey(licenseKey);
+        }
+        // Set custom VLC options
+        if (!string.IsNullOrEmpty(vlcOptions))
+        {
+            var vlcSrc2 = sourceFilter as IVlcSrc2;
+            if (vlcSrc2 != null)
+            {
+                // Parse space-separated options into list
+                var parameters = new List<string>(vlcOptions.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries));
+                var array = new IntPtr[parameters.Count];
+                for (int i = 0; i < parameters.Count; i++)
+                {
+                    array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+                }
+                try
+                {
+                    vlcSrc2.SetCustomCommandLine(array, parameters.Count);
+                }
+                finally
+                {
+                    for (int i = 0; i < array.Length; i++)
+                    {
+                        Marshal.FreeHGlobal(array[i]);
+                    }
+                }
+            }
+        }
+        // Set frame rate override
+        if (frameRate.HasValue)
+        {
+            var vlcSrc3 = sourceFilter as IVlcSrc3;
+            vlcSrc3?.SetDefaultFrameRate(frameRate.Value);
+        }
+        // Load file
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            int hr = vlcSrc.SetFile(filename);
+            DsError.ThrowExceptionForHR(hr);
+            // Enumerate audio tracks
+            LoadAudioTracks(vlcSrc);
+            // Enumerate subtitles
+            LoadSubtitles(vlcSrc);
+        }
+        // Build graph
+        int result = captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, null);
+        result = captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+    }
+    private void LoadAudioTracks(IVlcSrc vlcSrc)
+    {
+        AudioTracks.Clear();
+        int count = 0;
+        vlcSrc.GetAudioTracksCount(out count);
+        for (int i = 0; i < count; i++)
+        {
+            int id;
+            StringBuilder name = new StringBuilder(256);
+            vlcSrc.GetAudioTrackInfo(i, out id, name);
+            AudioTracks.Add(new AudioTrackInfo
+            {
+                Index = i,
+                Id = id,
+                Name = name.ToString()
+            });
+        }
+    }
+    private void LoadSubtitles(IVlcSrc vlcSrc)
+    {
+        Subtitles.Clear();
+        int count = 0;
+        vlcSrc.GetSubtitlesCount(out count);
+        for (int i = 0; i < count; i++)
+        {
+            int id;
+            StringBuilder name = new StringBuilder(256);
+            vlcSrc.GetSubtitleInfo(i, out id, name);
+            Subtitles.Add(new SubtitleInfo
+            {
+                Index = i,
+                Id = id,
+                Name = name.ToString()
+            });
+        }
+    }
+    public void SetVideoWindow(IntPtr handle, int width, int height)
+    {
+        if (videoWindow != null)
+        {
+            videoWindow.put_Owner(handle);
+            videoWindow.put_WindowStyle(WindowStyle.Child | WindowStyle.ClipSiblings);
+            videoWindow.SetWindowPosition(0, 0, width, height);
+            videoWindow.put_Visible(OABool.True);
+        }
+    }
+    public void Play() => mediaControl?.Run();
+    public void Pause() => mediaControl?.Pause();
+    public void Stop() => mediaControl?.Stop();
+    public void SelectAudioTrack(int trackIndex)
+    {
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null && trackIndex >= 0 && trackIndex < AudioTracks.Count)
+        {
+            vlcSrc.SetAudioTrack(AudioTracks[trackIndex].Id);
+        }
+    }
+    public void SelectSubtitle(int subtitleIndex)
+    {
+        var vlcSrc = sourceFilter as IVlcSrc;
+        if (vlcSrc != null)
+        {
+            if (subtitleIndex < 0)
+            {
+                vlcSrc.SetSubtitle(-1); // Disable
+            }
+            else if (subtitleIndex < Subtitles.Count)
+            {
+                vlcSrc.SetSubtitle(Subtitles[subtitleIndex].Id);
+            }
+        }
+    }
+    public void Seek(long timeInSeconds)
+    {
+        if (mediaSeeking != null)
+        {
+            long seekPos = timeInSeconds * 10000000;
+            mediaSeeking.SetPositions(ref seekPos, AMSeekingSeekingFlags.AbsolutePositioning,
+                                     IntPtr.Zero, AMSeekingSeekingFlags.NoPositioning);
+        }
+    }
+    public long GetPosition()
+    {
+        if (mediaSeeking != null)
+        {
+            mediaSeeking.GetCurrentPosition(out long position);
+            return position / 10000000;
+        }
+        return 0;
+    }
+    public long GetDuration()
+    {
+        if (mediaSeeking != null)
+        {
+            mediaSeeking.GetDuration(out long duration);
+            return duration / 10000000;
+        }
+        return 0;
+    }
+    public void HandleGraphEvent()
+    {
+        if (mediaEventEx != null)
+        {
+            while (mediaEventEx.GetEvent(out EventCode eventCode, out IntPtr param1,
+                                          out IntPtr param2, 0) == 0)
+            {
+                mediaEventEx.FreeEventParams(eventCode, param1, param2);
+                if (eventCode == EventCode.Complete)
+                {
+                    PlaybackComplete?.Invoke(this, EventArgs.Empty);
+                }
+            }
+        }
+    }
+    public void Dispose()
+    {
+        if (mediaControl != null)
+        {
+            mediaControl.Stop();
+        }
+        if (mediaEventEx != null)
+        {
+            mediaEventEx.SetNotifyWindow(IntPtr.Zero, 0, IntPtr.Zero);
+        }
+        if (videoWindow != null)
+        {
+            videoWindow.put_Visible(OABool.False);
+            videoWindow.put_Owner(IntPtr.Zero);
+        }
+        FilterGraphTools.RemoveAllFilters(filterGraph);
+        if (sourceFilter != null) Marshal.ReleaseComObject(sourceFilter);
+        if (videoWindow != null) Marshal.ReleaseComObject(videoWindow);
+        if (mediaSeeking != null) Marshal.ReleaseComObject(mediaSeeking);
+        if (mediaEventEx != null) Marshal.ReleaseComObject(mediaEventEx);
+        if (captureGraph != null) Marshal.ReleaseComObject(captureGraph);
+        if (mediaControl != null) Marshal.ReleaseComObject(mediaControl);
+        if (filterGraph != null) Marshal.ReleaseComObject(filterGraph);
+    }
+}
+```
+
+### Usage Example
+
+## ``` public partial class MainForm : Form { private VLCMediaPlayer player; public MainForm() { InitializeComponent(); player = new VLCMediaPlayer(); } private void btnLoad_Click(object sender, EventArgs e) { OpenFileDialog dlg = new OpenFileDialog(); dlg.Filter = "Video Files|*.mp4;*.mkv;*.avi;*.mov|All Files|*.*"; if (dlg.ShowDialog() == DialogResult.OK) { player.Initialize(panelVideo.Handle, this.Handle); // Custom VLC options for hardware decoding string vlcOptions = "--avcodec-hw=any --network-caching=1000"; player.LoadFile(dlg.FileName, vlcOptions: vlcOptions); player.SetVideoWindow(panelVideo.Handle, panelVideo.Width, panelVideo.Height); // Populate audio track combo box comboAudioTracks.Items.Clear(); foreach (var track in player.AudioTracks) { comboAudioTracks.Items.Add(track.Name); } if (comboAudioTracks.Items.Count > 0) { comboAudioTracks.SelectedIndex = 0; } // Populate subtitle combo box comboSubtitles.Items.Clear(); comboSubtitles.Items.Add("None"); foreach (var subtitle in player.Subtitles) { comboSubtitles.Items.Add(subtitle.Name); } comboSubtitles.SelectedIndex = 0; player.Play(); } } private void comboAudioTracks_SelectedIndexChanged(object sender, EventArgs e) { player.SelectAudioTrack(comboAudioTracks.SelectedIndex); } private void comboSubtitles_SelectedIndexChanged(object sender, EventArgs e) { player.SelectSubtitle(comboSubtitles.SelectedIndex - 1); // -1 because of "None" item } protected override void WndProc(ref Message m) { if (m.Msg == 0x8000 + 1) { player?.HandleGraphEvent(); } base.WndProc(ref m); } private void MainForm_FormClosing(object sender, FormClosingEventArgs e) { player?.Dispose(); } } ```
+
+## Troubleshooting
+
+### Issue: "Class not registered" Error
+
+**Solution**: Register the VLC Source build that matches your application (x86 or x64):
+
+```
+regsvr32 VisioForge_VLC_Source.ax
+regsvr32 VisioForge_VLC_Source_x64.ax
+```
+
+### Issue: Audio/Subtitle Track Count Returns 0
+
+**Cause**: Tracks not yet available (filter graph not built yet)
+
+**Solution**: Audio and subtitle information is only available after the file is loaded and the graph is built. Call track enumeration methods after `SetFile()` and building the graph.
+
+```
+// Load file first
+pVlcSrc->SetFile(L"movie.mkv");
+
+// Build filter graph
+pGraph->RenderFile(L"movie.mkv", nullptr);
+
+// NOW query tracks
+int count = 0;
+pVlcSrc->GetAudioTracksCount(&count);
+```
+
+### Issue: Custom VLC Options Not Working
+
+**Solution**: Ensure VLC options are set before loading the file, and use the correct marshaling:
+
+```
+// Correct order and usage:
+var vlcSrc2 = sourceFilter as IVlcSrc2;
+if (vlcSrc2 != null)
+{
+    var parameters = new List<string>
+    {
+        "--network-caching=1000",
+        "--rtsp-tcp"
+    };
+
+    var array = new IntPtr[parameters.Count];
+    for (int i = 0; i < parameters.Count; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+    }
+
+    try
+    {
+        vlcSrc2.SetCustomCommandLine(array, parameters.Count);  // 1. Set options first
+    }
+    finally
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
+}
+
+var vlcSrc = sourceFilter as IVlcSrc;
+vlcSrc?.SetFile(filename);  // 2. Then load file
+// Build and run graph...
+```
+
+### Issue: RTSP Stream Has High Latency
+
+**Solution**: Configure VLC for minimal network buffering and use TCP transport:
+
+```
+// C++ example
+IVlcSrc2* pVlcSrc2 = nullptr;
+hr = pFilter->QueryInterface(IID_IVlcSrc2, (void**)&pVlcSrc2);
+if (SUCCEEDED(hr))
+{
+    const char* params[] = {
+        "--network-caching=50",
+        "--live-caching=50",
+        "--rtsp-tcp",
+        "--no-audio-time-stretch"
+    };
+
+    // Convert to wide strings and then to IntPtr equivalents
+    // (In C++, you can pass ANSI/UTF-8 strings directly in some cases,
+    // but for consistency with the interface, use proper conversion)
+
+    pVlcSrc2->Release();
+}
+```
+
+```
+// C# example
+var vlcSrc2 = sourceFilter as IVlcSrc2;
+if (vlcSrc2 != null)
+{
+    var lowLatencyOptions = new List<string>
+    {
+        "--network-caching=50",
+        "--live-caching=50",
+        "--rtsp-tcp",
+        "--no-audio-time-stretch"
+    };
+
+    var array = new IntPtr[lowLatencyOptions.Count];
+    for (int i = 0; i < lowLatencyOptions.Count; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(lowLatencyOptions[i]);
+    }
+
+    try
+    {
+        vlcSrc2.SetCustomCommandLine(array, lowLatencyOptions.Count);
+    }
+    finally
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
+}
+```
+
+### Issue: Hardware Acceleration Not Working
+
+**Solution**: Explicitly specify the hardware decoder to use:
+
+```
+// C++ example - Try explicit hardware decoder
+IVlcSrc2* pVlcSrc2 = nullptr;
+hr = pFilter->QueryInterface(IID_IVlcSrc2, (void**)&pVlcSrc2);
+if (SUCCEEDED(hr))
+{
+    const char* params[] = {
+        "--avcodec-hw=d3d11va"  // For Windows 8+
+        // or "--avcodec-hw=dxva2" for Windows 7
+    };
+
+    // Proper conversion and calling required
+
+    pVlcSrc2->Release();
+}
+```
+
+```
+// C# example
+var vlcSrc2 = sourceFilter as IVlcSrc2;
+if (vlcSrc2 != null)
+{
+    var hwOptions = new List<string>
+    {
+        "--avcodec-hw=dxva2"  // or d3d11va, nvdec, any
+    };
+
+    var array = new IntPtr[hwOptions.Count];
+    for (int i = 0; i < hwOptions.Count; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(hwOptions[i]);
+    }
+
+    try
+    {
+        vlcSrc2.SetCustomCommandLine(array, hwOptions.Count);
+    }
+    finally
+    {
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
+}
+```
+
+---
+
+## See Also
+
+### Documentation
+
+- [Interface Reference](../interface-reference/) - Complete API reference
+- [Deployment Guide](../../deployment/) - Filter deployment
+
+### External Resources
+
+- [VLC Command-Line Documentation](https://www.videolan.org/doc/)
+- [DirectShow Programming Guide](https://learn.microsoft.com/en-us/windows/win32/DirectShow/directshow)
+
+---END OF PAGE---
+
+
+
+## VLC Source DirectShow Filter - 200+ Formats & Streams
+**URL:** https://www.visioforge.com/help/docs/directshow/vlc-source-filter/
+**Description:** DirectShow source filter powered by libVLC for playing 200+ formats, 4K/8K video, and RTSP/HLS/UDP network streams with hardware decoding. C++, C#, Delphi.
+**Tags:** DirectShow, C++, Windows, Streaming, Editing
+**API:** IFileSourceFilter, IBaseFilter, IVFRegister
+
+# VLC Source DirectShow Filter
+
+## Overview
+
+The VLC Source DirectShow filter empowers developers to seamlessly integrate advanced media playback capabilities into any DirectShow-based application. This powerful component enables smooth playback of various video files and network streams across multiple formats and protocols.
+
+Our SDK package delivers a complete solution with all necessary VLC player DLLs bundled alongside a flexible DirectShow filter. The package provides both standard file-selection interfaces and extensive options for custom filter configurations to match your specific development requirements.
+
+For complete product details and licensing options, visit the [product page](https://www.visioforge.com/vlc-source-directshow-filter).
+
+### Trial Version
+
+Without a license the filter works in full and marks the video instead: every frame carries a "TRIAL - VisioForge VLC Source" strip across its middle. Audio is not affected, and a source with no video carries no mark. No dialog is shown, so a trial build can run in a service or on a thread with no user interface. Pass your license key to `IVFRegister.SetLicenseKey` (see [Example 7](examples/#example-7-license-activation)) to remove the strip.
+
+---
+
+## Installation
+
+Before using the code samples and integrating the filter into your application, you must first install the VLC Source DirectShow Filter from the [product page](https://www.visioforge.com/vlc-source-directshow-filter).
+
+**Installation Steps**:
+
+1. Download the SDK installer from the product page
+2. Run the installer with administrative privileges
+3. The installer will register the VLC Source filter and deploy all necessary VLC DLLs
+4. Sample applications and source code will be available in the installation directory
+
+**Note**: The filter must be properly registered on the system before it can be used in your applications. The installer handles this automatically.
+
+---
+
+## Technical Specifications
+
+### Supported DirectShow Interfaces
+
+The filter implements these standard DirectShow interfaces for maximum compatibility:
+
+- **IAMStreamSelect** - Comprehensive video and audio stream selection capabilities
+- **IAMStreamConfig** - Advanced video and audio configuration settings
+- **IFileSourceFilter** - Flexible specification of filename or URL sources
+- **IMediaSeeking** - Robust timeline seeking and positioning support
+
+### Key Features
+
+- Hardware-accelerated decoding for optimal performance
+- Support for 4K and 8K video playback
+- Extensive format compatibility including modern codecs
+- Network stream handling (RTSP, HLS, DASH, etc.)
+- Subtitle rendering and management
+- Multi-language audio track support
+- 360° video playback capabilities
+- HDR content support
+
+## Implementation Examples
+
+### C++ Integration Example
+
+```
+#include <dshow.h>
+#include <mfapi.h>
+#include <evr.h>
+#include "ivlcsrc.h"
+
+// VLC Source Filter CLSID
+DEFINE_GUID(CLSID_VlcSource,
+    0x3fc97748, 0x7cb6, 0x4195, 0x89, 0xde, 0x07, 0x17, 0x58, 0x2a, 0x48, 0x63);
+
+HRESULT InitializeVLCSource(HWND hVideoWindow)
+{
+    HRESULT hr = S_OK;
+    IFilterGraph2* pGraph = NULL;
+    ICaptureGraphBuilder2* pBuild = NULL;
+    IMediaControl* pControl = NULL;
+    IBaseFilter* pVLCSource = NULL;
+    IBaseFilter* pVideoRenderer = NULL;
+    IFileSourceFilter* pFileSource = NULL;
+
+    // Initialize COM
+    CoInitialize(NULL);
+
+    // Create the filter graph manager
+    hr = CoCreateInstance(CLSID_FilterGraph, NULL, CLSCTX_INPROC_SERVER,
+                         IID_IFilterGraph2, (void**)&pGraph);
+    if (FAILED(hr))
+        return hr;
+
+    // Create the Capture Graph Builder
+    hr = CoCreateInstance(CLSID_CaptureGraphBuilder2, NULL, CLSCTX_INPROC_SERVER,
+                         IID_ICaptureGraphBuilder2, (void**)&pBuild);
+    if (FAILED(hr))
+        goto cleanup;
+
+    // Set the filter graph to the capture graph builder
+    hr = pBuild->SetFiltergraph(pGraph);
+    if (FAILED(hr))
+        goto cleanup;
+
+    // Create the VLC Source filter
+    hr = CoCreateInstance(CLSID_VlcSource, NULL, CLSCTX_INPROC_SERVER,
+                         IID_IBaseFilter, (void**)&pVLCSource);
+    if (FAILED(hr))
+        goto cleanup;
+
+    // Add the filter to the graph
+    hr = pGraph->AddFilter(pVLCSource, L"VLC Source");
+    if (FAILED(hr))
+        goto cleanup;
+
+    // Load the media file using IFileSourceFilter interface
+    hr = pVLCSource->QueryInterface(IID_IFileSourceFilter, (void**)&pFileSource);
+    if (SUCCEEDED(hr) && pFileSource)
+    {
+        hr = pFileSource->Load(L"C:\\media\\sample.mp4", NULL);
+        pFileSource->Release();
+        if (FAILED(hr))
+            goto cleanup;
+    }
+
+    // Create Enhanced Video Renderer (EVR)
+    CLSID CLSID_EVR = { 0xFA10746C, 0x9B63, 0x4B6C,
+        { 0xBC, 0x49, 0xFC, 0x30, 0x0E, 0xA5, 0xF2, 0x56 } };
+    hr = CoCreateInstance(CLSID_EVR, NULL, CLSCTX_INPROC_SERVER,
+                         IID_IBaseFilter, (void**)&pVideoRenderer);
+    if (FAILED(hr))
+        goto cleanup;
+
+    hr = pGraph->AddFilter(pVideoRenderer, L"EVR");
+    if (FAILED(hr))
+        goto cleanup;
+
+    // Configure EVR
+    IEVRFilterConfig* pConfig = NULL;
+    hr = pVideoRenderer->QueryInterface(IID_IEVRFilterConfig, (void**)&pConfig);
+    if (SUCCEEDED(hr) && pConfig)
+    {
+        pConfig->SetNumberOfStreams(1);
+        pConfig->Release();
+    }
+
+    // Set video window
+    IMFGetService* pGetService = NULL;
+    hr = pVideoRenderer->QueryInterface(IID_IMFGetService, (void**)&pGetService);
+    if (SUCCEEDED(hr) && pGetService)
+    {
+        IMFVideoDisplayControl* pDisplayControl = NULL;
+        hr = pGetService->GetService(MR_VIDEO_RENDER_SERVICE,
+                                     IID_IMFVideoDisplayControl,
+                                     (void**)&pDisplayControl);
+        if (SUCCEEDED(hr) && pDisplayControl)
+        {
+            pDisplayControl->SetVideoWindow(hVideoWindow);
+            pDisplayControl->Release();
+        }
+        pGetService->Release();
+    }
+
+    // Render the streams
+    hr = pBuild->RenderStream(NULL, &MEDIATYPE_Video, pVLCSource, NULL, pVideoRenderer);
+    if (FAILED(hr))
+        goto cleanup;
+
+    hr = pBuild->RenderStream(NULL, &MEDIATYPE_Audio, pVLCSource, NULL, NULL);
+    // Audio errors are not critical
+
+    // Get the media control interface for playback control
+    hr = pGraph->QueryInterface(IID_IMediaControl, (void**)&pControl);
+    if (SUCCEEDED(hr))
+    {
+        // Start playback
+        hr = pControl->Run();
+    }
+
+cleanup:
+    // Release interfaces
+    if (pControl) pControl->Release();
+    if (pVideoRenderer) pVideoRenderer->Release();
+    if (pVLCSource) pVLCSource->Release();
+    if (pBuild) pBuild->Release();
+    if (pGraph) pGraph->Release();
+
+    return hr;
+}
+```
+
+### C# Integration (.NET)
+
+```
+using System;
+using System.Runtime.InteropServices;
+using MediaFoundation;
+using MediaFoundation.EVR;
+using VisioForge.DirectShowAPI;
+using VisioForge.DirectShowLib;
+
+// Initialize the VLC Source filter in C# using DirectShowLib
+public class VLCSourcePlayer
+{
+    private IFilterGraph2 filterGraph;
+    private ICaptureGraphBuilder2 captureGraph;
+    private IMediaControl mediaControl;
+    private IMediaSeeking mediaSeeking;
+    private IMediaEventEx mediaEventEx;
+    private IBaseFilter sourceFilter;
+    private IBaseFilter videoRenderer;
+
+    public void Initialize(string filename, IntPtr videoWindowHandle)
+    {
+        try
+        {
+            // Create the filter graph manager
+            filterGraph = (IFilterGraph2)new FilterGraph();
+            captureGraph = (ICaptureGraphBuilder2)new CaptureGraphBuilder2();
+            mediaControl = (IMediaControl)filterGraph;
+            mediaSeeking = (IMediaSeeking)filterGraph;
+            mediaEventEx = (IMediaEventEx)filterGraph;
+
+            // Attach the filter graph to the capture graph
+            int hr = captureGraph.SetFiltergraph(filterGraph);
+            DsError.ThrowExceptionForHR(hr);
+
+            // Create the VLC Source filter using the correct CLSID
+            sourceFilter = FilterGraphTools.AddFilterFromClsid(
+                filterGraph,
+                Consts.CLSID_VFVLCSource,
+                "VLC Source");
+
+            // Optional: Register purchased version
+            // var reg = sourceFilter as IVFRegister;
+            // reg?.SetLicenseKey("your-license-key-here");
+
+            // Load the media file or URL using IFileSourceFilter interface
+            var sourceFilterIntf = sourceFilter as IFileSourceFilter;
+            hr = sourceFilterIntf.Load(filename, null);
+            DsError.ThrowExceptionForHR(hr);
+
+            // Create video renderer (EVR - Enhanced Video Renderer)
+            Guid CLSID_EVR = new Guid("FA10746C-9B63-4B6C-BC49-FC300EA5F256");
+            videoRenderer = FilterGraphTools.AddFilterFromClsid(filterGraph, CLSID_EVR, "EVR");
+
+            // Configure EVR
+            var evrConfig = videoRenderer as IEVRFilterConfig;
+            evrConfig?.SetNumberOfStreams(1);
+
+            // Set video window for rendering
+            var getService = videoRenderer as MediaFoundation.IMFGetService;
+            if (getService != null)
+            {
+                getService.GetService(
+                    MediaFoundation.MFServices.MR_VIDEO_RENDER_SERVICE,
+                    typeof(MediaFoundation.IMFVideoDisplayControl).GUID,
+                    out var videoDisplayControlObj);
+
+                var videoDisplayControl = videoDisplayControlObj as MediaFoundation.IMFVideoDisplayControl;
+                videoDisplayControl?.SetVideoWindow(videoWindowHandle);
+            }
+
+            // Render the streams
+            hr = captureGraph.RenderStream(null, MediaType.Video, sourceFilter, null, videoRenderer);
+            DsError.ThrowExceptionForHR(hr);
+
+            hr = captureGraph.RenderStream(null, MediaType.Audio, sourceFilter, null, null);
+            // Note: Audio rendering errors are not critical for video-only playback
+
+            // Start playback
+            hr = mediaControl.Run();
+            DsError.ThrowExceptionForHR(hr);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error initializing VLC Source: {ex.Message}");
+            Cleanup();
+            throw;
+        }
+    }
+
+    public void Cleanup()
+    {
+        // Stop playback
+        if (mediaControl != null)
+        {
+            mediaControl.StopWhenReady();
+            mediaControl.Stop();
+        }
+
+        // Stop receiving events
+        mediaEventEx?.SetNotifyWindow(IntPtr.Zero, 0, IntPtr.Zero);
+
+        // Remove all filters
+        FilterGraphTools.RemoveAllFilters(filterGraph);
+
+        // Release DirectShow interfaces
+        if (mediaControl != null)
+        {
+            Marshal.ReleaseComObject(mediaControl);
+            mediaControl = null;
+        }
+
+        if (mediaSeeking != null)
+        {
+            Marshal.ReleaseComObject(mediaSeeking);
+            mediaSeeking = null;
+        }
+
+        if (mediaEventEx != null)
+        {
+            Marshal.ReleaseComObject(mediaEventEx);
+            mediaEventEx = null;
+        }
+
+        if (sourceFilter != null)
+        {
+            Marshal.ReleaseComObject(sourceFilter);
+            sourceFilter = null;
+        }
+
+        if (videoRenderer != null)
+        {
+            Marshal.ReleaseComObject(videoRenderer);
+            videoRenderer = null;
+        }
+
+        if (captureGraph != null)
+        {
+            Marshal.ReleaseComObject(captureGraph);
+            captureGraph = null;
+        }
+
+        if (filterGraph != null)
+        {
+            Marshal.ReleaseComObject(filterGraph);
+            filterGraph = null;
+        }
+    }
+}
+```
+
+**Key CLSIDs and GUIDs:**
+
+```
+// VLC Source Filter CLSID
+public static readonly Guid CLSID_VFVLCSource = new Guid("3FC97748-7CB6-4195-89DE-0717582A4863");
+
+// IVlcSrc Interface IID
+[Guid("77493EB7-6D00-41C5-9535-7C593824E892")]
+public interface IVlcSrc { /* ... */ }
+
+// IVlcSrc2 Interface IID (for custom command-line parameters)
+[Guid("CCE122C0-172C-4626-B4B6-42B039E541CB")]
+public interface IVlcSrc2 : IVlcSrc { /* ... */ }
+
+// IVlcSrc3 Interface IID (for frame rate override)
+[Guid("3DFBED0C-E4A8-401C-93EF-CBBFB65223DD")]
+public interface IVlcSrc3 : IVlcSrc2 { /* ... */ }
+
+// IVFRegister Interface IID (for licensing)
+[Guid("59E82754-B531-4A8E-A94D-57C75F01DA30")]
+public interface IVFRegister { /* ... */ }
+```
+
+**Required NuGet Packages:**
+
+- `VisioForge.DirectShowAPI` - DirectShow wrapper library
+- `MediaFoundation.NET` - Media Foundation wrapper for EVR renderer
+
+**Audio Track Selection Example:**
+
+```
+// Enumerate and select audio tracks
+var vlcSrc = sourceFilter as IVlcSrc;
+if (vlcSrc != null)
+{
+    int audioCount = 0;
+    vlcSrc.GetAudioTracksCount(out audioCount);
+
+    for (int i = 0; i < audioCount; i++)
+    {
+        int trackId;
+        var trackName = new StringBuilder(256);
+        vlcSrc.GetAudioTrackInfo(i, out trackId, trackName);
+
+        Console.WriteLine($"Track {i}: {trackName} (ID: {trackId})");
+    }
+
+    // Select specific audio track
+    if (audioCount > 1)
+    {
+        int desiredTrackId;
+        var name = new StringBuilder(256);
+        vlcSrc.GetAudioTrackInfo(1, out desiredTrackId, name);
+        vlcSrc.SetAudioTrack(desiredTrackId);
+    }
+}
+```
+
+**Custom VLC Options Example:**
+
+`IVlcSrc2::SetCustomCommandLine` takes an array of UTF-8 native strings (`char* params[]` in `ivlcsrc.h`), not a managed `string[]`. The C# wrapper marshals the parameters as `IntPtr[]` of unmanaged UTF-8 buffers — allocate with `StringHelper.NativeUtf8FromString()` and free with `Marshal.FreeHGlobal()` after the call. Passing a raw `string[]` would marshal as ANSI and corrupt non-ASCII flags.
+
+```
+// Configure VLC for low-latency RTSP streaming
+var vlcSrc2 = sourceFilter as IVlcSrc2;
+if (vlcSrc2 != null)
+{
+    var parameters = new[]
+    {
+        "--network-caching=300",     // Low network buffer
+        "--rtsp-tcp",                // Force TCP for RTSP
+        "--avcodec-hw=any",          // Enable hardware decoding
+        "--live-caching=300"         // Low live stream buffer
+    };
+
+    // Convert managed strings to native UTF-8 IntPtr array
+    var array = new IntPtr[parameters.Length];
+    for (int i = 0; i < parameters.Length; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+    }
+
+    try
+    {
+        int hr = vlcSrc2.SetCustomCommandLine(array, parameters.Length);
+        DsError.ThrowExceptionForHR(hr);
+    }
+    finally
+    {
+        // Free unmanaged UTF-8 buffers
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
+
+    // Then load the stream
+    var vlcSrc = vlcSrc2 as IVlcSrc;
+    vlcSrc?.SetFile("rtsp://192.168.1.100/stream");
+}
+```
+
+See [examples.md](examples/) for the canonical helper pattern reused across multiple scenarios (Example 4 binary key with custom flags, low-latency variants, etc.).
+
+## Version History
+
+### Version 2026.10.23
+
+- Updated to VLC v3.0.24 core (FFmpeg 8.1 decoders, upstream security fixes)
+- New native Windows ARM64 build, `VisioForge_VLC_Source_arm64.ax`, available in the `VisioForge.DotNet.Core.Redist.VLC.arm64` NuGet package (the installer remains x86/x64)
+- libVLC 3.0.24 no longer includes the RealRTSP, Schroedinger (Dirac) and SDL\_image modules or the YouTube playlist script, so RealRTSP streams, Dirac video and YouTube page URLs no longer open
+
+### Version 2026.3.4
+
+- Updated to VLC v3.0.23 core
+- Upgraded build toolset to MSVC v143 (Visual Studio 2022)
+- Fixed crash on graph teardown during `libvlc_media_player_stop()`
+- Replaced Boost dependencies with C++ standard library equivalents
+
+### Version 15.0
+
+- Enhanced playback quality across numerous formats
+- Improved subtitle rendering engine
+- Updated codec implementations including dav1d, ffmpeg, and libvpx
+- Added Super Resolution scaling with nVidia and Intel GPU acceleration
+
+### Version 14.0
+
+- Updated to VLC v3.0.18 core
+- Fixed DxVA/D3D11 compatibility issues with HEVC content
+- Resolved OpenGL resizing problems for smoother playback
+
+### Version 12.0
+
+- Upgraded to VLC v3.0.16 engine
+- Added support for new Fourcc formats (E-AC3 and AV1)
+- Fixed stability issues with VP9 streams
+
+### Version 11.1
+
+- Incorporated VLC v3.0.11
+- Optimized HLS playlist update mechanism
+- Enhanced WebVTT subtitle handling and display
+
+### Version 11.0
+
+- Built on VLC v3.0.10 foundation
+- Fixed critical regression issues with HLS streams
+
+### Version 10.4
+
+- Major update to VLC 3.0 architecture
+- Enabled hardware decoding by default for 4K and 8K content
+- Added 10-bit color depth and HDR support
+- Implemented 360-degree video and 3D audio capabilities
+- Introduced Blu-Ray Java menu support
+
+### Version 10.0
+
+- Initial release as a standalone DirectShow filter
+- For earlier version history, please refer to Video Capture SDK .NET changelog
+
+## Additional Resources
+
+- [End User License Agreement](../../eula/)
+- [Code Samples](https://github.com/visioforge/)
+
+---END OF PAGE---
+
+
+
+## VLC Source DirectShow Filter Full Interface Reference
+**URL:** https://www.visioforge.com/help/docs/directshow/vlc-source-filter/interface-reference/
+**Description:** IVlcSrc family interfaces for multi-track audio, subtitle support, and custom VLC command-line options in DirectShow applications.
+**Tags:** DirectShow, C++, Windows, IP Camera, RTSP, HLS, MP4, MKV, C#
+**API:** IBaseFilter
+
+# VLC Source Filter Interface Reference
+
+## Overview
+
+The VLC Source DirectShow filter exposes three progressive interfaces (`IVlcSrc`, `IVlcSrc2`, `IVlcSrc3`) that provide comprehensive control over media playback, audio/subtitle track selection, and VLC configuration. These interfaces enable developers to leverage VLC's powerful media framework within DirectShow applications.
+
+## Interface Hierarchy
+
+```
+IUnknown
+  └── IVlcSrc
+        └── IVlcSrc2
+              └── IVlcSrc3
+```
+
+Each interface extends the previous one, adding new capabilities while maintaining backward compatibility.
+
+---
+
+## IVlcSrc Interface
+
+The base interface providing essential file loading and track selection capabilities.
+
+### Interface Definition
+
+- **Interface Name**: `IVlcSrc`
+- **GUID**: `{77493EB7-6D00-41C5-9535-7C593824E892}`
+- **Inherits From**: `IUnknown`
+- **Header File**: `ivlcsrc.h` (C++), `IVlcSrc.cs` (.NET)
+
+### Methods
+
+#### SetFile
+
+Sets the media file or URL to play. **Syntax (C++)**:
+
+```
+HRESULT SetFile(WCHAR *file);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int SetFile([MarshalAs(UnmanagedType.LPWStr)] string file);
+```
+
+**Parameters**: - `file`: Wide-character string containing the file path or URL. **Returns**: `S_OK` (0) on success, error code otherwise. **Supported Sources**: - Local files: `C:\Videos\movie.mp4` - HTTP streams: `https://example.com/stream.m3u8` - RTSP streams: `rtsp://example.com/live` - HLS playlists: `https://example.com/playlist.m3u8` - DASH streams: `https://example.com/manifest.mpd` - DVB-T/C/S broadcasts - Network shares: `\\server\share\video.mkv` **Example (C++)**:
+
+```
+IVlcSrc* pVlcSrc = nullptr;
+pFilter->QueryInterface(IID_IVlcSrc, (void**)&pVlcSrc);
+pVlcSrc->SetFile(L"C:\\Videos\\movie.mkv");
+pVlcSrc->Release();
+```
+
+**Example (C#)**:
+
+```
+var vlcSrc = filter as IVlcSrc;
+if (vlcSrc != null)
+{
+    vlcSrc.SetFile(@"C:\Videos\movie.mkv");
+}
+```
+
+---
+
+### Audio Track Management
+
+#### GetAudioTracksCount
+
+Retrieves the total number of available audio tracks.
+
+**Syntax (C++)**:
+
+```
+HRESULT GetAudioTracksCount(int *count);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int GetAudioTracksCount(out int count);
+```
+
+**Parameters**:
+
+- `count`: [out] Receives the number of audio tracks.
+
+**Returns**: `S_OK` (0) on success.
+
+**Usage Notes**:
+
+- Call after the file is loaded and the filter graph is built
+- Returns 0 if no audio tracks are available or file not loaded
+
+**Example (C++)**:
+
+```
+int audioCount = 0;
+pVlcSrc->GetAudioTracksCount(&audioCount);
+printf("Audio tracks: %d\n", audioCount);
+```
+
+---
+
+#### GetAudioTrackInfo
+
+Retrieves information about a specific audio track. **Syntax (C++)**:
+
+```
+HRESULT GetAudioTrackInfo(int number, int *id, WCHAR *name);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int GetAudioTrackInfo(int number, out int id,
+                      [MarshalAs(UnmanagedType.LPWStr)] StringBuilder name);
+```
+
+**Parameters**: - `number`: Zero-based track index (0 to count-1). - `id`: [out] Receives the track ID. - `name`: [out] Buffer to receive the track name (must be pre-allocated, minimum 256 characters). **Returns**: `S_OK` (0) on success. **Usage Notes**: - Pre-allocate name buffer with at least 256 wide characters - Track names typically include language and codec information - Track ID is used with SetAudioTrack() **Example (C++)**:
+
+```
+int audioCount = 0;
+pVlcSrc->GetAudioTracksCount(&audioCount);
+for (int i = 0; i < audioCount; i++)
+{
+    int id = 0;
+    WCHAR name[256] = {0};
+    pVlcSrc->GetAudioTrackInfo(i, &id, name);
+    wprintf(L"Track %d - ID: %d, Name: %s\n", i, id, name);
+}
+```
+
+**Example (C#)**:
+
+```
+int count = 0;
+vlcSrc.GetAudioTracksCount(out count);
+for (int i = 0; i < count; i++)
+{
+    int id;
+    var name = new StringBuilder(256);
+    vlcSrc.GetAudioTrackInfo(i, out id, name);
+    Console.WriteLine($"Track {i} - ID: {id}, Name: {name}");
+}
+```
+
+---
+
+#### GetAudioTrack
+
+Retrieves the ID of the currently active audio track.
+
+**Syntax (C++)**:
+
+```
+HRESULT GetAudioTrack(int *id);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int GetAudioTrack(out int id);
+```
+
+**Parameters**:
+
+- `id`: [out] Receives the current audio track ID.
+
+**Returns**: `S_OK` (0) on success.
+
+**Example (C++)**:
+
+```
+int currentTrack = 0;
+pVlcSrc->GetAudioTrack(&currentTrack);
+printf("Current audio track ID: %d\n", currentTrack);
+```
+
+---
+
+#### SetAudioTrack
+
+Sets the active audio track by ID. **Syntax (C++)**:
+
+```
+HRESULT SetAudioTrack(int id);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int SetAudioTrack(int id);
+```
+
+**Parameters**: - `id`: The track ID to activate (obtained from GetAudioTrackInfo). **Returns**: `S_OK` (0) on success, error code if track ID is invalid. **Usage Notes**: - Can be called during playback to switch tracks dynamically - Use -1 to disable all audio tracks - Track switching may cause brief audio interruption **Example (C++)**:
+
+```
+// Switch to second audio track
+int trackId = 0;
+pVlcSrc->GetAudioTrackInfo(1, &trackId, nullptr);
+pVlcSrc->SetAudioTrack(trackId);
+```
+
+**Example (C#)**:
+
+```
+// Switch to first audio track
+int trackId;
+var name = new StringBuilder(256);
+vlcSrc.GetAudioTrackInfo(0, out trackId, name);
+vlcSrc.SetAudioTrack(trackId);
+```
+
+---
+
+### Subtitle Track Management
+
+#### GetSubtitlesCount
+
+Retrieves the total number of available subtitle tracks.
+
+**Syntax (C++)**:
+
+```
+HRESULT GetSubtitlesCount(int *count);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int GetSubtitlesCount(out int count);
+```
+
+**Parameters**:
+
+- `count`: [out] Receives the number of subtitle tracks.
+
+**Returns**: `S_OK` (0) on success.
+
+**Example (C++)**:
+
+```
+int subtitleCount = 0;
+pVlcSrc->GetSubtitlesCount(&subtitleCount);
+printf("Subtitle tracks: %d\n", subtitleCount);
+```
+
+---
+
+#### GetSubtitleInfo
+
+Retrieves information about a specific subtitle track. **Syntax (C++)**:
+
+```
+HRESULT GetSubtitleInfo(int number, int *id, WCHAR *name);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int GetSubtitleInfo(int number, out int id,
+                    [MarshalAs(UnmanagedType.LPWStr)] StringBuilder name);
+```
+
+**Parameters**: - `number`: Zero-based track index (0 to count-1). - `id`: [out] Receives the subtitle track ID. - `name`: [out] Buffer to receive the subtitle track name (minimum 256 characters). **Returns**: `S_OK` (0) on success. **Example (C++)**:
+
+```
+int subCount = 0;
+pVlcSrc->GetSubtitlesCount(&subCount);
+for (int i = 0; i < subCount; i++)
+{
+    int id = 0;
+    WCHAR name[256] = {0};
+    pVlcSrc->GetSubtitleInfo(i, &id, name);
+    wprintf(L"Subtitle %d - ID: %d, Name: %s\n", i, id, name);
+}
+```
+
+---
+
+#### GetSubtitle
+
+Retrieves the ID of the currently active subtitle track.
+
+**Syntax (C++)**:
+
+```
+HRESULT GetSubtitle(int *id);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int GetSubtitle(out int id);
+```
+
+**Parameters**:
+
+- `id`: [out] Receives the current subtitle track ID.
+
+**Returns**: `S_OK` (0) on success.
+
+---
+
+#### SetSubtitle
+
+Sets the active subtitle track by ID. **Syntax (C++)**:
+
+```
+HRESULT SetSubtitle(int id);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int SetSubtitle(int id);
+```
+
+**Parameters**: - `id`: The subtitle track ID to activate. **Returns**: `S_OK` (0) on success. **Usage Notes**: - Use -1 to disable subtitles - Subtitle rendering is performed by VLC's internal renderer - Can be switched during playback **Example (C++)**:
+
+```
+// Enable first subtitle track
+int subtitleId = 0;
+pVlcSrc->GetSubtitleInfo(0, &subtitleId, nullptr);
+pVlcSrc->SetSubtitle(subtitleId);
+// Disable subtitles
+pVlcSrc->SetSubtitle(-1);
+```
+
+---
+
+## IVlcSrc2 Interface
+
+Extends `IVlcSrc` with custom VLC command-line parameter support.
+
+### Interface Definition
+
+- **Interface Name**: `IVlcSrc2`
+- **GUID**: `{CCE122C0-172C-4626-B4B6-42B039E541CB}`
+- **Inherits From**: `IVlcSrc`
+- **Header File**: `ivlcsrc.h` (C++), `IVlcSrc.cs` (.NET)
+
+### Methods
+
+#### SetCustomCommandLine
+
+Sets custom VLC command-line parameters.
+
+**Syntax (C++)**:
+
+```
+HRESULT SetCustomCommandLine(char* params[], int length);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int SetCustomCommandLine([In][Out][MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.LPStr)] IntPtr[] params_,
+                         int size);
+```
+
+**Parameters**:
+
+- `params_`: Array of IntPtr pointers to UTF-8 encoded strings containing VLC command-line parameters.
+- `size`: Number of parameters in the array.
+
+**Returns**: `S_OK` (0) on success.
+
+**Usage Notes**:
+
+- Must be called **before** loading the media file with SetFile()
+- Parameters must be converted to native UTF-8 IntPtr using StringHelper.NativeUtf8FromString()
+- Memory allocated for IntPtr parameters must be freed after the call using Marshal.FreeHGlobal()
+- Parameters are passed directly to libVLC initialization
+- Invalid parameters are ignored with warnings in VLC log
+- Use standard VLC command-line syntax (see VLC documentation)
+
+**Common VLC Parameters**:
+
+| Parameter | Description | Example Value |
+| --- | --- | --- |
+| `--network-caching` | Network caching in ms | `1000` |
+| `--file-caching` | File caching in ms | `300` |
+| `--live-caching` | Live stream caching in ms | `300` |
+| `--avcodec-hw` | Hardware acceleration | `any`, `dxva2`, `d3d11va` |
+| `--verbose` | Logging verbosity | `2` |
+| `--rtsp-tcp` | Force RTSP over TCP | (flag, no value) |
+| `--no-audio` | Disable audio | (flag, no value) |
+| `--sout-mux-caching` | Output muxer caching | `1000` |
+
+**Example (C++)**:
+
+```
+IVlcSrc2* pVlcSrc2 = nullptr;
+pFilter->QueryInterface(IID_IVlcSrc2, (void**)&pVlcSrc2);
+
+// Configure for low-latency RTSP
+char* params[] = {
+    "--network-caching=300",
+    "--rtsp-tcp",
+    "--avcodec-hw=d3d11va",
+    "--verbose=2"
+};
+
+pVlcSrc2->SetCustomCommandLine(params, 4);
+pVlcSrc2->SetFile(L"rtsp://192.168.1.100/stream");
+
+pVlcSrc2->Release();
+```
+
+**Example (C#)**:
+
+```
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using VisioForge.Core.Helpers;
+
+var vlcSrc2 = filter as IVlcSrc2;
+if (vlcSrc2 != null)
+{
+    // Enable hardware acceleration and adjust caching
+    var parameters = new List<string>
+    {
+        "--avcodec-hw=any",
+        "--network-caching=1000",
+        "--file-caching=300"
+    };
+
+    // Convert strings to native UTF-8 IntPtr array
+    var array = new IntPtr[parameters.Count];
+    for (int i = 0; i < parameters.Count; i++)
+    {
+        array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+    }
+
+    try
+    {
+        vlcSrc2.SetCustomCommandLine(array, parameters.Count);
+        vlcSrc2.SetFile(@"C:\Videos\movie.mkv");
+    }
+    finally
+    {
+        // Free allocated unmanaged memory
+        for (int i = 0; i < array.Length; i++)
+        {
+            Marshal.FreeHGlobal(array[i]);
+        }
+    }
+}
+```
+
+**Example (Delphi)**:
+
+libVLC parses the command line as **UTF-8**, not the system ANSI codepage. `PAnsiChar` literals are ASCII-safe but corrupt non-ASCII characters; encode each parameter to UTF-8 explicitly via `UTF8Encode` (or store an `AnsiString` with `CP_UTF8`). For a pure-ASCII parameter set, `PAnsiChar` literals happen to round-trip cleanly, but the snippet below uses the safe pattern.
+
+```
+var
+  VlcSrc2: IVlcSrc2;
+  P0, P1, P2: AnsiString;
+  Params: array[0..2] of PAnsiChar;
+begin
+  if Succeeded(Filter.QueryInterface(IID_IVlcSrc2, VlcSrc2)) then
+  begin
+    P0 := UTF8Encode('--network-caching=500');
+    P1 := UTF8Encode('--rtsp-tcp');
+    P2 := UTF8Encode('--avcodec-hw=dxva2');
+    Params[0] := PAnsiChar(P0);
+    Params[1] := PAnsiChar(P1);
+    Params[2] := PAnsiChar(P2);
+
+    VlcSrc2.SetCustomCommandLine(@Params, 3);
+    VlcSrc2.SetFile('rtsp://example.com/stream');
+  end;
+end;
+```
+
+---
+
+## IVlcSrc3 Interface
+
+Extends `IVlcSrc2` with frame rate override capability.
+
+### Interface Definition
+
+- **Interface Name**: `IVlcSrc3`
+- **GUID**: `{3DFBED0C-E4A8-401C-93EF-CBBFB65223DD}`
+- **Inherits From**: `IVlcSrc2`
+- **Header File**: `ivlcsrc.h` (C++), `IVlcSrc.cs` (.NET)
+
+### Methods
+
+#### SetDefaultFrameRate
+
+Sets a default frame rate for media without frame rate information. **Syntax (C++)**:
+
+```
+HRESULT SetDefaultFrameRate(double frameRate);
+```
+
+**Syntax (C#)**:
+
+```
+[PreserveSig]
+int SetDefaultFrameRate(double frameRate);
+```
+
+**Parameters**: - `frameRate`: Frame rate in frames per second (e.g., 29.97, 30.0, 25.0, 60.0). **Returns**: `S_OK` (0) on success. **Usage Notes**: - Must be called **before** loading the media file - Used when source media doesn't specify frame rate - Particularly useful for network streams without timing information - Common values: 23.976, 24.0, 25.0, 29.97, 30.0, 50.0, 59.94, 60.0 **Example (C++)**:
+
+```
+IVlcSrc3* pVlcSrc3 = nullptr;
+pFilter->QueryInterface(IID_IVlcSrc3, (void**)&pVlcSrc3);
+// Set default frame rate for MJPEG IP camera stream
+pVlcSrc3->SetDefaultFrameRate(30.0);
+pVlcSrc3->SetFile(L"http://192.168.1.50/video.mjpg");
+pVlcSrc3->Release();
+```
+
+**Example (C#)**:
+
+```
+var vlcSrc3 = filter as IVlcSrc3;
+if (vlcSrc3 != null)
+{
+    // Set PAL frame rate for DV stream
+    vlcSrc3.SetDefaultFrameRate(25.0);
+    vlcSrc3.SetFile(@"dv://0");
+}
+```
+
+---
+
+## Complete Usage Examples
+
+### Example 1: Multi-Language Movie Playback (C++)
+
+```
+#include <dshow.h>
+#include "ivlcsrc.h"
+
+void PlayMovieWithAudioSelection(IBaseFilter* pVlcFilter)
+{
+    HRESULT hr;
+    IVlcSrc* pVlcSrc = nullptr;
+
+    hr = pVlcFilter->QueryInterface(IID_IVlcSrc, (void**)&pVlcSrc);
+    if (FAILED(hr))
+        return;
+
+    // Load movie
+    pVlcSrc->SetFile(L"C:\\Movies\\multilang_movie.mkv");
+
+    // Build and run the graph here...
+    // (IGraphBuilder::RenderFile, IMediaControl::Run, etc.)
+
+    // Enumerate audio tracks
+    int audioCount = 0;
+    pVlcSrc->GetAudioTracksCount(&audioCount);
+
+    wprintf(L"Available audio tracks:\n");
+    for (int i = 0; i < audioCount; i++)
+    {
+        int id = 0;
+        WCHAR name[256] = {0};
+        pVlcSrc->GetAudioTrackInfo(i, &id, name);
+        wprintf(L"  [%d] %s (ID: %d)\n", i, name, id);
+    }
+
+    // Select English audio track (assuming it's track 1)
+    int englishTrackId = 0;
+    pVlcSrc->GetAudioTrackInfo(1, &englishTrackId, nullptr);
+    pVlcSrc->SetAudioTrack(englishTrackId);
+
+    // Enable subtitles
+    int subCount = 0;
+    pVlcSrc->GetSubtitlesCount(&subCount);
+    if (subCount > 0)
+    {
+        int subId = 0;
+        pVlcSrc->GetSubtitleInfo(0, &subId, nullptr);
+        pVlcSrc->SetSubtitle(subId);
+    }
+
+    pVlcSrc->Release();
+}
+```
+
+### Example 2: Low-Latency RTSP Stream (C#)
+
+```
+using System;
+using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Text;
+using DirectShowLib;
+using VisioForge.Core.Helpers;
+using VisioForge.DirectShowAPI;
+
+public class VLCRTSPPlayer
+{
+    public void SetupLowLatencyRTSP(IBaseFilter vlcFilter)
+    {
+        // Get IVlcSrc3 interface (highest version)
+        var vlcSrc3 = vlcFilter as IVlcSrc3;
+        if (vlcSrc3 == null)
+            throw new NotSupportedException("IVlcSrc3 not available");
+
+        // Configure VLC for minimal latency
+        var parameters = new List<string>
+        {
+            "--network-caching=50",       // Minimal network buffer
+            "--live-caching=50",          // Minimal live buffer
+            "--rtsp-tcp",                 // Use TCP transport
+            "--no-audio-time-stretch",    // Disable audio stretching
+            "--avcodec-hw=d3d11va",      // Hardware decoding
+            "--verbose=0"                 // Reduce logging
+        };
+
+        // Convert to IntPtr array
+        var array = new IntPtr[parameters.Count];
+        for (int i = 0; i < parameters.Count; i++)
+        {
+            array[i] = StringHelper.NativeUtf8FromString(parameters[i]);
+        }
+
+        try
+        {
+            int hr = vlcSrc3.SetCustomCommandLine(array, parameters.Count);
+            DsError.ThrowExceptionForHR(hr);
+
+            // Set frame rate for IP camera
+            hr = vlcSrc3.SetDefaultFrameRate(25.0);
+            DsError.ThrowExceptionForHR(hr);
+
+            // Load RTSP stream
+            hr = vlcSrc3.SetFile("rtsp://admin:password@192.168.1.100:554/stream1");
+            DsError.ThrowExceptionForHR(hr);
+        }
+        finally
+        {
+            // Free allocated memory
+            for (int i = 0; i < array.Length; i++)
+            {
+                Marshal.FreeHGlobal(array[i]);
+            }
+        }
+
+        // Build filter graph and start playback...
+    }
+}
+```
+
+### Example 3: Subtitle Track Switching UI (Delphi)
+
+```
+unit VLCSubtitles;
+
+interface
+
+uses
+  Winapi.Windows, System.Classes, Vcl.Controls, Vcl.StdCtrls,
+  DSPack, ivlcsrc;
+
+type
+  TSubtitleForm = class(TForm)
+    ComboBoxSubtitles: TComboBox;
+    procedure FormCreate(Sender: TObject);
+    procedure ComboBoxSubtitlesChange(Sender: TObject);
+  private
+    FVlcSrc: IVlcSrc;
+    FSubtitleIDs: TArray<Integer>;
+    procedure LoadSubtitleTracks;
+  public
+    procedure SetVLCFilter(Filter: IBaseFilter);
+  end;
+
+implementation
+
+procedure TSubtitleForm.SetVLCFilter(Filter: IBaseFilter);
+begin
+  if Succeeded(Filter.QueryInterface(IID_IVlcSrc, FVlcSrc)) then
+  begin
+    LoadSubtitleTracks;
+  end;
+end;
+
+procedure TSubtitleForm.LoadSubtitleTracks;
+var
+  Count, I, ID: Integer;
+  Name: array[0..255] of WideChar;
+begin
+  ComboBoxSubtitles.Clear;
+  ComboBoxSubtitles.Items.Add('Disabled');
+
+  if FVlcSrc.GetSubtitlesCount(Count) = S_OK then
+  begin
+    SetLength(FSubtitleIDs, Count + 1);
+    FSubtitleIDs[0] := -1; // Disabled
+
+    for I := 0 to Count - 1 do
+    begin
+      if FVlcSrc.GetSubtitleInfo(I, ID, Name) = S_OK then
+      begin
+        FSubtitleIDs[I + 1] := ID;
+        ComboBoxSubtitles.Items.Add(Name);
+      end;
+    end;
+  end;
+
+  ComboBoxSubtitles.ItemIndex := 0;
+end;
+
+procedure TSubtitleForm.ComboBoxSubtitlesChange(Sender: TObject);
+var
+  Index: Integer;
+begin
+  Index := ComboBoxSubtitles.ItemIndex;
+  if (Index >= 0) and (Index < Length(FSubtitleIDs)) then
+  begin
+    FVlcSrc.SetSubtitle(FSubtitleIDs[Index]);
+  end;
+end;
+
+end.
+```
+
+## Best Practices
+
+### Track Management
+
+1. **Always enumerate tracks after building the filter graph** - Track information is not available until the source is loaded
+2. **Handle files with no audio/subtitles gracefully** - Check count before accessing tracks
+3. **Pre-allocate name buffers with 256 characters** - Prevents buffer overruns
+4. **Cache track IDs** - Don't repeatedly call GetAudioTrackInfo/GetSubtitleInfo
+
+### VLC Configuration
+
+1. **Use IVlcSrc3 when available** - Provides full feature set
+2. **Set custom parameters before loading file** - Parameters only apply at initialization
+3. **Test VLC parameters independently** - Use VLC command-line to verify parameters work
+4. **Use appropriate caching values**:
+5. Local files: 300ms
+6. Network streams: 1000-3000ms
+7. Low-latency streams: 50-300ms
+
+### Hardware Acceleration
+
+1. **Enable hardware decoding for H.264/H.265**:
+
+```
+"--avcodec-hw=any"  // Auto-detect best method
+```
+
+1. **Platform-specific options**:
+2. Windows: `d3d11va`, `dxva2`
+3. All platforms: `any` (auto-detect)
+
+### Performance
+
+1. **Minimize network caching for live streams** - Reduces latency
+2. **Use RTSP over TCP when UDP fails** - More reliable through firewalls
+3. **Enable verbose logging for debugging only** - Reduces performance overhead
+
+## Related Interfaces
+
+- **IFileSourceFilter** - Alternative standard DirectShow interface for loading files
+- **IAMStreamSelect** - DirectShow standard for stream selection (also supported by VLC filter)
+- **IMediaSeeking** - Seek control in media
+- **IBasicVideo** - Video window control
+
+## See Also
+
+- [VLC Source Filter Overview](../)
+- [VLC Command-Line Documentation](https://www.videolan.org/doc/)
+- [Code Examples](../examples/)
+
+---END OF PAGE---
+
+

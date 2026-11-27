@@ -143,6 +143,6 @@ VisioForge expose déjà trois autres surfaces destinées aux agents IA — Agen
 | Surface | Forme | Idéal pour |
 |---|---|---|
 | `mcp.visioforge.com/mcp` (via `/.well-known/mcp.json` + `/.well-known/mcp-server-card`) | Serveur MCP en direct avec 14 outils de documentation en lecture seule | Interroger la surface API du SDK, rechercher des media blocks, récupérer des exemples de code |
-| `/llms.txt`, `/llms-full.txt` | Index de documentation adapté aux LLM | Ingestion en masse du corpus documentaire |
+| `/llms.txt`, `/llms-full.txt` | Index de documentation adapté aux LLM | Ingestion en masse du corpus documentaire : `/llms-full.txt` liste les fichiers en texte intégral, un par section, sous `/help/llms-full/` |
 | `<meta name="x-webmcp-tools">` + runtime WebMCP | 10 outils intégrés à la page, enregistrés via `navigator.modelContext.provideContext()` | Agent agissant dans l'onglet de navigateur actuel de l'utilisateur (changement de langue, plan de la page, copie de code, …) |
 | **`/.well-known/agent-skills/index.json`** | **Archives de skills procéduraux par (SDK, plateforme)** | **Démarrer un nouveau projet utilisant l'un de nos SDK** |

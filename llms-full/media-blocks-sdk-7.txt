@@ -1,0 +1,2429 @@
+# VisioForge — Media Blocks SDK, part 7 of 7
+
+> Full text of 4 pages. All parts: https://www.visioforge.com/llms-full.txt; index: https://www.visioforge.com/llms.txt.
+
+**Author:** VisioForge
+**License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
+**Generated:** 2026-11-27 20:41:07 UTC (c5e129a2023)
+**MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
+
+---
+
+## Video Overlay Manager - Text, Image, PiP Layers in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoProcessing/OverlayManagerBlock/
+**Description:** Add text, images, shapes, and PiP overlays to live video using VisioForge Media Blocks SDK OverlayManagerBlock with real-time layer management.
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, Linux, Android, iOS, GStreamer, Playback, Streaming, Effects, Decklink, NDI Source, RTSP, NDI, MP4, GIF, C#
+**API:** OverlayManagerBlock, OverlayManagerShadowSettings, VideoView, FontSettings, IVideoView, IOverlayManagerDrawable
+
+# Overlay Manager Block usage guide
+
+## Overview
+
+The `OverlayManagerBlock` is a powerful MediaBlocks component that provides dynamic multi-layer video overlay composition and management. It allows you to add various overlay elements (images, text, shapes, animations) on top of video content with real-time updates, layer management, and advanced features like shadows, rotation, and opacity control.
+
+## Key Features
+
+- **Multiple Overlay Types**: Text, scrolling text, images, image sequences, GIFs, SVG, shapes (rectangles, circles, triangles, stars, lines), video files/URLs, live video (NDI, Decklink), WebView2 web content (Windows), WPF controls (Windows)
+- **Video File Overlays**: Play video files or stream URLs as overlays with full playback control and optional audio output
+- **WPF Control Overlays**: Render live WPF elements with animations and data binding as video overlays (Windows only)
+- **Overlay Groups**: Synchronize multiple overlays for coordinated start/stop with preloading support
+- **Squeezeback Effects**: Scale video to a custom rectangle with overlay image on top (broadcast-style)
+- **Video Transformations**: Zoom and pan effects that transform the entire video frame
+- **Animation Support**: Animate video position/scale with easing functions
+- **Fade Effects**: Fade in/out for video and overlay elements
+- **Layer Management**: Z-index ordering for proper overlay stacking
+- **Advanced Effects**: Shadows, rotation, opacity, custom positioning
+- **Real-time Updates**: Dynamic overlay modification during playback
+- **Time-based Display**: Show/hide overlays at specific timestamps
+- **Custom Drawing**: Callback support for custom Cairo drawing operations, plus a `IOverlayManagerDrawable` contract for user-defined element types
+- **Live Video Sources**: Support for NDI network sources and Decklink capture cards
+- **Cross-platform**: Works on Windows, Linux, macOS, iOS, and Android
+
+## Class Reference
+
+### OverlayManagerBlock
+
+**Namespace**: `VisioForge.Core.MediaBlocks.VideoProcessing`
+
+```
+public class OverlayManagerBlock : MediaBlock, IMediaBlockInternals
+```
+
+#### Properties
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Type` | `MediaBlockType` | Returns `MediaBlockType.OverlayManager` |
+| `Input` | `MediaBlockPad` | Video input pad |
+| `Output` | `MediaBlockPad` | Video output pad with overlays |
+
+#### Methods
+
+##### Static Methods
+
+```
+public static bool IsAvailable()
+```
+
+Checks if the overlay manager is available in the current environment (requires Cairo overlay support).
+
+##### Instance Methods
+
+```
+public void Video_Overlay_Add(IOverlayManagerElement overlay)
+```
+
+Adds a new overlay element to the video composition. Throws `ObjectDisposedException` for a disposed `OverlayManagerSVG`, `OverlayManagerGIF`, `OverlayManagerImage` or `OverlayManagerGroup`, which would draw nothing. `Video_Overlay_Remove`, `Video_Overlay_RemoveAt` and `Video_Overlay_Clear` dispose them: create a new one to add it again. A removed `OverlayManagerVideo` needs `Initialize` again before it draws.
+
+```
+public void Video_Overlay_Remove(IOverlayManagerElement overlay)
+```
+
+Removes a specific overlay element and disposes it if it implements `IDisposable`.
+
+```
+public void Video_Overlay_RemoveAt(int index)
+```
+
+Removes an overlay at the specified index and disposes it if it implements `IDisposable`.
+
+```
+public void Video_Overlay_Clear()
+```
+
+Removes all overlay elements and disposes those that implement `IDisposable`.
+
+```
+public void Video_Overlay_Update(IOverlayManagerElement overlay)
+```
+
+Updates an existing overlay with its new properties and keeps it alive. The overlay moves to the end of the list. Throws `ObjectDisposedException` in the same cases as `Video_Overlay_Add`.
+
+## Overlay Element Types
+
+### Common Properties (IOverlayManagerElement)
+
+All overlay elements implement the `IOverlayManagerElement` interface with these common properties:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Name` | `string` | - | Optional name for identification |
+| `Enabled` | `bool` | `true` | Enable/disable the overlay |
+| `StartTime` | `TimeSpan` | `Zero` | When to start showing (optional) |
+| `EndTime` | `TimeSpan` | `Zero` | When to stop showing (optional); `Zero` means no end. outside their windows, the nearest `OverlayManagerFade` or `OverlayManagerPan` holds its state (see below) |
+| `Opacity` | `double` | `1.0` | Transparency (0.0-1.0) |
+| `Rotation` | `double` | `0.0` | Rotation angle in degrees (0-360) |
+| `ZIndex` | `int` | `0` | Layer order (higher = on top) |
+| `Shadow` | `OverlayManagerShadowSettings` | - | Shadow configuration |
+
+Either time bound on its own defines a window. `StartTime = TimeSpan.Zero` with a non-zero `EndTime` shows the element from the beginning until that moment; a zero `EndTime` means the element has no end. Both values are compared against the frame timestamp, which counts from the pipeline start - not the wall clock.
+
+### OverlayManagerText
+
+Displays text with optional background and formatting.
+
+```
+public class OverlayManagerText : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Text` | `string` | "Hello!!!" | Text to display |
+| `TextProvider` | `Func<TimeSpan, string>` | `null` | Optional per-frame text callback; overrides `Text` |
+| `X` | `int` | `100` | X of the top-left corner, in pixels. `0` is the left edge of the frame. |
+| `Y` | `int` | `100` | Y of the top-left corner, in pixels. `0` is the top edge; the first line is fully visible there. |
+| `Font` | `FontSettings` | System default | Font configuration |
+| `Color` | `SKColor` | `Red` | Text color |
+| `Background` | `IOverlayManagerBackground` | `null` | Optional background |
+| `CustomWidth` | `int` | `0` | Custom bounding width (0 = auto) |
+| `CustomHeight` | `int` | `0` | Custom bounding height (0 = auto) |
+
+**Example:**
+
+```
+var text = new OverlayManagerText("Hello World!", 100, 100);
+text.Color = SKColors.White;
+text.Font.Size = 48;
+text.Font.Name = "Arial";
+text.Shadow = new OverlayManagerShadowSettings(true, depth: 5, direction: 45);
+overlayManager.Video_Overlay_Add(text);
+```
+
+#### Text that changes on every frame
+
+Text is redrawn on every frame, so there is no "apply" step and no need to remove and re-add the element. There are two ways to keep it current, and neither touches the pipeline:
+
+**Assign `Text` whenever the value changes.** Safe from any thread; the new value appears on the next frame. Use this when the updates are driven by your own events.
+
+```
+// From a sensor callback, a UI event, a background thread - anywhere.
+text.Text = $"Sensor: {reading:F1}";
+```
+
+**Set `TextProvider` when the text must be rebuilt for each frame** - a clock, a frame counter, or a template mixing several live values. The callback receives the frame timestamp, counted from the pipeline start.
+
+```
+var text = new OverlayManagerText(string.Empty, 40, 40);
+text.Color = SKColors.Yellow;
+text.Font.Size = 28;
+
+text.TextProvider = ts => "Camera 1\nOperator: demo\nREC\n"
+    + $"Sensor {_sensorValue:F1}   {DateTime.Now:HH:mm:ss}   {ts:hh\\:mm\\:ss}";
+
+overlayManager.Video_Overlay_Add(text);
+```
+
+Both paths are cheap: the text layout (line splitting and measurement) is cached on the element and recomputed only when the string, font or geometry actually changes, so a value that stays the same costs nothing extra.
+
+Three rules for `TextProvider`:
+
+- It runs on the GStreamer streaming thread, **while the overlay list is locked** — the same lock `Video_Overlay_Add` and `Video_Overlay_Remove` take. Blocking on another thread from inside it risks a deadlock, not merely a dropped frame: calling `Dispatcher.Invoke` to read a UI value deadlocks outright if the UI thread happens to be adding or removing an overlay at that moment. Read a field the UI thread has already written, as the example above does.
+- Returning `null` falls back to `Text`. A callback that throws is logged once and is then **not called again** — the element falls back to `Text`, because retrying it every frame would unwind an exception at the frame rate while the overlay lock is held. Assigning to `TextProvider` again re-enables it, including assigning the very same delegate.
+- `OverlayManagerDateTime` inherits the property, and its `[DATETIME]` token is substituted into whatever the provider returned.
+
+For anything beyond text - custom shapes, gauges, composited bitmaps - use [OverlayManagerCallback](#overlaymanagercallback), which hands you the Cairo context for the frame.
+
+### OverlayManagerImage
+
+Displays static images with stretch modes.
+
+```
+public class OverlayManagerImage : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Display width (0 = original) |
+| `Height` | `int` | - | Display height (0 = original) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `None` | Image scaling mode |
+
+**Stretch Modes:**
+
+- `None` - Original size
+- `Stretch` - Fill target area (may distort)
+- `Letterbox` - Fit within area (maintain aspect ratio)
+- `CropToFill` - Fill area by cropping (maintain aspect ratio)
+
+**Constructors:**
+
+```
+// From file
+new OverlayManagerImage(string filename, int x, int y, double alpha = 1.0)
+
+// From SkiaSharp bitmap
+new OverlayManagerImage(SKBitmap image, int x, int y, double alpha = 1.0)
+
+// From System.Drawing.Bitmap (Windows only)
+new OverlayManagerImage(System.Drawing.Bitmap image, int x, int y, double alpha = 1.0)
+```
+
+**Example:**
+
+```
+var image = new OverlayManagerImage("logo.png", 10, 10);
+image.StretchMode = OverlayManagerImageStretchMode.Letterbox;
+image.Width = 200;
+image.Height = 100;
+overlayManager.Video_Overlay_Add(image);
+```
+
+### OverlayManagerGIF
+
+Displays animated GIF images.
+
+```
+public class OverlayManagerGIF : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Position` | `SKPoint` | Position of the GIF |
+| `AnimationLength` | `TimeSpan` | Total animation duration |
+
+**Example:**
+
+```
+var gif = new OverlayManagerGIF("animation.gif", new SKPoint(150, 150));
+overlayManager.Video_Overlay_Add(gif);
+```
+
+### OverlayManagerImageSequence
+
+Displays a sequence of images, each shown for a specified duration, with support for looping, animation, fade effects, and all standard overlay properties.
+
+```
+public class OverlayManagerImageSequence : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | `0` | Display width (0 = original) |
+| `Height` | `int` | `0` | Display height (0 = original) |
+| `Loop` | `bool` | `true` | Restart sequence after last frame |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `None` | Image scaling mode |
+| `AnimationLength` | `TimeSpan` | - | Total duration of all frames (read-only) |
+| `FrameCount` | `int` | - | Number of loaded frames (read-only) |
+
+**Animation Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `AnimationEnabled` | `bool` | `false` | Enable position/size animation |
+| `TargetX` | `int` | `0` | Animation target X |
+| `TargetY` | `int` | `0` | Animation target Y |
+| `TargetWidth` | `int` | `0` | Animation target width (0 = keep current) |
+| `TargetHeight` | `int` | `0` | Animation target height (0 = keep current) |
+| `AnimationStartTime` | `TimeSpan` | `Zero` | Animation start time |
+| `AnimationEndTime` | `TimeSpan` | `Zero` | Animation end time |
+| `Easing` | `OverlayManagerPanEasing` | `Linear` | Position animation easing |
+
+**Fade Properties:**
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `FadeEnabled` | `bool` | `false` | Enable fade animation |
+| `FadeType` | `OverlayManagerFadeType` | `FadeIn` | Fade direction |
+| `FadeStartTime` | `TimeSpan` | `Zero` | Fade start time |
+| `FadeEndTime` | `TimeSpan` | `Zero` | Fade end time |
+| `FadeEasing` | `OverlayManagerPanEasing` | `Linear` | Fade easing function |
+
+**Constructors:**
+
+```
+// Basic: position only
+new OverlayManagerImageSequence(IEnumerable<ImageSequenceItem> items, int x, int y)
+
+// Full: position, size, and stretch mode
+new OverlayManagerImageSequence(
+    IEnumerable<ImageSequenceItem> items,
+    int x, int y,
+    int width, int height,
+    OverlayManagerImageStretchMode stretchMode = None)
+```
+
+**Methods:**
+
+```
+// Add a frame dynamically during playback
+void AddFrame(string filename, TimeSpan duration)
+
+// Start position/size animation
+void StartAnimation(int targetX, int targetY, int targetWidth, int targetHeight,
+    TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+
+// Get interpolated position/size at the given time
+(int X, int Y, int Width, int Height) GetCurrentRect(TimeSpan currentTime)
+
+// Fade effects
+void StartFadeIn(TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+void StartFadeOut(TimeSpan startTime, TimeSpan duration, OverlayManagerPanEasing easing = Linear)
+double GetCurrentOpacity(TimeSpan currentTime)
+```
+
+**Example - Basic Image Sequence:**
+
+```
+// Define images with per-frame durations
+var items = new List<ImageSequenceItem>
+{
+    new ImageSequenceItem("slide1.png", TimeSpan.FromSeconds(3)),
+    new ImageSequenceItem("slide2.png", TimeSpan.FromSeconds(2)),
+    new ImageSequenceItem("slide3.png", TimeSpan.FromSeconds(4))
+};
+
+// Create sequence at position (100, 100), scaled to 320x240
+var sequence = new OverlayManagerImageSequence(items, 100, 100, 320, 240)
+{
+    Loop = true,
+    Opacity = 0.9,
+    ZIndex = 5,
+    Name = "SlideShow"
+};
+
+overlayManager.Video_Overlay_Add(sequence);
+```
+
+**Example - With Animation and Fade:**
+
+```
+// Animate the sequence from top-left to center over 3 seconds
+sequence.StartAnimation(
+    targetX: 400, targetY: 200,
+    targetWidth: 640, targetHeight: 480,
+    startTime: TimeSpan.FromSeconds(2),
+    duration: TimeSpan.FromSeconds(3),
+    easing: OverlayManagerPanEasing.EaseInOut);
+
+// Fade in over the first 1.5 seconds
+sequence.StartFadeIn(
+    startTime: TimeSpan.Zero,
+    duration: TimeSpan.FromSeconds(1.5),
+    easing: OverlayManagerPanEasing.EaseOut);
+```
+
+**Example - Add Frames Dynamically:**
+
+```
+// Add a new frame to a running sequence
+sequence.AddFrame("slide4.png", TimeSpan.FromSeconds(2.5));
+```
+
+**Convenience Methods on OverlayManagerBlock:**
+
+```
+// Add image sequence overlay
+var element = overlayManager.Video_Overlay_AddImageSequence(
+    items, x: 100, y: 100, width: 320, height: 240,
+    loop: true, name: "SlideShow");
+
+// Update position
+overlayManager.Video_Overlay_UpdateImageSequencePosition(
+    "SlideShow", x: 200, y: 150, width: 400, height: 300);
+
+// Animate position/size
+overlayManager.Video_Overlay_AnimateImageSequence(
+    "SlideShow", targetX: 500, targetY: 300, targetWidth: 640, targetHeight: 480,
+    startTime: currentPosition, duration: TimeSpan.FromSeconds(2),
+    easing: OverlayManagerPanEasing.EaseInOut);
+
+// Fade effects
+overlayManager.Video_Overlay_ImageSequenceFadeIn(
+    "SlideShow", startTime: currentPosition, duration: TimeSpan.FromSeconds(1));
+overlayManager.Video_Overlay_ImageSequenceFadeOut(
+    "SlideShow", startTime: currentPosition, duration: TimeSpan.FromSeconds(1));
+```
+
+#### ImageSequenceItem
+
+Represents a single image frame in an image sequence.
+
+```
+public class ImageSequenceItem
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Filename` | `string` | Full path to the image file |
+| `Duration` | `TimeSpan` | How long this image is displayed |
+
+```
+// Constructors
+new ImageSequenceItem()
+new ImageSequenceItem(string filename, TimeSpan duration)
+```
+
+### OverlayManagerDateTime
+
+Displays current date/time with custom formatting.
+
+```
+public class OverlayManagerDateTime : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Text` | `string` | "[DATETIME]" | Text template |
+| `Format` | `string` | "MM/dd/yyyy HHss" | DateTime format |
+| `X` | `int` | `100` | X position |
+| `Y` | `int` | `100` | Y position |
+| `Font` | `FontSettings` | System default | Font configuration |
+| `Color` | `SKColor` | `Red` | Text color |
+
+**Example:**
+
+```
+var dateTime = new OverlayManagerDateTime();
+dateTime.Format = "yyyy-MM-dd HH:mm:ss";
+dateTime.X = 10;
+dateTime.Y = 30;
+overlayManager.Video_Overlay_Add(dateTime);
+```
+
+### OverlayManagerScrollingText
+
+Displays scrolling text that moves across the video in a specified direction.
+
+```
+public class OverlayManagerScrollingText : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Text` | `string` | "Scrolling Text" | Text to display |
+| `X` | `int` | `0` | X position of the scrolling area |
+| `Y` | `int` | `100` | Y position of the scrolling area |
+| `Width` | `int` | `0` | Width of scrolling area (0 = uses DefaultWidth) |
+| `Height` | `int` | `0` | Height of scrolling area (0 = auto based on font) |
+| `DefaultWidth` | `int` | `1920` | Default width when Width is 0 (set to video width) |
+| `DefaultHeight` | `int` | `1080` | Default height when Height is 0 for vertical scroll |
+| `Speed` | `int` | `5` | Scrolling speed in pixels per frame |
+| `Direction` | `ScrollDirection` | `RightToLeft` | Scroll direction |
+| `Font` | `FontSettings` | System default | Font configuration |
+| `Color` | `SKColor` | `White` | Text color |
+| `BackgroundTransparent` | `bool` | `true` | Whether background is transparent |
+| `BackgroundColor` | `SKColor` | `Black` | Background color (when not transparent) |
+| `Infinite` | `bool` | `true` | Loop scrolling infinitely |
+| `TextRestarted` | `EventHandler` | `null` | Called when text loops back to start |
+
+**ScrollDirection Enum:**
+
+- `LeftToRight` - Text scrolls from left to right
+- `RightToLeft` - Text scrolls from right to left
+- `BottomToTop` - Text scrolls from bottom to top
+- `TopToBottom` - Text scrolls from top to bottom
+
+**Example:**
+
+```
+// Create a news ticker style scrolling text
+var scrollingText = new OverlayManagerScrollingText(
+    "Breaking News: VisioForge Media Framework now supports scrolling text overlays!",
+    x: 0,
+    y: 50,
+    speed: 3,
+    direction: ScrollDirection.RightToLeft);
+
+scrollingText.Font.Size = 24;
+scrollingText.Color = SKColors.Yellow;
+scrollingText.BackgroundTransparent = false;
+scrollingText.BackgroundColor = SKColors.DarkBlue;
+
+// Set the default width to match your video resolution
+// This is used when Width is not explicitly set
+scrollingText.DefaultWidth = 1920; // Full HD width
+
+// Or set Width directly for a specific scrolling area width
+// scrollingText.Width = 1920;
+
+// Add event handler for when text loops
+scrollingText.TextRestarted += (sender, e) => {
+    Console.WriteLine("Scrolling text restarted");
+};
+
+overlayManager.Video_Overlay_Add(scrollingText);
+
+// To reset scrolling position
+scrollingText.Reset();
+
+// To update after changing text or font
+scrollingText.Text = "Updated news text...";
+scrollingText.Update();
+```
+
+### Video Overlays
+
+The Overlay Manager supports video overlays from multiple sources, including video files/URLs, Decklink capture cards, and NDI network sources. Video overlays play within the overlay composition with full playback control.
+
+#### OverlayManagerVideo
+
+Plays video files or stream URLs as overlays on the video composition. Each video overlay runs its own internal playback pipeline with optional audio output.
+
+```
+public class OverlayManagerVideo : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Source` | `string` | - | Video source file path or URL |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width |
+| `Height` | `int` | - | Overlay height |
+| `Loop` | `bool` | `true` | Whether the video loops |
+| `PlaybackRate` | `double` | `1.0` | Playback speed (1.0 = normal) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
+| `VideoView` | `IVideoView` | `null` | Optional external video preview window |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView (`null`: Direct3D 11 on Windows; not used by a WPF VideoView) |
+| `AudioOutput` | `AudioOutputDeviceInfo` | `null` | Audio output device (null = discard audio) |
+| `AudioOutput_Volume` | `double` | `1.0` | Audio volume (0.0-1.0+, above 1.0 amplifies) |
+| `AudioOutput_Mute` | `bool` | `false` | Mute audio output |
+
+Like every overlay element, it supports the common `IOverlayManagerElement` properties, including the `StartTime`/`EndTime` visibility window — see [Common Properties](#common-properties-ioverlaymanagerelement).
+
+**Methods:**
+
+- `Initialize(bool autoStart)` - Initialize the video pipeline. If `autoStart` is true, begins playing immediately; if false, preloads to PAUSED state.
+- `Play()` - Start or resume video playback
+- `Pause()` - Pause video playback
+- `Stop()` - Stop video playback
+- `Seek(TimeSpan position)` - Seek to a specific position in the video
+- `UpdateSource(string source)` - Change the video source dynamically
+- `Dispose()` - Clean up resources
+
+**Example - Video File Overlay:**
+
+```
+// Create a video file overlay
+var videoOverlay = new OverlayManagerVideo(
+    source: "intro.mp4",
+    x: 100,
+    y: 100,
+    width: 640,
+    height: 360)
+{
+    Loop = true,
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    StartTime = TimeSpan.FromSeconds(5),   // show from 5 s of the main video
+    EndTime = TimeSpan.FromSeconds(30),    // hide after 30 s
+    ZIndex = 5
+};
+
+// Optionally enable audio output
+var audioOutputs = await AudioRendererBlock.GetDevicesAsync(AudioOutputDeviceAPI.DirectSound);
+videoOverlay.AudioOutput = audioOutputs[0];
+videoOverlay.AudioOutput_Volume = 0.5;
+
+// Initialize and add to overlay manager
+if (videoOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(videoOverlay);
+}
+
+// Control playback at runtime
+videoOverlay.Pause();
+videoOverlay.Seek(TimeSpan.FromSeconds(10));
+videoOverlay.Play();
+
+// Change source dynamically
+videoOverlay.UpdateSource("outro.mp4");
+
+// Clean up when done
+videoOverlay.Stop();
+videoOverlay.Dispose();
+```
+
+**Example - Picture-in-Picture:**
+
+```
+// Create a small PiP video in the corner
+var pipVideo = new OverlayManagerVideo(
+    source: "camera_feed.mp4",
+    x: 20,
+    y: 20,
+    width: 240,
+    height: 135)
+{
+    Loop = true,
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 100,
+    Shadow = new OverlayManagerShadowSettings
+    {
+        Enabled = true,
+        Color = SKColors.DarkGray,
+        Opacity = 0.7,
+        BlurRadius = 8,
+        Depth = 3,
+        Direction = 45
+    }
+};
+
+if (pipVideo.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(pipVideo);
+}
+```
+
+**Example - Stream URL Overlay:**
+
+```
+// Overlay a network stream
+var streamOverlay = new OverlayManagerVideo(
+    source: "rtsp://192.168.1.21:554/Streaming/Channels/101",
+    x: 400,
+    y: 50,
+    width: 320,
+    height: 240)
+{
+    Loop = false,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 10
+};
+
+if (streamOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(streamOverlay);
+}
+```
+
+**Transparent video**
+
+A VP8 or VP9 WebM with an alpha channel (`yuva420p`) is drawn with that alpha, including soft edges and fades. H.264 in an MP4 has no alpha channel, so it stays opaque.
+
+Remotion writes that file with `--image-format=png --pixel-format=yuva420p --codec=vp8` (or `--codec=vp9`).
+
+#### OverlayManagerDecklinkVideo
+
+Captures and displays video from Blackmagic Decklink capture cards.
+
+```
+public class OverlayManagerDecklinkVideo : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `DecklinkSettings` | `DecklinkVideoSourceSettings` | - | Decklink device configuration |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width |
+| `Height` | `int` | - | Overlay height |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
+| `VideoView` | `IVideoView` | `null` | Optional video preview |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings (`null`: Direct3D 11 on Windows) |
+
+**Example:**
+
+```
+// Get Decklink devices
+var devices = await DecklinkVideoSourceBlock.GetDevicesAsync();
+var decklinkSettings = new DecklinkVideoSourceSettings(devices[0]);
+decklinkSettings.Mode = DecklinkMode.HD1080p2997;
+
+// Create Decklink overlay
+var decklinkOverlay = new OverlayManagerDecklinkVideo(
+    decklinkSettings,
+    x: 10,
+    y: 10,
+    width: 640,
+    height: 360);
+
+// Initialize and add to overlay manager
+if (decklinkOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(decklinkOverlay);
+}
+
+// Clean up when done
+decklinkOverlay.Stop();
+decklinkOverlay.Dispose();
+```
+
+#### OverlayManagerNDIVideo
+
+Captures and displays video from NDI (Network Device Interface) sources.
+
+Not available on iOS: the SDK's iOS GStreamer runtime does not include the NDI plugin.
+
+```
+public class OverlayManagerNDIVideo : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `NDISettings` | `NDISourceSettings` | - | NDI source configuration |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width |
+| `Height` | `int` | - | Overlay height |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit video |
+| `VideoView` | `IVideoView` | `null` | Optional video preview |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings (`null`: Direct3D 11 on Windows) |
+
+**Example:**
+
+```
+// Discover NDI sources on the network
+var ndiSources = await DeviceEnumerator.Shared.NDISourcesAsync();
+var ndiSettings = await NDISourceSettings.CreateAsync(
+    null,
+    ndiSources[0].Name,
+    ndiSources[0].URL);
+
+// Create NDI overlay
+var ndiOverlay = new OverlayManagerNDIVideo(
+    ndiSettings,
+    x: 10,
+    y: 10,
+    width: 640,
+    height: 360);
+
+// Initialize and add to overlay manager
+if (ndiOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(ndiOverlay);
+}
+
+// Clean up when done
+ndiOverlay.Stop();
+ndiOverlay.Dispose();
+```
+
+**Common Methods for Video Overlays:**
+
+- `Initialize(bool autoStart)` - Initialize the video pipeline
+- `Play()` - Start or resume video playback/capture
+- `Pause()` - Pause video playback/capture
+- `Stop()` - Stop video playback/capture
+- `Dispose()` - Clean up resources
+
+**Additional Methods (OverlayManagerVideo only):**
+
+- `Seek(TimeSpan position)` - Seek to a specific position
+- `UpdateSource(string source)` - Change the video source dynamically
+
+### OverlayManagerWPFControl (Windows Only)
+
+Renders a WPF `FrameworkElement` as a video overlay. This enables using any WPF visual tree — including controls with Storyboard animations, data binding, and complex layouts — as an overlay. The element is periodically snapshot at a configurable refresh rate.
+
+> **Note**: This overlay type is only available on Windows (`NET_WINDOWS` build target).
+
+```
+public class OverlayManagerWPFControl : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `ElementFactory` | `Func<FrameworkElement>` | - | Factory that creates the WPF element on the internal STA thread |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width (must be > 0) |
+| `Height` | `int` | - | Overlay height (must be > 0) |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Stretch` | How to fit the rendered control |
+| `RefreshRate` | `int` | `15` | Snapshots per second (1-60) |
+| `Dpi` | `double` | `96` | DPI for rendering |
+
+**Methods:**
+
+- `Initialize()` - Initialize the WPF control overlay and start periodic rendering
+- `InvokeOnUIThread(Action action)` - Execute an action on the WPF STA thread for safe runtime updates
+- `InvokeOnUIThread<T>(Func<T> func)` - Execute a function on the WPF STA thread and return the result
+- `Dispose()` - Clean up resources
+
+**Convenience Method on OverlayManagerBlock:**
+
+```
+public OverlayManagerWPFControl Video_Overlay_AddWPFControl(
+    Func<FrameworkElement> elementFactory,
+    int x, int y, int width, int height,
+    int refreshRate = 15,
+    string name = null)
+```
+
+Creates, initializes, and adds a WPF control overlay in one call. Returns the overlay instance, or `null` if initialization failed.
+
+**Example - Using Convenience Method:**
+
+```
+// Add a color-cycling text overlay using the convenience method
+var wpfOverlay = overlayManager.Video_Overlay_AddWPFControl(
+    elementFactory: () =>
+    {
+        var border = new Border
+        {
+            Width = 350,
+            Height = 60,
+            Background = new SolidColorBrush(Color.FromArgb(160, 0, 0, 0)),
+            CornerRadius = new CornerRadius(8),
+            Padding = new Thickness(15, 5, 15, 5)
+        };
+
+        var text = new TextBlock
+        {
+            Text = "VisioForge Media Framework",
+            FontSize = 28,
+            FontWeight = FontWeights.Bold,
+            VerticalAlignment = VerticalAlignment.Center,
+            HorizontalAlignment = HorizontalAlignment.Center
+        };
+
+        var brush = new SolidColorBrush(Colors.Red);
+        text.Foreground = brush;
+        border.Child = text;
+
+        // Animate text color
+        var colorAnim = new ColorAnimationUsingKeyFrames
+        {
+            Duration = TimeSpan.FromSeconds(5),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Red, KeyTime.FromPercent(0.0)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Gold, KeyTime.FromPercent(0.25)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Cyan, KeyTime.FromPercent(0.5)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Magenta, KeyTime.FromPercent(0.75)));
+        colorAnim.KeyFrames.Add(new LinearColorKeyFrame(Colors.Red, KeyTime.FromPercent(1.0)));
+        brush.BeginAnimation(SolidColorBrush.ColorProperty, colorAnim);
+
+        return border;
+    },
+    x: 50, y: 300, width: 350, height: 60,
+    refreshRate: 30, name: "ColorText");
+
+if (wpfOverlay == null)
+{
+    // Initialization failed
+}
+```
+
+**Example - Manual Creation with Animated Clock:**
+
+```
+// Create a WPF analog clock overlay manually
+var clockOverlay = new OverlayManagerWPFControl(
+    elementFactory: () =>
+    {
+        var canvas = new Canvas { Width = 200, Height = 200 };
+
+        // Clock face
+        var face = new Ellipse
+        {
+            Width = 180, Height = 180,
+            Stroke = Brushes.White, StrokeThickness = 3
+        };
+        Canvas.SetLeft(face, 10);
+        Canvas.SetTop(face, 10);
+        canvas.Children.Add(face);
+
+        // Second hand with rotation animation
+        var secondHand = new Line
+        {
+            X1 = 100, Y1 = 100, X2 = 100, Y2 = 25,
+            Stroke = Brushes.Red, StrokeThickness = 1
+        };
+        var secondRotate = new RotateTransform(DateTime.Now.Second * 6, 100, 100);
+        secondHand.RenderTransform = secondRotate;
+        canvas.Children.Add(secondHand);
+
+        var anim = new DoubleAnimation
+        {
+            From = DateTime.Now.Second * 6,
+            To = DateTime.Now.Second * 6 + 360,
+            Duration = TimeSpan.FromSeconds(60),
+            RepeatBehavior = RepeatBehavior.Forever
+        };
+        secondRotate.BeginAnimation(RotateTransform.AngleProperty, anim);
+
+        return canvas;
+    },
+    x: 20, y: 20, width: 200, height: 200, refreshRate: 30);
+
+if (clockOverlay.Initialize())
+{
+    overlayManager.Video_Overlay_Add(clockOverlay);
+}
+
+// Update WPF control at runtime (thread-safe)
+clockOverlay.InvokeOnUIThread(() =>
+{
+    // Safe to modify WPF elements here
+});
+
+// Clean up
+clockOverlay.Dispose();
+```
+
+### OverlayManagerWebView2Video (Windows Only)
+
+Renders live web content (HTML, CSS, JavaScript) as a video overlay using Microsoft WebView2. This enables displaying web pages, dynamic HTML dashboards, animated web content, news tickers, or any browser-rendered content as an overlay on your video. The web page is rendered offscreen and captured as video frames at the browser's native refresh rate.
+
+> **Note**: This overlay type is only available on Windows (`NET_WINDOWS` build target). Requires the Microsoft WebView2 Runtime and the GStreamer WebView2 plugin (`webview2src`).
+
+```
+public class OverlayManagerWebView2Video : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Location` | `string` | `"about:blank"` | URL to display in the overlay |
+| `JavaScript` | `string` | `null` | JavaScript code to execute after each navigation completes |
+| `Adapter` | `int` | `-1` | DXGI adapter index for GPU selection (-1 = any available device) |
+| `UserDataFolder` | `string` | `null` | Absolute path to WebView2 user data folder for cache and profile data |
+| `X` | `int` | - | X position |
+| `Y` | `int` | - | Y position |
+| `Width` | `int` | - | Overlay width |
+| `Height` | `int` | - | Overlay height |
+| `StretchMode` | `OverlayManagerImageStretchMode` | `Letterbox` | How to fit the rendered content |
+| `VideoView` | `IVideoView` | `null` | Optional external video preview window |
+| `VideoRendererSettings` | `VideoRendererSettingsX` | `null` | Renderer settings for VideoView (`null`: Direct3D 11 on Windows) |
+
+**Methods:**
+
+- `Initialize(bool autoStart = true)` - Initialize the WebView2 rendering pipeline. If `autoStart` is true, begins rendering immediately; if false, preloads to PAUSED state. Returns `true` if successful.
+- `Play()` - Start or resume web page rendering
+- `Pause()` - Pause web page rendering
+- `Stop()` - Stop web page rendering
+- `UpdateLocation(string location)` - Change the displayed URL dynamically
+- `Dispose()` - Clean up resources
+
+**Example - Basic Web Page Overlay:**
+
+```
+// Display a web page as a video overlay
+var webOverlay = new OverlayManagerWebView2Video(
+    location: "https://example.com/dashboard",
+    x: 50,
+    y: 50,
+    width: 640,
+    height: 480)
+{
+    Opacity = 0.9,
+    StretchMode = OverlayManagerImageStretchMode.Letterbox,
+    ZIndex = 5
+};
+
+// Initialize and add to overlay manager
+if (webOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(webOverlay);
+}
+else
+{
+    webOverlay.Dispose();
+}
+```
+
+**Example - Web Overlay with JavaScript Injection:**
+
+```
+// Overlay a web page and inject JavaScript to customize it
+var tickerOverlay = new OverlayManagerWebView2Video(
+    location: "https://example.com/ticker",
+    x: 0,
+    y: 680,
+    width: 1920,
+    height: 40)
+{
+    // JavaScript runs after each navigation completes
+    JavaScript = "document.body.style.background = 'transparent';",
+    Opacity = 0.8,
+    ZIndex = 10,
+    Shadow = new OverlayManagerShadowSettings
+    {
+        Enabled = true,
+        Color = SKColors.Black,
+        Opacity = 0.5,
+        BlurRadius = 5,
+        Depth = 5,
+        Direction = 45
+    }
+};
+
+if (tickerOverlay.Initialize(autoStart: true))
+{
+    overlayManager.Video_Overlay_Add(tickerOverlay);
+}
+```
+
+**Example - Dynamic URL Update at Runtime:**
+
+```
+// Change the displayed page at runtime
+webOverlay.UpdateLocation("https://example.com/new-page");
+
+// Control rendering
+webOverlay.Pause();
+webOverlay.Play();
+
+// Clean up when done
+webOverlay.Stop();
+webOverlay.Dispose();
+```
+
+### Shape Overlays
+
+#### OverlayManagerLine
+
+```
+public class OverlayManagerLine : IOverlayManagerElement
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Start` | `SKPoint` | Line start point |
+| `End` | `SKPoint` | Line end point |
+| `Color` | `SKColor` | Line color |
+
+#### OverlayManagerRectangle
+
+```
+public class OverlayManagerRectangle : IOverlayManagerElement
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Rectangle` | `SKRect` | Rectangle bounds |
+| `Color` | `SKColor` | Fill/stroke color |
+| `Fill` | `bool` | Fill or stroke only |
+
+#### OverlayManagerCircle
+
+```
+public class OverlayManagerCircle : IOverlayManagerElement
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Center` | `SKPoint` | Circle center |
+| `Radius` | `double` | Circle radius |
+| `Color` | `SKColor` | Fill/stroke color |
+| `Fill` | `bool` | Fill or stroke only |
+
+#### OverlayManagerTriangle
+
+```
+public class OverlayManagerTriangle : IOverlayManagerElement
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Point1` | `SKPoint` | First vertex |
+| `Point2` | `SKPoint` | Second vertex |
+| `Point3` | `SKPoint` | Third vertex |
+| `Color` | `SKColor` | Fill/stroke color |
+| `Fill` | `bool` | Fill or stroke only |
+
+#### OverlayManagerStar
+
+```
+public class OverlayManagerStar : IOverlayManagerElement
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Center` | `SKPoint` | Star center |
+| `OuterRadius` | `double` | Outer points radius |
+| `InnerRadius` | `double` | Inner points radius |
+| `StrokeColor` | `SKColor` | Stroke color |
+| `FillColor` | `SKColor` | Fill color |
+
+### OverlayManagerSVG
+
+Displays SVG vector graphics. The SVG is rendered once, at its own size, when the element is created, and that image is what gets drawn: a rotated SVG is resampled from it, and a large SVG holds its memory until `Dispose`.
+
+The constructor throws if the file cannot be used: `GLib.GException` with librsvg's message if it cannot be loaded, `Exception` if it has no size, is larger than 32767 pixels on a side or cannot be rendered.
+
+```
+public class OverlayManagerSVG : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `X` | `int` | X position |
+| `Y` | `int` | Y position |
+| `Width` | `int` | Width from the file, in pixels (read-only) |
+| `Height` | `int` | Height from the file, in pixels (read-only) |
+| `Opacity` | `double` | Opacity from 0.0 (transparent) to 1.0 (opaque) |
+| `Rotation` | `double` | Rotation around the center, in degrees |
+| `Shadow` | `OverlayManagerShadowSettings` | Shadow, shaped by the SVG's transparency |
+
+### OverlayManagerCallback
+
+Custom drawing using Cairo graphics.
+
+```
+public class OverlayManagerCallback : IOverlayManagerElement
+```
+
+**Event:**
+
+```
+public event EventHandler<OverlayManagerCallbackEventArgs> OnDraw;
+```
+
+**Example:**
+
+```
+var callback = new OverlayManagerCallback();
+callback.OnDraw += (sender, e) => {
+    var ctx = e.Context;
+    ctx.SetSourceRGB(1, 0, 0);
+    ctx.Arc(200, 200, 50, 0, 2 * Math.PI);
+    ctx.Fill();
+};
+overlayManager.Video_Overlay_Add(callback);
+```
+
+### IOverlayManagerDrawable
+
+The extension point for a user-defined overlay element. `Video_Overlay_Add` accepts any `IOverlayManagerElement`, but only the built-in element types are drawn automatically. A custom type that implements `IOverlayManagerDrawable` is handed the live Cairo context of the frame — the same way `OverlayManagerCallback` is — instead of being silently skipped.
+
+```
+public interface IOverlayManagerDrawable
+{
+    void Draw(OverlayManagerCallbackEventArgs e);
+}
+```
+
+An element that implements `IOverlayManagerElement` but neither this interface nor a built-in type is not drawn and is reported once in the log.
+
+`Draw` runs on the GStreamer streaming thread **while the overlay list is locked** — the same lock `Video_Overlay_Add` and `Video_Overlay_Remove` take. Keep it short and do not block: calling back into a UI dispatcher from it can deadlock rather than merely drop a frame. An exception thrown from `Draw` is reported once, and the element is still drawn on later frames.
+
+**Example:**
+
+```
+public class MyOverlay : IOverlayManagerElement, IOverlayManagerDrawable
+{
+    public string Name { get; set; } = "MyOverlay";
+    public object Cache { get; set; }
+    public TimeSpan StartTime { get; set; }
+    public TimeSpan EndTime { get; set; }
+    public bool Enabled { get; set; } = true;
+    public OverlayManagerShadowSettings Shadow { get; set; } = new OverlayManagerShadowSettings();
+    public double Opacity { get; set; } = 1.0;
+    public double Rotation { get; set; }
+    public int ZIndex { get; set; }
+
+    public void Draw(OverlayManagerCallbackEventArgs e)
+    {
+        var ctx = e.Context;
+        ctx.SetSourceRGB(1, 0, 0);
+        ctx.Arc(200, 200, 50, 0, 2 * Math.PI);
+        ctx.Fill();
+    }
+}
+
+overlayManager.Video_Overlay_Add(new MyOverlay());
+```
+
+`OverlayManagerCallbackEventArgs` exposes the `Context` (`Cairo.Context`) for the frame plus its `Timestamp` and `Duration`, and a `DrawImage` helper that reuses the element's `Rotation`, `Shadow` and `Opacity`.
+
+### OverlayManagerGroup
+
+Groups multiple overlays for synchronized lifecycle management. This is especially useful when you need to preload multiple video overlays and start them at exactly the same time.
+
+```
+public class OverlayManagerGroup : IOverlayManagerElement, IDisposable
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Overlays` | `List<IOverlayManagerElement>` | Empty list | Overlays in this group (read-only) |
+
+> **Note**: The standard `IOverlayManagerElement` properties (`Opacity`, `Rotation`, `ZIndex`, `Shadow`) are present on the group but not applied at the group level — individual overlay properties within the group are used for rendering.
+
+**Methods:**
+
+- `Add(IOverlayManagerElement overlay)` - Add an overlay to the group. Throws `InvalidOperationException` if already initialized.
+- `Remove(IOverlayManagerElement overlay)` - Remove an overlay from the group. Throws `InvalidOperationException` if already initialized.
+- `Initialize()` - Preload all `OverlayManagerVideo` overlays in the group to PAUSED state. Returns `true` if all succeeded. Other overlay types (Decklink, NDI) must be initialized manually.
+- `Play()` - Start all `OverlayManagerVideo` overlays synchronously. Must call `Initialize()` first. Other video overlay types must call `Play()` individually.
+- `Pause()` - Pause all `OverlayManagerVideo` overlays in the group.
+- `Stop()` - Stop all `OverlayManagerVideo` overlays in the group.
+- `GetRenderableOverlays()` - Returns all enabled overlays in the group (used internally).
+- `Dispose()` - Stop and dispose all overlays in the group.
+
+> **Important**: You cannot add or remove overlays after `Initialize()` has been called.
+
+**Why add non-video overlays to a group?** While `Initialize()`, `Play()`, `Pause()`, and `Stop()` only control `OverlayManagerVideo` instances, adding other overlay types (Decklink, NDI, text, images) to a group provides organizational grouping for rendering and centralized disposal — `Dispose()` cleans up **all** overlays in the group regardless of type.
+
+**Example - Synchronized Video + Decklink Group:**
+
+```
+// Create a group for overlays that must start simultaneously
+var group = new OverlayManagerGroup("SyncGroup");
+
+// Add a video file overlay
+var videoOverlay = new OverlayManagerVideo(
+    source: "intro.mp4",
+    x: 10, y: 10, width: 640, height: 360)
+{
+    Loop = true,
+    ZIndex = 10
+};
+group.Add(videoOverlay);
+
+// Add a Decklink capture overlay
+var decklinkSettings = new DecklinkVideoSourceSettings(deviceNumber);
+decklinkSettings.Mode = DecklinkMode.HD1080p2997;
+
+var decklinkOverlay = new OverlayManagerDecklinkVideo(
+    settings: decklinkSettings,
+    x: 660, y: 10, width: 640, height: 360)
+{
+    ZIndex = 11
+};
+
+// Initialize Decklink manually (group handles OverlayManagerVideo only)
+decklinkOverlay.Initialize(autoStart: false);
+group.Add(decklinkOverlay);
+
+// You can also mix in non-video overlays
+var label = new OverlayManagerText("Camera 1", 10, 380);
+label.Font.Size = 14;
+label.Color = SKColors.White;
+group.Add(label);
+
+// Add group to overlay manager
+overlayManager.Video_Overlay_Add(group);
+
+// Start all OverlayManagerVideo overlays in the group
+group.Play();
+// Decklink must be started separately (group.Play() only handles OverlayManagerVideo)
+decklinkOverlay.Play();
+
+// Later, pause/stop all at once
+group.Pause();
+group.Stop();
+
+// Clean up
+group.Dispose();
+```
+
+## Video Transformation Effects
+
+The OverlayManagerBlock supports advanced video transformation effects that modify the entire video frame, not just overlays on top.
+
+### OverlayManagerZoom
+
+Applies a zoom effect to the video frame, scaling it horizontally and vertically.
+
+```
+public class OverlayManagerZoom : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `ZoomX` | `double` | `1.0` | Horizontal zoom level (1.0 = no zoom, 2.0 = 2x zoom) |
+| `ZoomY` | `double` | `1.0` | Vertical zoom level (1.0 = no zoom, 2.0 = 2x zoom) |
+| `ShiftX` | `int` | `0` | Horizontal shift of the zoomed frame, pixels |
+| `ShiftY` | `int` | `0` | Vertical shift of the zoomed frame, pixels |
+| `InterpolationMode` | `OverlayManagerInterpolationMode` | `Bilinear` | Quality/speed tradeoff |
+
+**Example:**
+
+```
+// Create a 1.5x zoom
+var zoom = new OverlayManagerZoom
+{
+    ZoomX = 1.5,
+    ZoomY = 1.5,
+    Name = "VideoZoom"
+};
+zoom.ZIndex = -1000; // Process before other overlays
+overlayManager.Video_Overlay_Add(zoom);
+
+// Animate zoom over time
+zoom.ZoomX = 2.0; // Update dynamically
+zoom.ZoomY = 2.0;
+```
+
+### OverlayManagerPan
+
+Applies a pan (translate) effect to the video frame.
+
+```
+public class OverlayManagerPan : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `StartX` / `StartY` / `StartWidth` / `StartHeight` | `int` | `0` | Frame rectangle at `StartTime` |
+| `StopX` / `StopY` / `StopWidth` / `StopHeight` | `int` | `0` | Frame rectangle at `EndTime` |
+| `StartTime` / `EndTime` | `TimeSpan` | `Zero` | When the pan starts and ends |
+| `InterpolationMode` | `OverlayManagerInterpolationMode` | `Bilinear` | Quality/speed tradeoff |
+
+**Example:**
+
+```
+// Pan video 100 pixels right and 50 pixels down over 2 seconds
+var pan = OverlayManagerPan.FromRectangles(
+    (0, 0, 1920, 1080),
+    (100, 50, 1920, 1080),
+    TimeSpan.Zero,
+    TimeSpan.FromSeconds(2));
+pan.Name = "VideoPan";
+pan.ZIndex = -1000; // Process before other overlays
+overlayManager.Video_Overlay_Add(pan);
+```
+
+After `EndTime` the stop rectangle stays on screen until the next pan starts; before the first pan starts, its start rectangle is shown.
+
+### OverlayManagerFade
+
+Applies a fade effect to the entire video frame.
+
+```
+public class OverlayManagerFade : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `FadeType` | `OverlayManagerFadeType` | `FadeIn` | `FadeIn` or `FadeOut` |
+| `StartTime` | `TimeSpan` | `Zero` | When the fade starts |
+| `EndTime` | `TimeSpan` | `Zero` | When the fade ends |
+| `FadeColor` | `(byte R, byte G, byte B)` | `(0, 0, 0)` | Colour the frame fades to or from |
+| `Opacity` | `double` | `1.0` | Not used: the fade animation sets the opacity |
+| `Easing` | `OverlayManagerPanEasing` | `Linear` | Interpolation curve |
+
+**Example:**
+
+```
+// Fade in video over 2 seconds starting at playback position
+var position = await pipeline.Position_GetAsync();
+var fade = OverlayManagerFade.CreateFadeIn(TimeSpan.FromSeconds(2), position);
+fade.Name = "VideoFade";
+overlayManager.Video_Overlay_Add(fade);
+```
+
+Between two fades, the earlier fade's final state is held until the next fade starts, so after a `FadeOut` the frame stays covered. Before the first fade starts, its initial state is shown, so a `FadeIn` keeps the frame covered.
+
+### OverlayManagerSqueezeback
+
+Creates a broadcast-style "squeezeback" effect where the video is scaled to a custom rectangle and an overlay image (typically PNG with alpha transparency) is drawn on top. This is commonly used for lower-thirds, frames, and broadcast graphics.
+
+```
+public class OverlayManagerSqueezeback : IOverlayManagerElement
+```
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `BackgroundImageFilename` | `string` | - | Overlay image path (PNG with alpha recommended) |
+| `VideoRect` | `Rect` | - | Where video is scaled and positioned |
+| `BackgroundRect` | `Rect` | `null` | Overlay image position (null = full frame) |
+| `VideoOnTop` | `bool` | `false` | Layer order (false = video below, image on top) |
+| `VideoOpacity` | `double` | `1.0` | Video layer opacity |
+| `BackgroundOpacity` | `double` | `1.0` | Overlay image opacity |
+
+**Animation Properties:**
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `VideoAnimationEnabled` | `bool` | Enable video position animation |
+| `VideoAnimationStartRect` | `Rect` | Animation start position |
+| `VideoAnimationTargetRect` | `Rect` | Animation end position |
+| `VideoAnimationStartTime` | `TimeSpan` | Animation start time |
+| `VideoAnimationEndTime` | `TimeSpan` | Animation end time |
+| `VideoAnimationEasing` | `OverlayManagerPanEasing` | Easing function |
+
+**Fade Properties:**
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `VideoFadeEnabled` | `bool` | Enable the video fade |
+| `VideoFadeType` | `OverlayManagerFadeType` | Video fade type (`FadeIn` or `FadeOut`) |
+| `VideoFadeStartTime` | `TimeSpan` | Video fade start time |
+| `VideoFadeEndTime` | `TimeSpan` | Video fade end time |
+| `VideoFadeEasing` | `OverlayManagerPanEasing` | Easing function |
+| `BackgroundFadeEnabled` | `bool` | Enable the background fade |
+| `BackgroundFadeType` | `OverlayManagerFadeType` | Background fade type |
+| `BackgroundFadeStartTime` | `TimeSpan` | Background fade start time |
+| `BackgroundFadeEndTime` | `TimeSpan` | Background fade end time |
+| `BackgroundFadeEasing` | `OverlayManagerPanEasing` | Easing function |
+
+The `StartVideoFadeIn` / `StartVideoFadeOut` / `StartBackgroundFadeIn` / `StartBackgroundFadeOut` methods set these from code, each taking a `TimeSpan` start, a `TimeSpan` duration and an optional easing.
+
+**Example - Basic Squeezeback:**
+
+```
+// Create squeezeback with video in lower-right corner
+var squeezeback = new OverlayManagerSqueezeback
+{
+    BackgroundImageFilename = "frame.png", // PNG with transparent center
+    VideoRect = new Rect(960, 540, 1920, 1080), // Lower-right quadrant
+    Name = "Squeezeback"
+};
+squeezeback.ZIndex = -2000; // Process first
+overlayManager.Video_Overlay_Add(squeezeback);
+```
+
+**Example - Animated Squeezeback:**
+
+```
+// Get current playback position
+var position = await pipeline.Position_GetAsync();
+
+// Animate video from its current VideoRect to a corner over 2 seconds.
+// AnimateVideo has no startRect — the start position is implicit (the element's
+// current VideoRect), so configure it beforehand if you need a specific starting point.
+var squeezeback = overlayManager.Video_Overlay_GetByName("Squeezeback") as OverlayManagerSqueezeback;
+squeezeback.VideoRect = new Rect(0, 0, 1920, 1080); // Full screen starting point
+squeezeback.AnimateVideo(
+    targetRect: new Rect(1280, 720, 1920, 1080), // Lower-right corner
+    startTime: position,
+    duration: TimeSpan.FromSeconds(2),
+    easing: OverlayManagerPanEasing.EaseInOut
+);
+```
+
+**Example - Fade Effects:**
+
+```
+var position = await pipeline.Position_GetAsync();
+
+// Fade out video over 1.5 seconds
+squeezeback.StartVideoFadeOut(position, TimeSpan.FromSeconds(1.5));
+
+// Later, fade it back in
+squeezeback.StartVideoFadeIn(position, TimeSpan.FromSeconds(1.5));
+
+// Fade background image independently
+squeezeback.StartBackgroundFadeOut(position, TimeSpan.FromSeconds(1));
+```
+
+**Convenience Methods on OverlayManagerBlock:**
+
+```
+// Add squeezeback
+var element = overlayManager.Video_Overlay_AddSqueezeback(
+    backgroundImageFilename: "frame.png",
+    videoRect: new Rect(960, 540, 1920, 1080),
+    backgroundRect: null,  // Full frame
+    name: "Squeezeback"
+);
+
+// Update video position
+overlayManager.Video_Overlay_Squeezeback_UpdateVideoPosition("Squeezeback", newRect);
+
+// Animate video (no startRect — start is the element's current VideoRect).
+overlayManager.Video_Overlay_Squeezeback_AnimateVideo(
+    "Squeezeback", targetRect, startTime, duration, easing);
+
+// Fade controls
+overlayManager.Video_Overlay_Squeezeback_VideoFadeIn("Squeezeback", startTime, duration);
+overlayManager.Video_Overlay_Squeezeback_VideoFadeOut("Squeezeback", startTime, duration);
+
+// Layer ordering
+overlayManager.Video_Overlay_Squeezeback_SetVideoOnTop("Squeezeback");
+overlayManager.Video_Overlay_Squeezeback_SetBackgroundOnTop("Squeezeback");
+```
+
+### Easing Functions
+
+Animation easing options available via `OverlayManagerPanEasing`:
+
+| Value | Description |
+| --- | --- |
+| `Linear` | Constant speed |
+| `EaseIn` | Slow start, fast end |
+| `EaseOut` | Fast start, slow end |
+| `EaseInOut` | Slow start and end |
+| `EaseInCubic` | Cubic slow start |
+| `EaseOutCubic` | Cubic slow end |
+| `EaseInOutCubic` | Cubic slow start and end |
+
+### Interpolation Modes
+
+Quality/performance tradeoff for scaling via `OverlayManagerInterpolationMode`:
+
+| Value | Description |
+| --- | --- |
+| `None` | Fastest, pixelated edges |
+| `Bilinear` | Good quality/speed balance |
+| `Bicubic` | Higher quality, slower |
+| `Lanczos` | Highest quality, slowest |
+
+## Shadow Settings
+
+Configure drop shadows for overlay elements:
+
+```
+public class OverlayManagerShadowSettings
+```
+
+| Property | Type | Range | Default | Description |
+| --- | --- | --- | --- | --- |
+| `Enabled` | `bool` | - | `false` | Enable shadows |
+| `Depth` | `double` | 0-30 | `5.0` | Shadow offset distance |
+| `Direction` | `double` | 0-360° | `45.0` | Shadow direction |
+| `Opacity` | `double` | 0-1 | `0.5` | Shadow transparency |
+| `BlurRadius` | `double` | 0-10 | `2.0` | Shadow blur amount |
+| `Color` | `SKColor` | - | `Black` | Shadow color |
+
+**Direction Reference:**
+
+- 0° = Right
+- 90° = Down
+- 180° = Left
+- 270° = Up
+
+## Text Backgrounds
+
+Text overlays can have various background shapes:
+
+### OverlayManagerBackgroundRectangle
+
+```
+var text = new OverlayManagerText("Info", 100, 100);
+text.Background = new OverlayManagerBackgroundRectangle {
+    Color = SKColors.Black.WithAlpha(128),
+    Fill = true,
+    Margin = new Rect(5, 3, 5, 3)   // Margin is a VisioForge.Core.Types.Rect (Left/Top/Right/Bottom)
+};
+```
+
+### OverlayManagerBackgroundSquare
+
+Similar to rectangle but maintains square aspect ratio.
+
+### OverlayManagerBackgroundImage
+
+Uses an image as text background with stretch modes.
+
+### OverlayManagerBackgroundTriangle/Star
+
+Custom shaped backgrounds for text.
+
+## Font Settings
+
+Configure text appearance:
+
+```
+public class FontSettings
+```
+
+| Property | Type | Description |
+| --- | --- | --- |
+| `Name` | `string` | Font family name |
+| `Size` | `int` | Font size in points |
+| `Style` | `FontStyle` | Normal, Italic, Oblique |
+| `Weight` | `FontWeight` | Normal, Bold, Light, etc. |
+
+## Complete Example
+
+```
+// Create pipeline and blocks
+var pipeline = new MediaBlocksPipeline();
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(videoUri));
+var overlayManager = new OverlayManagerBlock();
+var videoRenderer = new VideoRendererBlock(pipeline, videoView);
+
+// Connect pipeline
+pipeline.Connect(fileSource.VideoOutput, overlayManager.Input);
+pipeline.Connect(overlayManager.Output, videoRenderer.Input);
+
+// Add logo watermark
+var logo = new OverlayManagerImage("logo.png", 10, 10);
+logo.Opacity = 0.5;
+logo.ZIndex = 10; // On top
+overlayManager.Video_Overlay_Add(logo);
+
+// Add timestamp — position against the known output height (set up when the overlay manager block is configured)
+const int frameHeight = 720;
+var timestamp = new OverlayManagerDateTime();
+timestamp.X = 10;
+timestamp.Y = frameHeight - 30;
+timestamp.Font.Size = 16;
+timestamp.Color = SKColors.White;
+timestamp.Shadow = new OverlayManagerShadowSettings(true);
+overlayManager.Video_Overlay_Add(timestamp);
+
+// Add animated title (appears after 5 seconds)
+var title = new OverlayManagerText("Welcome!", 100, 100);
+title.Font.Size = 72;
+title.Color = SKColors.Yellow;
+title.StartTime = TimeSpan.FromSeconds(5);
+title.EndTime = TimeSpan.FromSeconds(10);
+title.Rotation = -10; // Slight tilt
+title.Background = new OverlayManagerBackgroundRectangle {
+    Color = SKColors.DarkBlue,
+    Fill = true
+};
+overlayManager.Video_Overlay_Add(title);
+
+// Start playback
+await pipeline.StartAsync();
+
+// Update overlays dynamically
+title.Text = "Updated Text!";
+overlayManager.Video_Overlay_Update(title);
+```
+
+## Sample Application
+
+For a complete working example demonstrating all overlay types, refer to:
+
+- [Overlay Manager Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Overlay%20Manager%20Demo)
+
+## Performance Considerations
+
+1. **Z-Index Ordering**: Elements are sorted by Z-index before rendering. Use appropriate values to minimize sorting overhead.
+2. **Image Formats**: Use RGBA8888 format images when possible to avoid color conversion.
+3. **Shadow Effects**: Shadows with blur are computationally expensive. Use sparingly for real-time applications.
+4. **Updates**: Use `Video_Overlay_Update()` for existing elements rather than remove/add operations.
+5. **Resource Management**: Dispose image, GIF, and image sequence overlays when no longer needed to free memory.
+6. **Video Overlays**: Each `OverlayManagerVideo` overlay runs its own internal GStreamer pipeline. Limit the number of simultaneous video overlays to avoid excessive CPU and memory usage.
+7. **WPF Control Overlays**: Higher `RefreshRate` values increase CPU usage. Use the minimum refresh rate needed for smooth visual updates — 15 fps is sufficient for most static or slowly-changing content.
+8. **WebView2 Overlays**: Each `OverlayManagerWebView2Video` overlay runs its own internal rendering pipeline with an offscreen browser. Limit the number of simultaneous WebView2 overlays to avoid excessive CPU, GPU, and memory usage.
+9. **Overlay Groups**: Use `OverlayManagerGroup` to preload video overlays. This avoids staggered start times when multiple video overlays need to begin simultaneously.
+
+## Platform Notes
+
+- **Windows**: Supports System.Drawing.Bitmap in addition to SkiaSharp
+- **Windows (WPF)**: Supports `OverlayManagerWPFControl` for rendering WPF visual elements as overlays. Requires `NET_WINDOWS` build target.
+- **Windows (WebView2)**: Supports `OverlayManagerWebView2Video` for rendering live web content (HTML/CSS/JS) as overlays. Requires Microsoft WebView2 Runtime and the GStreamer WebView2 plugin (`webview2src`).
+- **iOS**: Font defaults to "System-ui"
+- **Android**: Font defaults to "System-ui"
+- **Linux/macOS**: Enumerates available fonts at runtime
+
+## Thread Safety
+
+The overlay manager uses internal locking for thread-safe operations. You can safely add, remove, or update overlays from any thread.
+
+## Troubleshooting
+
+1. **Overlay not visible**: Check `Enabled` property, `StartTime`/`EndTime`, and `ZIndex` ordering.
+2. **Text appears blurry**: Ensure font size is appropriate for video resolution.
+3. **Memory usage**: Dispose unused image/GIF/image sequence overlays and use appropriate image sizes.
+4. **Video overlay shows no frames**: Ensure `Initialize()` returns `true` before adding to the overlay manager. Check that the source file path is valid and accessible, and that GStreamer has the required codecs.
+5. **WPF overlay not updating**: Verify `RefreshRate` is appropriate for your content. Use `InvokeOnUIThread()` for all WPF element modifications to avoid cross-thread exceptions.
+6. **WebView2 overlay not rendering**: Ensure the Microsoft WebView2 Runtime is installed on the target machine. Check that `Initialize()` returns `true` before adding to the overlay manager. The GStreamer WebView2 plugin (`webview2src`) must be available.
+7. **Group overlays not starting together**: Ensure all overlays are added to the group before calling `Initialize()`. Overlays cannot be added after initialization.
+
+## Frequently Asked Questions
+
+### How do I overlay a video file on top of another video in C#?
+
+Use `OverlayManagerVideo` to play a video file or stream URL as an overlay. Create an instance with the source path, position, and dimensions, then call `Initialize()` and add it to the `OverlayManagerBlock`. You get full playback control with `Play()`, `Pause()`, `Stop()`, and `Seek()` methods, plus optional audio output. See the [OverlayManagerVideo](#overlaymanagervideo) section for examples.
+
+### Can I use WPF controls as live video overlays?
+
+Yes. `OverlayManagerWPFControl` renders any WPF `FrameworkElement` as a video overlay, including controls with Storyboard animations, data binding, and complex visual trees. The element is periodically snapshot at a configurable refresh rate (1-60 fps). This is Windows-only and requires the `NET_WINDOWS` build target. Use the convenience method `Video_Overlay_AddWPFControl()` for the simplest setup. See the [OverlayManagerWPFControl](#overlaymanagerwpfcontrol-windows-only) section.
+
+### How do I synchronize multiple video overlays to start at the same time?
+
+Use `OverlayManagerGroup` to group overlays that need coordinated lifecycle. Add all overlays to the group before calling `Initialize()`, which preloads video overlays to PAUSED state. Then call `Play()` to start them all simultaneously. This is especially useful for multi-camera compositions. See the [OverlayManagerGroup](#overlaymanagergroup) section.
+
+### Can I play audio from a video file overlay?
+
+Yes. Set the `AudioOutput` property on `OverlayManagerVideo` to an audio output device before calling `Initialize()`. Control volume with `AudioOutput_Volume` (0.0-1.0+) and mute with `AudioOutput_Mute`. If `AudioOutput` is null (the default), audio from the video file is discarded.
+
+### What overlay types does OverlayManagerBlock support?
+
+The OverlayManagerBlock supports: text (`OverlayManagerText`), date/time (`OverlayManagerDateTime`), scrolling text (`OverlayManagerScrollingText`), images (`OverlayManagerImage`), animated GIFs (`OverlayManagerGIF`), image sequences (`OverlayManagerImageSequence`), SVG graphics (`OverlayManagerSVG`), shapes (rectangle, circle, triangle, star, line), video files/URLs (`OverlayManagerVideo`), Decklink capture cards (`OverlayManagerDecklinkVideo`), NDI network sources (`OverlayManagerNDIVideo`), WebView2 web content (`OverlayManagerWebView2Video`, Windows only), WPF controls (`OverlayManagerWPFControl`, Windows only), overlay groups (`OverlayManagerGroup`), custom Cairo drawing (`OverlayManagerCallback`), and video transformation effects (zoom, pan, fade, squeezeback).
+
+### Can I render live web content as a video overlay?
+
+Yes. `OverlayManagerWebView2Video` renders any web page (HTML, CSS, JavaScript) as a video overlay using Microsoft WebView2. You can display dashboards, animated web content, tickers, or any browser-rendered content. It supports JavaScript injection after navigation for customizing the displayed page. This is Windows-only and requires the Microsoft WebView2 Runtime. See the [OverlayManagerWebView2Video](#overlaymanagerwebview2video-windows-only) section.
+
+---END OF PAGE---
+
+
+
+## Video Stabilization SDK for .NET — VideoStabilizationBlock
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoProcessing/video-stabilization/
+**Description:** Remove camera shake from live or recorded video in C# with VideoStabilizationBlock (OpenCV deshake) from the VisioForge Media Blocks SDK.
+**Tags:** Media Blocks SDK, .NET, MediaBlocksPipeline, Windows, macOS, GStreamer, OpenCV, Effects, Playback, C#
+**API:** VideoStabilizationBlock, VideoStabilizationSettings, UniversalSourceBlock, VideoRendererBlock, MediaBlocksPipeline
+
+# Video Stabilization Block
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+## Overview
+
+The `VideoStabilizationBlock` removes camera shake from a live or recorded video stream in real time. It estimates the global inter-frame motion (translation and rotation) with sparse optical flow, smooths the resulting camera trajectory with a causal moving-average window, and warps every frame back onto the smoothed path. A small centre zoom (crop ratio) hides the borders exposed by the compensation.
+
+The block is backed by the OpenCV `vfdeshake` GStreamer element, so it requires the OpenCV SDK redistributable. It is currently available on Windows, Linux, macOS, Mac Catalyst and iOS.
+
+Latency is zero: only past frames are used for smoothing, so the block can be used in live pipelines.
+
+## Key Features
+
+- Global motion estimation (translation + rotation) via `goodFeaturesToTrack` + pyramidal Lucas-Kanade optical flow and a partial-affine RANSAC fit.
+- Causal trajectory smoothing with a configurable window radius - no added frame latency.
+- Automatic centre zoom (`CropRatio`) to keep the borders hidden.
+- Per-frame correction limits (`MaxShift`, `MaxAngle`) as safety limiters.
+- Live retuning: every property can be changed while the pipeline runs.
+- Passthrough mode (`Enabled = false`) for an instant before/after comparison.
+
+## Settings
+
+`VideoStabilizationSettings` maps one-to-one to the element properties:
+
+| Property | Type | Default | Description |
+| --- | --- | --- | --- |
+| `Enabled` | `bool` | `true` | When `false` the block passes frames through untouched. |
+| `SmoothingRadius` | `int` | `15` | Number of past frames averaged when smoothing the camera trajectory. Larger = steadier, slower-reacting. Range `1` - `1000`. |
+| `CropRatio` | `double` | `0.9` | Fraction of the frame kept visible. The frame is zoomed by `1 / CropRatio` around its centre to hide the exposed borders. `1.0` disables the zoom. Range `0.5` - `1.0`. |
+| `MaxShift` | `int` | `100` | Maximum per-frame translation correction in pixels (safety limiter). Minimum `0`. |
+| `MaxAngle` | `double` | `15` | Maximum per-frame rotation correction in degrees (safety limiter). Range `0` - `90`. |
+
+Every property **clamps silently** to its range on assignment - an out-of-range value is corrected, not rejected, so read the property back if you need to know what was applied.
+
+## Availability
+
+`IsAvailable()` looks the `vfdeshake` element up in the GStreamer registry, so call it **after** the SDK has been initialized:
+
+```
+await VisioForgeX.InitSDKAsync();
+
+if (!VideoStabilizationBlock.IsAvailable())
+{
+    // Add the VisioForge.CrossPlatform.OpenCV.Windows.x64 NuGet package.
+}
+```
+
+## Sample code - preview a stabilized file
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.OpenCV;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.OpenCV;
+using VisioForge.Core.Types.X.Sources;
+
+// Initialize the SDK once at application startup before building any pipeline.
+await VisioForgeX.InitSDKAsync();
+
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(@"C:\Videos\shaky.mp4", renderVideo: true, renderAudio: false));
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings
+{
+    Enabled = true,
+    SmoothingRadius = 20,
+    CropRatio = 0.9,
+});
+
+// VideoView1 is a VisioForge VideoView control on your form/window.
+var renderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(source.VideoOutput, stabilizer.Input);
+pipeline.Connect(stabilizer.Output, renderer.Input);
+
+await pipeline.StartAsync();
+```
+
+## Sample code - stabilize and save to MP4
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.OpenCV;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.Types.X.OpenCV;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.VideoEncoders;
+
+// Initialize the SDK once at application startup before building any pipeline.
+await VisioForgeX.InitSDKAsync();
+
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(@"C:\Videos\shaky.mp4", renderVideo: true, renderAudio: false));
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings { CropRatio = 0.9 });
+
+var h264 = new H264EncoderBlock(new OpenH264EncoderSettings());
+var mp4 = new MP4SinkBlock(new MP4SinkSettings(@"C:\Videos\stabilized.mp4"));
+
+pipeline.Connect(source.VideoOutput, stabilizer.Input);
+pipeline.Connect(stabilizer.Output, h264.Input);
+pipeline.Connect(h264.Output, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+
+// The file plays to its end and the pipeline finalizes the MP4 on EOS - handle OnStop to know when.
+// To end the recording EARLY, call StopAsync(): it pushes EOS so the muxer writes the moov atom.
+// Killing the process instead leaves an unplayable file.
+// await pipeline.StopAsync();
+```
+
+## Sample code - preview and record the stabilized output
+
+To watch the stabilized video and record it at the same time, split the stabilizer output with a `TeeBlock`: one branch feeds the renderer, the other the H264 encoder and the MP4 sink.
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.OpenCV;
+using VisioForge.Core.MediaBlocks.Sinks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.Special;
+using VisioForge.Core.MediaBlocks.VideoEncoders;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.OpenCV;
+using VisioForge.Core.Types.X.Sinks;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.Types.X.VideoEncoders;
+
+// Initialize the SDK once at application startup before building any pipeline.
+await VisioForgeX.InitSDKAsync();
+
+var pipeline = new MediaBlocksPipeline();
+
+var source = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(@"C:\Videos\shaky.mp4", renderVideo: true, renderAudio: false));
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings { CropRatio = 0.9 });
+
+var tee = new TeeBlock(2, MediaBlockPadMediaType.Video);
+var renderer = new VideoRendererBlock(pipeline, VideoView1);
+var h264 = new H264EncoderBlock(new OpenH264EncoderSettings());
+var mp4 = new MP4SinkBlock(new MP4SinkSettings(@"C:\Videos\stabilized.mp4"));
+
+pipeline.Connect(source.VideoOutput, stabilizer.Input);
+pipeline.Connect(stabilizer.Output, tee.Input);
+pipeline.Connect(tee.Outputs[0], renderer.Input);
+pipeline.Connect(tee.Outputs[1], h264.Input);
+pipeline.Connect(h264.Output, mp4.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+
+// The file plays to its end and the pipeline finalizes the MP4 on EOS - handle OnStop to know when.
+// To end the recording EARLY, call StopAsync(): it pushes EOS so the muxer writes the moov atom.
+// Killing the process instead leaves an unplayable file.
+// await pipeline.StopAsync();
+```
+
+## Use in the X engines
+
+`VideoStabilizationBlock` implements `IVideoProcessingBlock`, so it can be inserted directly into the high-level X engines - `VideoCaptureCoreX` and `MediaPlayerCoreX` - with `Video_Processing_AddBlock()`. The engine wires the block into its video path for you, which means you can stabilize a **live camera** and not only a file.
+
+Add the block **before the engine builds its pipeline**. For `VideoCaptureCoreX` that means before `StartAsync()`; for `MediaPlayerCoreX` it means before `OpenAsync()`, because the player builds its graph during Open - a block added after that is ignored (it only produces a warning in the log).
+
+```
+using VisioForge.Core;
+using VisioForge.Core.MediaBlocks.OpenCV;
+using VisioForge.Core.Types.X.OpenCV;
+using VisioForge.Core.Types.X.Sources;
+using VisioForge.Core.VideoCaptureX;
+
+// Initialize the SDK once at application startup before creating any engine.
+await VisioForgeX.InitSDKAsync();
+
+if (!VideoStabilizationBlock.IsAvailable())
+{
+    // Add the VisioForge.CrossPlatform.OpenCV.Windows.x64 NuGet package.
+    return;
+}
+
+// Enumerate the cameras.
+var cameras = await DeviceEnumerator.Shared.VideoSourcesAsync();
+if (cameras.Length == 0)
+{
+    return;
+}
+
+// VideoView1 is a VisioForge VideoView control on your form/window.
+var core = new VideoCaptureCoreX(VideoView1);
+
+// This constructor picks an HD (or the best available) format and frame rate for the device.
+core.Video_Source = new VideoCaptureDeviceSourceSettings(cameras[0]);
+
+var stabilizer = new VideoStabilizationBlock(new VideoStabilizationSettings
+{
+    SmoothingRadius = 20,
+    CropRatio = 0.9,
+});
+
+core.Video_Processing_AddBlock(stabilizer);
+
+// StartAsync returns false if a block failed to build - it does not throw.
+if (!await core.StartAsync())
+{
+    // Handle the failure: the OpenCV redistributable or the camera may be unavailable.
+}
+```
+
+`ApplySettings()` works exactly the same way inside an engine: change the values on `stabilizer.Settings` and call `stabilizer.ApplySettings()` to retune the effect while the camera keeps running.
+
+The engine owns the block
+
+Once you pass a block to `Video_Processing_AddBlock()`, the engine owns it: it builds the block on start and **disposes it when capture or playback stops**. Do not dispose it yourself, and do not reuse the same instance for a second session - create a new block for each start. `ApplySettings()` is safe to call at any time (it is a no-op once the block has been disposed).
+
+## Live retuning
+
+The `vfdeshake` element re-reads its properties every frame. Change any value on the `Settings` object and call `ApplySettings()` to retune the effect without rebuilding the pipeline:
+
+```
+stabilizer.Settings.Enabled = false;      // instant before/after toggle
+stabilizer.Settings.SmoothingRadius = 30; // steadier
+stabilizer.Settings.CropRatio = 0.85;     // zoom in a little more
+stabilizer.ApplySettings();
+```
+
+## Tips
+
+- Increase `SmoothingRadius` for steadier results on continuous shake; decrease it if the stabilization reacts too slowly to intentional camera moves.
+- Lower `CropRatio` (for example `0.85`) when the shake is large, so the wider compensation stays hidden behind the zoom. Higher values keep more of the frame but may expose the edges.
+- Global motion estimation works best when the scene is dominated by the camera motion. Scenes with large moving foreground objects are harder to stabilize.
+
+## Demos
+
+- **[Video Stabilization Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Video%20Stabilization%20Demo)** - Media Blocks pipeline: open a file, preview the stabilized playback, optionally record it to MP4, and tune the settings live.
+- **[Video Stabilization Capture X](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/WPF/CSharp/Video%20Stabilization%20Capture%20X)** - live camera stabilization with `VideoCaptureCoreX` and `Video_Processing_AddBlock()`.
+- **[Video Stabilization Camera Demo](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/Video%20Stabilization%20Camera%20Demo)** - the same live camera, but built by hand as a `MediaBlocksPipeline`: camera source -> stabilizer -> renderer, with live tuning.
+
+---END OF PAGE---
+
+
+
+## Video Renderer in C# .NET - DirectX, OpenGL, Metal
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/VideoRendering/
+**Description:** Display video in WPF, WinForms, Avalonia, and MAUI apps with hardware-accelerated rendering using VisioForge Media Blocks SDK for .NET.
+**Tags:** Media Blocks SDK, .NET, Windows, macOS, Linux, Android, iOS
+**API:** VideoRendererBlock, UniversalSourceBlock, VideoView, MediaBlocksPipeline, UniversalSourceSettings
+
+# Video Renderer Block
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+## Overview
+
+The Video Renderer block is an essential component designed for developers who need to display video streams in their applications. This powerful tool enables you to render video content on specific areas of windows or screens across various platforms and UI frameworks.
+
+The block utilizes a platform-specific visual control called `VideoView` which leverages DirectX technology on Windows systems and typically implements OpenGL rendering on other platforms. The SDK fully supports cross-platform development with compatibility for both Avalonia and MAUI UI frameworks.
+
+One of the key advantages of this block is its flexibility - developers can implement multiple video views and renderers to display the same video stream in different locations simultaneously, whether in separate sections of a window or across multiple windows.
+
+## Rendering Technologies
+
+### DirectX Integration
+
+On Windows platforms, the Video Renderer Block seamlessly integrates with DirectX for high-performance hardware-accelerated rendering. This integration provides several benefits:
+
+- **Hardware acceleration**: Utilizes the GPU for efficient video processing and rendering
+- **Low-latency playback**: Minimizes delay between frame processing and display
+- **Direct3D surface sharing**: Enables efficient memory management and reduced copying of video data
+- **Multiple display support**: Handles rendering across various display configurations
+- **Support for High DPI**: Ensures crisp rendering on high-resolution displays
+
+The renderer automatically selects the appropriate DirectX version based on your system capabilities, supporting DirectX 11 and DirectX 12 where available.
+
+### OpenGL Implementation
+
+For cross-platform compatibility, the Video Renderer uses OpenGL on Linux and older macOS systems:
+
+- **Consistent rendering API**: Provides a unified approach across different operating systems
+- **Shader-based processing**: Enables advanced video effects and color transformations
+- **Texture mapping optimization**: Efficiently handles video frame presentation
+- **Framebuffer objects support**: Allows for off-screen rendering and complex composition
+- **Hardware-accelerated scaling**: Delivers high-quality resizing with minimal performance impact
+
+OpenGL ES variants are utilized on mobile platforms to ensure optimal performance while maintaining compatibility with the core rendering pipeline.
+
+### Metal Framework Support
+
+On newer Apple platforms (macOS, iOS, iPadOS), the Video Renderer can leverage Metal - Apple's modern graphics and compute API:
+
+- **Native Apple integration**: Optimized specifically for Apple hardware
+- **Reduced CPU overhead**: Minimizes processing bottlenecks compared to OpenGL
+- **Enhanced parallel execution**: Better utilizes multi-core processors
+- **Improved memory bandwidth**: More efficient video frame handling
+- **Integration with Apple's video toolchain**: Seamless interoperability with AV Foundation and Core Video
+
+The renderer automatically selects Metal when available on Apple platforms, falling back to OpenGL when necessary on older versions.
+
+## Technical Specifications
+
+### Block Information
+
+Name: VideoRendererBlock
+
+| Pin direction | Media type | Pins count |
+| --- | --- | --- |
+| Input video | uncompressed video | one or more |
+| Input subtitle | text or subpicture subtitles | one (optional) |
+
+## Implementation Guide
+
+### Setting Up Your Video View
+
+The Video View component serves as the visual element where your video content will be displayed. It needs to be properly integrated into your application's UI layout.
+
+### Creating a Basic Pipeline
+
+Below is a visual representation of a simple pipeline implementation:
+
+```
+graph LR;
+    UniversalSourceBlock-->VideoRendererBlock;
+```
+
+This diagram illustrates how a source block connects directly to the video renderer to create a functional video playback system.
+
+### Code Implementation Example
+
+The following sample demonstrates how to implement a basic video rendering pipeline:
+
+```
+// Create a pipeline
+var pipeline = new MediaBlocksPipeline();
+
+// create a source block
+var filename = "test.mp4";
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync(filename));
+
+// create a video renderer block
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+// connect the blocks
+pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
+
+// start the pipeline
+await pipeline.StartAsync();
+```
+
+### Displaying Embedded Subtitles
+
+Connect a source's subtitle output to `SubtitleInput` and set `SubtitleEnabled` to draw the subtitle track of the file over the video - text (SRT, SSA/ASS, tx3g) and bitmap (DVD, DVB, PGS) subtitles. It works with every video view. To draw an external file instead, set `SubtitleExternalFile` and leave `SubtitleInput` unconnected.
+
+```
+var fileSource = new UniversalSourceBlock(
+    await UniversalSourceSettings.CreateAsync(filename, renderSubtitle: true));
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+
+pipeline.Connect(fileSource.VideoOutput, videoRenderer.Input);
+// SubtitleOutput is null when the file has no subtitle track
+if (fileSource.SubtitleOutput != null)
+{
+    videoRenderer.SubtitleEnabled = true;
+    pipeline.Connect(fileSource.SubtitleOutput, videoRenderer.SubtitleInput);
+}
+```
+
+### Keeping the Last Frame After Stop
+
+By default the view clears to its background when the media ends or the pipeline stops. Set `KeepLastFrame` to keep the last frame on the view instead, for example to show where a film ended:
+
+```
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1)
+{
+    KeepLastFrame = true,
+};
+```
+
+The X engines read the same setting from the view: `VideoView1.RendererSettings.KeepLastFrame = true` before the start.
+
+- The default is `false`, which keeps the behaviour of earlier versions.
+- The frame stays until the next start. Letterbox applies to it as to the video. One exception: on Android, `VideoViewTX` (which the MAUI and Uno views use there) clears it when the view is resized or its surface is recreated while stopped, for example on rotation.
+- While the pipeline is stopped, `Snapshot_Get` and `Snapshot_GetAsync` return that frame, so an app can save it or use it as a cover.
+- `LiveVideoCompositor` with `KeepLastFrame` on its main view stops its main pipeline before its inputs, so the view keeps the last composed picture rather than the compositor's background.
+- The classic DirectShow engines (`VideoCaptureCore`, `MediaPlayerCore`, `VideoEditCore`) have their own renderer settings and keep clearing on stop.
+
+| Platform | Views | Checked on (off and on) |
+| --- | --- | --- |
+| Windows | WinForms, WPF, Avalonia | Windows 11 desktop |
+| Windows | WinUI, MAUI (`VideoViewX`, `SkiaVideoView`) | Windows 11 desktop |
+| Windows | Uno | Not checked yet |
+| Linux | Avalonia | Ubuntu 24.04, X11 |
+| Android | `VideoView`, `VideoViewGL`, `VideoViewTX` | Android 16 phone, Android emulator |
+| Android | MAUI, Uno, Avalonia | Not checked yet |
+| iOS | Apple views, MAUI | Not checked on a device yet |
+| Mac Catalyst | Apple views, MAUI | macOS 27 desktop |
+| macOS | Apple views, Avalonia | macOS 27 desktop |
+
+## Platform Compatibility
+
+The Video Renderer block offers wide compatibility across multiple operating systems and devices:
+
+- Windows
+- macOS
+- Linux
+- iOS
+- Android
+
+This makes it an ideal solution for developers building cross-platform applications that require consistent video rendering capabilities.
+
+---END OF PAGE---
+
+
+
+## Direct3D 11 GPU Video Decoding and Effects in C# .NET
+**URL:** https://www.visioforge.com/help/docs/dotnet/mediablocks/windows/
+**Description:** Use Direct3D 11 hardware-accelerated video decoding, effects, and DirectShow integration on Windows with VisioForge Media Blocks SDK for .NET.
+**Tags:** Media Blocks SDK, .NET, DirectShow, Windows, macOS, Linux, Android, iOS
+**API:** D3D11H264DecoderBlock, D3D11UploadBlock, D3D11DownloadBlock, D3D12InterlaceBlock, D3D12InterlaceSettings, D3D12FisheyeDewarpBlock, D3D12FisheyeDewarpSettings, D3D12RemapBlock, D3D12RemapSettings, D3D12UVRemapMap, UniversalSourceBlock, UniversalSourceSettings
+
+# Windows Platform Blocks - VisioForge Media Blocks SDK .NET
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+This section covers MediaBlocks specifically optimized for Windows platforms.
+
+## Available Blocks
+
+### Direct3D 11 Hardware Decoders
+
+Windows provides hardware-accelerated video decoding through Direct3D 11:
+
+- **D3D11H264DecoderBlock**: Hardware H.264/AVC decoding
+- **D3D11H265DecoderBlock**: Hardware H.265/HEVC decoding
+- **D3D11VP8DecoderBlock**: Hardware VP8 decoding
+- **D3D11VP9DecoderBlock**: Hardware VP9 decoding
+- **D3D11AV1DecoderBlock**: Hardware AV1 decoding
+- **D3D11MPEG2DecoderBlock**: Hardware MPEG-2 decoding
+
+See [Video Decoders Documentation](../VideoDecoders/)
+
+### Direct3D 11 Processing
+
+- **D3D11UploadBlock**: Upload video from system memory to GPU
+- **D3D11DownloadBlock**: Download video from GPU to system memory
+- **D3D11VideoConverterBlock**: GPU-accelerated color space conversion
+
+See [Video Processing Documentation](../VideoProcessing/#d3d11-video-converter)
+
+### Direct3D 11 Composition
+
+- **D3D11VideoCompositorBlock**: GPU-accelerated video compositing and mixing
+
+### Direct3D 12 Processing
+
+- **D3D12InterlaceBlock**: GPU conversion of progressive video to interlaced video, for broadcast and other outputs that need an explicit field order
+
+This is the opposite of deinterlacing (`DeinterlaceBlock`): the input must be progressive, and the output is interleaved interlaced video. `D3D12InterlaceSettings` sets:
+
+- `FieldPattern`: `OneToOne` turns two progressive frames into one interlaced frame, halving the frame rate (60p to 60i, 30 frames per second); `TwoToTwo` splits each progressive frame into two fields, keeping the frame rate (30p to 60i, 30 frames per second)
+- `TopFieldFirst`: top field first when `true`, bottom field first when `false` (the default)
+- `Engine`: the GPU engine (`Auto`, `ThreeD`, `Compute`)
+- `AdapterIndex`: the GPU adapter, `-1` for the default one
+
+The block moves frames to and from the GPU itself: its input and its output each take system, D3D11 or D3D12 memory, whichever the neighbouring block uses, and D3D12 memory on the block's own GPU adapter passes through without a copy on both sides. It needs a Direct3D 12 capable GPU. The downstream consumer must accept interlaced video (for example, the MPEG-2 encoder): one that takes progressive video only cannot be linked to the block, and the pipeline reports the failed link through `OnError`. A GPU adapter that does not exist fails the pipeline start.
+
+- **D3D12FisheyeDewarpBlock**: GPU dewarping of a circular fisheye image into an equirectangular, panorama or perspective view
+
+`D3D12FisheyeDewarpSettings` sets:
+
+- `Projection`: `Equirectangular` (the default), `Panorama`, `Perspective` or `Passthrough`
+- `CenterX`, `CenterY`, `RadiusX`, `RadiusY`: the fisheye circle in the input image, normalized from 0 to 1, the radius at least 1e-6 (defaults: centred, radius 0.5)
+- `FisheyeFOV`: the lens field of view in degrees (180 by default)
+- `HorizontalFOV`, `VerticalFOV`: the output field of view in degrees (90 by default); not used by `Panorama`. The element reduces angles modulo 360; reduced, an angle must be from 0.001 to 359.999 degrees, and up to 179.999 for `Perspective`. `FisheyeFOV` takes the 0.001 to 359.999 range in every projection. An `Equirectangular` frame spans `HorizontalFOV` by `VerticalFOV`, so a wide one takes, for example, 300 by 180
+- `RotationX` (pitch), `RotationY` (yaw), `RotationZ` (roll) in degrees, with `RotationOrder` and `RotationSpace` (`Local` camera-relative or `World` fixed axes); only the roll applies to `Panorama`
+- `InnerRadius`: the centre part cropped out of a `Panorama`, normalized (0.3 by default)
+- `RoiX`, `RoiY`, `RoiWidth`, `RoiHeight`: the region of interest in output image space, normalized, width and height at least 1e-6; the element does not clamp it. Past the frame horizontally it turns the view (a panorama crosses its seam); past it vertically a panorama shows black rows and an equirectangular frame folds over the pole
+- `ViewportX`, `ViewportY`, `ViewportWidth`, `ViewportHeight`: where the result is drawn in the output frame, normalized, width and height at least 1e-6
+- `AdapterIndex`: the GPU adapter, `-1` for the default one
+
+Every setting but `AdapterIndex` can be changed while the pipeline runs: change `Settings` and call `Update()`, which returns `false` when a value is out of range and, once the block is in a pipeline, reports the cause through `OnError`. This turns one fisheye camera into a virtual pan-tilt-zoom camera. The output has the input's size, format and frame rate; put a `VideoResizeBlock` after the block for another size, for example 2:1 for an equirectangular frame. Like the interlace block, it moves frames to and from the GPU itself and needs a Direct3D 12 capable GPU. On the CPU, `CVDewarpBlock` (OpenCV) is the alternative.
+
+- **D3D12RemapBlock**: GPU remapping of video through a UV map, for lens calibration, distortion correction and other geometric transformations
+
+`D3D12RemapSettings` sets:
+
+- `Map`: a `D3D12UVRemapMap`, or `null` to pass the video through unchanged
+- `AdapterIndex`: the GPU adapter, `-1` for the default one
+
+A `D3D12UVRemapMap` is created from its width and height (each from 1 to 16384) and an array of `ushort` values, four per map point, row by row from the top left: U, V, unused and mask. U and V are the input position the point shows, 0 to 65535 for 0 to 1 of the input's width and height. A mask of 32768 or more shows the input there; a smaller one shows black. The map is stretched over the output frame, so its size does not have to match the video's: map point (x, y) stands for the output position ((x + 0.5) / width, (y + 0.5) / height). The map is copied when it is created and takes 8 bytes per point; a map the size of the video is plenty. A saved pipeline (`ToJson`, `SaveJsonAsync`) carries the map, up to 80 million points (8192x8192 is 67 million); a pipeline with a larger map is saved without the block's settings, and `ToDocument` reports it. To replace or remove it while the pipeline runs, change `Settings.Map` and call `Update()`; the next frame shows the change. The block uploads the map to the GPU the video frames are on and owns that copy, so the application never handles a Direct3D resource; the frame that takes a new map waits for its upload. A failed upload is reported through `OnError`, and the previous map stays in use (if there is none, or it was made for another GPU, the video passes through unchanged) until the next `Update()`, which uploads the map again, or until the video moves to another GPU. Like the interlace block, it moves frames to and from the GPU itself and needs a Direct3D 12 capable GPU.
+
+### Windows Video Effects
+
+- **VideoEffectsWinBlock**: Windows-specific video effects
+- **VR360ProcessorBlock**: 360-degree VR video processing
+
+### Special Blocks
+
+See [Special Blocks Documentation](../Special/)
+
+## Platform Requirements
+
+- **Windows**: Windows 10 or later
+- **Direct3D 11**: GPU with D3D11 support
+- **Hardware Decode**: GPU with hardware video decode support
+
+## Features
+
+- **Hardware Acceleration**: Leverage GPU for encoding, decoding, and processing
+- **Direct3D 11 Integration**: Efficient video processing on GPU
+- **Low CPU Usage**: Offload processing to dedicated hardware
+- **High Performance**: Handle multiple HD/4K streams simultaneously
+- **Power Efficiency**: Reduce power consumption with hardware acceleration
+
+## Sample Code
+
+### Hardware H.264 Decoding
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// The decoder takes the encoded stream: demux the MP4 and parse its H.264 instead of decoding it in a source block (another container needs its own demuxer)
+var fileSource = new BasicFileSourceBlock("video.mp4");
+var demux = new QTDemuxBlock(renderVideo: true, renderAudio: false);
+var parse = new H264ParseBlock();
+pipeline.Connect(fileSource.Output, demux.Input);
+pipeline.Connect(demux.VideoOutput, parse.Input);
+
+// D3D11 hardware decoder
+var d3d11Decoder = new D3D11H264DecoderBlock();
+pipeline.Connect(parse.Output, d3d11Decoder.Input);
+
+// Process on GPU or download to system memory
+var d3d11Download = new D3D11DownloadBlock();
+pipeline.Connect(d3d11Decoder.Output, d3d11Download.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(d3d11Download.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### GPU Video Processing Pipeline
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// Software decoding: a hardware decoder already outputs GPU memory, which leaves the upload nothing to do
+var settings = await UniversalSourceSettings.CreateAsync("video.mp4");
+settings.DisableHWDecoders = true;
+var fileSource = new UniversalSourceBlock(settings);
+
+// Upload to GPU
+var d3d11Upload = new D3D11UploadBlock();
+pipeline.Connect(fileSource.VideoOutput, d3d11Upload.Input);
+
+// GPU color conversion, applied when the next block needs another format
+var d3d11Converter = new D3D11VideoConverterBlock();
+pipeline.Connect(d3d11Upload.Output, d3d11Converter.Input);
+
+// Download from GPU
+var d3d11Download = new D3D11DownloadBlock();
+pipeline.Connect(d3d11Converter.Output, d3d11Download.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(d3d11Download.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+### Progressive to Interlaced on the GPU
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// A 25p progressive source
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+
+// 25p to 50i, top field first
+var interlace = new D3D12InterlaceBlock(new D3D12InterlaceSettings
+{
+    FieldPattern = D3D12InterlacePattern.TwoToTwo,
+    TopFieldFirst = true
+});
+pipeline.Connect(fileSource.VideoOutput, interlace.Input);
+
+// MPEG-2 keeps the interlacing and the field order in the stream
+var encoder = new MPEG2EncoderBlock(new MPEG2VideoEncoderSettings());
+pipeline.Connect(interlace.Output, encoder.Input);
+
+var sink = new MPEGTSSinkBlock(new MPEGTSSinkSettings("output.ts"));
+pipeline.Connect(encoder.Output, sink.CreateNewInput(MediaBlockPadMediaType.Video));
+
+await pipeline.StartAsync();
+```
+
+### Fisheye Dewarping on the GPU
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+// A circular fisheye recording
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("fisheye.mp4"));
+
+// A 90-degree perspective view, turned 30 degrees around the vertical axis (yaw)
+var dewarp = new D3D12FisheyeDewarpBlock(new D3D12FisheyeDewarpSettings
+{
+    Projection = D3D12FisheyeProjection.Perspective,
+    RotationY = 30
+});
+pipeline.Connect(fileSource.VideoOutput, dewarp.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(dewarp.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Later, while playing: pan the view
+dewarp.Settings.RotationY = -45;
+dewarp.Update();
+```
+
+### Remapping Video on the GPU
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var fileSource = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video.mp4"));
+
+// Your own map, for example from a lens calibration: 1920 x 1080 points, four values each (U, V, unused, mask)
+ushort[] calibration = LoadCalibrationMap();
+var remap = new D3D12RemapBlock(new D3D12RemapSettings
+{
+    Map = new D3D12UVRemapMap(1920, 1080, calibration)
+});
+pipeline.Connect(fileSource.VideoOutput, remap.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(remap.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+
+// Later, while playing: switch to another calibration
+remap.Settings.Map = new D3D12UVRemapMap(1920, 1080, LoadOtherCalibrationMap());
+remap.Update();
+```
+
+### Video Composition
+
+```
+var pipeline = new MediaBlocksPipeline();
+
+var source1 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video1.mp4"));
+var source2 = new UniversalSourceBlock(await UniversalSourceSettings.CreateAsync("video2.mp4"));
+
+// Upload both to GPU
+var upload1 = new D3D11UploadBlock();
+var upload2 = new D3D11UploadBlock();
+pipeline.Connect(source1.VideoOutput, upload1.Input);
+pipeline.Connect(source2.VideoOutput, upload2.Input);
+
+// Configure the compositor — two streams on a 1920x1080 @ 30 fps canvas
+var compositorSettings = new D3D11VideoCompositorSettings(1920, 1080, VideoFrameRate.FPS_30);
+compositorSettings.Streams.Add(new VideoMixerStream(new Rect(0, 0, 960, 1080), zorder: 0));
+compositorSettings.Streams.Add(new VideoMixerStream(new Rect(960, 0, 1920, 1080), zorder: 1));
+
+// Composite on GPU — each added stream creates one input pad; access them via Inputs[].
+var compositor = new D3D11VideoCompositorBlock(compositorSettings);
+pipeline.Connect(upload1.Output, compositor.Inputs[0]);
+pipeline.Connect(upload2.Output, compositor.Inputs[1]);
+
+// Download result
+var download = new D3D11DownloadBlock();
+pipeline.Connect(compositor.Output, download.Input);
+
+var videoRenderer = new VideoRendererBlock(pipeline, VideoView1);
+pipeline.Connect(download.Output, videoRenderer.Input);
+
+await pipeline.StartAsync();
+```
+
+## Performance Tips
+
+- Keep video in GPU memory between operations to avoid upload/download overhead
+- Use hardware decoders when available for best performance
+- Chain GPU operations together before downloading to system memory
+- Monitor GPU memory usage when processing multiple streams
+- Check hardware support before using D3D11 blocks
+
+## Checking Hardware Support
+
+```
+// Check if D3D11 H.264 decoder is available
+if (D3D11H264DecoderBlock.IsAvailable())
+{
+    // Use hardware decoder
+    var decoder = new D3D11H264DecoderBlock();
+}
+else
+{
+    // Fall back to software decoder
+    var decoder = new UniversalDecoderBlock(MediaBlockPadMediaType.Video);
+}
+```
+
+## Platforms
+
+Windows 10 or later (Windows 11 recommended for best hardware support).
+
+## Related Documentation
+
+- [VideoDecoders](../VideoDecoders/) - Hardware decoding blocks
+- [VideoProcessing](../VideoProcessing/) - GPU processing blocks
+- [Special](../Special/) - Platform-specific utilities
+
+---END OF PAGE---
+
+

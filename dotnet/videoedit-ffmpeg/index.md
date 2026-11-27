@@ -65,7 +65,7 @@ To help you maximize the potential of the SDK, we provide comprehensive document
 
 ## System Requirements
 
-- **.NET Framework**: 4.7.2 or higher
+- **.NET Framework**: 4.6.1 or higher
 - **.NET Core**: 3.1 or higher
 - **.NET**: 5.0 or higher
 - **Operating Systems**: Windows 10/11, Windows Server 2016+

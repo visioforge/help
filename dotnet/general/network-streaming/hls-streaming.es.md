@@ -32,9 +32,9 @@ primary_api_classes:
   - H264EncoderBlock
 
 video:
-  id: Cw3UCgzu2wI
-  upload_date: 2026-11-24T20:18:00Z
-  duration: PT1M
+  id: xLOZmjgWHpo
+  upload_date: 2026-11-27T15:35:30Z
+  duration: PT10M27S
 
 ---
 
@@ -79,13 +79,17 @@ Dado que HLS es completamente basado en HTTP, necesitará un servidor HTTP dedic
 
 El Media Blocks SDK ofrece un enfoque completo para transmisión HLS a través de su arquitectura de pipeline, dando a los desarrolladores control granular sobre cada aspecto del proceso de transmisión.
 
-### La versión corta
+### Tutorial en vídeo: webcam por HLS a un navegador en C# WinForms
 
-El vídeo de un minuto ejecuta esta aplicación de consola y reproduce el flujo en un navegador.
+El tutorial construye una aplicación WinForms que transmite en directo una webcam y su micrófono por HLS con `HLSSinkBlock`. Un `TeeBlock` divide la cámara entre una vista previa local y el codificador H.264, el micrófono pasa por `AACEncoderBlock`, y el servidor HTTP integrado del sink sirve los segmentos de dos segundos, la lista de reproducción y una página de visor con hls.js, sin ningún servidor web que instalar. Después, la ejecución examina un segmento y la lista en directo, muestra cuánto va el navegador por detrás del directo, y repasa otros reproductores y qué comprobar cuando el flujo no se reproduce.
 
 <div class="video-wrapper">
-  <iframe src="https://www.youtube.com/embed/Cw3UCgzu2wI?controls=1" frameborder="0" allowfullscreen></iframe>
+  <iframe src="https://www.youtube.com/embed/xLOZmjgWHpo?controls=1" frameborder="0" allowfullscreen></iframe>
 </div>
+
+Su código: [hls-webcam-winforms](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/_VideoTutorials/hls-webcam-winforms) en GitHub.
+
+### La versión corta
 
 Una aplicación de consola completa: transmite en directo por HLS la primera cámara web hasta que se pulsa Enter. `SystemVideoSourceBlock` captura la cámara y `H264EncoderBlock` codifica el vídeo en H.264. `HLSSinkBlock` divide el flujo en segmentos MPEG-TS de unos cinco segundos (`TargetDuration`, cortados en fotogramas clave) y los escribe, con la lista de reproducción `playlist.m3u8`, en la subcarpeta `hls` de la carpeta de la aplicación; conserva en disco los diez últimos segmentos y en la lista los cinco últimos. Antes, la aplicación borra los segmentos y la lista que dejó allí una ejecución anterior, para que un reproductor nunca tome el flujo antiguo. Con `Custom_HTTP_Server_Enabled`, el servidor HTTP integrado del sink sirve esa subcarpeta, y solo ella, en el puerto 8088: abra `http://localhost:8088/` en un navegador. El flujo solo lleva vídeo; el ejemplo siguiente añade un micrófono con `AACEncoderBlock`.
 

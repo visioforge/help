@@ -22,6 +22,10 @@ primary_api_classes:
   - WebRTCSinkSettings
   - EchoCancellationBlock
   - MediaBlocksPipeline
+video:
+  id: V2YsobwtSX4
+  upload_date: 2026-11-27T10:57:20Z
+  duration: PT4M49S
 
 ---
 
@@ -33,6 +37,14 @@ primary_api_classes:
     Ce guide suit la [WebRTC Video Call Demo (WPF)](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/WPF/CSharp/WebRTC%20Video%20Call%20Demo) : une caméra et un microphone avec annulation d'écho, sourdine et caméra coupée, la vidéo et la voix de l'appelant, et une page d'appel servie par l'application.
 
     La référence des blocs se trouve dans [Blocs source → WebRTC](../Sources/index.md#bloc-source-webrtc), [Blocs sink → WebRTC](../Sinks/index.md#webrtc) et [Traitement audio → Annulation d'écho](../AudioProcessing/index.md#annulation-decho).
+
+## Tutoriel vidéo : appel vidéo WebRTC en C# WPF
+
+Le tutoriel parcourt la démo WPF ci-dessus : `WebRTCSinkBlock` envoie la caméra et le micro et sert la page d'appel, `WebRTCSourceBlock` reçoit la vidéo et la voix du navigateur, et `EchoCancellationBlock` évite que l'appelant entende sa propre voix. L'exécution montre un appel avec un navigateur, puis la coupure du micro et de la caméra.
+
+<div class="video-wrapper">
+  <iframe src="https://www.youtube.com/embed/V2YsobwtSX4?controls=1" frameborder="0" allowfullscreen></iframe>
+</div>
 
 ## Ce que vous allez construire
 

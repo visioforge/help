@@ -1,0 +1,3011 @@
+# VisioForge — General, part 9 of 9
+
+> Full text of 13 pages. All parts: https://www.visioforge.com/llms-full.txt; index: https://www.visioforge.com/llms.txt.
+
+**Author:** VisioForge
+**License:** CC-BY-4.0 (https://creativecommons.org/licenses/by/4.0/)
+**Generated:** 2026-11-27 20:41:07 UTC (c5e129a2023)
+**MCP Server:** https://mcp.visioforge.com/mcp (public, no auth — prefer for structured queries)
+
+---
+
+## HEVC Hardware Encoding on AMD, NVIDIA, Intel and Apple
+**URL:** https://www.visioforge.com/help/docs/dotnet/general/video-encoders/hevc/
+**Description:** Hardware-accelerated HEVC (H.265) encoding with AMD, NVIDIA and Intel GPUs and Apple VideoToolbox, including 10-bit and alpha, in .NET.
+**Tags:** Video Capture SDK, Media Blocks SDK, Video Edit SDK, .NET, MediaBlocksPipeline, VideoCaptureCoreX, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Capture, Streaming, Encoding, Editing, Conversion, Webcam, H.265, C#
+**API:** AMFHEVCEncoderSettings, NVENCHEVCEncoderSettings, QSVHEVCEncoderSettings, AppleMediaHEVCEncoderSettings, IHEVCEncoderSettings, SVTHEVCEncoderSettings
+
+# HEVC Hardware Encoding in .NET Applications
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+[VideoCaptureCoreX](#) [VideoEditCoreX](#) [MediaBlocksPipeline](#)
+
+This guide explores hardware-accelerated HEVC (H.265) encoding options available in VisioForge .NET SDKs. We'll cover implementation details for AMD, NVIDIA, and Intel GPU encoders plus Apple VideoToolbox, helping you choose the right solution for your video processing needs.
+
+For Windows-specific output formats, refer to our [MP4 output documentation](../../output-formats/mp4/).
+
+## Hardware HEVC Encoders Overview
+
+Modern GPUs offer powerful hardware encoding capabilities that significantly outperform software-based solutions. VisioForge SDKs support four hardware HEVC encoders:
+
+- **AMD AMF** - For AMD Radeon GPUs
+- **NVIDIA NVENC** - For NVIDIA GeForce and professional GPUs
+- **Intel QuickSync** - For Intel CPUs with integrated graphics
+- **Apple VideoToolbox** - For macOS, Mac Catalyst and iOS
+
+Each encoder provides unique features and optimization options. Let's explore their capabilities and implementation details.
+
+## AMD AMF HEVC Encoder
+
+AMD's Advanced Media Framework (AMF) delivers hardware-accelerated HEVC encoding on compatible Radeon GPUs. It balances encoding speed, quality, and efficiency for various scenarios.
+
+### Key Features and Settings
+
+- **Rate Control Methods**:
+- `CQP` (Constant QP) for fixed quality settings
+- `LCVBR` (Latency Constrained VBR) for streaming
+- `VBR` (Variable Bitrate) for offline encoding
+- `CBR` (Constant Bitrate) for reliable bandwidth usage
+- **Usage Profiles**:
+- Transcoding (highest quality)
+- Ultra Low Latency (for real-time applications)
+- Low Latency (for interactive streaming)
+- Web Camera (optimized for webcam sources)
+- **Quality Presets**: Balance between encoding speed and output quality
+
+### Implementation Example
+
+```
+var encoder = new AMFHEVCEncoderSettings
+{
+    Bitrate = 3000, // 3 Mbps target bitrate
+    MaxBitrate = 5000, // 5 Mbps peak bitrate
+    RateControl = AMFHEVCEncoderRateControl.CBR,
+
+    // Quality optimization
+    Preset = AMFHEVCEncoderPreset.Quality,
+    Usage = AMFHEVCEncoderUsage.Transcoding,
+
+    // GOP and frame settings
+    GOPSize = 30, // Keyframe interval
+    QP_I = 22, // I-frame quantization parameter
+    QP_P = 22, // P-frame quantization parameter
+
+    RefFrames = 1 // Reference frames count
+};
+```
+
+## NVIDIA NVENC HEVC Encoder
+
+NVIDIA's NVENC technology provides dedicated encoding hardware on GeForce and professional GPUs, offering excellent performance and quality across various bitrates.
+
+### Key Capabilities
+
+- **Multiple Profile Support**:
+- Main (8-bit)
+- Main10 (10-bit HDR)
+- Main444 (high color precision)
+- Main444x10 (4:4:4, 10-bit)
+- **Advanced Encoding Features**:
+- B-frame support with adaptive placement
+- Temporal Adaptive Quantization
+- Weighted Prediction
+- Look-ahead rate control
+- **Performance Presets**: From quality-focused to ultra-fast encoding
+
+### Implementation Example
+
+```
+var encoder = new NVENCHEVCEncoderSettings
+{
+    // Bitrate configuration
+    Bitrate = 3000, // 3 Mbps target
+    MaxBitrate = 5000, // 5 Mbps maximum
+
+    // Profile settings
+    Profile = NVENCHEVCProfile.Main,
+    Level = NVENCHEVCLevel.Level5_1,
+
+    // Quality enhancement options
+    BFrames = 2, // Number of B-frames
+    BAdaptive = true, // Adaptive B-frame placement
+    TemporalAQ = true, // Temporal adaptive quantization
+    WeightedPrediction = true, // Improves quality for fades
+    RCLookahead = 20, // Frames to analyze for rate control
+
+    // Buffer settings
+    VBVBufferSize = 0 // Use default buffer size
+};
+```
+
+## Intel QuickSync HEVC Encoder
+
+Intel QuickSync leverages the integrated GPU present in modern Intel processors for efficient hardware encoding, making it accessible without a dedicated graphics card.
+
+### Key Features
+
+- **Versatile Rate Control Options**:
+- `CBR` (Constant Bitrate)
+- `VBR` (Variable Bitrate)
+- `CQP` (Constant Quantizer)
+- `ICQ` (Intelligent Constant Quality)
+- `VCM` (Video Conferencing Mode)
+- `QVBR` (Quality-defined VBR)
+- **Optimization Settings**:
+- Target Usage parameter (quality vs speed balance)
+- Low-latency mode for streaming
+- HDR conformance controls
+- Closed caption insertion options
+- **Profile Support**:
+- Main (8-bit)
+- Main10 (10-bit HDR)
+
+### Implementation Example
+
+```
+var encoder = new QSVHEVCEncoderSettings
+{
+    // Bitrate settings
+    Bitrate = 3000, // 3 Mbps target
+    MaxBitrate = 5000, // 5 Mbps peak
+    RateControl = QSVHEVCEncRateControl.VBR,
+
+    // Quality tuning
+    TargetUsage = 4, // 1=Best quality, 7=Fastest encoding
+
+    // Stream structure
+    GOPSize = 30, // Keyframe interval
+    RefFrames = 2, // Reference frames
+
+    // Feature configuration
+    Profile = QSVHEVCEncProfile.Main,
+    LowLatency = false, // Enable for streaming
+
+    // Advanced options
+    CCInsertMode = QSVHEVCEncSEIInsertMode.Insert,
+    DisableHRDConformance = false
+};
+```
+
+## Apple VideoToolbox HEVC Encoder
+
+VideoToolbox is the hardware encoder on macOS, Mac Catalyst and iOS. It is available on Apple Silicon and on Intel Macs with QuickSync-capable graphics.
+
+### Key Features
+
+- **Rate Control**:
+- `ABR` (Average Bitrate, the default)
+- `CBR` (Constant Bitrate)
+- Data rate limits - a bitrate ceiling averaged over a sliding window, in `ABR` mode
+- **Profile Support**:
+- Main (8-bit)
+- Main10 (10-bit)
+- **Alpha channel** - `PreserveAlpha` switches to the alpha-capable encoder
+
+### Implementation Example
+
+```
+// Constant bitrate, for a fixed-bandwidth endpoint.
+var cbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,                              // 3 Mbps
+    RateControl = AppleMediaRateControl.CBR,
+    Profile = AppleMediaHEVCProfile.Main,
+    Realtime = true,
+    Quality = 0.5
+};
+
+// Average bitrate with a hard ceiling: 3 Mbps target, never more than 4.5 Mbps
+// averaged over any one second.
+var cappedAbr = new AppleMediaHEVCEncoderSettings
+{
+    Bitrate = 3000,
+    RateControl = AppleMediaRateControl.ABR,     // the default
+    DataRateLimitBitrate = 4500,
+    DataRateLimitDuration = 1.0,
+    Profile = AppleMediaHEVCProfile.Main
+};
+```
+
+### CBR and the data rate limits are alternatives
+
+Do not set both. With `CBR` selected the encoder ignores the data rate limits outright and says so in its log (`Ignoring data-rate-limits property, CBR mode is enabled`) — constant bitrate is already a ceiling. The limits apply in `ABR` mode, where they turn "aim for this bitrate" into "aim for this bitrate and never exceed that one over any window of this length".
+
+### CBR is not constant everywhere
+
+True constant bitrate is a VideoToolbox capability, not an SDK one: it requires macOS 13+ or iOS 16+ on Apple Silicon. On older systems and on Intel Macs, VideoToolbox emulates CBR through data rate limits of its own, derived from `Bitrate`, and reports it in its own log (`CBR is unsupported on your system, emulating with custom data rate limits`). The encoded output is then near-constant rather than constant, which matters if you are sizing a fixed transport budget around it.
+
+### Platform notes
+
+- **10-bit** (`AppleMediaHEVCProfile.Main10`), the **alpha** encoder and rate control all work on the GStreamer 1.28 runtime every Apple package now ships — macOS, Mac Catalyst and iOS alike (the alpha encoder and rate control need at least 1.26). Whether the device's VideoToolbox actually encodes 10-bit is still a per-chip question.
+- `ForceHWUsage` pins the encoder to the hardware-only element, failing rather than falling back to a software implementation. It has no effect on iOS: every VideoToolbox encoder there is hardware, so GStreamer registers no separate hardware-only element.
+- On the MediaBlocks pipeline path the SDK always inserts `h265parse` after this encoder: VideoToolbox emits `hvc1` only, while the MPEG-TS muxer behind SRT/UDP/RIST output accepts byte-stream only. The RTSP path needs no parser — `rtph265pay` takes `hvc1` directly.
+
+## Quality Presets for Simplified Configuration
+
+The AMD, NVIDIA and Intel encoders support standardized quality presets through the `VideoQuality` enum, providing a simplified configuration approach:
+
+- **Low**: 1 Mbps target, 2 Mbps max (for basic streaming)
+- **Normal**: 3 Mbps target, 5 Mbps max (for standard content)
+- **High**: 6 Mbps target, 10 Mbps max (for detailed content)
+- **Very High**: 15 Mbps target, 25 Mbps max (for premium quality)
+
+`AppleMediaHEVCEncoderSettings` has no `VideoQuality` constructor — set `Bitrate` and `Quality` on it directly, as the VideoToolbox example above does.
+
+### Using Quality Presets
+
+```
+// For AMD AMF
+var amfEncoder = new AMFHEVCEncoderSettings(VideoQuality.High);
+
+// For NVIDIA NVENC
+var nvencEncoder = new NVENCHEVCEncoderSettings(VideoQuality.High);
+
+// For Intel QuickSync
+var qsvEncoder = new QSVHEVCEncoderSettings(VideoQuality.High);
+```
+
+## Hardware Detection and Fallback Strategy
+
+A robust implementation should check for encoder availability and implement appropriate fallbacks:
+
+```
+// Create the most appropriate encoder for the current system
+IHEVCEncoderSettings GetOptimalHEVCEncoder()
+{
+    if (AMFHEVCEncoderSettings.IsAvailable())
+    {
+        return new AMFHEVCEncoderSettings(VideoQuality.High);
+    }
+    else if (NVENCHEVCEncoderSettings.IsAvailable())
+    {
+        return new NVENCHEVCEncoderSettings(VideoQuality.High);
+    }
+    else if (QSVHEVCEncoderSettings.IsAvailable())
+    {
+        return new QSVHEVCEncoderSettings(VideoQuality.High);
+    }
+    else
+    {
+#if __MACOS__ || __MACCATALYST__ || __IOS__
+        // Apple VideoToolbox.
+        return new AppleMediaHEVCEncoderSettings { Bitrate = 6000 };
+#elif NET_LINUX
+        // Fall back to the SVT-HEVC software encoder on Linux (Linux-only — see SVTHEVCEncoderSettings).
+        return new SVTHEVCEncoderSettings();
+#else
+        // The X engine does NOT ship a typed IHEVCEncoderSettings software fallback for Windows.
+        // Let the caller decide: keep H.264 output, install a GPU driver enabling QSV/NVENC/AMF, or
+        // use the classic engine's FFMPEG-EXE pipeline.
+        throw new NotSupportedException("No HEVC encoder available on this platform. Install a GPU driver or switch to H.264.");
+#endif
+    }
+}
+```
+
+## Best Practices for HEVC Encoding
+
+### 1. Encoder Selection
+
+- **AMD GPUs**: Best for applications where you know users have AMD hardware
+- **NVIDIA GPUs**: Provides consistent quality across generations, ideal for professional applications
+- **Intel QuickSync**: Great universal option when a dedicated GPU isn't guaranteed
+- **Apple VideoToolbox**: The only hardware HEVC encoder on macOS, Mac Catalyst and iOS
+
+### 2. Rate Control Selection
+
+- **Streaming**: Use CBR for consistent bandwidth utilization
+- **VoD Content**: VBR provides better quality at the same file size
+- **Archival**: CQP ensures consistent quality regardless of content complexity
+
+### 3. Performance Optimization
+
+- Lower the reference frames count for faster encoding
+- Adjust GOP size based on content type (smaller for high motion, larger for static scenes)
+- Consider disabling B-frames for ultra-low latency applications
+
+### 4. Quality Enhancement
+
+- Enable adaptive quantization features for content with varying complexity
+- Use weighted prediction for content with fades or gradual transitions
+- Implement look-ahead when encoding quality is more important than latency
+
+## Common Troubleshooting
+
+1. **Encoder unavailability**: Ensure GPU drivers are up-to-date
+2. **Lower than expected quality**: Check if quality presets match your content type
+3. **Performance issues**: Monitor GPU utilization and adjust settings accordingly
+4. **Compatibility problems**: Verify target devices support the selected HEVC profile
+
+## Conclusion
+
+Hardware-accelerated HEVC encoding offers significant performance advantages for .NET applications dealing with video processing. By leveraging AMD AMF, NVIDIA NVENC, or Intel QuickSync through VisioForge SDKs, you can achieve optimal balance between quality, speed, and efficiency.
+
+Choose the right encoder and settings based on your specific requirements, target audience, and content type to deliver the best possible experience in your applications.
+
+Start by detecting available hardware encoders, implementing appropriate quality settings, and testing across various content types to ensure optimal results.
+
+---END OF PAGE---
+
+
+
+## Video Encoders for VisioForge .NET — H264, HEVC, AV1
+**URL:** https://www.visioforge.com/help/docs/dotnet/general/video-encoders/
+**Description:** Comprehensive overview of video encoders with hardware acceleration, codec features, and performance optimization for .NET video applications.
+**Tags:** Video Capture SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, Streaming
+**API:** NVENCH264EncoderSettings, NVENCHEVCEncoderSettings, AMFH264EncoderSettings, AMFHEVCEncoderSettings, QSVH264EncoderSettings, QSVHEVCEncoderSettings, OpenH264EncoderSettings, AOMAV1EncoderSettings
+
+# Video Encoders for VisioForge .NET
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+## Introduction to Video Encoders
+
+Video encoders are essential components in multimedia processing applications, responsible for compressing video data while maintaining optimal quality. VisioForge .NET SDKs incorporate multiple advanced encoders to meet diverse development requirements across different platforms and use cases.
+
+This guide provides detailed information about each encoder's capabilities, performance characteristics, and implementation details to help .NET developers make informed decisions for their multimedia applications.
+
+## Hardware vs. Software Encoding
+
+When developing video processing applications, choosing between hardware and software encoders significantly impacts application performance and user experience.
+
+### Hardware-Accelerated Encoders
+
+Hardware encoders utilize dedicated processing units (GPUs or specialized hardware):
+
+- **Advantages**: Lower CPU usage, higher encoding speeds, improved battery efficiency
+- **Use cases**: Real-time streaming, live video processing, mobile applications
+- **Examples in our SDK**: NVIDIA NVENC, AMD AMF, Intel QuickSync
+
+### Software Encoders
+
+Software encoders run on the CPU without specialized hardware:
+
+- **Advantages**: Greater compatibility, more quality control options, platform independence
+- **Use cases**: High-quality offline encoding, environments without compatible hardware
+- **Examples in our SDK**: OpenH264, Software MJPEG encoder
+
+## Available Video Encoders
+
+Our SDKs provide extensive encoder options to accommodate various project requirements:
+
+### H.264 (AVC) Encoders
+
+H.264 remains one of the most widely used video codecs, offering excellent compression efficiency and broad compatibility.
+
+#### Key Features:
+
+- Multiple profile support (Baseline, Main, High)
+- Adjustable bitrate controls (CBR, VBR, CQP)
+- B-frame and reference frame configuration
+- Hardware acceleration options from major vendors
+
+[Learn more about H.264 encoders →](h264/)
+
+### HEVC (H.265) Encoders
+
+HEVC delivers superior compression efficiency compared to H.264, enabling higher quality video at the same bitrate or comparable quality at lower bitrates.
+
+#### Key Features:
+
+- Approximately 50% better compression than H.264
+- 8-bit and 10-bit color depth support
+- Multiple hardware acceleration options
+- Advanced rate control mechanisms
+
+[Learn more about HEVC encoders →](hevc/)
+
+### AV1 Encoder
+
+AV1 represents the next generation of video codecs, offering superior compression efficiency particularly suited for web streaming.
+
+#### Key Features:
+
+- Royalty-free open standard
+- Better compression than HEVC
+- Increasing browser and device support
+- Optimized for web content delivery
+
+[Learn more about AV1 encoder →](av1/)
+
+### MJPEG Encoders
+
+Motion JPEG provides frame-by-frame JPEG compression, useful for specific applications where individual frame access is important.
+
+#### Key Features:
+
+- Simple implementation
+- Low encoding latency
+- Independent frame access
+- Hardware and software implementations
+
+[Learn more about MJPEG encoders →](mjpeg/)
+
+### VP8 and VP9 Encoders
+
+These open codecs developed by Google offer royalty-free alternatives with good compression efficiency.
+
+#### Key Features:
+
+- Open-source implementation
+- Competitive quality-to-bitrate ratio
+- Wide web browser support
+- Suitable for WebM container format
+
+[Learn more about VP8/VP9 encoders →](vp8-vp9/)
+
+### Windows Media Video Encoder
+
+The WMV encoder provides compatibility with Windows ecosystem and legacy applications.
+
+#### Key Features:
+
+- Native Windows integration
+- Multiple profile options
+- Compatible with Windows Media framework
+- Efficient for Windows-centric deployments
+
+[Learn more about WMV encoder →](../output-formats/wmv/)
+
+## Encoder Selection Guidelines
+
+Selecting the optimal encoder depends on various factors:
+
+### Platform Compatibility
+
+- **Windows**: All encoders supported
+- **macOS**: Apple Media encoders, OpenH264, AV1
+- **Linux**: VAAPI, OpenH264, software implementations
+
+### Hardware Requirements
+
+When using hardware-accelerated encoders, verify system compatibility:
+
+Hardware-encoder availability checks live on the codec-specific settings classes (there is no shared `NVENCEncoderSettings` / `AMFEncoderSettings` / `QSVEncoderSettings` base type — instantiate `NVENCH264EncoderSettings`, `AMFHEVCEncoderSettings`, `QSVH264EncoderSettings`, etc., depending on the codec you need):
+
+```
+// Probe H.264 hardware encoders in priority order.
+if (NVENCH264EncoderSettings.IsAvailable())
+{
+    // NVIDIA GPU available — use NVENC H.264.
+    var settings = new NVENCH264EncoderSettings();
+}
+else if (QSVH264EncoderSettings.IsAvailable())
+{
+    // Intel CPU with Quick Sync available.
+    var settings = new QSVH264EncoderSettings();
+}
+else if (AMFH264EncoderSettings.IsAvailable())
+{
+    // AMD GPU available — use AMF H.264.
+    var settings = new AMFH264EncoderSettings();
+}
+else
+{
+    // Fallback to software encoder (cross-platform).
+    var settings = new OpenH264EncoderSettings();
+}
+```
+
+### Quality vs. Performance Tradeoffs
+
+Different encoders offer varying balances between quality and encoding speed:
+
+| Encoder Type | Quality | Performance | CPU Usage |
+| --- | --- | --- | --- |
+| NVENC H.264 | Good | Excellent | Very Low |
+| NVENC HEVC | Very Good | Very Good | Very Low |
+| AMF H.264 | Good | Very Good | Very Low |
+| QSV H.264 | Good | Excellent | Very Low |
+| OpenH264 | Good-Excellent | Moderate | High |
+| AV1 | Excellent | Poor-Moderate | Very High |
+
+### Encoding Scenarios
+
+- **Live streaming**: Prefer hardware encoders with CBR rate control
+- **Video recording**: Hardware encoders with VBR for better quality/size balance
+- **Offline processing**: Quality-focused encoders with VBR or CQP
+- **Low-latency applications**: Hardware encoders with low-latency presets
+
+## Performance Optimization
+
+Maximize encoder efficiency with these best practices:
+
+1. **Match output resolution to content requirements** - Avoid unnecessary upscaling
+2. **Select appropriate bitrates** - Higher isn't always better; target your delivery medium
+3. **Choose encoder presets wisely** - Faster presets use less CPU but may reduce quality
+4. **Enable scene detection** for improved quality at scene changes
+5. **Use hardware acceleration** when available for real-time applications
+
+## Conclusion
+
+VisioForge .NET SDKs provide a comprehensive set of video encoders to meet diverse requirements across different platforms and use cases. By understanding the strengths and configurations of each encoder, developers can create high-performance video applications with optimal quality and efficiency.
+
+For specific encoder configuration details, refer to the dedicated documentation pages for each encoder type linked throughout this guide.
+
+---END OF PAGE---
+
+
+
+## Motion JPEG (MJPEG) Encoders in VisioForge .NET SDKs
+**URL:** https://www.visioforge.com/help/docs/dotnet/general/video-encoders/mjpeg/
+**Description:** Implement MJPEG video encoders in .NET with CPU and GPU acceleration for frame-by-frame compression and streaming applications.
+**Tags:** Video Capture SDK, Media Blocks SDK, Video Edit SDK, .NET, MediaBlocksPipeline, VideoCaptureCoreX, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Capture, Streaming, Encoding, Editing, MJPEG, C#
+**API:** QSVMJPEGEncoderSettings, MJPEGEncoderSettings, IMJPEGEncoderSettings
+
+# Motion JPEG (MJPEG) Video Encoders for .NET Applications
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+[VideoCaptureCoreX](#) [VideoEditCoreX](#) [MediaBlocksPipeline](#)
+
+## Introduction to MJPEG Encoding in VisioForge
+
+The VisioForge .NET SDK suite provides robust Motion JPEG (MJPEG) encoder implementations designed for efficient video processing in your applications. MJPEG remains a popular choice for many video applications due to its simplicity, compatibility, and specific use cases where frame-by-frame compression is advantageous.
+
+This documentation provides a detailed exploration of the two MJPEG encoder options available in the VisioForge library:
+
+1. CPU-based MJPEG encoder - The default implementation utilizing processor resources
+2. GPU-accelerated Intel QuickSync MJPEG encoder - Hardware-accelerated option for compatible systems
+
+Both implementations offer developers flexible configuration options while maintaining the core MJPEG functionality through the unified `IMJPEGEncoderSettings` interface.
+
+## What is MJPEG and Why Use It?
+
+Motion JPEG (MJPEG) is a video compression format where each video frame is compressed separately as a JPEG image. Unlike more modern codecs such as H.264 or H.265 that use temporal compression across frames, MJPEG treats each frame independently.
+
+### Key Advantages of MJPEG
+
+- **Frame-by-frame processing**: Each frame maintains independent quality without temporal artifacts
+- **Lower latency**: Minimal processing delay makes it suitable for real-time applications
+- **Editing friendly**: Individual frame access simplifies non-linear editing workflows
+- **Resilience to motion**: Maintains quality during scenes with significant movement
+- **Universal compatibility**: Works across platforms without specialized hardware decoders
+- **Simplified development**: Straightforward implementation in various programming environments
+
+### Common Use Cases
+
+MJPEG encoding is particularly valuable in scenarios such as:
+
+- **Security and surveillance systems**: Where frame quality and reliability are critical
+- **Video capture applications**: Real-time video recording with minimal latency
+- **Medical imaging**: When individual frame fidelity is essential
+- **Industrial vision systems**: For consistent frame-by-frame analysis
+- **Multimedia editing software**: Where rapid seeking and frame extraction is required
+- **Streaming in bandwidth-limited environments**: Where consistent quality is preferred over file size
+
+## MJPEG Implementation in VisioForge
+
+Both MJPEG encoder implementations in VisioForge SDKs derive from the `IMJPEGEncoderSettings` interface, ensuring a consistent approach regardless of which encoder you choose. This design allows for easy switching between implementations based on performance requirements and hardware availability.
+
+### Core Interface and Common Properties
+
+The shared interface exposes essential properties and methods:
+
+- **Quality**: Integer value from 10-100 controlling compression level
+- **CreateBlock()**: Factory method to generate the encoder processing block
+- **IsAvailable()**: Static method to verify encoder support on the current system
+
+## CPU-based MJPEG Encoder
+
+The CPU-based encoder serves as the default implementation, providing reliable encoding across virtually all system configurations. It performs all encoding operations using the CPU, making it a universally compatible choice for MJPEG encoding.
+
+### Features and Specifications
+
+- **Processing method**: Pure CPU-based encoding
+- **Quality range**: 10-100 (higher values = better quality, larger files)
+- **Default quality**: 85 (balances quality and file size)
+- **Performance characteristics**: Scales with CPU cores and processing power
+- **Memory usage**: Moderate, dependent on frame resolution and processing settings
+- **Compatibility**: Works on any system supporting the .NET runtime
+- **Specialized hardware**: None required
+
+### Detailed Implementation Example
+
+```
+// Import the necessary VisioForge namespaces
+using VisioForge.Core.Types.Output;
+
+// Create a new instance of the CPU-based encoder settings
+var mjpegSettings = new MJPEGEncoderSettings();
+
+// Configure quality (10-100)
+mjpegSettings.Quality = 85; // Default balanced quality
+
+// Optional: Verify encoder availability
+if (MJPEGEncoderSettings.IsAvailable())
+{
+    // Create the encoder processing block
+    var encoderBlock = mjpegSettings.CreateBlock();
+
+    // Add the encoder block to your processing pipeline
+    pipeline.AddBlock(encoderBlock);
+
+    // Additional pipeline configuration
+    // ...
+
+    // Start the encoding process
+    await pipeline.StartAsync();
+}
+else
+{
+    // Handle encoder unavailability
+    Console.WriteLine("CPU-based MJPEG encoder is not available on this system.");
+}
+```
+
+### Quality-to-Size Relationship
+
+The quality setting directly affects both the visual quality and resulting file size:
+
+| Quality Setting | Visual Quality | File Size | Recommended Use Case |
+| --- | --- | --- | --- |
+| 10-30 | Very Low | Smallest | Archival, minimal bandwidth |
+| 31-60 | Low | Small | Web previews, thumbnails |
+| 61-80 | Medium | Moderate | Standard recording |
+| 81-95 | High | Large | Professional applications |
+| 96-100 | Maximum | Largest | Critical visual analysis |
+
+## Intel QuickSync MJPEG Encoder
+
+For systems with compatible Intel hardware, the QuickSync MJPEG encoder offers GPU-accelerated encoding performance. This implementation leverages Intel's QuickSync Video technology to offload encoding operations from the CPU to dedicated media processing hardware.
+
+### Hardware Requirements
+
+- Intel CPU with integrated graphics supporting QuickSync Video
+- Supported processor families:
+- Intel Core i3/i5/i7/i9 (6th generation or newer recommended)
+- Intel Xeon with compatible graphics
+- Select Intel Pentium and Celeron processors with HD Graphics
+
+### Features and Advantages
+
+- **Hardware acceleration**: Dedicated media processing engines
+- **Quality range**: 10-100 (same as CPU-based encoder)
+- **Default quality**: 85
+- **Preset profiles**: Four predefined quality configurations
+- **Reduced CPU load**: Frees processor resources for other tasks
+- **Power efficiency**: Lower energy consumption during encoding
+- **Performance gain**: Up to 3x faster than CPU-based encoding (hardware dependent)
+
+### Implementation Examples
+
+#### Basic Implementation
+
+```
+// Import required namespaces
+using VisioForge.Core.Types.Output;
+
+// Create QuickSync MJPEG encoder with default settings
+var qsvEncoder = new QSVMJPEGEncoderSettings();
+
+// Verify hardware support
+if (QSVMJPEGEncoderSettings.IsAvailable())
+{
+    // Set custom quality value
+    qsvEncoder.Quality = 90; // Higher quality setting
+
+    // Create and add encoder block
+    var encoderBlock = qsvEncoder.CreateBlock();
+    pipeline.AddBlock(encoderBlock);
+
+    // Continue pipeline setup
+}
+else
+{
+    // Fall back to CPU-based encoder
+    Console.WriteLine("QuickSync hardware not detected. Falling back to CPU encoder.");
+    var cpuEncoder = new MJPEGEncoderSettings();
+    pipeline.AddBlock(cpuEncoder.CreateBlock());
+}
+```
+
+#### Using Preset Quality Profiles
+
+```
+// Create encoder with preset quality profile
+var highQualityEncoder = new QSVMJPEGEncoderSettings(VideoQuality.High);
+
+// Or select other preset profiles
+var lowQualityEncoder = new QSVMJPEGEncoderSettings(VideoQuality.Low);
+var normalQualityEncoder = new QSVMJPEGEncoderSettings(VideoQuality.Normal);
+var veryHighQualityEncoder = new QSVMJPEGEncoderSettings(VideoQuality.VeryHigh);
+
+// Check availability and create encoder block
+if (QSVMJPEGEncoderSettings.IsAvailable())
+{
+    var encoderBlock = highQualityEncoder.CreateBlock();
+    // Use encoder in pipeline
+}
+```
+
+### Quality Preset Mapping
+
+The QuickSync implementation provides convenient preset quality profiles that map to specific quality values:
+
+| Preset Profile | Quality Value | Suitable Applications |
+| --- | --- | --- |
+| Low | 60 | Surveillance, monitoring, archiving |
+| Normal | 75 | Standard recording, web content |
+| High | 85 | Default for most applications |
+| VeryHigh | 95 | Professional video production |
+
+## Performance Optimization Guidelines
+
+Achieving optimal MJPEG encoding performance requires careful consideration of several factors:
+
+### System Configuration Recommendations
+
+1. **Memory allocation**: Ensure sufficient RAM for frame buffering (minimum 8GB recommended)
+2. **Storage throughput**: Use SSD storage for best write performance during encoding
+3. **CPU considerations**: Multi-core processors benefit the CPU-based encoder
+4. **GPU drivers**: Keep Intel graphics drivers updated for QuickSync performance
+5. **Background processes**: Minimize competing system processes during encoding
+
+### Code-Level Optimization Techniques
+
+1. **Frame size selection**: Consider downscaling before encoding for better performance
+2. **Quality selection**: Balance visual requirements against performance needs
+3. **Pipeline design**: Minimize unnecessary processing stages before encoding
+4. **Error handling**: Implement graceful fallback between encoder types
+5. **Threading model**: Respect the threading model of the VisioForge pipeline
+
+## Best Practices for MJPEG Implementation
+
+To ensure reliable and efficient MJPEG encoding in your applications:
+
+1. **Always check availability**: Use the `IsAvailable()` method before creating encoder instances
+2. **Implement encoder fallback**: Have CPU-based encoding as a backup when QuickSync is unavailable
+3. **Quality testing**: Test different quality settings with your specific video content
+4. **Performance monitoring**: Monitor CPU/GPU usage during encoding to identify bottlenecks
+5. **Exception handling**: Handle potential encoder initialization failures gracefully
+6. **Version compatibility**: Ensure SDK version compatibility with your development environment
+7. **License validation**: Verify proper licensing for your production environment
+
+## Troubleshooting Common Issues
+
+### QuickSync Availability Problems
+
+- Ensure Intel drivers are up-to-date
+- Verify BIOS settings haven't disabled integrated graphics
+- Check for competing GPU-accelerated applications
+
+### Performance Issues
+
+- Monitor system resource usage during encoding
+- Reduce input frame resolution or frame rate if necessary
+- Consider quality setting adjustments
+
+### Quality Problems
+
+- Increase quality settings for better visual results
+- Examine source material for pre-existing quality issues
+- Consider frame pre-processing for problematic source material
+
+## Conclusion
+
+The VisioForge .NET SDK provides flexible MJPEG encoding options suitable for a wide range of development scenarios. By understanding the characteristics and configuration options of both the CPU-based and QuickSync implementations, developers can make informed decisions about which encoder best fits their application requirements.
+
+Whether prioritizing universal compatibility with the CPU-based encoder or leveraging hardware acceleration with the QuickSync implementation, the consistent interface and comprehensive feature set enable efficient video processing while maintaining the frame-independent nature of MJPEG encoding that makes it valuable for specific video processing applications.
+
+---END OF PAGE---
+
+
+
+## VP8 and VP9 Video Encoding — Configuration and Tuning
+**URL:** https://www.visioforge.com/help/docs/dotnet/general/video-encoders/vp8-vp9/
+**Description:** Configure VP8 and VP9 video encoders for optimal streaming, recording, and processing performance in VisioForge .NET applications.
+**Tags:** Video Capture SDK, Media Blocks SDK, Video Edit SDK, .NET, MediaBlocksPipeline, VideoCaptureCoreX, VideoEditCoreX, Windows, macOS, Linux, Android, iOS, Capture, Streaming, Encoding, Editing, WebM, VP8, VP9, C#
+**API:** VP9EncoderSettings, VP8EncoderSettings, WebMOutput, QSVVP9EncoderSettings, WebMVideoEncoder
+
+# VP8 and VP9 Encoders in VisioForge .NET
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net)
+
+This guide shows you how to implement VP8 and VP9 video encoding in VisioForge .NET SDKs. You'll learn about the available encoder options and how to optimize them for your specific application needs.
+
+## Encoder Options Overview
+
+VisioForge SDK provides multiple encoder implementations based on your platform requirements:
+
+### Windows Platform Encoders
+
+[VideoCaptureCore](#) [VideoEditCore](#)
+
+- Software-based VP8 and VP9 encoders configured through the [WebMOutput](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.Output.WebMOutput.html) class
+
+### Cross-Platform X-Engine Options
+
+[VideoCaptureCoreX](#) [VideoEditCoreX](#) [MediaBlocksPipeline](#)
+
+- VP8 software encoder via [VP8EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.VP8EncoderSettings.html)
+- VP9 software encoder via [VP9EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.VP9EncoderSettings.html)
+- Hardware-accelerated Intel GPU VP9 encoder via [QSVVP9EncoderSettings](https://api.visioforge.org/dotnet/api/VisioForge.Core.Types.X.VideoEncoders.QSVVP9EncoderSettings.html) for integrated GPUs
+
+## Bitrate Control Strategies
+
+All VP8 and VP9 encoders support different bitrate control modes to match your application requirements:
+
+### Constant Bitrate (CBR)
+
+CBR maintains consistent bitrate throughout the encoding process, making it ideal for:
+
+- Live streaming applications
+- Scenarios with bandwidth limitations
+- Real-time video communication
+
+**Implementation Examples:**
+
+With `WebMOutput` (Windows):
+
+```
+var webmOutput = new WebMOutput();
+webmOutput.Video_EndUsage = VP8EndUsageMode.CBR;
+webmOutput.Video_Encoder = WebMVideoEncoder.VP8;
+webmOutput.Video_Bitrate = 2000;  // 2 Mbps
+```
+
+With `VP8EncoderSettings`:
+
+```
+var vp8 = new VP8EncoderSettings();
+vp8.RateControl = VPXRateControl.CBR;
+vp8.TargetBitrate = 2000;  // 2 Mbps
+```
+
+With `VP9EncoderSettings`:
+
+```
+var vp9 = new VP9EncoderSettings();
+vp9.RateControl = VPXRateControl.CBR;
+vp9.TargetBitrate = 2000;  // 2 Mbps
+```
+
+With Intel GPU encoder:
+
+```
+var vp9qsv = new QSVVP9EncoderSettings();
+vp9qsv.RateControl = QSVVP9EncRateControl.CBR;
+vp9qsv.Bitrate = 2000;  // 2 Mbps
+```
+
+### Variable Bitrate (VBR)
+
+VBR dynamically adjusts bitrate based on content complexity, best for:
+
+- Non-live video encoding
+- Scenarios prioritizing visual quality over file size
+- Content with varying visual complexity
+
+**Implementation Examples:**
+
+With `WebMOutput` (Windows):
+
+```
+var webmOutput = new WebMOutput();
+webmOutput.Video_EndUsage = VP8EndUsageMode.VBR;
+webmOutput.Video_Encoder = WebMVideoEncoder.VP8;
+webmOutput.Video_Bitrate = 3000;  // 3 Mbps target
+```
+
+With `VP8EncoderSettings`:
+
+```
+var vp8 = new VP8EncoderSettings();
+vp8.RateControl = VPXRateControl.VBR;
+vp8.TargetBitrate = 3000;
+```
+
+With `VP9EncoderSettings`:
+
+```
+var vp9 = new VP9EncoderSettings();
+vp9.RateControl = VPXRateControl.VBR;
+vp9.TargetBitrate = 3000;
+```
+
+With Intel GPU encoder:
+
+```
+var vp9qsv = new QSVVP9EncoderSettings();
+vp9qsv.RateControl = QSVVP9EncRateControl.VBR;
+vp9qsv.Bitrate = 3000;
+```
+
+## Quality-Focused Encoding Modes
+
+These modes prioritize consistent visual quality over specific bitrate targets:
+
+### Constant Quality (CQ) Mode
+
+Available for software VP8 and VP9 encoders:
+
+```
+var vp8 = new VP8EncoderSettings();
+vp8.RateControl = VPXRateControl.CQ;
+vp8.CQLevel = 20;  // Quality level (0-63, lower values = better quality)
+```
+
+```
+var vp9 = new VP9EncoderSettings();
+vp9.RateControl = VPXRateControl.CQ;
+vp9.CQLevel = 20;
+```
+
+### Intel QSV Quality Modes
+
+Intel's hardware encoder supports two quality-focused modes:
+
+**Intelligent Constant Quality (ICQ):**
+
+```
+var vp9qsv = new QSVVP9EncoderSettings();
+vp9qsv.RateControl = QSVVP9EncRateControl.ICQ;
+vp9qsv.ICQQuality = 25;  // 20-27 recommended for balanced quality
+```
+
+**Constant Quantization Parameter (CQP):**
+
+```
+var vp9qsv = new QSVVP9EncoderSettings();
+vp9qsv.RateControl = QSVVP9EncRateControl.CQP;
+vp9qsv.QPI = 26;  // I-frame QP
+vp9qsv.QPP = 28;  // P-frame QP
+```
+
+## VP9 Performance Optimization
+
+VP9 encoders offer additional features for enhanced performance:
+
+### Adaptive Quantization
+
+Improves visual quality by allocating more bits to complex areas:
+
+```
+var vp9 = new VP9EncoderSettings();
+vp9.AQMode = VPXAdaptiveQuantizationMode.Variance;  // Enable variance-based AQ
+```
+
+### Parallel Processing
+
+Speeds up encoding through multi-threading and tile-based processing:
+
+```
+var vp9 = new VP9EncoderSettings();
+vp9.FrameParallelDecoding = true;  // Enable parallel frame processing
+vp9.RowMultithread = true;         // Enable row-based multithreading
+vp9.TileColumns = 6;               // Set number of tile columns (log2)
+vp9.TileRows = 0;                  // Set number of tile rows (log2)
+```
+
+## Error Resilience Settings
+
+Both VP8 and VP9 support error resilience for robust streaming over unreliable networks:
+
+Using `WebMOutput` (Windows):
+
+```
+var webmOutput = new WebMOutput();
+webmOutput.Video_ErrorResilient = true;  // Enable error resilience
+```
+
+Using software encoders:
+
+```
+var vpx = new VP8EncoderSettings();  // or VP9EncoderSettings
+vpx.ErrorResilient = VPXErrorResilientFlags.Default | VPXErrorResilientFlags.Partitions;
+```
+
+## Performance Tuning Options
+
+Optimize encoding performance with these settings:
+
+```
+var vpx = new VP8EncoderSettings();  // or VP9EncoderSettings
+vpx.CPUUsed = 0;           // Range: -16 to 16, higher values favor speed over quality
+vpx.NumOfThreads = 4;      // Specify number of encoding threads
+vpx.TokenPartitions = VPXTokenPartitions.Eight;  // Enable parallel token processing
+```
+
+## Best Practices for VP8/VP9 Encoding
+
+### Rate Control Selection
+
+Choose the appropriate rate control mode based on your application:
+
+- **CBR** for live streaming and real-time communication
+- **VBR** for offline encoding where quality is the priority
+- **Quality-based modes** (CQ, ICQ, CQP) for highest possible quality regardless of bitrate
+
+### Performance Optimization
+
+- Adjust `CPUUsed` to balance quality and encoding speed
+- Enable multithreading for faster encoding on multi-core systems
+- Use tile-based parallelism in VP9 for better hardware utilization
+
+### Error Recovery
+
+- Enable error resilience when streaming over unreliable networks
+- Configure token partitioning for improved error recovery
+- Consider frame reordering limitations for low-latency applications
+
+### Quality Optimization
+
+- Use adaptive quantization in VP9 for better quality distribution
+- Consider two-pass encoding for offline encoding scenarios
+- Adjust quantizer settings based on content type and target quality
+
+By following this guide, you'll be able to effectively implement and configure VP8 and VP9 encoders in your VisioForge .NET applications for optimal performance and quality.
+
+---END OF PAGE---
+
+
+
+## Install VisioForge .NET SDKs in an Avalonia 12.1 App
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/avalonia/
+**Description:** Install the VisioForge .NET SDKs in an Avalonia 12.1 app for Desktop, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, Avalonia, GStreamer, C#, NuGet
+**API:** VideoView, VisioForgeX
+
+# Install the VisioForge .NET SDKs in an Avalonia app
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+This guide installs the VisioForge .NET SDKs in an Avalonia 12.1 app with Desktop, Android and iOS heads, and puts a `VideoView` on its main view. It ends with an app that builds and runs on the Desktop head on Windows.
+
+All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). The Avalonia `VideoView` is in [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia). Each platform also takes a redist package, its native engine (on Linux only the SDK's own libraries; GStreamer comes from the system), and Android takes the VisioForge binding project, `AndroidDependency`, from GitHub.
+
+## Video tutorial
+
+The video creates the app, installs the packages in Visual Studio 2026 and runs it:
+
+## Requirements
+
+- Windows 10 or 11, x64
+- Visual Studio 2026 and the .NET 10 SDK, with the Android and iOS workloads to build those heads
+- Git
+- A Mac with Xcode, paired with Visual Studio, to build the iOS head
+- A Mac with Xcode and the .NET macOS workload to build the Desktop head for macOS
+- On Linux, GStreamer installed from the distribution's packages, see [Ubuntu deployment](../../deployment-x/Ubuntu/)
+
+`VisioForge.DotNet.Core.UI.Avalonia` is built for Avalonia 12.1, so the app is created from the Avalonia 12.1.6 templates.
+
+## Create the app
+
+In Developer PowerShell, install the Avalonia templates, create the app, take out its Browser head, and fetch the Android binding project:
+
+```
+cd $HOME\source\repos
+dotnet new install Avalonia.Templates@12.1.6
+dotnet new avalonia.xplat -o VisioForgeAvalonia
+cd VisioForgeAvalonia
+dotnet sln remove VisioForgeAvalonia.Browser\VisioForgeAvalonia.Browser.csproj
+git clone --depth 1 --filter=blob:none --sparse https://github.com/visioforge/.Net-SDK-s-samples.git samples
+git -C samples sparse-checkout set AndroidDependency
+dotnet sln add samples\AndroidDependency\VisioForge.Core.Android.X10.csproj
+devenv VisioForgeAvalonia.slnx
+```
+
+`avalonia.xplat` makes a shared project for the views (`VisioForgeAvalonia`) and a head project for each platform: Desktop, Android, iOS and Browser. The SDK has no engine for the browser, so the Browser head leaves the solution. The sparse clone checks out only `AndroidDependency` from the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), and `dotnet sln add` puts it into the solution, so Visual Studio restores it with the app.
+
+Visual Studio may ask you to accept the Android SDK license as the solution loads. Accepting installs the Android SDK, which the Android head needs to build.
+
+## Install the packages
+
+Right-click the shared project, `VisioForgeAvalonia`, open **Manage NuGet Packages** and the **Browse** tab. Install `VisioForge.DotNet.Core`, then `VisioForge.DotNet.Core.UI.Avalonia`, and accept the license.
+
+The Avalonia template uses central package management, so NuGet writes the versions to `Directory.Packages.props` and the project file gets references without them. The template leaves `Directory.Packages.props` out of the solution: open it with **File > Open > File** and add a version for each redist under the two VisioForge packages:
+
+```
+<ItemGroup>
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.27" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Avalonia" Version="2026.11.27" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.macOS" Version="2026.11.22" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.x64" Version="2026.10.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Linux.arm64" Version="2026.10.26" />
+</ItemGroup>
+```
+
+Take the latest versions from [nuget.org](https://www.nuget.org/profiles/visioforge). The macOS, Android, iOS and Linux redists are released on their own schedule, so their versions differ from the SDK's. Windows takes two redists, the native engine and the Libav codecs (`.UPX` is the size-optimized build); macOS, Android and iOS take one each, and Linux takes the core package for its architecture, which has no GStreamer inside. The video was recorded before the Linux core package lines were added here and in the Desktop head, so it does not show them.
+
+## The Desktop head
+
+Each head takes its redist in its own project file. Right-click `VisioForgeAvalonia.Desktop`, select **Edit Project File**, and add these blocks at the end, before `</Project>`:
+
+```
+<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+  <TargetFramework>net10.0-macos</TargetFramework>
+  <ApplicationId>com.companyname.visioforgeavalonia</ApplicationId>
+  <OutputType>Exe</OutputType>
+</PropertyGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64.UPX" />
+</ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('OSX'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" />
+</ItemGroup>
+<ItemGroup Condition="$([MSBuild]::IsOsPlatform('Linux')) or $(RuntimeIdentifier.StartsWith('linux-'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.arm64" Condition="$(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64')))" />
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Linux.x64" Condition="!($(RuntimeIdentifier.EndsWith('-arm64')) or ('$(RuntimeIdentifier)' == '' and $(NETCoreSdkRuntimeIdentifier.EndsWith('-arm64'))))" />
+</ItemGroup>
+```
+
+The template builds the Desktop head for plain `net10.0`, and the SDK's Windows and macOS engines need the operating system's own framework. The later properties replace the template's: `net10.0-windows` on Windows, and `net10.0-macos` on a Mac, an app bundle, which needs an application ID. Linux keeps `net10.0` and uses the GStreamer installed on the system, see [Ubuntu deployment](../../deployment-x/Ubuntu/); the last block, applied when the head is built on Linux or published for a `linux-*` runtime identifier, gives it the core package for its architecture, which holds the SDK's own native libraries. The references carry no versions: those come from `Directory.Packages.props`.
+
+## The Android head
+
+Open **Edit Project File** on `VisioForgeAvalonia.Android`. In the template's first `PropertyGroup`, change the `SupportedOSPlatformVersion` line to 24:
+
+```
+<SupportedOSPlatformVersion>24</SupportedOSPlatformVersion>
+```
+
+Then add the redist and `AndroidDependency` at the end of the file, before `</Project>`:
+
+```
+<ItemGroup>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" />
+  <ProjectReference Include="..\samples\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
+</ItemGroup>
+```
+
+Android 7 (API level 24) is the SDK's minimum on Android. `VisioForge.Core.Android.X10.csproj` targets `net10.0-android`, and a `net11.0-android` app references it as well.
+
+## The iOS head
+
+Open **Edit Project File** on `VisioForgeAvalonia.iOS`. In the template's first `PropertyGroup`, change the `SupportedOSPlatformVersion` line to 18.0:
+
+```
+<SupportedOSPlatformVersion>18.0</SupportedOSPlatformVersion>
+```
+
+Then add the redist at the end of the file, before `</Project>`:
+
+```
+<ItemGroup>
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" />
+</ItemGroup>
+```
+
+iOS 18.0 is the minimum of the native iOS libraries. Then right-click the iOS head's `Info.plist`, choose **Open With** and **XML (Text) Editor**, change the value under the template's `MinimumOSVersion` key to `<string>18.0</string>`, the same version. Then add a scene manifest, the one new key, above `UIRequiredDeviceCapabilities`:
+
+```
+<key>UIApplicationSceneManifest</key>
+<dict>
+  <key>UIApplicationSupportsMultipleScenes</key>
+  <false/>
+</dict>
+```
+
+An app built with the iOS 27 SDK must use the UIKit scene lifecycle (the build stops with `MT7199` otherwise). One scene is enough: the Avalonia 12.1 app delegate supplies the scene configuration itself.
+
+Build the iOS head with the .NET 10 SDK. The .NET 11 SDK maps `net10.0-ios` to iOS 26.0, below the iOS assets of SkiaSharp 3.119.4 (`net10.0-ios26.2`), and the app then stops at launch with `DllNotFoundException: libSkiaSharp`. Pin the SDK with a `global.json` if both are installed.
+
+## Add VideoView to the view
+
+In the shared project, open `Views/MainView.axaml`. Map the VisioForge namespace to a prefix, here `vf`, next to the template's own namespaces, and replace the template's `TextBox` with a `StackPanel` that holds a `VideoView` above the same `TextBox`:
+
+The whole file after the edit:
+
+```
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:VisioForgeAvalonia.ViewModels"
+             xmlns:vf="using:VisioForge.Core.UI.Avalonia"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="VisioForgeAvalonia.Views.MainView"
+             x:DataType="vm:MainViewModel">
+    <Design.DataContext>
+        <vm:MainViewModel />
+    </Design.DataContext>
+
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="12">
+        <vf:VideoView Width="640" Height="360" Background="Black" />
+        <TextBox Text="{Binding Greeting}" />
+    </StackPanel>
+</UserControl>
+```
+
+The namespace is `VisioForge.Core.UI.Avalonia`, from the `VisioForge.DotNet.Core.UI.Avalonia` package. The size is only for this demo; give the `VideoView` an `x:Name` to reach it from code.
+
+## Run it
+
+Right-click `VisioForgeAvalonia.Desktop`, select **Set as Startup Project**, and start the app without debugging (Ctrl+F5). Visual Studio builds the Desktop head for Windows with the Windows redists. The app opens with the `VideoView` above *Welcome to Avalonia!*, black until an SDK engine draws into it.
+
+## Initialize the SDK
+
+Before the first engine, initialize the SDK, and release it on exit. In the shared project's `App.axaml.cs`, add `using VisioForge.Core;` and two lines to the template's `OnFrameworkInitializationCompleted`:
+
+```
+public override void OnFrameworkInitializationCompleted()
+{
+    VisioForgeX.InitSDK();
+
+    if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+    {
+        desktop.Exit += (_, _) => VisioForgeX.DestroySDK();
+        // ... the template's code
+    }
+    // ... the template's other branches and base call
+}
+```
+
+`InitSDK` runs once for every head; `Exit` is raised on the Desktop head. To initialize without blocking the UI thread, call `await VisioForgeX.InitSDKAsync()` from an `async` event handler instead, such as the main window's `Loaded`.
+
+Android needs the camera and microphone permissions in `AndroidManifest.xml`, and iOS and macOS the usage descriptions in `Info.plist` (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`). The deployment guides for [Windows](../../deployment-x/Windows/), [macOS](../../deployment-x/macOS/), [Ubuntu](../../deployment-x/Ubuntu/), [Android](../../deployment-x/Android/) and [iOS](../../deployment-x/iOS/) cover them, the native dependencies and troubleshooting. [SDK initialization](../../init/) covers `InitSDKAsync` and `DestroySDK` in detail.
+
+## Sample applications
+
+Complete Avalonia apps with a shared project and Desktop, Android and iOS heads, like the app in this guide:
+
+- [Media Player SDK X/Avalonia/SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia/SimplePlayerMVVM)
+- [Media Blocks SDK/Avalonia/SimplePlayerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/SimplePlayerMVVM)
+- [Media Blocks SDK/Avalonia/SimpleVideoCaptureMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/SimpleVideoCaptureMVVM)
+- [Media Blocks SDK/Avalonia/VideoMixerMVVM](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia/VideoMixerMVVM)
+
+The other Avalonia samples are desktop apps: [Media Player SDK X/Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Avalonia), [Video Capture SDK X/Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Avalonia) and [Media Blocks SDK/Avalonia](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Avalonia).
+
+## Video Transcript
+
+### Overview
+
+Let's install the VisioForge .NET SDKs in an Avalonia app, with Desktop, Android and iOS heads, and put a VideoView on its main view. All four VisioForge .NET SDKs come in one NuGet package, VisioForge.DotNet.Core. The Avalonia VideoView is in VisioForge.DotNet.Core.UI.Avalonia. Each platform also takes a redist package, its native engine, and Android takes the VisioForge binding project, AndroidDependency, from GitHub. You need Windows 10 or 11, Visual Studio 2026, and the .NET 10 SDK, with the Android and iOS workloads to build those heads, and Git. The VisioForge Avalonia package is built for Avalonia 12.1, so this video creates the app from the Avalonia 12.1.6 templates.
+
+### Create the app
+
+Open Developer PowerShell from the Start menu, and go to your projects folder. Install the Avalonia templates, version 12.1.6. Create the app with dotnet new avalonia.xplat. It makes a shared project for the views, and a head project for each platform: Desktop, Android, iOS and Browser. The SDK has no engine for the browser, so take the Browser head out of the solution with dotnet sln remove. In the solution folder, clone the VisioForge samples repository sparsely, check out only AndroidDependency, the Android binding project, and add it to the solution with dotnet sln add. Then open the solution in Visual Studio. Here are all the commands. Visual Studio may ask you to accept the Android SDK license as the solution loads: that installs the Android SDK, which the Android head needs to build.
+
+### NuGet
+
+Now NuGet. Right-click the shared project, VisioForgeAvalonia, open Manage NuGet Packages, and the Browse tab. Search for VisioForge.DotNet.Core and install it. Visual Studio shows the changes and the license: accept them. Then install VisioForge.DotNet.Core.UI.Avalonia, which holds the Avalonia VideoView. Both are on the Installed tab. The template uses central package management, so their versions went to Directory.Packages.props.
+
+### Redists
+
+The redists come next. The template leaves Directory.Packages.props out of the solution, so open it with File, Open, and add a version for each redist under the two VisioForge packages. Windows takes two, the native engine and the Libav codecs. macOS, Android and iOS take one each. Here is the whole list: the two packages from NuGet and the five redists. Take the latest versions from nuget.org.
+
+### Desktop head
+
+Each head takes its redist in its own project file. Right-click the Desktop head, and open Edit Project File. Add the blocks at the end of the file, each under the condition of the operating system that builds it, and save. The template builds the Desktop head for plain net10.0, and the SDK's Windows and macOS engines need the operating system's own framework. On Windows that is net10.0-windows. On a Mac it is net10.0-macos, an app bundle, which needs an application ID. Linux keeps net10.0. Windows takes the engine and Libav, and macOS its engine. The references carry no versions: those come from Directory.Packages.props. On Linux, the SDK uses the GStreamer installed on the system.
+
+### Android and iOS
+
+Now the Android head: Edit Project File again. Raise the minimum to Android 7, API level 24, the SDK's minimum on Android. Then add the Android redist, and a reference to the AndroidDependency project from the samples folder. The minimum version replaces the template's own line. The rest goes in at the end of the file. The iOS head is next. Raise its minimum to iOS 18, the SDK's minimum on iOS, and add the iOS redist. The same two edits as on Android: the minimum version, and the redist reference at the end. The iOS head has one more file, Info.plist. Right-click it, choose Open With, and the XML text editor. Set MinimumOSVersion to 18.0, to match the project, and add a scene manifest above the device capabilities. The iOS 27 SDK refuses an app without a scene manifest. One scene is enough, and Avalonia supplies its configuration.
+
+### VideoView
+
+Now the view. In the shared project, open MainView.axaml from the Views folder. Map the VisioForge namespace to a prefix, here vf, next to the template's own namespaces. And replace the template's TextBox with a StackPanel, holding a VideoView above the same TextBox. Then save. In Avalonia, the namespace is VisioForge.Core.UI.Avalonia, from the VisioForge.DotNet.Core.UI.Avalonia package. The size here is only for this demo.
+
+### Run it
+
+Set the Desktop head as the startup project. And start it without debugging. Visual Studio builds the Desktop head for Windows, with the Windows redists. The app opens, with the VideoView above the greeting. It stays black until an SDK engine draws into it.
+
+### Next steps
+
+Before the first engine, initialize the SDK with VisioForgeX.InitSDKAsync, and release it with DestroySDK on exit. Android needs the camera and microphone permissions in its manifest, and iOS and macOS the usage descriptions in Info.plist. Deployment for each platform is on the help site.
+
+## See also
+
+- [SDK initialization](../../init/) — `InitSDKAsync` and `DestroySDK` in detail
+- Install guides for [Visual Studio](../visual-studio/), [MAUI](../maui/), [Uno Platform](../uno/) and [Rider](../rider/)
+- [Windows](../../deployment-x/Windows/), [macOS](../../deployment-x/macOS/), [Ubuntu](../../deployment-x/Ubuntu/), [Android](../../deployment-x/Android/) and [iOS](../../deployment-x/iOS/) deployment
+
+---END OF PAGE---
+
+
+
+## Install .NET SDKs: NuGet, Visual Studio, and Rider
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/
+**Description:** Setup files or NuGet packages. Target frameworks for Windows, macOS, iOS, Android, and Linux. SDK initialization, VideoView controls, and native dependencies.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, DirectShow, Windows, macOS, Linux, Android, iOS, Capture, Streaming
+**API:** VideoView, VideoCaptureCore, VideoCaptureCoreX
+
+# VisioForge .NET SDKs Installation Guide
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+VisioForge offers powerful multimedia SDKs for .NET developers that enable advanced video capture, editing, playback, and media processing capabilities in your applications. This guide covers everything you need to know to properly install and configure our SDKs in your development environment.
+
+## Available .NET SDKs
+
+VisioForge provides several specialized SDKs to address different multimedia needs:
+
+- [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) - For capturing video from cameras, screen recording, and streaming ([documentation](../videocapture/))
+- [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) - For video editing, processing, and format conversion ([documentation](../videoedit/))
+- [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) - For building custom media processing pipelines ([documentation](../mediablocks/))
+- [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) - For creating custom media players with advanced features ([documentation](../mediaplayer/))
+
+## Installation Methods
+
+You can install our SDKs using two primary methods:
+
+### Using Setup Files
+
+The setup file installation method is recommended for Windows development environments. This approach:
+
+1. Automatically installs all required dependencies
+2. Configures Visual Studio integration
+3. Includes sample projects to help you get started quickly
+4. Provides documentation and additional resources
+
+Setup files can be downloaded from the respective SDK product pages on our website.
+
+### Using NuGet Packages
+
+For cross-platform development or CI/CD pipelines, our NuGet packages offer flexibility and easy integration.
+
+Install the package for the SDK you bought — each one pulls `VisioForge.DotNet.Core` in as a dependency, so you never reference `Core` directly:
+
+```
+Install-Package VisioForge.DotNet.VideoCapture   # Video Capture SDK .NET
+Install-Package VisioForge.DotNet.VideoEdit      # Video Edit SDK .NET
+Install-Package VisioForge.DotNet.MediaPlayer    # Media Player SDK .NET
+Install-Package VisioForge.DotNet.MediaBlocks    # Media Blocks SDK .NET
+```
+
+These packages hold the managed SDK only. The native engine comes in a separate redist package, which you reference next to it:
+
+| Engine | Platform | Redist package |
+| --- | --- | --- |
+| X engines (`VideoCaptureCoreX`, `MediaPlayerCoreX`, `VideoEditCoreX`, `MediaBlocksPipeline`) | Windows | `VisioForge.CrossPlatform.Core.Windows.x64` (`.x86` or `.arm64` for other CPUs; on ARM64, MP3 playback also needs `VisioForge.CrossPlatform.Libav.Windows.arm64`, and NDI is not available) |
+| X engines | macOS, Mac Catalyst | `VisioForge.CrossPlatform.Core.macOS` |
+| X engines | Android | `VisioForge.CrossPlatform.Core.Android` |
+| X engines | iOS | `VisioForge.CrossPlatform.Core.iOS` |
+| X engines | Linux | `VisioForge.CrossPlatform.Core.Linux.x64` or `VisioForge.CrossPlatform.Core.Linux.arm64`, plus GStreamer 1.20+ from the distribution (1.22+ for some features) |
+| `VideoCaptureCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoCapture.x64` (`.x86` for 32-bit apps) |
+| `MediaPlayerCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.MediaPlayer.x64` and `VisioForge.DotNet.Core.Redist.LAV.x64`. LAV is the default `Source_Mode`, the GPU mode uses LAV too, and so does `GetFileThumbnail`: leave the LAV package out only when the app uses none of them. Add `VisioForge.DotNet.Core.Redist.FFMPEG.x64` when the app uses the FFMPEG or Blu-ray mode, and `VisioForge.DotNet.Core.Redist.VLC.x64` for `File_VLC` or `HTTP_RTSP_VLC` (`.x86` of each package for 32-bit apps). An ARM64 app takes `VisioForge.DotNet.Core.Redist.Base.arm64` and `VisioForge.DotNet.Core.Redist.FFMPEG.arm64` with `MediaPlayerSourceMode.FFMPEG` (no MediaPlayer or LAV package, so no GPU mode and no `GetFileThumbnail`) |
+| `VideoEditCore` (Windows only) | Windows | `VisioForge.DotNet.Core.Redist.VideoEdit.x64` and `VisioForge.DotNet.Core.Redist.FFMPEG.x64` to open MP4, MKV and other input files (`.x86` for 32-bit apps) |
+
+For example, a Windows x64 app on the X engines adds:
+
+```
+Install-Package VisioForge.CrossPlatform.Core.Windows.x64
+Install-Package VisioForge.CrossPlatform.Libav.Windows.x64   # recommended: FFmpeg (libav) decoders and encoders
+```
+
+Some platforms need a step beyond the package: Android also takes the Java bindings project ([Android deployment](../deployment-x/Android/)), and Mac Catalyst a build target that copies the native libraries into the app bundle ([macOS deployment](../deployment-x/macOS/)). With the Windows-only engines, an AnyCPU app deploys both the x86 and the x64 packages. Their engine packages and LAV have no ARM64 build, so on Windows on Arm, where an AnyCPU app usually runs as ARM64, build the app as x64 or use the X engines. For native ARM64 file playback, `MediaPlayerCore` plays with `MediaPlayerSourceMode.FFMPEG` and the ARM64 packages in its row ([Windows ARM64](../general/guides/windows-arm64/)). The optional packages are listed in the [deployment guide](../deployment-x/) for the X engines and on the deployment pages of [Video Capture SDK .NET](../videocapture/deployment/), [Media Player SDK .NET](../mediaplayer/deployment/) and [Video Edit SDK .NET](../videoedit/deployment/) for the Windows-only engines.
+
+Additional UI-specific packages may be required depending on your target platform:
+
+```
+Install-Package VisioForge.DotNet.Core.UI.MAUI
+Install-Package VisioForge.DotNet.Core.UI.WinUI
+Install-Package VisioForge.DotNet.Core.UI.Avalonia
+Install-Package VisioForge.DotNet.Core.UI.Uno
+```
+
+WPF and Windows Forms need no UI package: their `VideoView` is in `VisioForge.Core`, which every SDK package above brings in. The separate `VisioForge.DotNet.Core.UI.WPF` and `VisioForge.DotNet.Core.UI.WinForms` packages are not needed.
+
+## IDE Integration and Setup
+
+Our SDKs seamlessly integrate with popular .NET development environments:
+
+### Visual Studio Integration
+
+[Visual Studio](visual-studio/) offers the most complete experience with our SDKs:
+
+- Full IntelliSense support for SDK components
+- Built-in debugging for media processing components
+- Designer support for visual controls
+- NuGet package management
+
+For detailed Visual Studio setup instructions, see our [Visual Studio integration guide](visual-studio/). To start from a working app, use the [VisioForge project templates](project-templates/) for Visual Studio 2026 and `dotnet new`.
+
+### JetBrains Rider Integration
+
+[Rider](rider/) provides excellent cross-platform development support:
+
+- Full code completion for SDK APIs
+- Smart navigation features for exploring SDK classes
+- Integrated NuGet package management
+- Cross-platform debugging capabilities
+
+For Rider-specific instructions, visit our [Rider integration documentation](rider/).
+
+### Visual Studio for Mac
+
+[Visual Studio for Mac](visual-studio-mac/) users can develop applications for macOS, iOS, and Android:
+
+- Built-in NuGet package manager for installing SDK components
+- Project templates for quick setup
+- Integrated debugging tools
+
+Learn more in our [Visual Studio for Mac setup guide](visual-studio-mac/).
+
+## Platform-Specific Configuration
+
+### Target Framework Configuration
+
+Each operating system requires specific target framework settings for optimal compatibility:
+
+#### Windows Applications
+
+Windows applications must use the `-windows` target framework suffix:
+
+```
+<TargetFramework>net10.0-windows</TargetFramework>
+```
+
+This enables access to Windows-specific APIs and UI frameworks like WPF and Windows Forms.
+
+#### Android Development
+
+Android projects require the `-android` framework suffix:
+
+```
+<TargetFramework>net10.0-android</TargetFramework>
+```
+
+Ensure that Android workloads are installed in your development environment:
+
+```
+dotnet workload install android
+```
+
+#### iOS Development
+
+iOS applications must use the `-ios` target framework:
+
+```
+<TargetFramework>net10.0-ios</TargetFramework>
+```
+
+iOS development requires a Mac with Xcode installed, even when using Visual Studio on Windows.
+
+#### macOS Applications
+
+macOS native applications use either the `-macos` or `-maccatalyst` framework:
+
+```
+<TargetFramework>net10.0-macos</TargetFramework>
+```
+
+For .NET MAUI applications targeting macOS, use:
+
+```
+<TargetFramework>net10.0-maccatalyst</TargetFramework>
+```
+
+#### Linux Development
+
+Linux applications use the standard target framework without a platform suffix:
+
+```
+<TargetFramework>net10.0</TargetFramework>
+```
+
+Add `VisioForge.CrossPlatform.Core.Linux.x64`, or `VisioForge.CrossPlatform.Core.Linux.arm64` on ARM64. It carries the SDK's own native libraries only: install GStreamer 1.20 or later (1.22 or later for some features, such as the OpenCV blocks and the ONVIF audio backchannel) from the distribution packages, as described in [Ubuntu deployment](../deployment-x/Ubuntu/).
+
+## Special Framework Support
+
+### .NET MAUI Applications
+
+[MAUI projects](maui/) require special configuration:
+
+- Add the `VisioForge.DotNet.Core.UI.MAUI` NuGet package
+- Configure platform-specific permissions in your project
+- Use MAUI-specific video view controls
+
+See our [detailed MAUI guide](maui/) for complete instructions.
+
+### Avalonia UI Framework
+
+[Avalonia projects](avalonia/) provide a cross-platform UI alternative:
+
+- Install the `VisioForge.DotNet.Core.UI.Avalonia` package
+- Use Avalonia-specific video rendering controls
+- Configure platform-specific dependencies
+
+Our [Avalonia integration guide](avalonia/) provides complete setup instructions.
+
+### Uno Platform Applications
+
+[Uno Platform projects](uno/) enable building applications for Windows, Android, iOS, macOS, and Linux from a single codebase:
+
+- Add the `VisioForge.DotNet.Core.UI.Uno` NuGet package
+- Use Uno Platform-specific video view controls
+- Configure platform-specific redistributables
+
+See our [Uno Platform guide](uno/) for complete setup instructions.
+
+### Unity
+
+[Unity](unity/) integration uses a ready-to-import `.unitypackage` instead of NuGet:
+
+- Self-contained for Unity 6 on Windows x64 — managed SDK, native runtime, and sample scenes
+- No source build, no NuGet, and no external dependencies
+- Video renders into a Unity `RawImage` via the bundled scripts
+
+See our [Unity installation guide](unity/) for the step-by-step setup.
+
+## SDK Initialization for Cross-Platform Engines
+
+Our SDKs include both Windows-specific DirectShow engines (like `VideoCaptureCore`) and cross-platform X-engines (like `VideoCaptureCoreX`). The X-engines require explicit initialization and cleanup.
+
+### Initializing the SDK
+
+Before using any X-engine components, initialize the SDK:
+
+```
+// Initialize at application startup
+VisioForge.Core.VisioForgeX.InitSDK();
+
+// Or use the async version
+await VisioForge.Core.VisioForgeX.InitSDKAsync();
+```
+
+### Cleaning Up Resources
+
+When your application exits, properly release resources:
+
+```
+// Clean up at application exit (sync — DestroySDK has no async variant)
+VisioForge.Core.VisioForgeX.DestroySDK();
+```
+
+Failing to initialize or clean up properly may result in memory leaks or unstable behavior.
+
+## Video Rendering Controls
+
+Each UI framework requires specific video view controls to display media content:
+
+### Windows Forms
+
+```
+// At the top of Form1.cs. The WinForms VideoView is in VisioForge.Core: no extra package
+using VisioForge.Core.UI.WinForms;
+
+// Inside the Form1 class: a field, added to the form in the existing constructor
+private readonly VideoView videoView = new VideoView { Dock = DockStyle.Fill };
+
+public Form1()
+{
+    InitializeComponent();
+    Controls.Add(videoView); // add this line to the existing constructor
+}
+```
+
+### WPF Applications
+
+```
+<!-- MainWindow.xaml. The WPF VideoView is in VisioForge.Core: no extra package -->
+<Window ...
+        xmlns:vf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core">
+    <vf:VideoView x:Name="videoView" />
+</Window>
+```
+
+### MAUI Applications
+
+```
+// Add reference to VisioForge.DotNet.Core.UI.MAUI
+using VisioForge.Core.UI.MAUI;
+
+// In your XAML
+<vf:VideoView x:Name="videoView" />
+```
+
+### Avalonia UI
+
+```
+// Add reference to VisioForge.DotNet.Core.UI.Avalonia
+using VisioForge.Core.UI.Avalonia;
+
+// In your XAML
+<vf:VideoView Name="videoView" />
+```
+
+## Native Dependencies Management
+
+Our SDKs leverage native libraries for optimal performance. These dependencies must be properly managed for deployment:
+
+- Windows: the setup installer installs them on the development machine. An application you ship takes the redist package for its engine and CPU from the [table above](#using-nuget-packages); its libraries are copied next to the application on build
+- macOS/iOS: `VisioForge.CrossPlatform.Core.macOS` and `VisioForge.CrossPlatform.Core.iOS` carry the native libraries, GStreamer included; the app still needs proper signing, and Mac Catalyst a build target (see [macOS deployment](../deployment-x/macOS/))
+- Android: `VisioForge.CrossPlatform.Core.Android` carries the native libraries for every Android architecture; the app also takes the Java bindings project (see [Android deployment](../deployment-x/Android/))
+- Linux: `VisioForge.CrossPlatform.Core.Linux.x64` or `.arm64` carries the SDK's own native libraries only; GStreamer comes from the distribution packages (see [Ubuntu deployment](../deployment-x/Ubuntu/))
+
+For detailed deployment instructions, see our [deployment guide](../deployment-x/).
+
+## Troubleshooting Common Installation Issues
+
+If you encounter issues during installation:
+
+1. Verify target framework compatibility with your project type
+2. Ensure all required workloads are installed (`dotnet workload list`)
+3. Check for dependency conflicts in your project
+4. Confirm proper SDK initialization for X-engines
+5. Review platform-specific requirements in our documentation
+
+## Sample Code and Resources
+
+We maintain an extensive collection of sample applications on our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) to help you get started quickly with our SDKs.
+
+These examples cover common scenarios like:
+
+- Video capture from cameras and screens
+- Media playback with custom controls
+- Video editing and processing
+- Cross-platform development
+
+Visit our repository for the latest code examples and best practices for using our SDKs.
+
+---
+
+For additional support or questions, please contact our technical support team or visit our documentation portal.
+
+---END OF PAGE---
+
+
+
+## Install VisioForge .NET SDKs in MAUI Apps via NuGet
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/maui/
+**Description:** Add video capture, playback, and editing to .NET MAUI apps. NuGet setup for Windows, Android, iOS, and macOS with VisioForge VideoView controls.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, C++, MediaPlayerCoreX, Windows, macOS, Android, iOS, MAUI, Playback, C#, NuGet
+**API:** VideoView, MediaPlayerCoreX
+
+# Integrating VisioForge SDKs with .NET MAUI Applications
+
+## Overview
+
+.NET Multi-platform App UI (MAUI) enables developers to build cross-platform applications for mobile and desktop from a single codebase. VisioForge provides comprehensive support for MAUI applications through the `VisioForge.DotNet.Core.UI.MAUI` NuGet package (namespace: `VisioForge.Core.UI.MAUI`), which contains specialized UI controls designed specifically for the .NET MAUI platform.
+
+Our SDKs enable powerful multimedia capabilities across all MAUI-supported platforms:
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+Looking for a working tutorial?
+
+Once the packages are installed, walk through the [.NET MAUI Video Player Guide](../../mediaplayer/guides/maui-player/) — a full `VideoView` + `MediaPlayerCoreX` implementation with file picker, seek, and volume that runs on iOS, Android, macOS, and Windows from one codebase.
+
+## Getting Started
+
+### Installation
+
+To begin using VisioForge with your MAUI project, install the required NuGet packages:
+
+1. The SDK package for the product you are using - one of:
+2. `VisioForge.DotNet.VideoCapture` - camera, screen and IP camera capture (`VideoCaptureCoreX`)
+3. `VisioForge.DotNet.MediaPlayer` - file and network playback (`MediaPlayerCoreX`)
+4. `VisioForge.DotNet.VideoEdit` - timeline editing and rendering (`VideoEditCoreX`)
+5. `VisioForge.DotNet.MediaBlocks` - custom pipelines (`MediaBlocksPipeline`)
+6. The core UI package: `VisioForge.DotNet.Core.UI.MAUI` - the `VideoView` control
+7. Platform-specific redistributable (detailed in platform sections below)
+
+```
+<ItemGroup>
+  <!-- Replace with the SDK package your app uses. -->
+  <PackageReference Include="VisioForge.DotNet.MediaPlayer" Version="2026.*" />
+  <PackageReference Include="VisioForge.DotNet.Core.UI.MAUI" Version="2026.*" />
+</ItemGroup>
+```
+
+`VisioForge.DotNet.Core.UI.MAUI` only supplies the `VideoView` control. On its own it cannot compile `VideoCaptureCoreX`, `MediaPlayerCoreX` or `VideoEditCoreX` - the SDK package above is what brings those in.
+
+### SDK Initialization
+
+Proper initialization is essential for the VisioForge SDKs to function correctly within your MAUI application. This process must be completed in your `MauiProgram.cs` file.
+
+```
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
+
+public static class MauiProgram
+{
+    public static MauiApp CreateMauiApp()
+    {
+        var builder = MauiApp.CreateBuilder();
+        builder
+          .UseMauiApp<App>()
+          // Initialize the SkiaSharp package by adding the below line of code
+          .UseSkiaSharp()
+          // Initialize the VisioForge MAUI package by adding the below line of code
+          .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
+          // After initializing the VisioForge MAUI package, optionally add additional fonts
+          .ConfigureFonts(fonts =>
+          {
+              fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+              fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+          });
+
+        // Continue initializing your .NET MAUI App here
+        return builder.Build();
+    }
+}
+```
+
+`AddVisioForgeHandlers` registers the `VideoView` handler. It does not load the native stack - that is a separate call, and it must run before the first `VideoCaptureCoreX`, `MediaPlayerCoreX`, `VideoEditCoreX` or `MediaBlocksPipeline` is constructed. Without it the constructor throws `DllNotFoundException` on a clean machine:
+
+```
+using VisioForge.Core;
+
+// Async initialization (recommended - the first call builds the GStreamer registry
+// and can take hundreds of milliseconds, which would freeze the UI thread).
+await VisioForgeX.InitSDKAsync();
+
+// Or synchronous initialization.
+VisioForgeX.InitSDK();
+```
+
+Release the SDK when the page or the application shuts down:
+
+```
+VisioForgeX.DestroySDK();
+```
+
+## Using VisioForge Controls in XAML
+
+The `VideoView` control is the primary interface for displaying video content in your MAUI application. To use VisioForge controls in your XAML files:
+
+1. Add the VisioForge namespace to your XAML file:
+
+```
+xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
+```
+
+1. Add the VideoView control to your layout:
+
+```
+<vf:VideoView Grid.Row="0"
+                HorizontalOptions="FillAndExpand"
+                VerticalOptions="FillAndExpand"
+                x:Name="videoView"
+                Background="Black"/>
+```
+
+The VideoView control adapts to the native rendering capabilities of each platform while providing a consistent API for your application code.
+
+## Platform-Specific Configuration
+
+On iOS and Mac Catalyst, leave `PublishTrimmed` unset: the .NET SDK decides when those targets are trimmed, and a project that targets `net11.0-ios` or `net11.0-maccatalyst` fails to build when the property is set (unless `PublishAot` is enabled); control trimming with `MtouchLink` instead. If you added it following an earlier version of this page, remove it.
+
+### Android Implementation
+
+Android requires additional configuration steps to ensure proper operation:
+
+#### 1. Add Java Bindings Library
+
+The VisioForge SDK relies on native Android functionality that requires a custom Java bindings library:
+
+1. Clone the binding library from our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency)
+2. Use `VisioForge.Core.Android.X10.csproj` from that folder. It targets `net10.0-android`, and a `net11.0-android` app references it as well.
+3. Add the reference to your project file:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <ProjectReference Include="..\..\..\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
+</ItemGroup>
+```
+
+#### 2. Add Android Redistributable Package
+
+Include the Android-specific redistributable package:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="2026.*" />
+</ItemGroup>
+```
+
+#### 3. Android Permissions
+
+Ensure your AndroidManifest.xml includes the necessary permissions for camera, microphone, and storage access depending on your application's functionality. Common required permissions include:
+
+- `android.permission.CAMERA`
+- `android.permission.RECORD_AUDIO`
+- `android.permission.READ_EXTERNAL_STORAGE`
+- `android.permission.WRITE_EXTERNAL_STORAGE`
+
+### iOS Configuration
+
+iOS integration requires fewer steps but has some important considerations:
+
+#### 1. Add iOS Redistributable
+
+Add the iOS-specific package to your project:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <!-- The iOS redist version trails the SDK version on purpose - it tracks the
+       GStreamer-iOS rebuild cadence, not the wrapper release. Do not bump it to
+       match VisioForge.DotNet.*; there is no 2026.x on nuget.org. -->
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.26]"/>
+</ItemGroup>
+```
+
+#### 2. Important Notes for iOS Development
+
+- **Minimum iOS version**: set `<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">18.0</SupportedOSPlatformVersion>` in the project. The native iOS libraries are built for iOS 18.0, and the MAUI template defaults to 15.0.
+- **Interpreter for XAML (`net10.0-ios` and earlier target frameworks)**: set `<UseInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">true</UseInterpreter>` in the project. Without it, the app can stop at startup with an `aot-only mode` JIT error inside XAML code. This depends on the target framework, not on the installed SDK: a `net11.0-ios` app runs on CoreCLR, where the SDK warns that the property has no effect, so remove it there.
+- **Use physical devices**: The SDK requires testing on physical iOS devices rather than simulators for full functionality.
+- **Privacy descriptions**: Add the necessary usage description strings in your Info.plist file for camera and microphone access:
+- `NSCameraUsageDescription`
+- `NSMicrophoneUsageDescription`
+- `NSLocalNetworkUsageDescription` — required to reach a server or device on the local network. Without it, iOS 14+ silently drops LAN traffic (no prompt, no error).
+
+### macOS Configuration
+
+For macOS Catalyst applications:
+
+#### 1. Local Network Access
+
+If your application connects to a server or device on the local network, add `NSLocalNetworkUsageDescription` to the Mac Catalyst `Info.plist`. Without this key, iOS and Mac Catalyst can silently block local-network traffic without showing a permission prompt.
+
+#### 2. Configure Runtime Identifiers
+
+To ensure your application works correctly on both Intel and Apple Silicon Macs, specify the appropriate runtime identifiers:
+
+```
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+</PropertyGroup>
+```
+
+#### 3. Interpreter for XAML
+
+For `net10.0-maccatalyst` and earlier target frameworks, enable the interpreter for the same reason as on iOS (see the iOS notes above). Leave it out for `net11.0-maccatalyst`:
+
+```
+<PropertyGroup>
+  <UseInterpreter Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">true</UseInterpreter>
+</PropertyGroup>
+```
+
+For more detailed information about macOS deployment, refer to our [macOS](../../deployment-x/macOS/) documentation page.
+
+### Windows Configuration
+
+For Windows applications, you need to include several redistributable packages:
+
+#### 1. Add Base Windows Redistributables
+
+Include the core Windows packages:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.*" />
+</ItemGroup>
+```
+
+#### 2. Add Extended Codec Support (Optional but Recommended)
+
+For enhanced media format support, include the libAV (FFMPEG) package:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.*" />
+</ItemGroup>
+```
+
+### Performance Optimization
+
+For optimal performance across platforms:
+
+1. Use hardware acceleration when available
+2. Adjust video resolution based on the target device capabilities
+3. Consider memory constraints on mobile devices when processing large media files
+
+## Troubleshooting Common Issues
+
+- **Blank video display**: Ensure proper permissions are granted on mobile platforms
+- **Missing codecs**: Verify all platform-specific redistributable packages are correctly installed
+- **Performance issues**: Check that hardware acceleration is enabled when available
+- **Deployment errors**: Confirm runtime identifiers are correctly specified for the target platform
+
+## Conclusion
+
+The VisioForge SDK provides a comprehensive solution for adding powerful multimedia capabilities to your .NET MAUI applications. By following the platform-specific setup instructions and best practices outlined in this guide, you can create rich cross-platform applications with advanced video and audio features.
+
+For additional examples and sample code, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples).
+
+## Next Steps
+
+- [.NET MAUI Video Player Guide](../../mediaplayer/guides/maui-player/) — complete `VideoView` tutorial with seek, volume, and file picker
+- [Avalonia Player Guide](../../mediaplayer/guides/avalonia-player/) — desktop-first cross-platform alternative (includes Linux)
+- [Android Player Guide](../../mediaplayer/guides/android-player/) — Android-only deployment details
+
+---END OF PAGE---
+
+
+
+## VisioForge Project Templates for Visual Studio 2026
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/project-templates/
+**Description:** Start a VisioForge .NET app from a template: camera preview, media player or Media Blocks player for WPF, WinForms, Avalonia and .NET MAUI.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, .NET, Windows, WinForms, WPF, Avalonia, MAUI, NuGet
+**API:** VideoCaptureCoreX, MediaPlayerCoreX, MediaBlocksPipeline, VisioForgeX
+
+# VisioForge Project Templates
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+The VisioForge project templates create a small, complete .NET 10 app that already works: a camera preview, a media player or a Media Blocks player. The NuGet packages are referenced, the SDK is initialized and shut down, and the video view is in place. Build it, press F5 and extend it from there.
+
+The templates come two ways: the **VisioForge .NET Media SDK Templates** extension for Visual Studio 2026, and the `VisioForge.DotNet.Templates` package for `dotnet new`. Both carry the same eight templates.
+
+The Windows setup of the SDKs installs the `dotnet new` package for you when you click **Finish**, if the .NET 10 SDK is installed and the computer is online. It is installed for the Windows account the setup ran under: if you typed an administrator's password at the Windows prompt, that is the administrator's account. Visual Studio 2026 lists templates installed this way in **Create a new project**; if they are not listed, restart Visual Studio. Run the command from [Install from the Command Line](#install-from-the-command-line) yourself under any other account, if the setup ran without its **Finish** page (`/qn`, `/qb`, `/passive`), or when the templates are not there.
+
+## Templates
+
+| Template | Short name | SDK | Platforms |
+| --- | --- | --- | --- |
+| VisioForge Video Capture App (WPF) | `vf-capture-wpf` | Video Capture SDK .NET | Windows x64 |
+| VisioForge Video Capture App (WinForms) | `vf-capture-winforms` | Video Capture SDK .NET | Windows x64 |
+| VisioForge Video Capture App (Avalonia) | `vf-capture-avalonia` | Video Capture SDK .NET | Windows x64; macOS and Linux when built on them |
+| VisioForge Video Capture App (.NET MAUI) | `vf-capture-maui` | Video Capture SDK .NET | Windows x64; iOS and Mac Catalyst when built on macOS |
+| VisioForge Media Player App (WPF) | `vf-player-wpf` | Media Player SDK .NET | Windows x64 |
+| VisioForge Media Player App (WinForms) | `vf-player-winforms` | Media Player SDK .NET | Windows x64 |
+| VisioForge Media Blocks Player App (WPF) | `vf-mediablocks-wpf` | Media Blocks SDK .NET | Windows x64 |
+| VisioForge Media Blocks Player App (WinForms) | `vf-mediablocks-winforms` | Media Blocks SDK .NET | Windows x64 |
+
+The capture templates open the first camera and show its preview; a list or a button switches cameras. The player templates have **Open file...** and **Stop** buttons and play any file the SDK can decode.
+
+## Requirements
+
+- The .NET 10 SDK. Visual Studio 2026 installs it; with Visual Studio 2022, install it separately.
+- MAUI template: the `maui` workload (`dotnet workload install maui`, or the .NET MAUI workload in the Visual Studio installer). Its Windows app is a packaged MSIX: run it from Visual Studio 2026, not with `dotnet run`. iOS and Mac Catalyst build on a Mac with Xcode: run Mac Catalyst with `dotnet run -f net10.0-maccatalyst`; for iOS, which needs a physical device, see [MAUI](../maui/).
+- Avalonia template: Xcode and the `macos` workload (`dotnet workload install macos`) on a Mac; the system GStreamer on Linux, installed as described in [Ubuntu](../../deployment-x/Ubuntu/).
+
+## Install in Visual Studio 2026
+
+If the templates are already in **Create a new project**, go to step 3.
+
+1. Open **Extensions → Manage Extensions**, search for **VisioForge .NET Media SDK Templates** and click **Install**.
+2. Restart Visual Studio so the extension is installed.
+3. Open **File → New → Project** and search for **VisioForge**.
+4. Pick a template, name the project and click **Create**.
+5. Press **F5**.
+
+Visual Studio 2022
+
+The extension installs into Visual Studio 2026 only. The templates target .NET 10, which Visual Studio 2022 does not support. With Visual Studio 2022, use the command line below instead: the WPF, WinForms and Avalonia templates build and run with `dotnet run`. The Windows app of the MAUI template needs Visual Studio 2026. Visual Studio 2022 may list the templates the SDK setup installed; create the project with `dotnet new` instead. To add the SDK to a project of your own, see [Visual Studio](../visual-studio/).
+
+## Install from the Command Line
+
+```
+dotnet new install VisioForge.DotNet.Templates
+dotnet new vf-capture-wpf -n MyCaptureApp
+cd MyCaptureApp
+dotnet run
+```
+
+`dotnet new list VisioForge` shows the installed VisioForge templates, and `dotnet new update` moves them to the newest release. The project name you give with `-n` becomes the namespace and, in the MAUI and Avalonia templates, part of the bundle identifier `com.example.<name>`, lowercased and stripped to letters and digits (`app` when nothing is left). Replace `com.example` with your own prefix before you sign or publish the app.
+
+## What a Template Contains
+
+- The SDK NuGet packages at exact versions: the SDK, the native redist for the target platform and, for MAUI and Avalonia, the UI package.
+- A main window that calls `VisioForgeX.InitSDKAsync` when it loads and `VisioForgeX.DestroySDK` when it closes. Closing waits for the engine to stop first.
+- The engine and its video view: `VideoCaptureCoreX` with the camera list, `MediaPlayerCoreX`, or a `MediaBlocksPipeline` with a universal source, a video renderer and an audio renderer.
+- An `.mcp.json` that connects AI coding assistants (Claude Code, Visual Studio) to the [VisioForge MCP server](../../general/mcp-server-usage/). Delete it if you do not use one.
+
+The first start on a machine takes longer: the SDK builds its plugin registry once. The SDKs run in trial mode without a license key.
+
+## Next Steps
+
+- [Visual Studio](../visual-studio/) — add the SDK to an existing project.
+- [Avalonia](../avalonia/) and [MAUI](../maui/) — add the SDK to a cross-platform app of your own.
+- [Samples on GitHub](https://github.com/visioforge/.Net-SDK-s-samples) — larger demos for every SDK.
+
+---END OF PAGE---
+
+
+
+## Install VisioForge SDK in JetBrains Rider — NuGet Setup
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/rider/
+**Description:** Add VisioForge .NET SDKs to Rider projects via NuGet. .NET 6/7/8/9, macOS/Windows/Linux. Package references, native dependencies, troubleshooting.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, WPF, Avalonia, NuGet
+**API:** VideoView
+
+# .NET SDKs Integration with JetBrains Rider
+
+## Introduction
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+This comprehensive guide walks you through the process of installing and configuring VisioForge .NET SDKs within JetBrains Rider, a powerful cross-platform IDE for .NET development. While we'll use a Windows application with WPF as our primary example, these installation steps can be readily adapted for macOS, iOS, or Android applications as well. JetBrains Rider provides a consistent development experience across Windows, macOS, and Linux platforms, making it an excellent choice for cross-platform .NET development.
+
+## Creating Your Project
+
+### Setting Up a Modern Project Structure
+
+Begin by launching JetBrains Rider and creating a new project. For this tutorial, we'll use WPF (Windows Presentation Foundation) as our framework. It's crucial to utilize the modern project format, which provides enhanced compatibility with VisioForge SDKs and offers a more streamlined development experience.
+
+1. Open JetBrains Rider
+2. Select "Create New Solution" from the welcome screen
+3. Choose "WPF Application" from the available templates
+4. Configure your project settings, ensuring you select the modern project format
+5. Click "Create" to generate your project structure
+
+## Adding Required NuGet Packages
+
+### Installing the Main SDK Package
+
+Each VisioForge SDK has a corresponding main package that provides core functionality. You'll need to select the appropriate package based on which SDK you're working with.
+
+1. Right-click on your project in the Solution Explorer
+2. Select the "Manage NuGet Packages" menu item
+3. In the NuGet Package Manager, search for the VisioForge package that corresponds to your desired SDK
+4. Select the latest stable version and click "Install"
+
+### Available Main SDK Packages
+
+Choose from the following main packages based on your development needs:
+
+- [VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture) - For applications requiring video capture functionality
+- [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit) - For video editing and processing applications
+- [VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer) - For media playback applications
+- [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks) - For applications requiring modular media processing capabilities
+
+### Adding the UI Package, if needed
+
+Main SDK package contains the core UI components for WinForms, WPF, Android, and Apple.
+
+For other platforms, you'll need to install the appropriate UI package that corresponds to your chosen UI framework.
+
+### Available UI Packages
+
+Depending on your target platform and UI framework, choose from these UI packages:
+
+- Core package contains the core UI components For WinForms, WPF, and Apple
+- [VisioForge.DotNet.Core.UI.WinUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.WinUI) - For Windows applications using the modern WinUI framework
+- [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI) - For cross-platform applications using .NET MAUI
+- [VisioForge.DotNet.Core.UI.Avalonia](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Avalonia) - For cross-platform applications using Avalonia UI
+
+## Integrating VideoView Control (Optional)
+
+### Adding Video Preview Capabilities
+
+If your application requires video preview functionality, you'll need to add the VideoView control to your user interface. This can be accomplished either through XAML markup or programmatically in your code-behind file. Below, we'll demonstrate how to add it via XAML.
+
+#### Step 1: Add the WPF Namespace
+
+First, add the necessary namespace reference to your XAML file:
+
+```
+xmlns:wpf="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core"
+```
+
+#### Step 2: Add the VideoView Control
+
+Then, add the VideoView control to your layout:
+
+```
+<wpf:VideoView
+    Width="640"
+    Height="480"
+    Margin="10,10,0,0"
+    HorizontalAlignment="Left"
+    VerticalAlignment="Top"/>
+```
+
+This control provides a canvas where video content can be displayed in real-time, essential for applications that involve video capture, editing, or playback.
+
+## Adding Required Redistribution Packages
+
+### Platform-Specific Dependencies
+
+Depending on your target platform, chosen product, and the specific engine you're utilizing, additional redistribution packages may be needed to ensure proper functionality across all deployment environments.
+
+For comprehensive information about which redistribution packages are required for your specific scenario, please consult the Deployment documentation page for your selected VisioForge product. These resources provide detailed guidance on:
+
+- Required system dependencies
+- Platform-specific considerations
+- Deployment optimization strategies
+- Runtime requirements
+
+Following these deployment guidelines will ensure your application functions correctly on end-user systems without missing dependencies or runtime errors.
+
+## Additional Resources
+
+For more examples and detailed implementation guides, visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples), which contains numerous code samples demonstrating various features and integration scenarios.
+
+Our documentation portal also offers comprehensive API references, detailed tutorials, and best practice guides to help you make the most of VisioForge SDKs in your JetBrains Rider projects.
+
+## Conclusion
+
+By following this installation guide, you've successfully integrated VisioForge .NET SDKs with JetBrains Rider, setting the foundation for developing powerful media applications. The combination of VisioForge's robust media processing capabilities and JetBrains Rider's intelligent development environment provides an ideal platform for creating sophisticated media applications across multiple platforms.
+
+---END OF PAGE---
+
+
+
+## Install VisioForge media SDKs in Unity 6 — Setup Guide
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/unity/
+**Description:** Set up VisioForge media SDKs in Unity 6 — one cumulative .unitypackage for video playback, capture and editing on Windows, Android, macOS, iOS.
+**Tags:** Media Blocks SDK, Media Player SDK, Video Capture SDK, Video Edit SDK, .NET, Unity, Windows, Android, macOS, iOS, RTSP, C#
+**API:** VisioForgeEnvironment, MediaBlocksPipeline, MediaPlayerCoreX, VideoCaptureCoreX, VideoEditCoreX
+
+# Install VisioForge media SDKs in Unity
+
+[Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net) [Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net)
+
+This guide walks through installing the VisioForge **media SDKs** in **Unity 6**. A single, fully self-contained **`.unitypackage`** brings four products into Unity at once — the **Media Blocks SDK .NET** pipeline plus the high-level **Media Player SDK .NET** (`MediaPlayerCoreX`), **Video Capture SDK .NET** (`VideoCaptureCoreX`), and **Video Edit SDK .NET** (`VideoEditCoreX`) engines. The package bundles every supported native runtime in one file — Windows x64, Android, macOS Standalone, and iOS Standalone — and lets Unity pick the right one per Build Target at build time. You do not build anything from source, you do not need NuGet, and there are no external dependencies to install.
+
+The package targets **`netstandard2.1`** managed assemblies. For projects pinned to the older Mono Unity LTS, a legacy `net48` Windows-only flavor is still published — see the spoiler at the bottom of this page.
+
+For what's inside and how to use it, see **[Using VisioForge in Unity](../../general/unity/)** — the overview with the full product and sample catalog. For the five-step shortcut, see the **[Quickstart](../../general/unity/getting-started/)**.
+
+## Requirements
+
+|  |  |
+| --- | --- |
+| Unity | **6 (6000.x)** — verified on `6000.4.6f1` |
+| Build targets shipped | **Windows x64**, **Android arm64**, **macOS Universal arm64+x86\_64**, **iOS device arm64** |
+| Managed TFM | **`netstandard2.1`** |
+| Mandatory Editor settings | `Api Compatibility Level = .NET Standard 2.1` |
+
+Use a short path on NTFS — not a Dev Drive / ReFS volume
+
+Importing the package writes thousands of small native files, and Unity's import/compile is heavy small-file I/O. On a Dev Drive (ReFS) that is **dramatically slower** (a cold import can take many minutes instead of seconds) and is more prone to the `EPERM rename` race. Keep the project on a plain **NTFS** drive with a short root path, e.g. `C:\unity\MyApp`. Unity's package cache also produces deep paths that can overflow Windows' 260-character `MAX_PATH`.
+
+## Download
+
+Download the latest cumulative package — Windows + Android + macOS + iOS in one file:
+
+[**VisioForge.MediaBlocks.Unity.unitypackage**](https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage)
+
+```
+https://files.visioforge.com/unity/VisioForge.MediaBlocks.Unity.unitypackage
+```
+
+## Step 1 — Create or open a Unity project
+
+Use an existing Unity 6 project or create a new one (any template). Keep the project root on a short NTFS path (see the warning above).
+
+The sample scenes render video into a uGUI `RawImage`, so the project needs the **uGUI** package (`com.unity.ugui`) — every Unity Hub template ships it, but a hand-trimmed project may not. No render pipeline is required: the scenes work on Built-in, URP and HDRP alike.
+
+## Step 2 — Import the package
+
+In the Editor: **Assets → Import Package → Custom Package…**, select the downloaded `.unitypackage`, and click **Import** (keep all items checked).
+
+The package adds:
+
+| Content | Location | Purpose |
+| --- | --- | --- |
+| Managed SDK (`netstandard2.1`) + dependencies | `Assets/Plugins/` (+ `Android/`, `macOS/`, `iOS/Managed/` subfolders) | the Media Blocks SDK .NET assemblies, per platform |
+| Windows native runtime | `Assets/StreamingAssets/VisioForge/x64/` | Windows GStreamer libs and plugins |
+| Android native runtime | `Assets/Plugins/Android/libs/arm64-v8a/` | monolithic `libgstreamer_android.so` + Java AAR |
+| macOS native runtime | `Assets/Plugins/macOS/` | universal dylibs (arm64+x86\_64) |
+| iOS native runtime | `Assets/Plugins/iOS/GStreamerX.framework/` | embedded framework (device arm64) |
+| IL2CPP preservation | `Assets/VisioForge/link.xml` | type / member preservation for Android & iOS |
+| Reusable scripts | `Assets/Scripts/` | `VisioForgeEnvironment` and `VisioForgeVideoView` helpers plus the six sample scripts |
+| Six sample scenes | `Assets/Scenes/` | `SimplePlayer`, `RTSPViewer`, `MediaPlayerX`, `IPCameraX`, `VideoCaptureX`, `VideoEditX` — see the [samples overview](../../general/unity/#samples) |
+| One-time setup helper | `Assets/VisioForge/Editor/` | applies the two required project settings |
+
+Per-flavor `PluginImporter` metadata on every native file tells Unity which Build Target each binary belongs to — switching the Build Target in Build Profiles automatically picks the right slot at build time.
+
+## Step 3 — Apply the required project settings
+
+On first import the setup helper shows a dialog asking to apply the required project setting. Click **Apply** — the setting is configured for you.
+
+This setting is **mandatory** — the SDK will not work without it:
+
+- **Api Compatibility Level = .NET Standard 2.1** — the SDK ships as `netstandard2.1` assemblies; the legacy `.NET Framework` setting cannot load them.
+
+Unity's default **Enter Play Mode** behavior (Domain + Scene Reload) is fully supported — you do **not** need to disable Domain Reload. The SDK survives the Editor's Play/Stop reloads.
+
+For mobile targets, also switch **Scripting Backend** to **IL2CPP** — Mono is not supported on Android or iOS by Unity itself. See [Build for Android](../../general/unity/android/) and [Build for iOS](../../general/unity/ios/) for the per-target Build Profile checklists.
+
+## Step 4 — Set the setting manually (only if you clicked Skip)
+
+If you clicked **Skip**, set it by hand:
+
+1. **Api Compatibility Level = .NET Standard 2.1** *Edit → Project Settings → Player → Other Settings → Configuration → Api Compatibility Level*.
+
+## Step 5 — Run a sample scene
+
+In the **Project** window open `Assets/Scenes/SimplePlayer.unity` (double-click it — do not stay on the empty default scene), select the **RawImage** GameObject, set its **File Path** in the Inspector, and press **▶ Play**. Video renders in the Game view and audio plays through the system default device.
+
+The RawImage looks empty until you press Play
+
+The video texture is created at runtime, so the `RawImage` is blank (white) in edit mode.
+
+Next, read the usage guides:
+
+- [Quickstart](../../general/unity/getting-started/) — the five-step path from import to playback.
+- [Using VisioForge in Unity](../../general/unity/) — the overview with the full product and sample catalog: file playback, RTSP / IP camera, webcam capture, and timeline editing.
+
+## Build for a target platform
+
+The cumulative `.unitypackage` contains every supported platform, but each Build Target has its own settings and gotchas. Read the matching page:
+
+- [Build for Windows](../../general/unity/windows/) — x86\_64 Editor + Standalone Player.
+- [Build for Android](../../general/unity/android/) — IL2CPP arm64, AndroidManifest permissions.
+- [Build for macOS](../../general/unity/macos/) — Universal arm64+x86\_64, code-signing.
+- [Build for iOS](../../general/unity/ios/) — Xcode export workflow, Info.plist permissions.
+
+## Uninstalling or upgrading the package
+
+A `.unitypackage` has no uninstaller — remove the files manually.
+
+1. **Close the Unity Editor** first — it locks the native DLLs and the `Library/` cache.
+2. Delete the VisioForge content from `Assets/`:
+3. `Assets/StreamingAssets/VisioForge/` — the Windows native runtime.
+4. `Assets/Plugins/Android/libs/arm64-v8a/libgstreamer_android.so`, `libVisioForge_Core.so`, and `Assets/Plugins/Android/visioforge-gstreamer.aar` — the Android runtime.
+5. `Assets/Plugins/macOS/*.dylib` and `Assets/Plugins/macOS/ca-certificates.crt` — the macOS runtime.
+6. `Assets/Plugins/iOS/GStreamerX.framework/` and `Assets/Plugins/iOS/libVisioForge_Core.a` — the iOS runtime.
+7. `Assets/Plugins/` (with `Android/`, `macOS/`, `iOS/Managed/` subfolders) — the managed assemblies, per platform.
+8. `Assets/VisioForge/` — the one-time setup helper and `link.xml`.
+9. The scripts in `Assets/Scripts/`: the `VisioForgeEnvironment.cs` and `VisioForgeVideoView.cs` helpers plus the six sample scripts — `MediaBlocksPlayer.cs`, `RTSPViewerPlayer.cs`, `MediaPlayerXPlayer.cs`, `IPCameraXViewer.cs`, `VideoCaptureXRecorder.cs`, `VideoEditXRenderer.cs` (plus their `.meta`) — keep any scripts of your own that live in the same folder.
+10. The sample scenes in `Assets/Scenes/`: `SimplePlayer.unity`, `RTSPViewer.unity`, `MediaPlayerX.unity`, `IPCameraX.unity`, `VideoCaptureX.unity`, `VideoEditX.unity`.
+11. Delete the project's `Library/` folder (next to `Assets/`) to clear the cached import state. Unity regenerates it on the next open (the first launch is slower).
+
+**Upgrading:** import the new `.unitypackage` over the old one — the managed-plugin GUIDs are deterministic, so Unity overwrites the existing assets in place and references are preserved. If you are coming from a much older package or see duplicated DLLs in `Assets/Plugins/`, do a clean removal (steps above) first, then import the new package.
+
+## Troubleshooting
+
+| Symptom | Cause | Fix |
+| --- | --- | --- |
+| `TypeLoadException` on play | Api Compatibility Level is `.NET Framework`, not `.NET Standard 2.1` | Set it to `.NET Standard 2.1`, or re-import and click **Apply** |
+| Editor hangs on "Reloading domain" on Play/Stop | An SDK build older than this release, before the Editor reload guard was added | Update to the latest SDK — its reload guard stops the GStreamer main-loop thread automatically, so Domain Reload is safe |
+| Editor crashes on the 2nd Play | `VisioForgeX.DestroySDK()` was called on Stop, then re-initialized | Don't shut the SDK down on Stop — it is process-global and reused; dispose only the per-play pipeline |
+| Native runtime not found | Package imported partially, or wrong Build Target's flavor missing from the package | Re-import the package with all items checked; confirm the package contains the platform you targeted |
+| No video, errors in the Console after import | The Editor needs a clean reload after the runtime is staged | Restart the Editor |
+| `DllNotFoundException` on Android | Scripting Backend is Mono | Switch to IL2CPP |
+
+For the full per-symptom reference, see [Troubleshooting](../../general/unity/troubleshooting/).
+
+## Legacy `net48` Windows-only flavor
+
+ I have an older Unity LTS pinned to Mono — what about the net48 build?
+
+The original Windows-only build of the package targets **`.NET Framework 4.8`** managed assemblies and is still produced for projects that cannot move to `.NET Standard 2.1` (for example, Unity 2019.4 LTS without the modern Api Compatibility option). It ships as a separate `.unitypackage` with `NET48` in the filename, contains only the Windows-x64 native runtime, and uses `.NET Framework` as the Api Compatibility Level. New projects should use the `netstandard2.1` package described above — it covers the same Windows-x64 use case plus every other platform, and Unity 6 defaults to it. If you have a hard requirement for the `net48` build, contact support for the latest download link.
+
+## Frequently Asked Questions
+
+### Can I install the SDK in Unity via NuGet?
+
+No. Unity does not run NuGet restore, and the SDK ships hundreds of native files that NuGet would not lay out for Unity. The `.unitypackage` bundles everything — managed assemblies, every platform's native runtime, scripts, and scenes — so you import a single file instead.
+
+### Do I need to install GStreamer or any other system dependency?
+
+No. The package is fully self-contained; everything the SDK needs is inside it. A system GStreamer install on your machine is not required and is not used by the bundled runtime — on the contrary, `VisioForgeEnvironment.Configure()` actively prunes any system GStreamer from the process search path to avoid a double-init.
+
+### Which VisioForge SDKs are included?
+
+The package ships four products from one shared `netstandard2.1` managed surface: the **Media Blocks SDK .NET** pipeline and the high-level **Media Player SDK .NET** (`MediaPlayerCoreX`), **Video Capture SDK .NET** (`VideoCaptureCoreX`), and **Video Edit SDK .NET** (`VideoEditCoreX`) engines. Each ships one or more ready sample scenes — see the [samples overview](../../general/unity/#samples).
+
+### Does the same package work on Windows ARM64?
+
+The package's Windows native runtime is x86\_64 only — there is no ARM64 native build today. Run it via x64 emulation only at your own risk; production use on Windows 11 ARM64 is not exercised.
+
+### Can I open the same package in the Mac-host Editor?
+
+Yes — if the package was built with `-IncludeMacOS`. The cumulative variant published at `files.visioforge.com/unity/` always contains the macOS flavor. A Windows-only variant opened in a Mac Editor surfaces a clear `[VisioForge] Native runtime folder not found at '…' for runtime platform OSXEditor` message; see [Bootstrap and lifecycle](../../general/unity/bootstrap/).
+
+## See Also
+
+- [Using VisioForge in Unity](../../general/unity/) — overview of how the integration works
+- [Quickstart](../../general/unity/getting-started/) — five-step path to a playing video
+- [Bootstrap and lifecycle](../../general/unity/bootstrap/) — what `Configure()` and `InitializeSdk()` do
+- [Play a media file in Unity](../../general/unity/simple-player/) — the file-playback sample
+- [View an RTSP camera in Unity](../../general/unity/rtsp-viewer/) — the RTSP sample
+- [Capture a webcam](../../general/unity/video-capture-x/) · [Edit and render](../../general/unity/video-edit-x/) — the CoreX engine samples
+- [Platform matrix](../../general/unity/platform-matrix/) — feature support by Unity platform
+- [Media Blocks SDK .NET overview](../../mediablocks/) — the full block catalog
+- [Installation guide](../) — install the SDK in other .NET project types
+
+---END OF PAGE---
+
+
+
+## Install VisioForge .NET SDKs in an Uno Platform App
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/uno/
+**Description:** Install the VisioForge .NET SDKs in an Uno Platform 7 app for Windows, Android and iOS: NuGet, redists, AndroidDependency, VideoView and a video.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, MediaBlocksPipeline, Windows, Android, iOS, Uno, GStreamer, C#, NuGet
+**API:** VideoView, VisioForgeX, UniversalSourceSettings, MediaBlocksPipeline, UniversalSourceBlock, VideoRendererBlock
+
+# Install the VisioForge .NET SDKs in an Uno Platform app
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+This guide installs the VisioForge .NET SDKs in an Uno Platform 7 app with Windows, Android and iOS heads, and puts a `VideoView` on its page. It ends with an app that builds and runs on the Windows head.
+
+All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). The Uno `VideoView` is in [VisioForge.DotNet.Core.UI.Uno](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.Uno). Each platform also takes a redist package, its native engine, and Android takes the VisioForge binding project, `AndroidDependency`, from GitHub.
+
+## Video tutorial
+
+The video creates the app, installs the packages in Visual Studio 2026 and runs it. It was recorded with Uno Platform 6.5; on Uno Platform 7 the template has no `-renderer` option and the project needs no `WinAppSdkVersion`:
+
+## Requirements
+
+- Windows 10 or 11, x64
+- Visual Studio 2026 and the .NET 10 SDK, with the Android and iOS workloads to build those heads
+- Git
+- A Mac with Xcode, paired with Visual Studio, to build the iOS head
+
+`VisioForge.DotNet.Core.UI.Uno` is built for Uno Platform 7, so the app is created from the Uno 7 templates. Versions up to 2026.11.16 are built for Uno Platform 6.5.
+
+## Create the app
+
+In Developer PowerShell, install the Uno 7 templates, create the app, and fetch the Android binding project:
+
+```
+cd $HOME\source\repos
+dotnet new install Uno.Templates@7.0.5
+dotnet new unoapp -o VisioForgeUno -preset blank -platforms android ios windows
+cd VisioForgeUno
+git clone --depth 1 --filter=blob:none --sparse https://github.com/visioforge/.Net-SDK-s-samples.git samples
+git -C samples sparse-checkout set AndroidDependency
+dotnet sln add samples\AndroidDependency\VisioForge.Core.Android.X10.csproj
+devenv VisioForgeUno.sln
+```
+
+The template options pick the blank preset and the three platforms. The sparse clone checks out only `AndroidDependency` from the [samples repository](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency). `dotnet sln add` puts it into the solution: Visual Studio restores only the projects its solution holds, and the app references this one.
+
+## Project properties
+
+Right-click the project and select **Edit Project File**. Add these properties to the property group, above `UnoFeatures`:
+
+```
+<PropertyGroup>
+  <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-android'))">24.0</SupportedOSPlatformVersion>
+  <SupportedOSPlatformVersion Condition="$(TargetFramework.Contains('-ios'))">18.0</SupportedOSPlatformVersion>
+</PropertyGroup>
+```
+
+The Android head targets Android 7 (API level 24), the SDK's minimum on Android. The iOS head targets iOS 18.0, the minimum of the native iOS libraries.
+
+## Install the packages
+
+Right-click the project, open **Manage NuGet Packages** and the **Browse** tab. Install `VisioForge.DotNet.Core`, then `VisioForge.DotNet.Core.UI.Uno`, and accept the license.
+
+The Uno template uses central package management, so NuGet writes the versions to `Directory.Packages.props` and the project file gets references without them. Open `Directory.Packages.props` from **Solution Items** and add a version for each redist under the two VisioForge packages:
+
+```
+<ItemGroup>
+  <PackageVersion Include="VisioForge.DotNet.Core" Version="2026.11.27" />
+  <PackageVersion Include="VisioForge.DotNet.Core.UI.Uno" Version="2026.11.27" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Libav.Windows.x64" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.Android" Version="2026.11.26" />
+  <PackageVersion Include="VisioForge.CrossPlatform.Core.iOS" Version="2026.11.26" />
+</ItemGroup>
+```
+
+Take the latest versions from [nuget.org](https://www.nuget.org/profiles/visioforge). Windows takes two redists, the native engine and the Libav codecs; Android and iOS take one each.
+
+Then open **Edit Project File** again and add the references at the end, each under the condition of its platform:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" />
+  <PackageReference Include="VisioForge.CrossPlatform.Libav.Windows.x64" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" />
+  <ProjectReference Include="..\samples\AndroidDependency\VisioForge.Core.Android.X10.csproj" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" />
+</ItemGroup>
+```
+
+Each head takes only its own native engine, and the Android head also references `AndroidDependency`. The references carry no versions: those come from `Directory.Packages.props`.
+
+## Add VideoView to the page
+
+Open `MainPage.xaml`. Map the VisioForge namespace to a prefix, here `vf`, next to the template's own namespaces, and put a `VideoView` into the `StackPanel`, above the greeting:
+
+```
+<Page x:Class="VisioForgeUno.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:vf="using:VisioForge.Core.UI.Uno">
+  <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+    <vf:VideoView x:Name="videoView" Width="640" Height="360" Background="Black" />
+  </StackPanel>
+</Page>
+```
+
+The namespace is `VisioForge.Core.UI.Uno`, from the `VisioForge.DotNet.Core.UI.Uno` package. The size is only for this demo.
+
+## Run it
+
+Start the app without debugging (Ctrl+F5) on the Windows head, **WinAppSDK Unpackaged**. The first build restores the Windows packages and takes about a minute. The app opens with the `VideoView` above *Hello Uno Platform!*, black until an SDK engine draws into it.
+
+## Initialize the SDK
+
+Before the first engine, initialize the SDK, and release it on exit:
+
+```
+using VisioForge.Core;
+
+await VisioForgeX.InitSDKAsync();
+
+// On exit
+VisioForgeX.DestroySDK();
+```
+
+Android needs the camera and microphone permissions in its manifest, and iOS the usage descriptions in `Info.plist`. The [Uno Platform deployment guide](../../deployment-x/uno/) covers them, the build commands for each platform, and troubleshooting.
+
+## Implement VideoView in code
+
+Here's a complete example of using VideoView with the Media Blocks pipeline. `App.xaml.cs` initializes the SDK once at startup and releases it when the window closes:
+
+```
+using VisioForge.Core;
+
+public partial class App : Application
+{
+    protected override async void OnLaunched(LaunchActivatedEventArgs args)
+    {
+        // Initialize the SDK once, before the first engine
+        await VisioForgeX.InitSDKAsync();
+
+        MainWindow = new Window();
+
+        // Release the SDK when the app closes
+        MainWindow.Closed += (sender, e) => VisioForgeX.DestroySDK();
+
+        // The template's code: create the Frame, navigate to MainPage, activate the window
+    }
+}
+```
+
+`MainPage.xaml.cs` plays a file or a URL in the `VideoView` when a button is clicked:
+
+```
+using VisioForge.Core.MediaBlocks;
+using VisioForge.Core.MediaBlocks.Sources;
+using VisioForge.Core.MediaBlocks.VideoRendering;
+using VisioForge.Core.Types.X.Sources;
+
+public sealed partial class MainPage : Page
+{
+    private MediaBlocksPipeline? _pipeline;
+    private UniversalSourceBlock? _source;
+    private VideoRendererBlock? _renderer;
+
+    public MainPage()
+    {
+        this.InitializeComponent();
+        this.Unloaded += MainPage_Unloaded;
+    }
+
+    // A Button in MainPage.xaml with Click="PlayButton_Click"
+    private async void PlayButton_Click(object sender, RoutedEventArgs e)
+    {
+        await PlayMediaAsync("https://example.com/video.mp4");
+    }
+
+    private async Task PlayMediaAsync(string mediaPath)
+    {
+        // Clean up the previous pipeline, if any
+        await CleanupPipelineAsync();
+
+        _pipeline = new MediaBlocksPipeline();
+
+        // A file path or a URL; video only, so audio is not rendered
+        var sourceSettings = await UniversalSourceSettings.CreateAsync(mediaPath, renderAudio: false);
+
+        // Connect the source to the renderer and start playback
+        _source = new UniversalSourceBlock(sourceSettings);
+        _renderer = new VideoRendererBlock(_pipeline, videoView);
+        _pipeline.Connect(_source.VideoOutput, _renderer.Input);
+
+        await _pipeline.StartAsync();
+    }
+
+    private async Task CleanupPipelineAsync()
+    {
+        if (_pipeline != null)
+        {
+            await _pipeline.StopAsync();
+            await _pipeline.DisposeAsync();
+            _pipeline = null;
+        }
+
+        _source?.Dispose();
+        _source = null;
+
+        _renderer?.Dispose();
+        _renderer = null;
+    }
+
+    private async void MainPage_Unloaded(object sender, RoutedEventArgs e)
+    {
+        await CleanupPipelineAsync();
+    }
+}
+```
+
+## Sample applications
+
+For complete examples and sample code, visit:
+
+- Sample applications in the [Media Blocks SDK/Uno](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Blocks%20SDK/Uno) folder
+- Sample applications in the [Media Player SDK X/Uno](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Media%20Player%20SDK%20X/Uno) folder
+- Sample applications in the [Video Capture SDK X/Uno](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/Video%20Capture%20SDK%20X/Uno) folder
+- Our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples)
+
+Available samples include:
+
+- **Simple Player** - Basic media player with playback controls
+- **RTSP Viewer** - Network camera streaming viewer
+- **Video Capture** - Camera capture with recording functionality
+
+## Video Transcript
+
+### Overview
+
+Let's install the VisioForge .NET SDKs in an Uno Platform app, with heads for Windows, Android and iOS, and put a VideoView on its page. All four VisioForge .NET SDKs come in one NuGet package, VisioForge.DotNet.Core. The Uno VideoView is in VisioForge.DotNet.Core.UI.Uno. Each platform also takes a redist package, its native engine, and Android takes the VisioForge binding project, AndroidDependency, from GitHub. You need Windows 10 or 11, Visual Studio 2026, and the .NET 10 SDK, with the Android and iOS workloads to build those heads, and Git. The VisioForge Uno package is built for Uno Platform 6.5, so this video creates the app from the Uno 6.5 templates.
+
+### Create the app
+
+Open Developer PowerShell from the Start menu, and go to your projects folder. Install the Uno Platform templates, version 6.5.31. Create the app with dotnet new unoapp: the blank preset, Android, iOS and Windows heads, and the native renderer. The template restores the new solution, which takes a minute. In the solution folder, clone the VisioForge samples repository sparsely, and check out only AndroidDependency, the Android binding project. Add it to the solution with dotnet sln add: Visual Studio restores only the projects its solution holds. Then open the solution in Visual Studio. Here are all the commands. The template options pick the blank preset, the three platforms, and the native renderer.
+
+### Two properties
+
+Two properties go into the project file before NuGet. Right-click the project, and open Edit Project File. Paste them into the property group, above UnoFeatures, and save. The VisioForge Uno package needs Windows App SDK 1.8, and Uno 6.5 brings 1.7: WinAppSdkVersion raises it. The Android head targets Android 7, API level 24, the SDK's minimum on Android.
+
+### NuGet
+
+Now NuGet. Right-click the project, open Manage NuGet Packages, and the Browse tab. Search for VisioForge.DotNet.Core and install it. Visual Studio shows the changes and the license: accept them. Then install VisioForge.DotNet.Core.UI.Uno, which holds the Uno VideoView. Both are on the Installed tab. The template uses central package management, so their versions went to Directory.Packages.props.
+
+### Redists
+
+The redists come next. Open Directory.Packages.props from Solution Items, and add a version for each redist under the two VisioForge packages. Windows takes two, the native engine and the Libav codecs. Android and iOS take one each. Here is the whole list: the two packages from NuGet and the four redists. Take the latest versions from nuget.org. Then open Edit Project File again, and add the references at the end, each under the condition of its platform. Each head takes only its own native engine, and Android also references the AndroidDependency project from the samples folder. The conditions check the target framework. The references carry no versions: those come from Directory.Packages.props.
+
+### VideoView
+
+Now the page. Open MainPage.xaml from Solution Explorer. Map the VisioForge namespace to a prefix, here vf, next to the template's own namespaces. And put a VideoView into the StackPanel, above the greeting. Then save. In Uno, the namespace is VisioForge.Core.UI.Uno, from the VisioForge.DotNet.Core.UI.Uno package. The size here is only for this demo.
+
+### Run it
+
+Start it without debugging, on the Windows head, WinAppSDK Unpackaged. The first build restores the Windows packages, and takes about a minute. The app opens, with the VideoView above Hello Uno Platform. It stays black until an SDK engine draws into it.
+
+### Next steps
+
+Before the first engine, initialize the SDK with VisioForgeX.InitSDKAsync, and release it with DestroySDK on exit. Android needs the camera and microphone permissions in its manifest, and iOS the usage descriptions in Info.plist. Deployment and the other platforms are in the Uno guide on the help site.
+
+## See also
+
+- [Uno Platform deployment guide](../../deployment-x/uno/) — redists, permissions, build commands and troubleshooting
+- [SDK initialization](../../init/) — `InitSDKAsync` and `DestroySDK` in detail
+- Install guides for [Visual Studio](../visual-studio/), [MAUI](../maui/), [Avalonia](../avalonia/) and [Rider](../rider/)
+- [Windows](../../deployment-x/Windows/), [Android](../../deployment-x/Android/) and [iOS](../../deployment-x/iOS/) deployment
+
+---END OF PAGE---
+
+
+
+## How to Install VisioForge .NET SDKs in Visual Studio
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/visual-studio/
+**Description:** Install the VisioForge .NET SDKs in Visual Studio from NuGet, in WinForms, WPF, MAUI and console projects: the packages, VideoView and a video.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Android, iOS, WinForms, WPF, MAUI, NuGet
+**API:** VideoView, VisioForgeX
+
+# Install the VisioForge .NET SDKs in Visual Studio
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+This guide installs the VisioForge .NET SDKs in Visual Studio from NuGet, in four kinds of project: WinForms, WPF, .NET MAUI and a console app. Each part ends with an empty project that builds and runs.
+
+All four SDKs — Video Capture SDK .NET, Media Player SDK .NET, Video Edit SDK .NET and Media Blocks SDK .NET — come in one NuGet package, [VisioForge.DotNet.Core](https://www.nuget.org/packages/VisioForge.DotNet.Core). Next to it goes a redist package, the native engine for the platform. On Windows x64 that is [VisioForge.CrossPlatform.Core.Windows.x64](https://www.nuget.org/packages/VisioForge.CrossPlatform.Core.Windows.x64). A MAUI app also takes [VisioForge.DotNet.Core.UI.MAUI](https://www.nuget.org/packages/VisioForge.DotNet.Core.UI.MAUI).
+
+## Video tutorial
+
+The video shows all four project types in Visual Studio 2026:
+
+## Requirements
+
+- Windows 10 or 11
+- Visual Studio 2026, or Visual Studio 2022 for .NET 8 and .NET 9 projects
+- The **.NET desktop development** workload for WinForms, WPF and console apps, and the **.NET Multi-platform App UI development** workload for MAUI
+
+## The packages
+
+| Project | Packages |
+| --- | --- |
+| WinForms, WPF, console (Windows x64) | `VisioForge.DotNet.Core`, `VisioForge.CrossPlatform.Core.Windows.x64` |
+| .NET MAUI | `VisioForge.DotNet.Core`, `VisioForge.DotNet.Core.UI.MAUI`, plus one redist per platform in the project file |
+
+Outside Visual Studio, `dotnet add package` installs the same packages from the command line:
+
+```
+dotnet add package VisioForge.DotNet.Core
+dotnet add package VisioForge.CrossPlatform.Core.Windows.x64
+```
+
+Per-product packages such as `VisioForge.DotNet.VideoCapture` are also published; they reference `VisioForge.DotNet.Core`, which is all a project needs.
+
+## WinForms
+
+1. On the start window, click **Create a new project**, search for *Windows Forms*, and pick **Windows Forms App** for C#.
+2. Name the project, choose **.NET 10**, and click **Create**.
+3. Right-click the project in **Solution Explorer** and open **Manage NuGet Packages**, on the **Browse** tab.
+4. Search for `VisioForge.DotNet.Core` and install it. Visual Studio shows the changes and the license: accept them.
+5. Install `VisioForge.CrossPlatform.Core.Windows.x64` the same way. Both packages are now on the **Installed** tab.
+
+The package also puts `VideoView` in the **Toolbox**, under **VisioForge**. Search for it and draw it on the form: this is where the SDK shows video. Start the app without debugging (Ctrl+F5), and the form opens with the `VideoView`, black until an engine draws into it.
+
+## WPF
+
+Create a **WPF Application** for C# on .NET 10 and install the same two packages. Then drag `VideoView` from the **Toolbox** into the `Grid` of `MainWindow.xaml`. Visual Studio writes the tag and the namespace with it:
+
+```
+<Window xmlns:WPF="clr-namespace:VisioForge.Core.UI.WPF;assembly=VisioForge.Core" x:Class="VisioForgeWpf.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:VisioForgeWpf"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <WPF:VideoView />
+    </Grid>
+</Window>
+```
+
+The namespace is `VisioForge.Core.UI.WPF`, in the `VisioForge.Core` assembly. The prefix is yours to pick: the Toolbox writes `WPF`, and `vf` is shorter.
+
+## .NET MAUI
+
+A .NET MAUI App project builds for Windows, Mac Catalyst, Android and iOS. From NuGet, install `VisioForge.DotNet.Core` and `VisioForge.DotNet.Core.UI.MAUI`, which holds the MAUI `VideoView`.
+
+The native engines go into the project file instead, each under the condition of its platform, so every head ships only the engine of its own platform. Open **Edit Project File** and add them at the end:
+
+```
+<ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Windows.x64" Version="[2026.11.26]" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-maccatalyst'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.macOS" Version="[2026.11.22]" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-android'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.Android" Version="[2026.11.26]" />
+</ItemGroup>
+<ItemGroup Condition="$(TargetFramework.Contains('-ios'))">
+  <PackageReference Include="VisioForge.CrossPlatform.Core.iOS" Version="[2026.11.26]" />
+</ItemGroup>
+```
+
+On a Mac, Mac Catalyst builds for the Mac's own processor:
+
+```
+<!-- Mac Catalyst: build for the Mac's own CPU -->
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'X64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-x64</RuntimeIdentifier>
+</PropertyGroup>
+<PropertyGroup Condition="$([MSBuild]::IsOSPlatform('osx')) AND '$([System.Runtime.InteropServices.RuntimeInformation]::OSArchitecture)' == 'Arm64' AND $(TargetFramework.Contains('-maccatalyst'))">
+  <RuntimeIdentifier>maccatalyst-arm64</RuntimeIdentifier>
+</PropertyGroup>
+```
+
+Two platforms need a little more:
+
+- **Android** also takes the VisioForge Android binding project from the [AndroidDependency folder](https://github.com/visioforge/.Net-SDK-s-samples/tree/master/AndroidDependency), and the camera and microphone permissions in its manifest.
+- **iOS and Mac Catalyst** need usage descriptions (`NSCameraUsageDescription`, `NSMicrophoneUsageDescription`) in `Info.plist`. iOS is tested on a device, not the simulator.
+
+The [MAUI install guide](../maui/) covers both in detail.
+
+In `MauiProgram.cs`, add two usings, then `UseSkiaSharp` and the VisioForge handlers to the builder. `UseSkiaSharp` turns on SkiaSharp, which the VisioForge views use, and `AddVisioForgeHandlers` registers their platform handlers:
+
+```
+using SkiaSharp.Views.Maui.Controls.Hosting;
+using VisioForge.Core.UI.MAUI;
+
+var builder = MauiApp.CreateBuilder();
+builder
+    .UseMauiApp<App>()
+    .UseSkiaSharp()
+    .ConfigureMauiHandlers(handlers => handlers.AddVisioForgeHandlers())
+    .ConfigureFonts(fonts =>
+    {
+        fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+        fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+    });
+```
+
+In `MainPage.xaml`, map the VisioForge namespace — `VisioForge.Core.UI.MAUI`, in the `VisioForge.Core.UI.MAUI` assembly — and put a `VideoView` on the page:
+
+```
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vf="clr-namespace:VisioForge.Core.UI.MAUI;assembly=VisioForge.Core.UI.MAUI"
+             x:Class="VisioForgeMaui.MainPage">
+    <ScrollView>
+        <VerticalStackLayout Padding="30,0" Spacing="25">
+            <vf:VideoView HeightRequest="300" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+```
+
+Run it on **Windows Machine**, and the `VideoView` sits above the template's content.
+
+## Console app
+
+Create a **Console App** for C# and install the same two packages as for WinForms. A console app needs one more step: its template targets `net10.0`, and that build of the SDK is the Linux one. Without `-windows`, the app looks for the Linux GStreamer library and fails with a `DllNotFoundException`. Open **Edit Project File** and add `-windows` to the target framework:
+
+```
+<PropertyGroup>
+  <OutputType>Exe</OutputType>
+  <!-- net10.0 is the Linux build of the SDK: on Windows, add -windows -->
+  <TargetFramework>net10.0-windows</TargetFramework>
+</PropertyGroup>
+```
+
+WinForms and WPF projects already target `net10.0-windows`.
+
+`Program.cs` initializes the SDK, prints whether it is ready, and releases it again:
+
+```
+using VisioForge.Core;
+
+await VisioForgeX.InitSDKAsync();
+Console.WriteLine($"VisioForge SDK initialized: {VisioForgeX.IsSDKInitialized}");
+VisioForgeX.DestroySDK();
+```
+
+The last line of the output reports that the SDK initialized.
+
+## Other packages
+
+- **Windows-only engines.** `VideoCaptureCore`, `MediaPlayerCore` and `VideoEditCore` take the classic redists instead: `VisioForge.DotNet.Core.Redist.VideoCapture.x64`, `…MediaPlayer.x64` or `…VideoEdit.x64`. See the deployment pages of [Video Capture SDK .NET](../../videocapture/deployment/), [Media Player SDK .NET](../../mediaplayer/deployment/) and [Video Edit SDK .NET](../../videoedit/deployment/).
+- **x86 and ARM64.** An app built for another CPU takes the redist for that CPU, such as `VisioForge.CrossPlatform.Core.Windows.x86` or `VisioForge.CrossPlatform.Core.Windows.arm64`.
+- **Other UI frameworks.** WinUI, Avalonia and Uno each have their own UI package: `VisioForge.DotNet.Core.UI.WinUI`, `VisioForge.DotNet.Core.UI.Avalonia` and `VisioForge.DotNet.Core.UI.Uno`.
+
+The [deployment guide](../../deployment-x/) lists the redist packages for every platform.
+
+## Manual installation
+
+Where NuGet is not an option, the SDK also ships as an installer:
+
+1. Download the [SDK installer](https://files.visioforge.com/trials/visioforge_sdks_installer_dotnet_setup.exe) and run it.
+2. In your project, add a reference to the installed `VisioForge.Core.dll`.
+3. To get `VideoView` in the Toolbox, right-click the Toolbox, select **Choose Items...**, and browse to `VisioForge.Core.dll`.
+
+NuGet is the recommended way: it brings the native engine with the package and updates with one click.
+
+## Video Transcript
+
+### Overview
+
+Let's install the VisioForge .NET SDKs in Visual Studio, in four kinds of project: WinForms, WPF, MAUI and a console app. All four VisioForge .NET SDKs come in one NuGet package, VisioForge.DotNet.Core: Video Capture, Media Player, Video Edit and Media Blocks. Next to it goes a redist package, the native engine for the platform. On Windows x64, that is VisioForge.CrossPlatform.Core.Windows.x64. A MAUI app also takes the MAUI UI package. You need Windows 10 or 11, and Visual Studio 2026, or 2022 for .NET 8 and 9 projects. WinForms, WPF and console apps need the .NET desktop development workload, and MAUI needs the .NET Multi-platform App UI workload. This video uses Visual Studio 2026 and .NET 10.
+
+### WinForms
+
+Start with WinForms. On the start window, click Create a new project, search for Windows Forms, and pick Windows Forms App for C#. Name the project, here VisioForgeWinForms, choose .NET 10, and click Create. Right-click the project in Solution Explorer, and open Manage NuGet Packages, on the Browse tab. Search for VisioForge.DotNet.Core and install it. Visual Studio shows the changes and the license: accept them. Then install VisioForge.CrossPlatform.Core.Windows.x64, the native engine for Windows x64. Both packages are now on the Installed tab. The package also puts VideoView in the Toolbox, under VisioForge. Search for it, and draw it on the form. This is where the SDK shows video. Start it without debugging. The form opens with the VideoView, black until an engine draws into it.
+
+### WPF
+
+WPF takes the same steps. Create a WPF Application for C#, here VisioForgeWpf, on .NET 10. Install the same two packages from NuGet: VisioForge.DotNet.Core and the Windows x64 redist. Drag VideoView from the Toolbox into the Grid of MainWindow.xaml. Visual Studio writes the tag, and the namespace with it. The namespace is VisioForge.Core.UI.WPF, in the VisioForge.Core assembly. The prefix is yours to pick: the Toolbox writes WPF, and vf is shorter. Run it, and the window shows the VideoView.
+
+### MAUI
+
+Now MAUI. Create a .NET MAUI App, here VisioForgeMaui. One project builds for Windows, Mac Catalyst, Android and iOS. From NuGet, install VisioForge.DotNet.Core and VisioForge.DotNet.Core.UI.MAUI, which holds the MAUI VideoView. The native engines go into the project file instead, each under the condition of its platform. Open Edit Project File and add them at the end. The Windows head takes the Windows x64 redist, and Mac Catalyst, Android and iOS each take their own. Every head ships only the native engine of its platform. On a Mac, Mac Catalyst builds for the Mac's own processor: Intel or Apple silicon picks its RuntimeIdentifier. Two platforms need a little more. Android also takes the VisioForge Android binding project, from the AndroidDependency folder on GitHub, and the camera and microphone permissions in its manifest. iOS and Mac Catalyst need usage descriptions in Info.plist, and iOS is tested on a device, not the simulator. In MauiProgram.cs, add two usings, then UseSkiaSharp and the VisioForge handlers to the builder. UseSkiaSharp turns on SkiaSharp, which the VisioForge views use, and AddVisioForgeHandlers registers their platform handlers. In MainPage.xaml, map the VisioForge namespace, and put a VideoView at the top of the page. In MAUI, the namespace is VisioForge.Core.UI.MAUI, in the VisioForge.Core.UI.MAUI assembly. Run it on Windows Machine. The VideoView sits above the template's content.
+
+### Console
+
+Last, a console app. Create a Console App for C#, here VisioForgeConsole. Install the same two packages as for WinForms. One more step for a console app. Its template targets net10.0, and that build of the SDK is the Linux one. Add dash windows to the target framework. Without it, the app looks for the Linux GStreamer library, and fails with a DllNotFoundException. WinForms and WPF already target net10.0-windows. Program.cs initializes the SDK, prints whether it is ready, and releases it again. Run it. The last line reports that the SDK initialized.
+
+### Other packages
+
+A few more packages. The Windows-only engines, VideoCaptureCore, MediaPlayerCore and VideoEditCore, take the classic redists: Redist.VideoCapture, MediaPlayer or VideoEdit. x86 and ARM64 apps take the redist for their CPU. And WinUI, Avalonia and Uno each have their own UI package. Outside Visual Studio, dotnet add package installs the same two packages from the command line.
+
+### Next steps
+
+Next, record a webcam to MP4 in the WinForms or WPF tutorial. The deployment guides list the redist packages for each platform, and there are install guides for Rider, Avalonia, Uno and Unity. The docs are at visioforge.com/help. Thanks for watching.
+
+## See also
+
+- [Webcam to MP4 in WinForms](../../videocapture/video-tutorials/video-capture-webcam-mp4/) and [in WPF](../../videocapture/video-tutorials/video-capture-webcam-mp4-wpf/) — the next step after installing
+- [SDK initialization](../../init/) — `InitSDKAsync` and `DestroySDK` in detail
+- Install guides for [MAUI](../maui/), [Rider](../rider/), [Avalonia](../avalonia/), [Uno](../uno/) and [Unity](../unity/)
+
+---
+
+Visit our [GitHub](https://github.com/visioforge/.Net-SDK-s-samples) page to get more code samples and implementation examples.
+
+---END OF PAGE---
+
+
+
+## Install VisioForge .NET SDKs in Visual Studio for Mac
+**URL:** https://www.visioforge.com/help/docs/dotnet/install/visual-studio-mac/
+**Description:** Install and configure VisioForge .NET SDKs in Visual Studio for Mac for multimedia macOS and iOS application development.
+**Tags:** Video Capture SDK, Media Player SDK, Media Blocks SDK, Video Edit SDK, .NET, Windows, macOS, Linux, Android, iOS, Streaming, Webcam, C#, NuGet
+**API:** VideoView
+
+# Complete Guide to Integrating VisioForge .NET SDKs with Visual Studio for Mac
+
+[Video Capture SDK .NET](https://www.visioforge.com/video-capture-sdk-net) [Video Edit SDK .NET](https://www.visioforge.com/video-edit-sdk-net) [Media Blocks SDK .NET](https://www.visioforge.com/media-blocks-sdk-net) [Media Player SDK .NET](https://www.visioforge.com/media-player-sdk-net)
+
+Visual Studio for Mac is retired
+
+Microsoft [retired Visual Studio for Mac](https://learn.microsoft.com/en-us/visualstudio/releases/2022/what-happened-to-vs-for-mac) on August 31, 2024. No new installs are possible and the IDE no longer receives updates. For macOS .NET development with VisioForge SDKs, use **[JetBrains Rider](../rider/)** or **Visual Studio Code with the C# Dev Kit** instead. The NuGet package names, UI controls and C# snippets on this page apply identically to those IDEs.
+
+## Introduction to VisioForge SDKs on macOS
+
+VisioForge provides powerful multimedia SDKs for .NET developers working on macOS and iOS platforms. This detailed guide will walk you through the entire process of integrating these SDKs into your Visual Studio for Mac projects. While this tutorial primarily focuses on macOS application development, the same principles apply to iOS applications with minimal adaptations.
+
+By following this guide, you'll learn how to properly set up your development environment, install the necessary packages, configure UI components, and prepare your application for deployment. This knowledge will serve as a solid foundation for building sophisticated multimedia applications using VisioForge technology.
+
+## Prerequisites for Development
+
+Before starting the integration process, ensure you have:
+
+- Visual Studio for Mac (latest version recommended)
+- .NET SDK installed (minimum version 6.0)
+- Basic knowledge of C# and .NET development
+- Administrative access to your macOS system
+- Active internet connection for NuGet package downloads
+- Optional: XCode for storyboard editing
+
+Having these prerequisites in place will ensure a smooth installation process and prevent common setup issues.
+
+## Setting Up a New macOS Project
+
+Let's begin by creating a new macOS project in Visual Studio for Mac. This will serve as the foundation for our VisioForge SDK integration.
+
+### Creating the Project Structure
+
+1. Launch Visual Studio for Mac.
+2. Select **File > New Solution** from the menu bar.
+3. In the template selection dialog, navigate to **.NET > App**.
+4. Choose **macOS Application** as your project template.
+5. Configure your project settings, including:
+6. Project name (choose something descriptive)
+7. Organization identifier (typically in reverse domain format)
+8. Target framework (.NET 6.0 or later recommended)
+9. Solution name (can match your project name)
+10. Click **Create** to generate your project template.
+
+This creates a basic macOS application with the standard project structure required for VisioForge SDK integration.
+
+## Installing VisioForge SDK Packages
+
+After creating your project, the next step is to install the necessary VisioForge SDK packages via NuGet. These packages contain the core functionality and UI components required for multimedia operations.
+
+### Adding the Main SDK Package
+
+Each VisioForge product line has a dedicated main package that contains the core functionality. You'll need to choose the appropriate package based on your development requirements.
+
+1. Right-click on your project in the Solution Explorer.
+2. Select **Manage NuGet Packages** from the context menu.
+3. Click on the **Browse** tab in the NuGet Package Manager.
+4. In the search box, type "VisioForge" to find all available packages.
+5. Select one of the following packages based on your requirements:
+
+Available NuGet packages:
+
+- [VisioForge.DotNet.VideoCapture](https://www.nuget.org/packages/VisioForge.DotNet.VideoCapture) - For video capture, webcam, and screen recording functionality
+- [VisioForge.DotNet.VideoEdit](https://www.nuget.org/packages/VisioForge.DotNet.VideoEdit) - For video editing, processing, and conversion
+- [VisioForge.DotNet.MediaPlayer](https://www.nuget.org/packages/VisioForge.DotNet.MediaPlayer) - For media playback and streaming
+- [VisioForge.DotNet.MediaBlocks](https://www.nuget.org/packages/VisioForge.DotNet.MediaBlocks) - For advanced media processing workflows
+- Click **Add Package** to install your selected package.
+- Accept any license agreements that appear.
+
+The installation process will automatically resolve dependencies and add references to your project.
+
+### Apple UI Controls
+
+For macOS and iOS applications, the Apple-specific UI controls (`VideoView`, `GLView`) are **shipped inside the main `VisioForge.DotNet.Core` package** — there is no separate `UI.Apple` NuGet. Once you've added `VisioForge.DotNet.Core` above, reference the controls via the `VisioForge.Core.UI.Apple` namespace:
+
+```
+using VisioForge.Core.UI.Apple;
+```
+
+## Integrating Video Preview Capabilities
+
+Most multimedia applications require video preview functionality. VisioForge SDKs provide specialized controls for this purpose that integrate seamlessly with macOS applications.
+
+### Adding the VideoView Control
+
+The VideoView control is the primary component for displaying video content in your application. Here's how to add it to your interface:
+
+1. Open your application's main storyboard file by double-clicking it in the Solution Explorer.
+2. Visual Studio for Mac will open XCode Interface Builder for storyboard editing.
+3. From the Object Library, find the **Custom View** control.
+4. Drag the Custom View control onto your window where you want the video to appear.
+5. Set appropriate constraints to ensure proper sizing and positioning.
+6. Using the Identity Inspector, set a descriptive name for your Custom View (e.g., "videoViewHost").
+7. Save your changes and return to Visual Studio for Mac.
+
+This Custom View will serve as a container for the VisioForge VideoView control, which will be added programmatically.
+
+### Initializing the VideoView in Code
+
+After adding the container Custom View, you need to initialize the VideoView control programmatically:
+
+1. Open your ViewController.cs file.
+2. Add the necessary using directives at the top of the file:
+
+```
+using VisioForge.Core.UI.Apple;
+using CoreGraphics;
+```
+
+1. Add a private field to your ViewController class to hold the VideoView reference:
+
+```
+private VideoView _videoView;
+```
+
+1. Modify the ViewDidLoad method to initialize and add the VideoView:
+
+```
+public override void ViewDidLoad()
+{
+    base.ViewDidLoad();
+
+    // Create and add VideoView
+    _videoView = new VideoView(new CGRect(0, 0, videoViewHost.Bounds.Width, videoViewHost.Bounds.Height));
+    this.videoViewHost.AddSubview(_videoView);
+
+    // Configure VideoView properties
+    _videoView.AutoresizingMask = Foundation.NSViewResizingMask.WidthSizable | Foundation.NSViewResizingMask.HeightSizable;
+
+    // Additional initialization code
+    InitializeMediaComponents();
+}
+
+private async void InitializeMediaComponents()
+{
+    // Initialize your VisioForge SDK components here. On macOS, always use the
+    // cross-platform X engines — classic VideoCaptureCore / MediaPlayerCore /
+    // VideoEditCore are Windows-only.
+    await VisioForgeX.InitSDKAsync();
+
+    // For example, for playback:
+    // var player = new MediaPlayerCoreX(_videoView);
+    // var settings = await UniversalSourceSettings.CreateAsync(new Uri("https://example.com/video.mp4"));
+    // await player.OpenAsync(settings);
+    // await player.PlayAsync();
+}
+```
+
+This code creates a `VideoView` instance, sizes it to match your container view, and adds it as a subview. The `AutoresizingMask` property ensures that the video view resizes properly when the window size changes.
+
+## Adding Required Redistribution Packages
+
+VisioForge SDKs rely on various native libraries and components that must be included in your application bundle. These dependencies vary based on the specific SDK you're using and your target platform.
+
+Check the [deployment documentation](../../deployment-x/) for detailed information on which redistribution packages are required for your specific scenario.
+
+## Troubleshooting Common Issues
+
+If you encounter issues during installation or integration, consider these common solutions:
+
+1. **Missing dependencies**: Ensure all required redistribution packages are installed
+2. **Build errors**: Verify that your project targets a compatible .NET version
+3. **Runtime crashes**: Check for platform-specific initialization issues
+4. **Black video display**: Verify that the VideoView is properly initialized and added to the view hierarchy
+5. **Performance issues**: Consider enabling hardware acceleration where available
+
+For more specific troubleshooting guidance, refer to the VisioForge documentation or contact their support team.
+
+## Next Steps and Resources
+
+Now that you've successfully integrated VisioForge SDKs into your Visual Studio for Mac project, you can explore more advanced features and capabilities:
+
+- Create custom video processing workflows
+- Implement recording and capture functionality
+- Develop sophisticated media editing features
+- Build streaming media applications
+
+### Additional Resources
+
+- Visit our [GitHub repository](https://github.com/visioforge/.Net-SDK-s-samples) for code samples and example projects
+- Join the [developer forum](https://helpdesk.visioforge.com/helpdesk/my-tickets/new) to connect with other developers
+- Subscribe to our newsletter for updates on new features and best practices
+
+By following this guide, you've established a solid foundation for developing powerful multimedia applications on macOS and iOS using VisioForge SDKs and Visual Studio for Mac.
+
+---END OF PAGE---
+
+
